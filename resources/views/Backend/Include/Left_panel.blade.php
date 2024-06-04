@@ -13,17 +13,21 @@ $route = Route::currentRouteName()
           </a>
         </li>
         
-        <!----------Blog  Menu-------------->
+         <label class="sidebar-label pd-x-10 mg-t-20 op-3">Accounts</label>
+       <!----------Accounts Management Menu-------------->
         <li class="br-menu-item">
-          <a href="#" class="br-menu-link with-sub {{($prefix=='admin/blog')?'show-sub':''}}">
-            <i class="menu-item-icon icon ion-ios-photos-outline tx-20"></i>
-            <span class="menu-item-label">Blog </span>
+          <a href="#" class="br-menu-link with-sub {{($prefix=='admin/accounts')?'show-sub':''}}">
+            <i class="menu-item-icon fas fa-receipt "></i>
+            <span class="menu-item-label">Accounts Management </span>
           </a>
           <ul class="br-menu-sub" >
-            <li class="sub-item"><a href="" class="sub-link ">Manage Category</a></li>
-            <li class="sub-item"><a href="" class="sub-link ">Add Blog</a></li>
+            <li class="sub-item"><a href="{{route('admin.master_ledger.index')}}" class="sub-link {{ ($route == 'admin.master_ledger.index')? 'active':'' }}">Master Ledger</a></li>
 
-            <li class="sub-item"><a href="" class="sub-link ">Manage Blog</a></li>
+            <li class="sub-item"><a href="{{route('admin.ledger.index')}}" class="sub-link  {{ ($route == 'admin.ledger.index')? 'active':'' }}">Ledger</a></li>
+
+            <li class="sub-item"><a href="{{route('admin.sub_ledger.index')}}" class="sub-link {{ ($route == 'admin.sub_ledger.index')? 'active':'' }} ">Sub Ledger</a></li>
+            
+            <li class="sub-item"><a href="{{route('admin.transaction.index')}}" class="sub-link {{ ($route == 'admin.transaction.index')? 'active':'' }} ">Transaction</a></li>
           </ul>
         </li>
         
