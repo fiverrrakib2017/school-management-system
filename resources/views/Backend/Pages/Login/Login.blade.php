@@ -1,10 +1,11 @@
-@if (auth()->guard('admin'))
+@if (auth()->guard('admin')->check())
 
 <script>
-   window.location.href = "{{ route('admin.dashboard') }}";
+   window.location = "{{ route('admin.dashboard') }}";
 </script>
-  
+
 @endif
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +30,7 @@
       <img src="{{ asset('Backend/images/login_photo.jpg') }}" class="wd-100p ht-100p object-fit-cover" alt="">
       <div class="overlay-body bg-black-6 d-flex align-items-center justify-content-center">
         <div class="login-wrapper wd-300 wd-xs-350 pd-25 pd-xs-40 rounded bd bd-white-2 bg-black-7">
-          <div class="signin-logo tx-center tx-28 tx-bold tx-white"><span class="tx-normal">[</span> Points <span class="tx-info">soft</span> <span class="tx-normal">]</span></div>
+          <div class="signin-logo tx-center tx-28 tx-bold tx-white"><span class="tx-normal">[</span> Rakib's <span class="tx-info">soft</span> <span class="tx-normal">]</span></div>
           <div class="tx-white-5 tx-center mg-b-60">Make Your Perfect Business</div>
               @if ($errors->any())
                   <div class="alert alert-danger">
@@ -59,7 +60,7 @@
       </div><!-- overlay-body -->
     </div><!-- d-flex -->
 
-    
+
 
   </body>
 </html>

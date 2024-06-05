@@ -2,7 +2,7 @@
 @section('title','Dashboard | Admin Panel')
 
 @section('content')
-        <div class="row">
+        {{-- <div class="row">
           <div class="col-md-2 offset-md-10 mt-3 mb-2">
             <div >
               <select name="dateFilter" class="form-control select2" data-placeholder="Choose location">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="row ">
-        
+
           <div class="col-sm-6 col-xl-3">
             <div class="bg-info rounded overflow-hidden">
               <div class="pd-x-20 pd-t-20 d-flex align-items-center">
@@ -72,7 +72,7 @@
           </div><!-- col-3 -->
 
         </div><!-- row -->
-        
+
         <div class="row " style="margin-top: 22px;">
           <div class="col-sm-6 col-xl-3">
             <div class="bg-info rounded overflow-hidden">
@@ -319,7 +319,7 @@
               </div><!-- row -->
             </div><!-- card -->
 
-          
+
 
 
           </div><!-- col-8 -->
@@ -403,16 +403,16 @@
               <p class="tx-11 mg-b-0 mg-t-15 tx-white-7">Notice: Lorem ipsum dolor sit amet.</p>
             </div><!-- card -->
 
-         
-          
+
+
 
           </div><!-- col-4 -->
-        </div><!-- row -->
-       
+        </div><!-- row --> --}}
+
 @endsection
 
 @section('script')
-  <script type="text/javascript"> 
+  <script type="text/javascript">
     $(document).ready(function(){
       /*get top rated product*/
       __top_rated_product();
@@ -422,7 +422,7 @@
       function getTodayDate() {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
         return yyyy + '-' + mm + '-' + dd;
       }
@@ -454,7 +454,7 @@
       function __getTodayDate() {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
         return yyyy + '-' + mm + '-' + dd;
       }
@@ -462,7 +462,7 @@
         var today = new Date();
         today.setDate(today.getDate() - days);
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
         return yyyy + '-' + mm + '-' + dd;
       }
@@ -470,19 +470,19 @@
         var today = new Date();
         var mm = String(today.getMonth()).padStart(2, '0');
         var yyyy = today.getFullYear();
-        return yyyy + '-' + mm + '-01'; 
+        return yyyy + '-' + mm + '-01';
       }
 
       function __get_last_year() {
         var today = new Date();
         var yyyy = today.getFullYear() - 1;
-        return yyyy + '-01-01'; 
+        return yyyy + '-01-01';
       }
 
       function __get_last_two_years(years) {
         var today = new Date();
         var yyyy = today.getFullYear() - years;
-        return yyyy + '-01-01'; 
+        return yyyy + '-01-01';
       }
       function __fetch_data(date){
         $.ajax({
@@ -533,13 +533,13 @@
             formatted_date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
             var __profile_image=__baseUrl + '/Backend/images/customer/' + customer.profile_image;
             console.log(__profile_image);
-            /*Create a new table row*/ 
+            /*Create a new table row*/
             var newRow = $("<tr>");
             newRow.append('<td class="pd-l-20"><img src="https://via.placeholder.com/500" class="wd-36 rounded-circle" alt="Image"></td>');
             newRow.append('<td><a href="" class="tx-inverse tx-14 tx-medium d-block">' + customer.fullname + '</a></td>');
             newRow.append('<td class="tx-12"><span class="square-8 bg-success mg-r-5 rounded-circle"></span>Active</td>');
-            newRow.append('<td>' + __formated_string + '</td>'); 
-            
+            newRow.append('<td>' + __formated_string + '</td>');
+
             // Append the new row to the table body
             __tbody.append(newRow);
             }

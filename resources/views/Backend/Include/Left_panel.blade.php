@@ -1,7 +1,7 @@
-@php 
+@php
 $route = Route::currentRouteName()
 @endphp
-<div class="br-logo"><a href=""><span>[</span>Pointsoft <i>plus</i><span>]</span></a></div>
+<div class="br-logo"><a href=""><span>[</span>Rakib's  <i>soft</i><span>]</span></a></div>
     <div class="br-sideleft sideleft-scrollbar">
     <label class="sidebar-label pd-x-10 mg-t-20 op-3">Menu</label>
       <ul class="br-sideleft-menu">
@@ -12,7 +12,24 @@ $route = Route::currentRouteName()
             <span class="menu-item-label">Dashboard</span>
           </a>
         </li>
-        
+
+         <label class="sidebar-label pd-x-10 mg-t-20 op-3">Student</label>
+       <!----------Student Management Menu-------------->
+        <li class="br-menu-item">
+          <a href="#" class="br-menu-link with-sub {{($prefix=='admin/student')?'show-sub':''}}">
+            <i class="menu-item-icon fas fa-receipt "></i>
+            <span class="menu-item-label">Student Management </span>
+          </a>
+          <ul class="br-menu-sub" >
+            <li class="sub-item"><a href="" class="sub-link ">Section Management</a></li>
+            <li class="sub-item"><a href="" class="sub-link ">Class Management</a></li>
+
+            <li class="sub-item"><a href="{{ route('admin.student.create') }}" class="sub-link {{ ($route == 'admin.sudent.create')? 'active':'' }}">Add Student</a></li>
+
+            <li class="sub-item"><a href="{{ route('admin.student.index') }}" class="sub-link {{ ($route == 'admin.sudent.index')? 'active':'' }} ">Student List</a></li>
+
+          </ul>
+        </li>
          <label class="sidebar-label pd-x-10 mg-t-20 op-3">Accounts</label>
        <!----------Accounts Management Menu-------------->
         <li class="br-menu-item">
@@ -26,11 +43,11 @@ $route = Route::currentRouteName()
             <li class="sub-item"><a href="{{route('admin.ledger.index')}}" class="sub-link  {{ ($route == 'admin.ledger.index')? 'active':'' }}">Ledger</a></li>
 
             <li class="sub-item"><a href="{{route('admin.sub_ledger.index')}}" class="sub-link {{ ($route == 'admin.sub_ledger.index')? 'active':'' }} ">Sub Ledger</a></li>
-            
+
             <li class="sub-item"><a href="{{route('admin.transaction.index')}}" class="sub-link {{ ($route == 'admin.transaction.index')? 'active':'' }} ">Transaction</a></li>
           </ul>
         </li>
-        
+
 
 
       </ul><!-- br-sideleft-menu -->

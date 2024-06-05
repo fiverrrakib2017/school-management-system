@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\Accounts\Master_Ledger\MasterLedgerController;
 use App\Http\Controllers\Backend\Accounts\Sub_Ledger\SubLedgerController;
 use App\Http\Controllers\Backend\Accounts\Transaction\TransactionController;
 use App\Http\Controllers\Backend\Admin\AdminController;
+use App\Http\Controllers\Backend\Student\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*Backend Route*/
@@ -16,6 +17,20 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('admin/logout',[AdminController::class,'logout'])->name('admin.logout');
     Route::post('/admin/get_dashboard_data',[AdminController::class,'get_data'])->name('admin.dashboard_get_all_data');
 
+    /** Student Management  Route **/
+    Route::prefix('admin/student')->group(function(){
+        
+        Route::controller(StudentController::class)->group(function(){
+            Route::get('/create','create')->name('admin.student.create');
+            Route::post('/store','store')->name('admin.student.store');
+            Route::get('/all_data','all_data')->name('admin.student.all_data');
+            Route::get('/list','index')->name('admin.student.index');
+            Route::get('/edit/{id}','edit')->name('admin.student.edit');
+            Route::post('/update/{id}','update')->name('admin.student.update');
+            Route::post('/delete','delete')->name('admin.student.delete');
+        });
+
+    });
     /** Accounts Management  Route **/
     Route::prefix('admin/accounts')->group(function(){
 
