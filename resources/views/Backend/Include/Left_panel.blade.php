@@ -21,8 +21,10 @@ $route = Route::currentRouteName()
             <span class="menu-item-label">Student Management </span>
           </a>
           <ul class="br-menu-sub" >
-            <li class="sub-item"><a href="" class="sub-link ">Section Management</a></li>
-            <li class="sub-item"><a href="" class="sub-link ">Class Management</a></li>
+
+            <li class="sub-item"><a href="{{ route('admin.student.section.index') }}" class="sub-link {{ ($route == 'admin.sudent.section.index')? 'active':'' }}">Section List</a></li>
+
+            <li class="sub-item"><a href="{{ route('admin.student.class.index') }}" class="sub-link {{ ($route == 'admin.sudent.class.index')? 'active':'' }}">Class List</a></li>
 
             <li class="sub-item"><a href="{{ route('admin.student.create') }}" class="sub-link {{ ($route == 'admin.sudent.create')? 'active':'' }}">Add Student</a></li>
 

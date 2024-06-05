@@ -5,6 +5,8 @@ use App\Http\Controllers\Backend\Accounts\Master_Ledger\MasterLedgerController;
 use App\Http\Controllers\Backend\Accounts\Sub_Ledger\SubLedgerController;
 use App\Http\Controllers\Backend\Accounts\Transaction\TransactionController;
 use App\Http\Controllers\Backend\Admin\AdminController;
+use App\Http\Controllers\Backend\Student\classController;
+use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +21,29 @@ Route::group(['middleware'=>'admin'],function(){
 
     /** Student Management  Route **/
     Route::prefix('admin/student')->group(function(){
-        
+        /** Section  Route **/
+        Route::prefix('section')->group(function(){
+            Route::controller(SectionController::class)->group(function(){
+                Route::get('/list','index')->name('admin.student.section.index');
+                Route::get('/all_data','all_data')->name('admin.student.section.all_data');
+                Route::get('/edit/{id}','edit')->name('admin.student.section.edit');
+                Route::post('/update','update')->name('admin.student.section.update');
+                Route::post('/store','store')->name('admin.student.section.store');
+                Route::post('/delete','delete')->name('admin.student.section.delete');
+            });
+        });
+        /** Class  Route **/
+        Route::prefix('class')->group(function(){
+            Route::controller(classController::class)->group(function(){
+                Route::get('/list','index')->name('admin.student.class.index');
+                Route::get('/all_data','all_data')->name('admin.student.class.all_data');
+                Route::get('/edit/{id}','edit')->name('admin.student.class.edit');
+                Route::post('/update','update')->name('admin.student.class.update');
+                Route::post('/store','store')->name('admin.student.class.store');
+                Route::post('/delete','delete')->name('admin.student.class.delete');
+            });
+        });
+        /** Student  Route **/
         Route::controller(StudentController::class)->group(function(){
             Route::get('/create','create')->name('admin.student.create');
             Route::post('/store','store')->name('admin.student.store');
