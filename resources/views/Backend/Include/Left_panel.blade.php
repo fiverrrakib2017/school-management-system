@@ -22,13 +22,28 @@ $route = Route::currentRouteName()
           </a>
           <ul class="br-menu-sub" >
 
-            <li class="sub-item"><a href="{{ route('admin.student.section.index') }}" class="sub-link {{ ($route == 'admin.sudent.section.index')? 'active':'' }}">Section List</a></li>
+            <li class="sub-item"><a href="{{ route('admin.student.section.index') }}" class="sub-link {{ ($route == 'admin.student.section.index')? 'active':'' }}">Section List</a></li>
 
-            <li class="sub-item"><a href="{{ route('admin.student.class.index') }}" class="sub-link {{ ($route == 'admin.sudent.class.index')? 'active':'' }}">Class List</a></li>
+            <li class="sub-item"><a href="{{ route('admin.student.class.index') }}" class="sub-link {{ ($route == 'admin.student.class.index')? 'active':'' }}">Class List</a></li>
 
-            <li class="sub-item"><a href="{{ route('admin.student.create') }}" class="sub-link {{ ($route == 'admin.sudent.create')? 'active':'' }}">Add Student</a></li>
+            <li class="sub-item"><a href="{{ route('admin.student.create') }}" class="sub-link {{ ($route == 'admin.student.create')? 'active':'' }}">Add Student</a></li>
 
-            <li class="sub-item"><a href="{{ route('admin.student.index') }}" class="sub-link {{ ($route == 'admin.sudent.index')? 'active':'' }} ">Student List</a></li>
+            <li class="sub-item"><a href="{{ route('admin.student.index') }}" class="sub-link {{ ($route == 'admin.student.index')? 'active':'' }} ">Student List</a></li>
+
+          </ul>
+        </li>
+         <label class="sidebar-label pd-x-10 mg-t-20 op-3">Teacher</label>
+       <!----------Student Management Menu-------------->
+        <li class="br-menu-item">
+          <a href="#" class="br-menu-link with-sub {{($prefix=='admin/teacher')?'show-sub':''}}">
+            <i class="menu-item-icon fas fa-receipt "></i>
+            <span class="menu-item-label">Teacher Management </span>
+          </a>
+          <ul class="br-menu-sub" >
+
+            <li class="sub-item"><a href="{{ route('admin.teacher.create') }}" class="sub-link {{ ($route == 'admin.teacher.create')? 'active':'' }}">Add Teacher</a></li>
+
+            <li class="sub-item"><a href="{{ route('admin.teacher.index') }}" class="sub-link {{ ($route == 'admin.teacher.index')? 'active':'' }} ">Teacher List</a></li>
 
           </ul>
         </li>

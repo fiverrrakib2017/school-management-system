@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('emergency_contact_name');
             $table->string('emergency_contact_phone');
             $table->text('remarks')->nullable();
+            $table->integer('status');
             $table->timestamps();
         });
     }

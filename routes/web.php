@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\Admin\AdminController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
+use App\Http\Controllers\Backend\Teacher\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 /*Backend Route*/
@@ -53,7 +54,14 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/update/{id}','update')->name('admin.student.update');
             Route::post('/delete','delete')->name('admin.student.delete');
         });
-
+    });
+     /** Teacher Management  Route **/
+    Route::prefix('admin/teacher')->group(function(){
+        Route::controller(TeacherController::class)->group(function(){
+            Route::get('/create','create')->name('admin.teacher.create');
+            Route::post('/store','store')->name('admin.teacher.store');
+            Route::get('/list','index')->name('admin.teacher.index');
+        });
     });
     /** Accounts Management  Route **/
     Route::prefix('admin/accounts')->group(function(){
