@@ -14,8 +14,14 @@ return new class extends Migration
         Schema::create('student_classes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('section_id');
             $table->integer('status');
             $table->timestamps();
+
+            $table->foreign('section_id')
+            ->on('sections')
+            ->references('id')
+            ->onDelete('cascade');
         });
     }
 

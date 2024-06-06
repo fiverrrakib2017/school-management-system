@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Models\Student_class;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +14,8 @@ class StudentController extends Controller
         return view('Backend.Pages.Student.index');
     }
     public function create(){
-        return view('Backend.Pages.Student.create');
+         $data=Student_class::latest()->get();
+        return view('Backend.Pages.Student.create',compact('data'));
     }
     public function edit($id){
         $data = Student::find($id);
@@ -59,9 +61,9 @@ class StudentController extends Controller
             'permanent_address' => 'required|string|max:255',
             'phone' => 'required|string|max:15',
             'email' => 'nullable|string|email|max:255',
-            'current_class' => 'required|string|max:50',
+            'current_class' => 'required|max:50',
             'previous_school' => 'nullable|string|max:255',
-            'previous_class' => 'nullable|string|max:50',
+            'previous_class' => 'nullable|max:50',
             'academic_results' => 'nullable|string|max:255',
             'blood_group' => 'nullable|string|max:10',
             'health_conditions' => 'nullable|string|max:255',

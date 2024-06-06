@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Section;
 use App\Models\Student_class;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,33 +11,56 @@ use Illuminate\Support\Facades\Validator;
 class classController extends Controller
 {
     public function index(){
-        return view('Backend.Pages.Student.Class.index');
+        $data=Section::latest()->get();
+       //return  Student_class::with('section')->get();
+        return view('Backend.Pages.Student.Class.index',compact('data'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name','status', 'created_at'];
-        $orderByColumn = $request->order[0]['column'];
-        $orderDirectection = $request->order[0]['dir'];
+        $columnsForOrderBy = ['id', 'section_id', 'name', 'status', 'created_at'];
+        $orderByColumnIndex = $request->order[0]['column'];
+        $orderDirection = $request->order[0]['dir'];
+        $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
-        $object = Student_class::when($search, function ($query) use ($search) {
-            $query->where('name', 'like', "%$search%");
-            $query->where('status', 'like', "%$search%");
-        })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
+        /*Start building the query*/
+        $query = Student_class::with('section');
 
-        $total = $object->count();
-        $item = $object->skip($request->start)->take($request->length)->get();
+        /*Apply the search filter*/
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                  ->orWhere('status', 'like', "%$search%")
+                  ->orWhereHas('section', function($q) use ($search) {
+                      $q->where('name', 'like', "%$search%");
+                  });
+            });
+        }
 
+        /* Get the total count of records*/
+        $totalRecords = Student_class::count();
+
+        /* Get the count of filtered records*/
+        $filteredRecords = $query->count();
+
+        /* Apply ordering, pagination and get the data*/
+        $items = $query->orderBy($orderByColumn, $orderDirection)
+                    ->skip($request->start)
+                    ->take($request->length)
+                    ->get();
+
+        /* Return the response in JSON format*/
         return response()->json([
             'draw' => $request->draw,
-            'recordsTotal' => $total,
-            'recordsFiltered' => $total,
-            'data' => $item,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $items,
         ]);
     }
     public function store(Request $request){
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'section'=>'required|integer',
             'status' => 'required|integer'
         ]);
 
@@ -50,6 +74,7 @@ class classController extends Controller
         /*Create a new class record*/
         $object = new Student_class();
         $object->name = $request->name;
+        $object->section_id = $request->section;
         $object->status = $request->status;
 
         /* Save the class record to the database*/
@@ -82,6 +107,7 @@ class classController extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'section'=>'required|integer',
             'status' => 'required|integer'
         ]);
 
@@ -103,6 +129,7 @@ class classController extends Controller
 
         /* Update the Class record */
         $object->name = $request->name;
+        $object->section_id = $request->section;
         $object->status = $request->status;
 
         /* Save the updated Class record to the database*/

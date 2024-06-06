@@ -46,6 +46,7 @@
         <tr>
           <th class="">No.</th>
           <th class="">Class Name</th>
+          <th class="">Section Name</th>
           <th class="">Status</th>
           <th class="">Create Date</th>
           <th class="">Action</th>
@@ -113,6 +114,18 @@
                     </div><!-- row -->
 
                     <div class="row mb-4">
+                        <label class="col-sm-3 form-control-label">Section: <span class="tx-danger">*</span></label>
+                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
+                          <select type="text" name="section" class="form-control" required>
+                            <option value="">---Select---</option>
+                                @foreach ($data as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                          </select>
+                        </div>
+                    </div><!-- row -->
+
+                    <div class="row mb-4">
                         <label class="col-sm-3 form-control-label">Status: <span class="tx-danger">*</span></label>
                         <div class="col-sm-9 mg-t-10 mg-sm-t-0">
                           <select type="text" name="status" class="form-control" required>
@@ -164,6 +177,18 @@
                         <div class="col-sm-9 mg-t-10 mg-sm-t-0">
                           <input type="text" name="id" class="d-none" required>
                           <input type="text" name="name" class="form-control" placeholder="Enter Class Name" required>
+                        </div>
+                    </div><!-- row -->
+
+                    <div class="row mb-4">
+                        <label class="col-sm-3 form-control-label">Section: <span class="tx-danger">*</span></label>
+                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
+                          <select type="text" name="section" class="form-control" required>
+                            <option value="">---Select---</option>
+                            @foreach ($data as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                          </select>
                         </div>
                     </div><!-- row -->
 
@@ -228,6 +253,9 @@
             "data":"name"
           },
           {
+            "data":"section.name"
+          },
+          {
             "data":"status",
             render:function(data,type,row){
                 if (row.status==1) {
@@ -273,6 +301,7 @@
                 $('#editModal').modal('show');
                 $('#editModal input[name="id"]').val(response.data.id);
                 $('#editModal input[name="name"]').val(response.data.name);
+                $('#editModal select[name="section"]').val(response.data.section_id);
                 $('#editModal select[name="status"]').val(response.data.status);
               } else {
                 toastr.error("Error fetching data for edit!");
