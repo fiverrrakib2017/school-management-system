@@ -61,6 +61,11 @@ Route::group(['middleware'=>'admin'],function(){
             Route::get('/create','create')->name('admin.teacher.create');
             Route::post('/store','store')->name('admin.teacher.store');
             Route::get('/list','index')->name('admin.teacher.index');
+            Route::get('/all_data','all_data')->name('admin.teacher.all_data');
+            Route::get('/edit/{id}','edit')->name('admin.teacher.edit');
+            Route::post('/update/{id}','update')->name('admin.teacher.update');
+            Route::post('/delete','delete')->name('admin.teacher.delete');
+
         });
     });
     /** Accounts Management  Route **/

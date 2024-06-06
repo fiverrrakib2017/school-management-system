@@ -31,21 +31,21 @@
       <div class="br-pageheader">
         <nav class="breadcrumb pd-0 mg-0 tx-12">
           <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <span class="breadcrumb-item active">All  Student</span>
+          <span class="breadcrumb-item active">All  Teacher</span>
         </nav>
       </div><!-- br-pageheader -->
 <div class="br-section-wrapper" style="padding: 0px !important;">
   <div class="table-wrapper">
     <div class="card">
       <div class="card-header">
-        <a href="{{ route('admin.student.create') }}" class="btn btn btn-success">Add New Student</a>
+        <a href="{{ route('admin.teacher.create') }}" class="btn btn btn-success">Add New Teacher</a>
       </div>
       <div class="card-body">
       <table id="datatable1" class="table display responsive nowrap">
       <thead>
         <tr>
           <th class="">No.</th>
-          <th class="">Student Name </th>
+          <th class="">Teacher Name </th>
           <th class="">Gender</th>
           <th class="">Status</th>
           <th class="">Create Date</th>
@@ -67,7 +67,7 @@
     <div class="modal-dialog modal-dialog-top" role="document">
         <div class="modal-content tx-size-sm">
         <div class="modal-body tx-center pd-y-20 pd-x-20">
-            <form action="{{route('admin.student.delete')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('admin.teacher.delete')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -109,7 +109,7 @@
         complete: function(){
           //$('.product_loading').css({"display":"none"});
         },
-        ajax: "{{ route('admin.student.all_data') }}",
+        ajax: "{{ route('admin.teacher.all_data') }}",
         language: {
           searchPlaceholder: 'Search...',
           sSearch: '',
@@ -145,7 +145,7 @@
           {
             "data":null,
             render:function(data,type,row){
-                return '<a href="{{ route('admin.student.edit', '') }}/' + row.id + '" class="btn btn-primary btn-sm mr-3"><i class="fa fa-edit"></i></a>' +
+                return '<a href="{{ route('admin.teacher.edit', '') }}/' + row.id + '" class="btn btn-primary btn-sm mr-3"><i class="fa fa-edit"></i></a>' +
                 '<button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + row.id + '"><i class="fa fa-trash"></i></button>';
             }
           },
