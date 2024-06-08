@@ -65,7 +65,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::get('/edit/{id}','edit')->name('admin.teacher.edit');
             Route::post('/update/{id}','update')->name('admin.teacher.update');
             Route::post('/delete','delete')->name('admin.teacher.delete');
-
+            Route::get('/view/{id}','view')->name('admin.teacher.view');
         });
     });
     /** Accounts Management  Route **/

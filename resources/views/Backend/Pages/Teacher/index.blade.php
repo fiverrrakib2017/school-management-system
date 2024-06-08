@@ -145,7 +145,8 @@
           {
             "data":null,
             render:function(data,type,row){
-                return '<a href="{{ route('admin.teacher.edit', '') }}/' + row.id + '" class="btn btn-primary btn-sm mr-3"><i class="fa fa-edit"></i></a>' +
+                return '<a href="{{ route('admin.teacher.view', '') }}/' + row.id + '" class="btn btn-success btn-sm mr-3"><i class="fa fa-eye"></i></a>' +
+                 '<a href="{{ route('admin.teacher.edit', '') }}/' + row.id + '" class="btn btn-primary btn-sm mr-3"><i class="fa fa-edit"></i></a>' +
                 '<button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + row.id + '"><i class="fa fa-trash"></i></button>';
             }
           },

@@ -119,6 +119,13 @@ class TeacherController extends Controller
             return view('Backend.Pages.Teacher.edit',compact('data'));
         }
     }
+    public function view($id){
+        $teacher = Teacher::find($id);
+
+        if ($teacher) {
+            return view('Backend.Pages.Teacher.view',compact('teacher'));
+        }
+    }
     public function update(Request $request, $id=NULL){
         /* Find the teacher record */
         $teacher = Teacher::findOrFail($id);
