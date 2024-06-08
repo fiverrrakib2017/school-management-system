@@ -53,6 +53,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::get('/edit/{id}','edit')->name('admin.student.edit');
             Route::post('/update/{id}','update')->name('admin.student.update');
             Route::post('/delete','delete')->name('admin.student.delete');
+            Route::get('/view/{id}','view')->name('admin.student.view');
         });
     });
      /** Teacher Management  Route **/

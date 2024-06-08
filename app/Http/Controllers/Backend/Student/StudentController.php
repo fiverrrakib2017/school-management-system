@@ -24,6 +24,12 @@ class StudentController extends Controller
             return view('Backend.Pages.Student.edit',compact('data'));
         }
     }
+    public function view($id){
+        $student = Student::find($id);
+        if ($student) {
+            return view('Backend.Pages.Student.view',compact('student'));
+        }
+    }
     public function all_data(Request $request){
         $search = $request->search['value'];
         $columnsForOrderBy = ['id', 'name','gender','status', 'created_at'];

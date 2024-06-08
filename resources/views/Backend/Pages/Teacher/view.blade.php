@@ -120,7 +120,12 @@
                         <div class="profile-header-cover"></div>
                         <div class="profile-header-content">
                             <div class="profile-header-img">
-                                <img src="{{ asset('uploads/photos/'.$teacher->photo) }}" alt="{{ $teacher->name }}" />
+                                @if (!empty($teacher->photo))
+                                   <img src="{{ asset('uploads/photos/'.$teacher->photo) }}" alt="{{ $teacher->name }}" />
+                                @else
+                                <img src="{{ asset('Backend/images/default.jpg/') }}" alt="Profile Image" />
+                                @endif
+
                             </div>
                             <div class="profile-header-info">
                                 <h4 class="m-t-sm">{{ $teacher->name }}</h4>
