@@ -18,7 +18,7 @@
     <!-- vendor css -->
     <link href="{{asset('Backend/lib/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
     <link href="{{asset('Backend/lib/ionicons/css/ionicons.min.css')}}" rel="stylesheet">
-     <link href="{{asset('Backend/lib/rickshaw/rickshaw.min.css')}}" rel="stylesheet"> 
+     <link href="{{asset('Backend/lib/rickshaw/rickshaw.min.css')}}" rel="stylesheet">
     <link href="{{asset('Backend/lib/select2/css/select2.min.css')}}" rel="stylesheet">
     <link href="{{asset('Backend/css/toastr.min.css')}}" rel="stylesheet">
 
@@ -78,14 +78,14 @@
     <script src="http://maps.google.com/maps/api/js?key=AIzaSyAq8o5-8Y5pudbJMJtDFzb8aHiWJufa5fg"></script>
     <script src="{{asset('Backend/lib/gmaps/gmaps.min.js')}}"></script>
 
-    
+
     <script src="{{asset('Backend/js/map.shiftworker.js')}}"></script>
     <script src="{{asset('Backend/js/ResizeSensor.js')}}"></script>
      <script src="{{asset('Backend/js/dashboard.js')}}"></script>
     <script src="{{asset('Backend/js/bracket.js')}}"></script>
     <script src="{{asset('Backend/js/toastr.min.js')}}"></script>
     @yield('script')
-    <!-- <script>
+     <script>
       $(function(){
         'use strict'
 
@@ -112,7 +112,7 @@
           }
         }
       });
-    </script> -->
-    
+    </script> 
+
   </body>
 </html>

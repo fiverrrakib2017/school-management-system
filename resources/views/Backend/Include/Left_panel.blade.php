@@ -47,7 +47,28 @@ $route = Route::currentRouteName()
 
           </ul>
         </li>
-         <label class="sidebar-label pd-x-10 mg-t-20 op-3">Accounts</label>
+        <label class="sidebar-label pd-x-10 mg-t-20 op-3">Inventory</label>
+        <!----------Customer  Menu-------------->
+        <li class="br-menu-item">
+          <a href="#" class="br-menu-link with-sub {{($prefix=='admin/customer')?'show-sub':''}}">
+            <!-- <i class="menu-item-icon icon ion-ios-photos-outline tx-20"></i> -->
+            <i class="menu-item-icon fas fa-users"></i>
+            <span class="menu-item-label">Customer</span>
+          </a>
+          <ul class="br-menu-sub" >
+
+          <li class="sub-item"><a href="{{route('admin.customer.create')}}" class="sub-link {{ ($route == 'admin.customer.create')? 'active':'' }}">Add Customer</a></li>
+
+            <li class="sub-item"><a href="{{route('admin.customer.index')}}" class="sub-link {{ ($route == 'admin.customer.index')? 'active':'' }}">Customer Management</a></li>
+
+            <li class="sub-item"><a href="{{route('admin.customer.invoice.create_invoice')}}" class="sub-link {{ ($route == 'admin.customer.invoice.create_invoice')? 'active':'' }}">Invoice Create</a></li>
+
+            <li class="sub-item"><a href="{{route('admin.customer.invoice.show_invoice')}}" class="sub-link {{ ($route == 'admin.customer.invoice.show_invoice'|| $route== 'admin.customer.invoice.edit_invoice' || $route=='admin.customer.invoice.view_invoice')? 'active':'' }}">Invoice Management</a></li>
+
+
+          </ul>
+        </li>
+        <label class="sidebar-label pd-x-10 mg-t-20 op-3">Accounts</label>
        <!----------Accounts Management Menu-------------->
         <li class="br-menu-item">
           <a href="#" class="br-menu-link with-sub {{($prefix=='admin/accounts')?'show-sub':''}}">

@@ -5,6 +5,8 @@ use App\Http\Controllers\Backend\Accounts\Master_Ledger\MasterLedgerController;
 use App\Http\Controllers\Backend\Accounts\Sub_Ledger\SubLedgerController;
 use App\Http\Controllers\Backend\Accounts\Transaction\TransactionController;
 use App\Http\Controllers\Backend\Admin\AdminController;
+use App\Http\Controllers\Backend\Customer\CustomerController;
+use App\Http\Controllers\Backend\Customer\InvoiceController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
@@ -114,5 +116,45 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store','store')->name('admin.transaction.store');
             });
         });
+    });
+    /** Customer  Route **/
+    Route::prefix('admin/customer')->group(function(){
+        Route::get('/list',[CustomerController::class,'index'])->name('admin.customer.index');
+
+        Route::get('/all-data',[CustomerController::class,'get_all_data'])->name('admin.customer.get_all_data');
+
+        Route::get('/create',[CustomerController::class,'create'])->name('admin.customer.create');
+
+        Route::get('/edit/{id}',[CustomerController::class,'edit'])->name('admin.customer.edit');
+
+        Route::get('/view/{id}',[CustomerController::class,'view'])->name('admin.customer.view');
+
+        Route::post('/delete',[CustomerController::class,'delete'])->name('admin.customer.delete');
+
+        Route::post('/store',[CustomerController::class,'store'])->name('admin.customer.store');
+
+        Route::post('/update/{id}',[CustomerController::class,'update'])->name('admin.customer.update');
+
+         /** Customer Invoice  Route **/
+         Route::get('/invoice/create',[InvoiceController::class,'create_invoice'])->name('admin.customer.invoice.create_invoice');
+
+         Route::get('/invoice/get_all_data',[InvoiceController::class,'show_invoice_data'])->name('admin.customer.invoice.show_invoice_data');
+
+         /*Seach Invoice Page Product Data*/
+         Route::post('/invoice/search_data',[InvoiceController::class,'search_product_data'])->name('admin.customer.invoice.search_product_data');
+
+         Route::get('/invoice/show',[InvoiceController::class,'show_invoice'])->name('admin.customer.invoice.show_invoice');
+
+         Route::post('/invoice/pay',[InvoiceController::class,'pay_due_amount'])->name('admin.customer.invoice.pay_due_amount');
+
+        Route::post('/invoice/store',[InvoiceController::class,'store_invoice'])->name('admin.customer.invoice.store_invoice');
+
+        Route::get('/invoice/view/{id}',[InvoiceController::class,'view_invoice'])->name('admin.customer.invoice.view_invoice');
+
+         Route::get('/invoice/edit/{id}',[InvoiceController::class,'edit_invoice'])->name('admin.customer.invoice.edit_invoice');
+
+         Route::post('/invoice/update',[InvoiceController::class,'update_invoice'])->name('admin.customer.invoice.update_invoice');
+
+         Route::post('/invoice/delete',[InvoiceController::class,'delete_invoice'])->name('admin.customer.invoice.delete_invoice');
     });
 });
