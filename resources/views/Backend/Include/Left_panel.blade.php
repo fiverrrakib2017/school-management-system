@@ -68,6 +68,40 @@ $route = Route::currentRouteName()
 
           </ul>
         </li>
+        <!----------Product Menu-------------->
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub {{($prefix=='admin/product')?'show-sub':''}}">
+              <!-- <i class="menu-item-icon icon ion-ios-photos-outline tx-20"></i> -->
+              <i class="menu-item-icon fas fa-box-open"></i>
+              <span class="menu-item-label">Products</span>
+            </a>
+            <ul class="br-menu-sub" >
+
+            <li class="sub-item"><a href="{{route('admin.brand.index')}}" class="sub-link {{ ($route == 'admin.brand.index' || $route == 'admin.brand.edit' || $route == 'admin.brand.update')? 'active':'' }}">Brand</a></li>
+
+              <li class="sub-item"><a href="{{route('admin.category.index')}}" class="sub-link {{ ($route == 'admin.category.index' || $route == 'admin.category.edit' || $route == 'admin.category.update')? 'active':'' }}">Category</a></li>
+
+              {{-- <li class="sub-item"><a href="{{route('admin.subcategory.index')}}" class="sub-link {{ ($route == 'admin.subcategory.index' || $route == 'admin.subcategory.edit' || $route == 'admin.subcategory.update')? 'active':'' }}">Sub Category</a></li>
+
+              <li class="sub-item"><a href="{{route('admin.childcategory.index')}}" class="sub-link {{ ($route == 'admin.childcategory.index' || $route == 'admin.childcategory.edit' || $route == 'admin.childcategory.update')? 'active':'' }}">Child Category</a></li>
+
+              <li class="sub-item"><a href="{{route('admin.product.color.index')}}" class="sub-link {{ ($route == 'admin.product.color.index')? 'active':'' }}">Color</a></li>
+
+              <li class="sub-item"><a href="{{route('admin.product.size.index')}}" class="sub-link {{ ($route == 'admin.product.size.index')? 'active':'' }}">Size</a></li>
+
+              <li class="sub-item"><a href="{{route('admin.products.create')}}" class="sub-link  {{ ( $route == 'admin.products.create')? 'active':'' }}">Add Product</a></li>
+
+
+
+              <li class="sub-item"><a href="{{route('admin.discount.index')}}" class="sub-link {{ ($route == 'admin.discount.index' || $route == 'admin.discount.edit' || $route == 'admin.discount.update')? 'active':'' }}">Discount Product</a></li>
+
+              <li class="sub-item"><a href="{{route('admin.products.index')}}" class="sub-link {{ ($route == 'admin.products.index' || $route == 'admin.products.edit' || $route == 'admin.products.update')? 'active':'' }}">Product Management</a></li>
+
+              <li class="sub-item"><a href="{{route('admin.product.store.index')}}" class="sub-link {{ ($route == 'admin.product.store.index')? 'active':'' }}">Stock Management</a></li> --}}
+
+              <li class="sub-item"><a href="#" class="sub-link">Product Review</a></li>
+            </ul>
+          </li>
         <label class="sidebar-label pd-x-10 mg-t-20 op-3">Accounts</label>
        <!----------Accounts Management Menu-------------->
         <li class="br-menu-item">
