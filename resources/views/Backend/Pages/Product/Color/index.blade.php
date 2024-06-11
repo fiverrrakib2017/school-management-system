@@ -3,7 +3,7 @@
 @section('style')
  <!-- vendor css -->
 		<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-  
+
     <link href="{{asset('Backend/lib/datatables.net-dt/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('Backend/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css')}}" rel="stylesheet">
 
@@ -14,12 +14,12 @@
       <div class="br-pageheader">
         <nav class="breadcrumb pd-0 mg-0 tx-12">
           <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <a class="breadcrumb-item" href="{{route('admin.products.index')}}">Product</a>
+          <a class="breadcrumb-item" href="">Product</a>
           <a class="breadcrumb-item" href="{{route('admin.product.color.index')}}">Color</a>
           <span class="breadcrumb-item active">All Color</span>
         </nav>
       </div><!-- br-pageheader -->
-<div class="br-section-wrapper" style="padding: 0px !important;"> 
+<div class="br-section-wrapper" style="padding: 0px !important;">
   <div class="table-wrapper">
     <div class="card">
       <div class="card-header">
@@ -42,7 +42,7 @@
     </table>
       </div>
     </div>
-    
+
   </div><!-- table-wrapper -->
 </div><!-- br-section-wrapper -->
 
@@ -122,7 +122,7 @@
     </div>
   </div>
 
-  
+
 <!----- Edit Modal ------->
 <div id="editModal" class="modal fade effect-scale">
         <div class="modal-dialog modal-lg modal-dialog-top mt-4" role="document">
@@ -185,7 +185,7 @@
     <script src="{{asset('Backend/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-     
+
       var table=$("#datatable1").DataTable({
          "processing":true,
         "responsive": true,
@@ -273,7 +273,7 @@
   });
 
 
-  
+
   /** Handle form submission for delete **/
   $('#deleteModal form').submit(function(e){
     e.preventDefault();
@@ -360,7 +360,7 @@
       'url':url,
       data: formData,
       beforeSend: function () {
-        form.find(':input').prop('disabled', true);  
+        form.find(':input').prop('disabled', true);
       },
       success: function (response) {
         $('#editModal').modal('hide');
@@ -399,5 +399,5 @@
         toastr.error("{{ session('error') }}");
     </script>
     @endif
-  
+
 @endsection

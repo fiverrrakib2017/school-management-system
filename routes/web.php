@@ -10,7 +10,9 @@ use App\Http\Controllers\Backend\Customer\InvoiceController;
 use App\Http\Controllers\Backend\Product\BrandController;
 use App\Http\Controllers\Backend\Product\CategoryController;
 use App\Http\Controllers\Backend\Product\SubCateogryController;
+use App\Http\Controllers\Backend\Product\ColorController;
 use App\Http\Controllers\Backend\Product\ChildCategoryController;
+use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
@@ -201,5 +203,22 @@ Route::group(['middleware'=>'admin'],function(){
         /*Get child Category*/
         Route::get('/get-child_category/{id}',[ChildCategoryController::class,'get_child_category']);
 
+         /** Product Color Mangement Route **/
+         Route::get('/color',[ColorController::class,'index'])->name('admin.product.color.index');
+         Route::get('/color/get_all_data',[ColorController::class,'get_all_data'])->name('admin.product.color.all_data');
+         Route::post('/color/store',[ColorController::class,'store'])->name('admin.product.color.store');
+         Route::get('/color/edit/{id}',[ColorController::class,'edit'])->name('admin.product.color.edit');
+         Route::post('/color/update',[ColorController::class,'update'])->name('admin.product.color.update');
+         Route::post('/color/delete',[ColorController::class,'delete'])->name('admin.product.color.delete');
+
+         /**Product Size Mangement Route **/
+         Route::get('/size',[SizeController::class,'index'])->name('admin.product.size.index');
+         Route::get('/size/get_all_data',[SizeController::class,'get_all_data'])->name('admin.product.size.all_data');
+         Route::post('/size/store',[SizeController::class,'store'])->name('admin.product.size.store');
+         Route::get('/size/edit/{id}',[SizeController::class,'edit'])->name('admin.product.size.edit');
+         Route::post('/size/update',[SizeController::class,'update'])->name('admin.product.size.update');
+         Route::post('/size/delete',[SizeController::class,'delete'])->name('admin.product.size.delete');
+
+         
     });
 });
