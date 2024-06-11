@@ -9,6 +9,8 @@ use App\Http\Controllers\Backend\Customer\CustomerController;
 use App\Http\Controllers\Backend\Customer\InvoiceController;
 use App\Http\Controllers\Backend\Product\BrandController;
 use App\Http\Controllers\Backend\Product\CategoryController;
+use App\Http\Controllers\Backend\Product\SubCateogryController;
+use App\Http\Controllers\Backend\Product\ChildCategoryController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
@@ -177,6 +179,27 @@ Route::group(['middleware'=>'admin'],function(){
         Route::post('/category/delete',[CategoryController::class,'delete'])->name('admin.category.delete');
         Route::get('/category/edit/{id}',[CategoryController::class,'edit'])->name('admin.category.edit');
         Route::post('/category/update',[CategoryController::class,'update'])->name('admin.category.update');
+
+
+        /* Sub Category Route*/
+        Route::get('/sub-category',[SubCateogryController::class,'index'])->name('admin.subcategory.index');
+        Route::post('/sub-category/store',[SubCateogryController::class,'store'])->name('admin.subcategory.store');
+        Route::get('/sub-category/edit/{id}',[SubCateogryController::class,'edit'])->name('admin.subcategory.edit');
+        Route::post('/sub-category/delete',[SubCateogryController::class,'delete'])->name('admin.subcategory.delete');
+        Route::post('/sub-category/update/{id}',[SubCateogryController::class,'update'])->name('admin.subcategory.update');
+        /*Get Sub Category*/
+        Route::get('/get-sub_category/{id}',[SubCateogryController::class,'get_sub_category']);
+
+
+        /* Child Category Route*/
+        Route::get('/child-category',[ChildCategoryController::class,'index'])->name('admin.childcategory.index');
+        Route::post('/child-category/store',[ChildCategoryController::class,'store'])->name('admin.childcategory.store');
+        Route::get('/child-category/edit/{id}',[ChildCategoryController::class,'edit'])->name('admin.childcategory.edit');
+        Route::post('/child-category/delete',[ChildCategoryController::class,'delete'])->name('admin.childcategory.delete');
+        Route::post('/child-category/update/{id}',[ChildCategoryController::class,'update'])->name('admin.childcategory.update');
+
+        /*Get child Category*/
+        Route::get('/get-child_category/{id}',[ChildCategoryController::class,'get_child_category']);
 
     });
 });

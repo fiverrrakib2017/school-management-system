@@ -81,11 +81,11 @@ $route = Route::currentRouteName()
 
               <li class="sub-item"><a href="{{route('admin.category.index')}}" class="sub-link {{ ($route == 'admin.category.index' || $route == 'admin.category.edit' || $route == 'admin.category.update')? 'active':'' }}">Category</a></li>
 
-              {{-- <li class="sub-item"><a href="{{route('admin.subcategory.index')}}" class="sub-link {{ ($route == 'admin.subcategory.index' || $route == 'admin.subcategory.edit' || $route == 'admin.subcategory.update')? 'active':'' }}">Sub Category</a></li>
+             <li class="sub-item"><a href="{{route('admin.subcategory.index')}}" class="sub-link {{ ($route == 'admin.subcategory.index' || $route == 'admin.subcategory.edit' || $route == 'admin.subcategory.update')? 'active':'' }}">Sub Category</a></li>
 
               <li class="sub-item"><a href="{{route('admin.childcategory.index')}}" class="sub-link {{ ($route == 'admin.childcategory.index' || $route == 'admin.childcategory.edit' || $route == 'admin.childcategory.update')? 'active':'' }}">Child Category</a></li>
 
-              <li class="sub-item"><a href="{{route('admin.product.color.index')}}" class="sub-link {{ ($route == 'admin.product.color.index')? 'active':'' }}">Color</a></li>
+             {{--   <li class="sub-item"><a href="{{route('admin.product.color.index')}}" class="sub-link {{ ($route == 'admin.product.color.index')? 'active':'' }}">Color</a></li>
 
               <li class="sub-item"><a href="{{route('admin.product.size.index')}}" class="sub-link {{ ($route == 'admin.product.size.index')? 'active':'' }}">Size</a></li>
 
