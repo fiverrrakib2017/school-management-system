@@ -5,11 +5,9 @@
  <link href="{{asset('Backend/lib/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
 		<link href="{{asset('Backend/lib/ionicons/css/ionicons.min.css')}}" rel="stylesheet">
 		<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-    <link href="{{asset('Backend/lib/select2/css/select2.min.css')}}" rel="stylesheet">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
     <!-- Bracket CSS -->
     <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('Backend/css/dropzone.min.css') }}" type="text/css" />
     <style>
       /* dropzone.css */
 .dropzone {
@@ -216,7 +214,7 @@
           </div>
 
           <div class="row">
-            
+
             <div class="col">
               <div class="form-group">
                 <label for="">Brand</label>
@@ -235,7 +233,7 @@
             <div class="col">
               <div class="form-group">
                 <label for="">Category</label>
-                <select type="text" class="form-control select2" name="category_id" id="category_id" required>
+                <select type="text" class="form-control " name="category_id" id="category_id" required>
                   <option value="">Select</option>
                   @if (count($category) > 0)
 
@@ -258,7 +256,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="">Sub Category</label>
-                <select type="text" class="form-control select2" name="sub_cat_id" id="sub_cat_id">
+                <select type="text" class="form-control " name="sub_cat_id" id="sub_cat_id">
                   <option value="">Select</option>
                 </select>
                 <p class="ierr"></p>
@@ -267,7 +265,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="">Child Category</label>
-                <select type="text" class="form-control select2" name="child_cat_id" id="child_cat_id">
+                <select type="text" class="form-control " name="child_cat_id" id="child_cat_id">
                   <option value="">Select</option>
                 </select>
                 <p class="ierr"></p>
@@ -354,7 +352,7 @@
             <div class="col">
               <div class="form-group">
                 <label for="">Size</label>
-                <select type="text" class="form-control" id="size" name="size[]" multiple="multiple" required>
+                <select type="text" class="form-control" id="size" name="size[]" multiple="multiple" >
                 <option value="">---Select---</option>
                   @foreach ($size as $item)
                      <option value="{{ $item->name }}">{{ $item->name }}</option>
@@ -367,7 +365,7 @@
             <div class="col">
               <div class="form-group">
                 <label for="">Color</label>
-                <select class="form-control" id="color" name="color[]" multiple="multiple" required>
+                <select class="form-control" id="color" name="color[]" multiple="multiple" >
                   <option value="">---Select---</option>
                     @foreach ($color as $item)
                      <option value="{{ $item->name }}">{{ $item->name }}</option>
@@ -445,14 +443,15 @@
     $tamurl='upload-temp-image';
 @endphp
 @section('script')
-<script src="https://cdn.tiny.cloud/1/h2axwpnzfh7k1agff20oqbrdvqd0hpov0jv1oc3q8gb14mqi/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
+<script src="https://cdn.tiny.cloud/1/zifeh3wuv4rjvx6ktqat7x169antz66gx9iwbh8sztsk1utd/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="{{ asset('Backend/js/dropzone.min.js') }}"></script>
   <script type="text/javascript">
     $("#brand_id").select2();
     $("#category_id").select2();
     $("#sub_cat_id").select2();
     $("#child_cat_id").select2();
+    $("#status").select2();
+    $("#product_type").select2();
 
     $("#color, #size").select2({
       allowClear: true,
@@ -479,20 +478,20 @@
         selector: '#short_description',
         plugins: 'lists link image',
         toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent",
-        height: 200, // Specify the height of the editor
+        height: 300, // Specify the height of the editor
       });
       tinymce.init({
         selector: '#description',
         plugins: 'lists link image',
         toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent",
-        height: 200, // Specify the height of the editor
+        height: 300, // Specify the height of the editor
       });
 
       tinymce.init({
         selector: '#shipping_returns',
         plugins: 'lists link image',
         toolbar: 'undo redo | bold italic | bullist numlist | link image',
-        height: 200, // Specify the height of the editor
+        height: 300, // Specify the height of the editor
       });
 
 

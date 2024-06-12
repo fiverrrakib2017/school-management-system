@@ -14,8 +14,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>  @yield('title')</title>
-
-    <!-- vendor css -->
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">    <!-- vendor css -->
     <link href="{{asset('Backend/lib/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
     <link href="{{asset('Backend/lib/ionicons/css/ionicons.min.css')}}" rel="stylesheet">
      <link href="{{asset('Backend/lib/rickshaw/rickshaw.min.css')}}" rel="stylesheet">
@@ -38,7 +38,7 @@
     <!-- ########## END: HEAD PANEL ########## -->
 
     <!-- ########## START: RIGHT PANEL ########## -->
-        @include('Backend.Include.Right_Panel')
+        {{-- @include('Backend.Include.Right_Panel') --}}
     <!-- ########## END: RIGHT PANEL ########## --->
 
     <!-- ########## START: MAIN PANEL ########## -->
@@ -75,12 +75,12 @@
     <script src="{{asset('Backend/lib/jquery-sparkline/jquery.sparkline.min.js')}}"></script>
     <script src="{{asset('Backend/lib/echarts/echarts.min.js')}}"></script>
     <script src="{{asset('Backend/lib/select2/js/select2.full.min.js')}}"></script>
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyAq8o5-8Y5pudbJMJtDFzb8aHiWJufa5fg"></script>
+    {{-- <script src="http://maps.google.com/maps/api/js?key=AIzaSyAq8o5-8Y5pudbJMJtDFzb8aHiWJufa5fg"></script> --}}
     <script src="{{asset('Backend/lib/gmaps/gmaps.min.js')}}"></script>
 
 
     <script src="{{asset('Backend/js/map.shiftworker.js')}}"></script>
-    <script src="{{asset('Backend/js/ResizeSensor.js')}}"></script>
+   <script src="{{asset('Backend/js/ResizeSensor.js')}}"></script>
      <script src="{{asset('Backend/js/dashboard.js')}}"></script>
     <script src="{{asset('Backend/js/bracket.js')}}"></script>
     <script src="{{asset('Backend/js/toastr.min.js')}}"></script>
@@ -112,7 +112,6 @@
           }
         }
       });
-    </script> 
-
+    </script>
   </body>
 </html>
