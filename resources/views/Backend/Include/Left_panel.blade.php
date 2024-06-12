@@ -89,11 +89,11 @@ $route = Route::currentRouteName()
 
               <li class="sub-item"><a href="{{route('admin.product.size.index')}}" class="sub-link {{ ($route == 'admin.product.size.index')? 'active':'' }}">Size</a></li>
 
-            {{--   <li class="sub-item"><a href="{{route('admin.products.create')}}" class="sub-link  {{ ( $route == 'admin.products.create')? 'active':'' }}">Add Product</a></li>
+             <li class="sub-item"><a href="{{route('admin.products.create')}}" class="sub-link  {{ ( $route == 'admin.products.create')? 'active':'' }}">Add Product</a></li>
 
 
 
-              <li class="sub-item"><a href="{{route('admin.discount.index')}}" class="sub-link {{ ($route == 'admin.discount.index' || $route == 'admin.discount.edit' || $route == 'admin.discount.update')? 'active':'' }}">Discount Product</a></li>
+             {{--   <li class="sub-item"><a href="{{route('admin.discount.index')}}" class="sub-link {{ ($route == 'admin.discount.index' || $route == 'admin.discount.edit' || $route == 'admin.discount.update')? 'active':'' }}">Discount Product</a></li>
 
               <li class="sub-item"><a href="{{route('admin.products.index')}}" class="sub-link {{ ($route == 'admin.products.index' || $route == 'admin.products.edit' || $route == 'admin.products.update')? 'active':'' }}">Product Management</a></li>
 

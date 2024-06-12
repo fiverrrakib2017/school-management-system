@@ -11,6 +11,8 @@ use App\Http\Controllers\Backend\Product\BrandController;
 use App\Http\Controllers\Backend\Product\CategoryController;
 use App\Http\Controllers\Backend\Product\SubCateogryController;
 use App\Http\Controllers\Backend\Product\ColorController;
+use App\Http\Controllers\Backend\Product\ProductController;
+use App\Http\Controllers\Backend\Product\TempImageController;
 use App\Http\Controllers\Backend\Product\ChildCategoryController;
 use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Student\classController;
@@ -219,6 +221,20 @@ Route::group(['middleware'=>'admin'],function(){
          Route::post('/size/update',[SizeController::class,'update'])->name('admin.product.size.update');
          Route::post('/size/delete',[SizeController::class,'delete'])->name('admin.product.size.delete');
 
-         
+          /* Product Route*/
+        Route::get('/all',[ProductController::class,'index'])->name('admin.products.index');
+        Route::get('/get_product/{id}',[ProductController::class,'get_product'])->name('admin.products.get_product');
+        Route::get('/create',[ProductController::class,'create'])->name('admin.products.create');
+        Route::post('/update',[ProductController::class,'product_update'])->name('admin.product.update');
+        Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit');
+
+         /* Product Image*/
+         Route::post('/upload-temp-image', [TempImageController::class, 'create'])->name('tempimage.create');
+         Route::post('/photo/update',[ProductController::class,'photo_update'])->name('admin.product.photo.update');
+         Route::post('/delete/photo',[ProductController::class,'delete_photo'])->name('admin.product.delete.photo');
+
+         /* Product Store*/
+         Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
+         Route::post('/delete',[ProductController::class,'delete'])->name('admin.products.delete');
     });
 });
