@@ -192,7 +192,7 @@
                     <input type="text"  class="form-control" name="product_name" id="product_name" placeholder="Enter Product Name" value="{{$data->title}}" required>
                     <p class="ierr"></p>
                 @endif
-                
+
               </div>
             </div>
             <div class="col-md-6">
@@ -200,7 +200,7 @@
                 @if (!empty($data->slug))
                     <label for="">Product Slug</label>
                     <input type="text"  class="form-control" name="slug" id="slug" value="{{$data->slug}}">
-                    <p class="ierr"></p> 
+                    <p class="ierr"></p>
                 @endif
             </div>
             </div>
@@ -232,23 +232,7 @@
           </div>
 
           <div class="row">
-            <div class="col">
-              <div class="form-group">
-                <label for="">Seller</label>
-                <select type="text" class="form-control " name="seller_id" id="seller_id" required>
-                  <option value="">---Select---</option>
-                  @if (count($seller) > 0)
 
-                    @foreach($seller as $item)
-                        @if ($data->seller_id==$item->id)
-                              <option value="{{$item->id}}" selected>{{ $item->fullname }}</option>
-                        @endif
-                    @endforeach
-                  @endif
-                </select>
-                <p class="ierr"></p>
-              </div>
-            </div>
             <div class="col">
               <div class="form-group">
                 <label for="">Brand</label>
@@ -334,7 +318,7 @@
                      <textarea type="text" class="form-control" name="short_description" id="short_description" placeholder="Enter Your Short Description ">{{$data->short_description}}</textarea>
                     <p class="ierr"></p>
                 @endif
-               
+
               </div>
             </div>
           </div>
@@ -347,7 +331,7 @@
                      <textarea type="text" class="form-control"  name="description" id="description" placeholder="Enter Your Description ">{{$data->description}}</textarea>
                     <p class="ierr"></p>
                 @endif
-               
+
               </div>
             </div>
           </div>
@@ -372,7 +356,7 @@
                      <input type="number" class="form-control" id="price"  name="price" placeholder="Enter Your Price" value="{{$data->price}}" required/>
                     <p class="ierr"></p>
                 @endif
-               
+
               </div>
             </div>
             <div class="col-md-6">
@@ -382,7 +366,7 @@
                     <input type="text" class="form-control" name="sku" id="sku" value="{{$data->sku}}" required/>
                     <p class="ierr"></p>
                 @endif
-                
+
             </div>
             </div>
           </div>
@@ -398,31 +382,31 @@
                         <option value="0%" selected>0%</option>
                     @else
                         <option value="0%">0%</option>
-                    @endif   
+                    @endif
 
                     @if ($data->tax == "5%")
                         <option value="5%" selected>5%</option>
                     @else
                         <option value="5%" >5%</option>
-                    @endif    
+                    @endif
 
                     @if ($data->tax == "10%")
                         <option value="10%" selected>10%</option>
                     @else
                         <option value="5%" >5%</option>
-                    @endif  
+                    @endif
 
                     @if ($data->tax == "15%")
                         <option value="15%" selected>15%</option>
                     @else
                     <option value="15%">15%</option>
-                    @endif 
+                    @endif
 
                     @if ($data->tax == "20%")
                         <option value="20%">20%</option>
                     @else
                         <option value="20%">20%</option>
-                    @endif                      
+                    @endif
                 </select>
                 <p class="ierr"></p>
               </div>
@@ -433,11 +417,11 @@
                 @if (!empty($data->delivery_charge))
                      <input type="text" class="form-control" name="dellivery_charge" id="dellivery_charge" placeholder="Enter Amount" value="{{$data->delivery_charge}}" required/>
                     <p class="ierr"></p>
-                @else 
+                @else
                     <input type="text" class="form-control" name="dellivery_charge" id="dellivery_charge" placeholder="Enter Amount" value="0" />
                     <p class="ierr"></p>
                 @endif
-               
+
             </div>
             </div>
           </div>
@@ -457,7 +441,7 @@
                       <option value="{{ $size->name }}" {{ in_array($size->name, $selectedSizes) ? 'selected' : '' }}>
                           {{ $size->name }}
                       </option>
-                  @endforeach      
+                  @endforeach
                 </select>
                 <p class="ierr"></p>
               </div>
@@ -487,18 +471,18 @@
                         <option value="Features" selected>Features</option>
                     @else
                         <option value="Features">Features</option>
-                    @endif  
+                    @endif
 
                     @if ($data->product_type == "Popular")
                         <option value="Popular" selected>Popular</option>
                     @else
                         <option value="Popular">Popular</option>
-                    @endif   
+                    @endif
                     @if ($data->product_type == "New")
                         <option value="New" selected>New</option>
                     @else
                         <option value="New">New</option>
-                    @endif   
+                    @endif
                 </select>
                 <p class="ierr"></p>
               </div>
@@ -533,8 +517,8 @@
                     @else
                         <option value="1">Active</option>
                         <option value="0" selected>Inactive</option>
-                    @endif               
-                 
+                    @endif
+
                 </select>
                 <p class="ierr"></p>
               </div>
@@ -562,17 +546,21 @@
 
 @endsection
 @section('script')
-<script src="https://cdn.tiny.cloud/1/h2axwpnzfh7k1agff20oqbrdvqd0hpov0jv1oc3q8gb14mqi/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/zifeh3wuv4rjvx6ktqat7x169antz66gx9iwbh8sztsk1utd/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="{{ asset('Backend/js/dropzone.min.js') }}"></script>
   <script type="text/javascript">
     $("#brand_id").select2();
     $("#category_id").select2();
     $("#sub_cat_id").select2();
     $("#child_cat_id").select2();
+    $("#status").select2();
+    $("#product_type").select2();
+
     $("#color, #size").select2({
       allowClear: true,
       placeholder: "Select "
     });
+    
     $.ajaxSetup({
       headers: {
           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -608,8 +596,8 @@
         height: 200, // Specify the height of the editor
       });
     /** Drag And Drop Image Upload **/
-      Dropzone.autoDiscover = false;    
-      const dropzone = $("#image").dropzone({ 
+      Dropzone.autoDiscover = false;
+      const dropzone = $("#image").dropzone({
         url:  "{{ route('admin.product.photo.update') }}",
         maxFiles: 10,
         paramName: 'image',
@@ -649,7 +637,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                if (response.success==true) { 
+                if (response.success==true) {
                   $('#image-row-' + id).remove();
                     toastr.success(response.message);
                 }
@@ -675,7 +663,7 @@
         data: formData,
         beforeSend: function () {
           $('form button[type=submit]').prop('disabled', true);
-          $("form button[type=submit]").html('<i class="fa fa-spinner fa-spin"></i> Loading...'); 
+          $("form button[type=submit]").html('<i class="fa fa-spinner fa-spin"></i> Loading...');
         },
         success: function (response) {
           $('form')[0].reset();
@@ -683,7 +671,7 @@
             if (response.success==true) {
                 $('button[type=submit]').prop('disabled', false);
                 $("button[type=submit]").html('Update Now');
-                toastr.success(response.message);  
+                toastr.success(response.message);
                 window.location.href = "{{route('admin.products.index')}}";
               }
           } else {
@@ -746,7 +734,7 @@
         $('#child_cat_id').append('<option value="">---Select---</option>');
       }
     });
-    
+
   </script>
 @endsection
 
