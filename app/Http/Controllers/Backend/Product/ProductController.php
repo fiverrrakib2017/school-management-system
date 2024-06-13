@@ -45,7 +45,6 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_cat_id;
             $product->child_category_id = $request->child_cat_id;
 
-            $product->seller_id = $request->seller_id;
             $product->size = implode(",",$request->size);
             $product->color =implode(",",$request->color);
             $product->tax = $request->tax;
@@ -122,7 +121,6 @@ class ProductController extends Controller
              $product->category_id = $request->category_id;
 
 
-             $product->seller_id = $request->seller_id;
              $product->size = implode(",",$request->size);
              $product->color =implode(",",$request->color);
              $product->tax = $request->tax;
@@ -176,7 +174,6 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success','Delete Success');
     }
     public function edit($id){
-        $seller=Seller::latest()->get();
         $category=Product_Category::latest()->get();
         $brand=Product_Brand::latest()->get();
         $child_category=Product_child_category::latest()->get();
@@ -184,7 +181,7 @@ class ProductController extends Controller
         $colors=Color::where('status', 1)->get();
         $sizes=Size::where('status',1)->get();
         $data=Product::with('product_image')->find($id);
-        return view('Backend.Pages.Product.Update',compact('data','seller','category','brand','sub_category','child_category','colors','sizes'));
+        return view('Backend.Pages.Product.Update',compact('data','category','brand','sub_category','child_category','colors','sizes'));
     }
     public function photo_update(Request $request){
         $image = $request->image;
@@ -244,7 +241,6 @@ class ProductController extends Controller
             'slug' => 'nullable',
             'price' => 'required|numeric',
             'description' => 'nullable|max:10000',
-            'seller_id' => 'required',
             'product_type' => 'required',
         ];
     }

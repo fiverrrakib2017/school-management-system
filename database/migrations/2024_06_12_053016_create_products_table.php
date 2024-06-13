@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('child_category_id')->nullable();
-            $table->unsignedBigInteger('seller_id');
 
             $table->string('slug');
             $table->string('size')->nullable();
