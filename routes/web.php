@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\Product\ProductController;
 use App\Http\Controllers\Backend\Product\TempImageController;
 use App\Http\Controllers\Backend\Product\ChildCategoryController;
 use App\Http\Controllers\Backend\Product\SizeController;
+use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
@@ -236,5 +237,7 @@ Route::group(['middleware'=>'admin'],function(){
          /* Product Store*/
          Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
          Route::post('/delete',[ProductController::class,'delete'])->name('admin.products.delete');
+        /* Stock Route*/
+         Route::get('/stock',[StockController::class,'index'])->name('admin.product.stock.index');
     });
 });
