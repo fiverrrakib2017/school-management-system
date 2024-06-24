@@ -237,7 +237,8 @@ Route::group(['middleware'=>'admin'],function(){
          /* Product Store*/
          Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
          Route::post('/delete',[ProductController::class,'delete'])->name('admin.products.delete');
-        /* Stock Route*/
+
+         /* Stock Route*/
          Route::get('/stock',[StockController::class,'index'])->name('admin.product.stock.index');
     });
 });

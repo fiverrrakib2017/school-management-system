@@ -1,105 +1,103 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
 @section('style')
- <!-- vendor css -->
-		<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
 
-    <link href="{{asset('Backend/lib/datatables.net-dt/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <link href="{{asset('Backend/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css')}}" rel="stylesheet">
+    <style>
+        /* .loading-spinner {
+        border:4px solid #f1f1f1;
+        border-left-color: #000000;;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        }
 
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
+        @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+        } */
+
+    </style>
 @endsection
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <a class="breadcrumb-item" href="{{route('admin.customer.index')}}">Customer</a>
-          <span class="breadcrumb-item active">List</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="br-section-wrapper" style="padding: 0px !important;">
-  <div class="table-wrapper">
-    <div class="card">
-      <div class="card-header">
-        <a href="{{route('admin.customer.create')}}" class="btn btn btn-success">Add New Customer</a>
-      </div>
-      <div class="card-body">
-      <table id="datatable1" class="table display responsive nowrap">
-      <thead>
-        <tr>
-          <th class="">No.</th>
-          <th class="">Photo</th>
-          <th class="">Fullname</th>
-          <th class="">Phone Number</th>
-          <th class="">City</th>
-          <th class="">State</th>
-          <th class="">Address</th>
-          <th class="">Opening Balance</th>
-          <th class="">Bank Payment Status</th>
-          <th class="">Verification Status</th>
-          <th class="">Create Date</th>
-          <th class="">Action</th>
-        </tr>
-      </thead>
-      <tbody>
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="card">
+            <div class="card-body">
+                <a href="{{ route('admin.customer.create') }}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                    Add New Customer</a>
 
-      </tbody>
-    </table>
-      </div>
+                <div class="table-responsive" id="tableStyle">
+                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="">No.</th>
+                                <th class="">Photo</th>
+                                <th class="">Fullname</th>
+                                <th class="">Phone Number</th>
+                                <th class="">Create Date</th>
+                                <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
 
-  </div><!-- table-wrapper -->
-</div><!-- br-section-wrapper -->
 
-<!--Start Delete MODAL ---->
 <div id="deleteModal" class="modal fade">
-    <div class="modal-dialog modal-dialog-top" role="document">
-        <div class="modal-content tx-size-sm">
-        <div class="modal-body tx-center pd-y-20 pd-x-20">
-            <form action="{{route('admin.customer.delete')}}" method="post" enctype="multipart/form-data">
-                @csrf
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <i class="icon icon ion-ios-close-outline tx-60 tx-danger lh-1 mg-t-20 d-inline-block"></i>
-                <h4 class="tx-danger  tx-semibold mg-b-20 mt-2">Are you sure! you want to delete this?</h4>
+    <div class="modal-dialog modal-confirm">
+        <form action="{{route('admin.customer.delete')}}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box">
+                    <i class="fas fa-trash"></i>
+                </div>
+                <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <button type="submit" class="btn btn-danger mr-2 text-white tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20">
-                    yes
-                </button>
-                <button type="button" class="btn btn-success tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20" data-dismiss="modal" aria-label="Close">
-                    No
-                </button>
-            </form>
-        </div><!-- modal-body -->
-        </div><!-- modal-content -->
+                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to delete these records? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+            </div>
+        </form>
     </div>
 </div>
 @endsection
 
 @section('script')
-    <script src="{{asset('Backend/lib/highlightjs/highlight.pack.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
-  <script type="text/javascript">
-    $(document).ready(function(){
 
-      var table=$("#datatable1").DataTable({
-         "processing":true,
-        "responsive": true,
-        "serverSide":true,
-        beforeSend: function () {
-        },
-        ajax: "{{ route('admin.customer.get_all_data') }}",
-        language: {
-          searchPlaceholder: 'Search...',
-          sSearch: '',
-          lengthMenu: '_MENU_ items/page',
-        },
-        "columns":[
+  <script type="text/javascript">
+     $(document).ready(function(){
+
+    var table=$("#datatable1").DataTable({
+    "processing":true,
+    "responsive": true,
+    "serverSide":true,
+    beforeSend: function () {
+        //$('#preloader').addClass('active');
+    },
+    complete: function(){
+        //$('.product_loading').css({"display":"none"});
+    },
+    ajax: "{{ route('admin.customer.get_all_data') }}",
+    language: {
+        searchPlaceholder: 'Search...',
+        sSearch: '',
+        lengthMenu: '_MENU_ items/page',
+    },
+    "columns":[
           {
             "data":"id"
           },
@@ -127,38 +125,7 @@
           {
             "data":"phone_number"
           },
-          {
-            "data":"city"
-          },
-          {
-            "data":"state"
-          },
-          {
-            "data":"address"
-          },
-          {
-            "data":"opening_balance"
-          },
-          {
-            "data":"bank_payment_status",
-            render:function(data,type,row){
-              if (row.bank_payment_status==1) {
-                return '<span class="badge badge-success">Active</span>';
-              }else{
-                return '<span class="badge badge-danger">Inactive</span>';
-              }
-            }
-          },
-          {
-            "data":"verification_status",
-            render:function(data,type,row){
-              if (row.verification_status==1) {
-                return '<span class="badge badge-success">Active</span>';
-              }else{
-                return '<span class="badge badge-danger">Inactive</span>';
-              }
-            }
-          },
+          
           {
             "data":"created_at",
             render: function (data, type, row) {
@@ -167,6 +134,7 @@
             }
           },
           {
+            data:null,
             render: function (data, type, row) {
               var editUrl = "{{ route('admin.customer.edit', ':id') }}".replace(':id', row.id);
 
@@ -185,13 +153,14 @@
 
           },
         ],
-        order:[
-          [0, "desc"]
-        ],
+    order:[
+        [0, "desc"]
+    ],
 
-      });
-      $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
     });
+
+    });
+
 
 
 
@@ -211,6 +180,14 @@
   /** Handle form submission for delete **/
   $('#deleteModal form').submit(function(e){
     e.preventDefault();
+    /*Get the submit button*/
+    var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
+
+    /* Save the original button text*/
+    var originalBtnText = submitBtn.html();
+
+    /*Change button text to loading state*/
+    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
 
     var form = $(this);
     var url = form.attr('action');
@@ -223,25 +200,20 @@
       success: function (response) {
         $('#deleteModal').modal('hide');
         if (response.success) {
-          toastr.success(response.success);
-          //table.ajax.reload();
+          toastr.success(response.message);
           $('#datatable1').DataTable().ajax.reload( null , false);
-        } else {
-           /** Handle  errors **/
-          toastr.error("Error!!!");
         }
       },
 
       error: function (xhr, status, error) {
          /** Handle  errors **/
-        console.error(xhr.responseText);
-      }
+         toastr.error(xhr.responseText);
+      },
+      complete: function () {
+        submitBtn.html(originalBtnText);
+        }
     });
   });
-
-
-
-
   </script>
 
 

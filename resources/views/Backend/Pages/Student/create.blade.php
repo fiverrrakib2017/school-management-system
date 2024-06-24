@@ -1,18 +1,15 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
 @section('style')
- <!-- vendor css -->
-	<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
 
-@endsection
-<style>
-    #preview {
+    <style>
+       #preview {
+
         margin-top: 10px;
         max-width: 200px;
         max-height: 200px;
     }
+
     .loading-spinner {
         border:4px solid #f1f1f1;
         border-left-color: #000000;;
@@ -27,200 +24,193 @@
             transform: rotate(360deg);
         }
         }
-</style>
+
+    </style>
+@endsection
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <span class="breadcrumb-item active">Student Create Page</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="br-section-wrapper" style="padding: 0px !important;">
-  <div class="table-wrapper">
-    <div class="card">
-        <div class="card-header">
-            <h4>Add New Student</h4>
-        </div>
-        <div class="card-body">
-            <form action="{{ route('admin.student.store') }}" method="post" id="addStudentForm" enctype="multipart/form-data">
-                @csrf
-                <!-- Student Personal Information -->
-                <div class="section">
-                    <h6  style="color:#777878 ">Student Personal Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" name="name" placeholder="Enter full name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="birth_date">Birth Date</label>
-                            <input type="date" class="form-control" name="birth_date" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="gender">Gender</label>
-                            <select class="form-control" name="gender" required>
-                                <option value="">Select gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="photo">Photo</label>
-                            <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
-                            <img id="preview" src="#" alt="Image Preview" style="display: none;" />
-                        </div>
-                    </div>
-                </div>
-                <hr style="border-top: 1px dashed #d3c6c6;">
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="card">
+            <div class="card-header">
+                <h4>Add New Student</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.student.store') }}" method="post" id="addStudentForm" enctype="multipart/form-data">
+                    @csrf
+                    <!-- Student Personal Information -->
+                    <div class="section">
+                        <h6  style="color:#777878 ">Student Personal Information</h6>
+                        <hr style="border-top: 1px dashed #d3c6c6;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" name="name" placeholder="Enter full name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="birth_date">Birth Date</label>
+                                <input type="date" class="form-control" name="birth_date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="gender">Gender</label>
+                                <select class="form-select " name="gender" required>
+                                    <option value="">Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="photo">Photo</label>
+                                <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
+                                <img id="preview" class="img-fluid" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
 
-                <!-- Guardian Information -->
-                <div class="section">
-                    <h6  style="color:#777878 ">Guardian Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="father_name">Father's Name</label>
-                            <input type="text" class="form-control" name="father_name" placeholder="Enter father's name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="mother_name">Mother's Name</label>
-                            <input type="text" class="form-control" name="mother_name" placeholder="Enter mother's name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="guardian_name">Guardian's Name (if different)</label>
-                            <input type="text" class="form-control" name="guardian_name" placeholder="Enter guardian's name">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <hr style="border-top: 1px dashed #d3c6c6;">
+                    <hr style="border-top: 1px dashed #d3c6c6;">
 
-                <!-- Contact Information -->
-                <div class="section">
-                    <h5></h5>
-                    <h6  style="color:#777878 ">Contact Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="current_address">Current Address</label>
-                            <input type="text" class="form-control" name="current_address" placeholder="Enter current address" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="permanent_address">Permanent Address</label>
-                            <input type="text" class="form-control" name="permanent_address" placeholder="Enter permanent address" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="phone">Phone</label>
-                            <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="Enter email">
+                    <!-- Guardian Information -->
+                    <div class="section">
+                        <h6  style="color:#777878 ">Guardian Information</h6>
+                        <hr style="border-top: 1px dashed #d3c6c6;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="father_name">Father's Name</label>
+                                <input type="text" class="form-control" name="father_name" placeholder="Enter father's name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="mother_name">Mother's Name</label>
+                                <input type="text" class="form-control" name="mother_name" placeholder="Enter mother's name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="guardian_name">Guardian's Name (if different)</label>
+                                <input type="text" class="form-control" name="guardian_name" placeholder="Enter guardian's name">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <hr style="border-top: 1px dashed #d3c6c6;">
+                    <hr style="border-top: 1px dashed #d3c6c6;">
 
-                <!-- Education Information -->
-                <div class="section">
-                    <h6  style="color:#777878 ">Education Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="current_class">Current Class</label>
-                            <select type="text" class="form-control" name="current_class" required>
-                                <option value="">---Select---</option>
-                                @foreach($data as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="previous_school">Previous School</label>
-                            <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="previous_class">Previous Class</label>
-                            <select type="text" class="form-control" name="previous_class">
-                                <option value="">---Select---</option>
-                                @foreach($data as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="academic_results">Academic Results</label>
-                            <input type="text" class="form-control" name="academic_results" placeholder="Enter academic results">
+                    <!-- Contact Information -->
+                    <div class="section">
+                        <h5></h5>
+                        <h6  style="color:#777878 ">Contact Information</h6>
+                        <hr style="border-top: 1px dashed #d3c6c6;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="current_address">Current Address</label>
+                                <input type="text" class="form-control" name="current_address" placeholder="Enter current address" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="permanent_address">Permanent Address</label>
+                                <input type="text" class="form-control" name="permanent_address" placeholder="Enter permanent address" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone">Phone</label>
+                                <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" placeholder="Enter email">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <hr style="border-top: 1px dashed #d3c6c6;">
+                    <hr style="border-top: 1px dashed #d3c6c6;">
 
-                <!-- Additional Information -->
-                <div class="section">
-                    <h6  style="color:#777878 ">Additional Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="blood_group">Blood Group</label>
-                            <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="health_conditions">Health Conditions</label>
-                            <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="emergency_contact_name">Emergency Contact Name</label>
-                            <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="emergency_contact_phone">Emergency Contact Phone</label>
-                            <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="religion">Religion</label>
-                            <input type="text" class="form-control" name="religion" placeholder="Enter religion">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="nationality">Nationality</label>
-                            <input type="text" class="form-control" name="nationality" placeholder="Enter nationality">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="status">Status</label>
-                            <select type="text" class="form-control" name="status">
-                                <option value="">---Select---</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="remarks">Remarks</label>
-                            <textarea class="form-control" name="remarks" rows="3" placeholder="Enter any remarks"></textarea>
+                    <!-- Education Information -->
+                    <div class="section">
+                        <h6  style="color:#777878 ">Education Information</h6>
+                        <hr style="border-top: 1px dashed #d3c6c6;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="current_class">Current Class</label>
+                                <select type="text" class="form-select" name="current_class" required>
+                                    <option value="">---Select---</option>
+                                    @foreach($data as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="previous_school">Previous School</label>
+                                <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="previous_class">Previous Class</label>
+                                <select type="text" class="form-select" name="previous_class">
+                                    <option value="">---Select---</option>
+                                    @foreach($data as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="academic_results">Academic Results</label>
+                                <input type="text" class="form-control" name="academic_results" placeholder="Enter academic results">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+                    <hr style="border-top: 1px dashed #d3c6c6;">
+
+                    <!-- Additional Information -->
+                    <div class="section">
+                        <h6  style="color:#777878 ">Additional Information</h6>
+                        <hr style="border-top: 1px dashed #d3c6c6;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="blood_group">Blood Group</label>
+                                <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="health_conditions">Health Conditions</label>
+                                <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="emergency_contact_name">Emergency Contact Name</label>
+                                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="emergency_contact_phone">Emergency Contact Phone</label>
+                                <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="religion">Religion</label>
+                                <input type="text" class="form-control" name="religion" placeholder="Enter religion">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nationality">Nationality</label>
+                                <input type="text" class="form-control" name="nationality" placeholder="Enter nationality">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="status">Status</label>
+                                <select type="text" class="form-select" name="status">
+                                    <option value="">---Select---</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="remarks">Remarks</label>
+                                <textarea class="form-control" name="remarks" rows="3" placeholder="Enter any remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
-
-
-  </div><!-- table-wrapper -->
-</div><!-- br-section-wrapper -->
+</div>
 
 @endsection
 
 @section('script')
-    <script src="{{asset('Backend/lib/highlightjs/highlight.pack.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
-  <script type="text/javascript">
+
+<script type="text/javascript">
     $(document).ready(function(){
+        $("select[name='gender']").select2();
         $("select[name='current_class']").select2();
         $("select[name='previous_class']").select2();
+        $("select[name='status']").select2();
 
         $('#photo').change(function() {
             let reader = new FileReader();
@@ -237,7 +227,7 @@
             var submitBtn = $(this).find('button[type="submit"]');
             var originalBtnText = submitBtn.html();
 
-            submitBtn.html('<div class="loading-spinner"></div>');
+            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>');
             submitBtn.prop('disabled', true);
 
             var form = $(this);
@@ -282,7 +272,6 @@
 
     });
   </script>
-
 
   @if(session('success'))
     <script>

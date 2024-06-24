@@ -1,47 +1,31 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
 @section('style')
- <!-- vendor css -->
- <link href="{{asset('Backend/lib/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
-		<link href="{{asset('Backend/lib/ionicons/css/ionicons.min.css')}}" rel="stylesheet">
-		<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-
-    <link href="{{asset('Backend/lib/datatables.net-dt/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <link href="{{asset('Backend/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css')}}" rel="stylesheet">
-
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
-
 @endsection
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="index.html">Dashboard</a>
-          <a class="breadcrumb-item" href="#">Product</a>
-          <span class="breadcrumb-item active">Brand</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="br-section-wrapper" style="padding: 0px !important;">
-  <div class="table-wrapper">
-    <div class="card">
-      <div class="card-header">
-        <a  href="{{route('admin.brand.create')}}" class="btn btn btn-success">Add New Brand</a>
-      </div>
-      <div class="card-body">
-      <table id="datatable1" class="table display responsive nowrap">
-      <thead>
-        <tr>
-          <th class="">No.</th>
-          <th class="">Brand Name</th>
-          <th class="">Image</th>
-          <th class="">Slug</th>
-          <th class="">Status</th>
-          <th class="">Create Date</th>
-          <th class="">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-          @php
+
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="card">
+            <div class="card-body">
+                <a href="{{route('admin.brand.create')}}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                    Add New Brand</a>
+
+                <div class="table-responsive" id="tableStyle">
+                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                            <th class="">No.</th>
+                            <th class="">Brand Name</th>
+                            <th class="">Image</th>
+                            <th class="">Slug</th>
+                            <th class="">Status</th>
+                            <th class="">Create Date</th>
+                            <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @php
             $key=0;
           @endphp
           @foreach($data as $item)
@@ -50,7 +34,7 @@
                 <td>{{ $item->brand_name }}</td>
                  <td>
                     @if($item->brand_image)
-                    <img class="img-circle" height="50px" src="{{ asset(request()->host().'/Backend/images/brands/' . $item->brand_image) }}" alt="Photo">
+                    <img class="img-circle" height="50px" src="{{ asset('Backend/uploads/photos/' . $item->brand_image) }}" alt="Photo">
                     @else
                         <img src="{{ asset('Backend/images/default.jpg') }}" height="50px" alt="Default Photo">
                     @endif
@@ -58,9 +42,9 @@
                 <td>{{ $item->slug}}</td>
                 <td>
                   @if ($item->status==1)
-                  <span class="badge badge-success">Active</span>
+                  <span class="badge bg-success">Active</span>
                   @else
-                  <span class="badge badge-danger">Inactive</span>
+                  <span class="badge bg-danger">Inactive</span>
                   @endif
                 </td>
                  <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
@@ -71,25 +55,19 @@
                 </td>
             </tr>
           @endforeach
-      </tbody>
-    </table>
-      </div>
-    </div>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-  </div><!-- table-wrapper -->
-</div><!-- br-section-wrapper -->
+    </div>
+</div>
 
 
 @endsection
 
 @section('script')
-    <script src="{{asset('Backend/lib/highlightjs/highlight.pack.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
-
-
 
     <script>
       $(function(){
@@ -103,13 +81,6 @@
             lengthMenu: '_MENU_ items/page',
           }
         });
-
-        $('#datatable2').DataTable({
-          bLengthChange: false,
-          searching: false,
-          responsive: true
-        });
-
         // Select2
         $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
 
@@ -140,4 +111,3 @@
     @endif
 
 @endsection
-

@@ -31,18 +31,18 @@ class CategoryController extends Controller
         if ($request->hasFile('category_image')) {
             $image = $request->file('category_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path($request->host().'/Backend/images/category'), $imageName);
+            $image->move(public_path('Backend/uploads/photos'), $imageName);
         }else{
             $imageName =NULL;
         }
 
-        // Create a new brand object
+        // Create a new  object
         $object = new Product_Category();
         $object->category_name=$request->category_name;
         $object->category_image=$imageName;
         $object->slug=$request->slug;
         $object->status=$request->status;
-        // Save the brand to the database
+        // Save the  to the database
         $object->save();
          // Redirect or return a response as needed
          return redirect()->route('admin.category.index')->with('success', 'Added successfully');
@@ -69,12 +69,12 @@ class CategoryController extends Controller
          $category->category_name=$request->category_name;
          if ($request->hasFile('category_image')) {
             // Delete the existing image
-            File::delete(public_path($request->host().'/Backend/images/category/' . $category->category_image));
+            File::delete(public_path('Backend/uploads/photos/' . $category->category_image));
 
             // Upload and save the new image
             $image = $request->file('category_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path($request->host().'/Backend/images/category'), $imageName);
+            $image->move(public_path('Backend/uploads/photos'), $imageName);
             $category->category_image = $imageName;
         }
         $category->slug=$request->slug;
@@ -89,7 +89,7 @@ class CategoryController extends Controller
 
         // Delete the brand image
         if ($object->category_image!=NULL) {
-            File::delete(public_path('Backend/images/category/' . $object->category_image));
+            File::delete(public_path('Backend/uploads/photos/' . $object->category_image));
         }
 
 

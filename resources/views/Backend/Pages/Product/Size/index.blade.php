@@ -1,193 +1,146 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-@section('style')
- <!-- vendor css -->
-		<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-
-    <link href="{{asset('Backend/lib/datatables.net-dt/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <link href="{{asset('Backend/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css')}}" rel="stylesheet">
-
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
-@endsection
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <a class="breadcrumb-item" href="#">Product</a>
-          <a class="breadcrumb-item" href="{{route('admin.product.color.index')}}">Size</a>
-          <span class="breadcrumb-item active">All Size</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="br-section-wrapper" style="padding: 0px !important;">
-  <div class="table-wrapper">
-    <div class="card">
-      <div class="card-header">
-        <button  type="button" class="btn btn btn-success"  data-toggle="modal" data-target="#addModal">Add New</a>
-      </div>
-      <div class="card-body">
-      <table id="datatable1" class="table display responsive nowrap">
-      <thead>
-        <tr>
-          <th class="">No.</th>
-          <th class="">Name</th>
-          <th class="">Status</th>
-          <th class="">Create Date</th>
-          <th class="">Action</th>
-        </tr>
-      </thead>
-      <tbody>
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="card">
+            <div class="card-header">
+                  <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                    Add New Size</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" id="tableStyle">
+                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                            <th class="">No.</th>
+                            <th class="">Name</th>
+                            <th class="">Status</th>
+                            <th class="">Create Date</th>
+                            <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-      </tbody>
-    </table>
-      </div>
-    </div>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-  </div><!-- table-wrapper -->
-</div><!-- br-section-wrapper -->
-
-<!--Start Delete MODAL ---->
-<div id="deleteModal" class="modal fade">
-    <div class="modal-dialog modal-dialog-top" role="document">
-        <div class="modal-content tx-size-sm">
-        <div class="modal-body tx-center pd-y-20 pd-x-20">
-            <form action="{{route('admin.product.size.delete')}}" method="post" enctype="multipart/form-data">
-                @csrf
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <i class="icon icon ion-ios-close-outline tx-60 tx-danger lh-1 mg-t-20 d-inline-block"></i>
-                <h4 class="tx-danger  tx-semibold mg-b-20 mt-2">Are you sure! you want to delete this?</h4>
-                <input type="hidden" name="id" value="">
-                <button type="submit" class="btn btn-danger mr-2 text-white tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20">
-                    yes
-                </button>
-                <button type="button" class="btn btn-success tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20" data-dismiss="modal" aria-label="Close">
-                    No
-                </button>
-            </form>
-        </div><!-- modal-body -->
-        </div><!-- modal-content -->
     </div>
 </div>
-<!--End Delete MODAL ---->
-<div id="addModal" class="modal fade effect-scale">
-        <div class="modal-dialog modal-lg modal-dialog-top mt-4" role="document">
-            <div class="modal-content tx-size-sm">
-            <div class="modal-header pd-x-20">
-                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add Size</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+
+<!-- Add Section Modal -->
+<div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Size
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        <!----- Start Add  Form ------->
-        <form action="{{route('admin.product.size.store')}}" method="post">
-        @csrf
-
-        <div class="modal-body ">
-            <!----- Start Add  Form input ------->
-            <div class="col-xl-12">
-                <div class="form-layout form-layout-4">
-
-
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Name: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                        <input type="text" name="name" class="form-control" placeholder="Enter  Name" required>
+            <!----- Start Add Form ------->
+            <form id="addSectionForm" action="{{ route('admin.product.size.store') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <!----- Start Add Form input ------->
+                    <div class="row">
+                        <div class="form-group mb-2">
+                            <label for="sectionName"> Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Enter  Name" required>
                         </div>
-                    </div><!-- row -->
-
-                    <div class="row mb-4 mt-4">
-                        <label class="col-sm-3 form-control-label">Status: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                            <select class="form-control " name="status" required>
-                                <option value="">---Select---</option>
+                        <div class="form-group mb-2">
+                            <label for="status">Status</label>
+                            <select name="status" id="" class="form-control">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
                     </div>
-
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-            <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
-        </div>
-
-        </form>
-        <!----- End Add Form ------->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+            <!----- End Add Form ------->
         </div>
     </div>
-  </div>
-
-
-<!----- Edit Modal ------->
-<div id="editModal" class="modal fade effect-scale">
-        <div class="modal-dialog modal-lg modal-dialog-top mt-4" role="document">
-            <div class="modal-content tx-size-sm">
-            <div class="modal-header pd-x-20">
-                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Update Size</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+</div>
+<!-- Edit Section Modal -->
+<div class="modal fade bs-example-modal-lg" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Size
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        <!----- Start Add  Form ------->
-        <form action="{{route('admin.product.size.update')}}" method="post">
-        @csrf
-
-        <div class="modal-body ">
-            <!----- Start Add  Form input ------->
-            <div class="col-xl-12">
-                <div class="form-layout form-layout-4">
-
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Name: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                        <input type="text" name="id" class="d-none" required>
-                        <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+            <!----- Start Update Form ------->
+            <form id="addSectionForm" action="{{ route('admin.product.size.update') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <!----- Start Update Form input ------->
+                    <div class="row">
+                        <div class="form-group mb-2">
+                            <label for="sectionName">Name</label>
+                            <input type="text" name="id" class="d-none" required>
+                            <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
                         </div>
-                    </div><!-- row -->
-
-                    <div class="row mb-4 mt-4">
-                        <label class="col-sm-3 form-control-label">Status: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                            <select class="form-control " name="status" required>
-                                <option value="">---Select---</option>
+                        <div class="form-group mb-2">
+                            <label for="status">Status</label>
+                            <select name="status"  class="form-control">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
                     </div>
-
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-success tx-size-xs">Update Now</button>
-            <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
-        </div>
-
-        </form>
-        <!----- End Add Form ------->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success tx-size-xs">Update Now</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+            <!----- End Update Form ------->
         </div>
     </div>
-  </div>
-<!----- Edit Modal ------->
+</div>
+<div id="deleteModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <form action="{{route('admin.product.size.delete')}}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box">
+                    <i class="fas fa-trash"></i>
+                </div>
+                <h4 class="modal-title w-100">Are you sure?</h4>
+                <input type="hidden" name="id" value="">
+                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to delete these records? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @section('script')
-    <script src="{{asset('Backend/lib/highlightjs/highlight.pack.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
+
   <script type="text/javascript">
     $(document).ready(function(){
 
       var table=$("#datatable1").DataTable({
-         "processing":true,
+        "processing":true,
         "responsive": true,
         "serverSide":true,
         beforeSend: function () {
@@ -209,9 +162,9 @@
             "data":"status",
             render:function(data,type,row){
               if (row.status==1) {
-                return '<span class="badge badge-success">Active</span>';
+                return '<span class="badge bg-success">Active</span>';
               }else{
-                return '<span class="badge badge-secondary">Inactive</span>';
+                return '<span class="badge bg-secondary">Inactive</span>';
               }
             }
           },
@@ -222,7 +175,8 @@
                 return formattedDate;
             }
           },
-          {
+          { 
+            "data":null,
             render:function(data,type,row){
               return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
@@ -235,7 +189,8 @@
 
       });
       $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
-    });
+      });
+
 
 
 

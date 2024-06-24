@@ -19,9 +19,9 @@ class StudentController extends Controller
     }
     public function edit($id){
         $data = Student::find($id);
-
+        $class_data=Student_class::latest()->get();
         if ($data) {
-            return view('Backend.Pages.Student.edit',compact('data'));
+            return view('Backend.Pages.Student.edit',compact('data','class_data'));
         }
     }
     public function view($id){

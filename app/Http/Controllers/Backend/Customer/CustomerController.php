@@ -22,16 +22,38 @@ class CustomerController extends Controller
     }
     public function get_all_data(Request $request)
     {
+        // $search = $request->search['value'];
+        // $columnsForOrderBy = ['id','profile_image', 'fullname', 'phone_number',  'create_at'];
+        // $orderByColumn = $request->order[0]['column'];
+        // $orderDirectection = $request->order[0]['dir'];
+
+        // $object = Customer::when($search, function ($query) use ($search) {
+        //     $query->where('fullname', 'like', "%$search%");
+        //     $query->where('phone_number', 'like', "%$search%");
+        // })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
+        // $total = $object->count();
+        // $item = $object->skip($request->start)->take($request->length)->get();
+        // return response()->json([
+        //     'draw' => $request->draw,
+        //     'recordsTotal' => $total,
+        //     'recordsFiltered' => $total,
+        //     'data' => $item,
+        // ]);
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'fullname', 'email_address', 'profile_image', 'phone_number', 'emergency_contract', 'city', 'state'];
+        $columnsForOrderBy = ['id', 'profile_image','fullname','phone_number', 'created_at'];
         $orderByColumn = $request->order[0]['column'];
         $orderDirectection = $request->order[0]['dir'];
-
-        $coupon = Customer::when($search, function ($query) use ($search) {
+    
+        $object = Customer::when($search, function ($query) use ($search) {
+            $query->where('profile_image', 'like', "%$search%");
             $query->where('fullname', 'like', "%$search%");
+            $query->where('phone_number', 'like', "%$search%");
+            $query->where('created_at', 'like', "%$search%");
         })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
-        $total = $coupon->count();
-        $item = $coupon->skip($request->start)->take($request->length)->get();
+    
+        $total = $object->count();
+        $item = $object->skip($request->start)->take($request->length)->get();
+    
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
@@ -66,7 +88,10 @@ class CustomerController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors()->all())->withInput();
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
         // Handle file upload
@@ -103,7 +128,11 @@ class CustomerController extends Controller
         $object->save();
 
         // Redirect to the index page or show success message
-        return redirect()->route('admin.customer.index')->with('success', 'Customer added successfully');
+        //return redirect()->route('admin.customer.index')->with('success', 'Customer added successfully');
+        return response()->json([
+            'success' => true,
+            'message' => 'Customer added successfully!'
+        ]);
     }
 
 
@@ -142,8 +171,8 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validate the form data
-        $request->validate([
+        /*Validate the form data*/ 
+        $rules=[
             'fullname' => 'required|string',
             'email_address' => 'required|email',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -163,14 +192,20 @@ class CustomerController extends Controller
             'bank_acc_no' => 'nullable|string',
             'bank_routing_no' => 'nullable|numeric',
             'bank_payment_status' => 'nullable|in:1,2',
-        ]);
-
-        // Find the Customer
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        
+        /* Find the Customer*/
 
         $object = Customer::findOrFail($id);
-
         $object->fullname = $request->fullname;
-
+        
         // Handle profile image update
         if ($request->hasFile('profile_image')) {
 
@@ -205,10 +240,11 @@ class CustomerController extends Controller
         $object->bank_acc_no = $request->bank_acc_no;
         $object->bank_routing_no = $request->bank_routing_no;
         $object->bank_payment_status = $request->bank_payment_status;
-        // Save to the database table
         $object->update();
 
-        // Redirect back or to a specific route
-        return redirect()->route('admin.customer.index')->with('success', 'Customer updated successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Customer Update successfully!'
+        ]);
     }
 }
