@@ -1,16 +1,10 @@
 @extends('Backend.Layout.App')
-@section('title','Dashboard | Admin Panel')
+
+@section('title','Update Product Page')
+
 @section('style')
- <!-- vendor css -->
- <link href="{{asset('Backend/lib/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
-		<link href="{{asset('Backend/lib/ionicons/css/ionicons.min.css')}}" rel="stylesheet">
-		<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-    <link href="{{asset('Backend/lib/select2/css/select2.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-    <style>
+<link rel="stylesheet" href="{{ asset('Backend/assets/css/dropzone.min.css') }}" type="text/css" />
+<style>
       /* dropzone.css */
 .dropzone {
     border: 2px dashed #287eff !important;
@@ -165,38 +159,32 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
     </style>
+</style>
 @endsection
+
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <a class="breadcrumb-item" href="{{route('admin.products.index')}}">Product</a>
-          <span class="breadcrumb-item active">Update</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="" style="padding: 0px !important;">
-   <div class="row">
-    <div class="col-md-9 m-auto">
-    <div class="card">
-        <div class="card-header bg-info text-white text-center">
-          <h6>Update Product</h6>
-        </div>
-        <form id="productForm" action="{{ route('admin.product.update') }}" method="POST" enctype="multipart/form-data">@csrf
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="card">
+            <div class="card-header">
+              <h4>Update Product</h4>
+            </div>
+            <form action="{{ route('admin.product.update') }}" id="productForm" enctype="multipart/form-data" method="post">@csrf
           <div class="card-body">
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Product Name</label>
                 @if (!empty($data->title))
                     <input type="text" class="d-none" name="id" value="{{$data->id}}">
                     <input type="text"  class="form-control" name="product_name" id="product_name" placeholder="Enter Product Name" value="{{$data->title}}" required>
                     <p class="ierr"></p>
                 @endif
-
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
+                <label for="">Product Slug</label>
                 @if (!empty($data->slug))
                     <label for="">Product Slug</label>
                     <input type="text"  class="form-control" name="slug" id="slug" value="{{$data->slug}}">
@@ -208,7 +196,7 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <input type="text" name="image_id" id="image_id" hidden>
                   <label for="image" class="label">Upload Image</label>
                   <div id="image" class="dropzone dz-clickable">
@@ -217,11 +205,11 @@
                     </div>
                 </div>
                 <div id="rowImg">
-                    @foreach ( $data->product_image as $image)
+                @foreach ( $data->product_image as $image)
                     <div id="image-row-${{ $image->id }}">
                         <input type="text" name="image_array[]" value="{{ $image->id }}" hidden>
                         <div id="border">
-                            <img src="{{ asset(request()->host().'/uploads/product/'.$image->image) }}" class="sortImage">
+                            <img src="{{ asset('uploads/product/'.$image->image) }}" class="sortImage">
                             <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})" class="errBtn">Remove</a>
                         </div>
                     </div>
@@ -234,7 +222,7 @@
           <div class="row">
 
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Brand</label>
                 <select type="text" class="form-control select2" name="brand_id" id="brand_id" required>
                   <option value="">---Select---</option>
@@ -250,7 +238,7 @@
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Category</label>
                 <select type="text"class="form-control" name="category_id" id="category_id" required>
                   <option value="">Select</option>
@@ -271,74 +259,35 @@
           </div>
 
 
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="">Sub Category</label>
-                <select type="text" class="form-control " name="sub_cat_id" id="sub_cat_id">
-                  <option value="">Select</option>
-                  @if (count($sub_category) > 0)
-
-                    @foreach($sub_category as $item)
-                        <option value="{{$item->id}}" {{ $data->sub_category_id == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                    @endforeach
-
-                  @else
-                    <option value="">No Data</option>
-                  @endif
-                </select>
-                <p class="ierr"></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="">Child Category</label>
-                <select type="text" class="form-control select2" name="child_cat_id" id="child_cat_id">
-                  <option value="">Select</option>
-                  @if (count($child_category) > 0)
-
-                    @foreach($child_category as $item)
-                        <option value="{{$item->id}}" {{ $data->child_category_id == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                    @endforeach
-
-                  @else
-                    <option value="">No Data</option>
-                  @endif
-                </select>
-                <p class="ierr"></p>
-            </div>
-            </div>
-          </div>
+          
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Short Description</label>
                 @if (!empty($data->short_description))
                      <textarea type="text" class="form-control" name="short_description" id="short_description" placeholder="Enter Your Short Description ">{{$data->short_description}}</textarea>
                     <p class="ierr"></p>
                 @endif
-
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Description</label>
                 @if (!empty($data->description))
                      <textarea type="text" class="form-control"  name="description" id="description" placeholder="Enter Your Description ">{{$data->description}}</textarea>
                     <p class="ierr"></p>
                 @endif
-
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Shipping & Returns</label>
                 @if (!empty($data->shipping_returns))
                     <textarea type="text" class="form-control" name="shipping_returns" id="shipping_returns">{{$data->shipping_returns}}</textarea>
@@ -350,23 +299,21 @@
 
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Price</label>
                 @if (!empty($data->price))
-                     <input type="number" class="form-control" id="price"  name="price" placeholder="Enter Your Price" value="{{$data->price}}" required/>
+                     <input type="number" class="form-control" id="price"  name="price" placeholder="Enter Your Price" value="{{$data->price}}" />
                     <p class="ierr"></p>
                 @endif
-
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Sku</label>
                 @if (!empty($data->sku))
-                    <input type="text" class="form-control" name="sku" id="sku" value="{{$data->sku}}" required/>
+                    <input type="text" class="form-control" name="sku" id="sku" value="{{$data->sku}}" />
                     <p class="ierr"></p>
                 @endif
-
             </div>
             </div>
           </div>
@@ -375,9 +322,9 @@
 
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Vat/Tax</label>
-                <select type="number" class="form-control" id="tax"  name="tax" required>
+                <select type="number" class="form-control" id="tax"  name="tax" >
                     @if ($data->tax == "0%")
                         <option value="0%" selected>0%</option>
                     @else
@@ -412,7 +359,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Delivery Charge</label>
                 @if (!empty($data->delivery_charge))
                      <input type="text" class="form-control" name="dellivery_charge" id="dellivery_charge" placeholder="Enter Amount" value="{{$data->delivery_charge}}" required/>
@@ -421,7 +368,6 @@
                     <input type="text" class="form-control" name="dellivery_charge" id="dellivery_charge" placeholder="Enter Amount" value="0" />
                     <p class="ierr"></p>
                 @endif
-
             </div>
             </div>
           </div>
@@ -430,26 +376,26 @@
 
           <div class="row">
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Size</label>
-                <select type="text" class="form-control" id="size" name="size[]" multiple="multiple" required>
-                <option value="">---Select---</option>
-                  @php
-                    $selectedSizes = explode(',', $data->size);
-                  @endphp
-                  @foreach ($sizes as $size)
-                      <option value="{{ $size->name }}" {{ in_array($size->name, $selectedSizes) ? 'selected' : '' }}>
-                          {{ $size->name }}
-                      </option>
-                  @endforeach
-                </select>
+                  <select type="text" class="form-control" id="size" name="size[]" multiple="multiple" >
+                  <option value="">---Select---</option>
+                    @php
+                      $selectedSizes = explode(',', $data->size);
+                    @endphp
+                    @foreach ($sizes as $size)
+                        <option value="{{ $size->name }}" {{ in_array($size->name, $selectedSizes) ? 'selected' : '' }}>
+                            {{ $size->name }}
+                        </option>
+                    @endforeach
+                  </select>
                 <p class="ierr"></p>
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Color</label>
-                <select type="text" class="form-control" id="color" name="color[]" multiple="multiple" required>
+                <select type="text" class="form-control" id="color" name="color[]" multiple="multiple" >
                 <option value="">---Select---</option>
                   @php
                       $selectedColors = explode(',', $data->color);
@@ -464,7 +410,7 @@
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Product Type</label>
                 <select type="text" class="form-control" name="product_type" id="product_type" required>
                     @if ($data->product_type == "Features")
@@ -492,14 +438,14 @@
 
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Barcode</label>
-                <input type="text" class="form-control"  name="barcode" id="barcode" value="{{$data->barcode}}" required/>
+                <input type="text" class="form-control"  name="barcode" id="barcode" value="{{$data->barcode}}" />
                 <p class="ierr"></p>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
               <label for="qty" class="label">Quantity</label>
               <input type="number" name="qty" class="form-control" id="qty" placeholder="Enter Quantity" value="{{$data->qty}}" required>
               <p class="ierr"></p>
@@ -508,9 +454,9 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Status</label>
-                <select type="text" class="form-control select2" name="status" id="status" required>
+                <select type="text" class="form-select" name="status" id="product_status" style="width: 100%;" required>
                     @if ($data->status == 1)
                         <option value="1" selected>Active</option>
                         <option value="0">Inactive</option>
@@ -538,22 +484,21 @@
             <button type="submit" class=" btn btn-success">Update Now</button>
           </div>
         </form>
-    </div>
-    </div>
-   </div>
-</div><!-- br-section-wrapper -->
+        </div>
 
-
+    </div>
+</div>
 @endsection
+
 @section('script')
 <script src="https://cdn.tiny.cloud/1/zifeh3wuv4rjvx6ktqat7x169antz66gx9iwbh8sztsk1utd/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-<script src="{{ asset('Backend/js/dropzone.min.js') }}"></script>
-  <script type="text/javascript">
+<script src="{{ asset('Backend/assets/js/dropzone.min.js') }}"></script>
+<script type="text/javascript">
     $("#brand_id").select2();
     $("#category_id").select2();
     $("#sub_cat_id").select2();
     $("#child_cat_id").select2();
-    $("#status").select2();
+    $("#product_status").select2();
     $("#product_type").select2();
 
     $("#color, #size").select2({
@@ -737,4 +682,3 @@
 
   </script>
 @endsection
-

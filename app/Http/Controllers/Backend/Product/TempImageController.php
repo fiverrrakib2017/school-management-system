@@ -12,22 +12,23 @@ class TempImageController extends Controller
     public function create(Request $request){
         $image = $request->image;
 
-        if(!empty($image)){
+        if (!empty($image)) {
             $ext = $image->getClientOriginalExtension();
             $newName = time() . '.' . $ext;
             $tempImage = new Temp_Image();
-
+        
             $tempImage->name = $newName;
             $tempImage->save();
-
-            $image->move(public_path().'/'.$request->host().'/temp', $newName);
-
+        
+            $image->move(public_path('temp'), $newName);
+        
             return response()->json([
                 'status' => true,
                 'image_id' => $tempImage->id,
-                'imagePath' => asset(''.$request->host().'/temp/'.$newName.''),
-                'message' => 'Image uploaded succesfully'
+                'imagePath' => asset('temp/' . $newName),
+                'message' => 'Image uploaded successfully'
             ]);
         }
+        
     }
 }

@@ -1,25 +1,6 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-@section('style')
 
-    <style>
-        /* .loading-spinner {
-        border:4px solid #f1f1f1;
-        border-left-color: #000000;;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-        } */
-
-    </style>
-@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">

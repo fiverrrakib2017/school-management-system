@@ -1,14 +1,10 @@
 @extends('Backend.Layout.App')
-@section('title','Dashboard | Admin Panel')
+
+@section('title','Create Product Page')
+
 @section('style')
- <!-- vendor css -->
- <link href="{{asset('Backend/lib/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
-		<link href="{{asset('Backend/lib/ionicons/css/ionicons.min.css')}}" rel="stylesheet">
-		<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
-    <link rel="stylesheet" href="{{ asset('Backend/css/dropzone.min.css') }}" type="text/css" />
-    <style>
+<link rel="stylesheet" href="{{ asset('Backend/assets/css/dropzone.min.css') }}" type="text/css" />
+<style>
       /* dropzone.css */
 .dropzone {
     border: 2px dashed #287eff !important;
@@ -163,34 +159,28 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
     </style>
+</style>
 @endsection
+
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <a class="breadcrumb-item" href="{{route('admin.products.index')}}">Product</a>
-          <span class="breadcrumb-item active">Create</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="" style="padding: 0px !important;">
-   <div class="row">
-    <div class="col-md-9 m-auto">
-    <div class="card">
-        <div class="card-header bg-info text-white text-center">
-          <h6>Add New Product</h6>
-        </div>
-        <form action="{{ route('admin.products.store') }}" id="productForm" enctype="multipart/form-data" method="post">@csrf
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="card">
+            <div class="card-header">
+              <h4>Add New Product</h4>
+            </div>
+            <form action="{{ route('admin.products.store') }}" id="productForm" enctype="multipart/form-data" method="post">@csrf
           <div class="card-body">
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Product Name</label>
                 <input type="text"  class="form-control" name="product_name" id="product_name" placeholder="Enter Product Name" required>
                 <p class="ierr"></p>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Product Slug</label>
                 <input type="text"  class="form-control" name="slug" id="slug" value="">
                 <p class="ierr"></p>
@@ -200,7 +190,7 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <input type="text" name="image_id" id="image_id" hidden>
                   <label for="image" class="label">Upload Image</label>
                   <div id="image" class="dropzone dz-clickable">
@@ -216,7 +206,7 @@
           <div class="row">
 
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Brand</label>
                 <select type="text" class="form-control" name="brand_id" id="brand_id" required>
                   <option value="">---Select---</option>
@@ -231,7 +221,7 @@
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Category</label>
                 <select type="text" class="form-control " name="category_id" id="category_id" required>
                   <option value="">Select</option>
@@ -252,30 +242,11 @@
           </div>
 
 
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="">Sub Category</label>
-                <select type="text" class="form-control " name="sub_cat_id" id="sub_cat_id">
-                  <option value="">Select</option>
-                </select>
-                <p class="ierr"></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="">Child Category</label>
-                <select type="text" class="form-control " name="child_cat_id" id="child_cat_id">
-                  <option value="">Select</option>
-                </select>
-                <p class="ierr"></p>
-            </div>
-            </div>
-          </div>
+          
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Short Description</label>
                 <textarea type="text" class="form-control" name="short_description" id="short_description"   placeholder="Enter Your Short Description "></textarea>
                 <p class="ierr"></p>
@@ -285,7 +256,7 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Description</label>
                 <textarea type="text" class="form-control"  name="description" id="description" placeholder="Enter Your Description "></textarea>
                 <p class="ierr"></p>
@@ -295,7 +266,7 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Shipping & Returns</label>
                 <textarea type="text" class="form-control" id="shipping_returns" name="shipping_returns"></textarea>
                 <p class="ierr"></p>
@@ -305,14 +276,14 @@
 
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Price</label>
                 <input type="number" class="form-control" id="price"  name="price" placeholder="Enter Your Price" required/>
                 <p class="ierr"></p>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Sku</label>
                 <input type="text" class="form-control" name="sku" id="sku" required/>
                 <p class="ierr"></p>
@@ -324,7 +295,7 @@
 
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Vat/Tax</label>
                 <select type="number" class="form-control" id="tax"  name="tax" required>
                     <option >---Select---</option>
@@ -338,7 +309,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Delivery Charge</label>
                 <input type="text" class="form-control" name="dellivery_charge" id="dellivery_charge" placeholder="Enter Amount" required/>
                 <p class="ierr"></p>
@@ -350,7 +321,7 @@
 
           <div class="row">
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Size</label>
                 <select type="text" class="form-control" id="size" name="size[]" multiple="multiple" >
                 <option value="">---Select---</option>
@@ -363,7 +334,7 @@
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Color</label>
                 <select class="form-control" id="color" name="color[]" multiple="multiple" >
                   <option value="">---Select---</option>
@@ -375,7 +346,7 @@
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Product Type</label>
                 <select type="text" class="form-control" name="product_type" id="product_type" required>
                   <option >---Select---</option>
@@ -391,14 +362,14 @@
 
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Barcode</label>
                 <input type="text" class="form-control"  name="barcode" id="barcode" required/>
                 <p class="ierr"></p>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
               <label for="qty" class="label">Quantity</label>
               <input type="number" name="qty" class="form-control" id="qty" placeholder="Enter Quantity" required>
               <p class="ierr"></p>
@@ -407,9 +378,9 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group mb-2">
                 <label for="">Status</label>
-                <select type="text" class="form-control select2" name="status" id="status" required>
+                <select type="text" class="form-select" name="status" id="" required>
                   <option value="">Select</option>
                   <option value="1">Active</option>
                   <option value="0">Inactive</option>
@@ -432,20 +403,16 @@
             <button type="submit" class=" btn btn-success">Add Now</button>
           </div>
         </form>
-    </div>
-    </div>
-   </div>
-</div><!-- br-section-wrapper -->
+        </div>
 
-
+    </div>
+</div>
 @endsection
-@php
-    $tamurl='upload-temp-image';
-@endphp
+
 @section('script')
 <script src="https://cdn.tiny.cloud/1/zifeh3wuv4rjvx6ktqat7x169antz66gx9iwbh8sztsk1utd/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-<script src="{{ asset('Backend/js/dropzone.min.js') }}"></script>
-  <script type="text/javascript">
+<script src="{{ asset('Backend/assets/js/dropzone.min.js') }}"></script>
+<script type="text/javascript">
     $("#brand_id").select2();
     $("#category_id").select2();
     $("#sub_cat_id").select2();
@@ -499,7 +466,7 @@
       Dropzone.autoDiscover = false;
       const dropzone = $("#image").dropzone({
 
-        url:  "{{$tamurl}}",
+        url:  "{{route('tempimage.create')}}",
         maxFiles: 10,
         paramName: 'image',
         addRemoveLinks: true,
@@ -639,4 +606,3 @@
      /** Product Add  **/
   </script>
 @endsection
-

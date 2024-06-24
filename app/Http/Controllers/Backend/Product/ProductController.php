@@ -87,8 +87,9 @@ class ProductController extends Controller
                     $productImage->save();
 
                     /*Generate Product Thumbnails*/
-                    $sPath = public_path() . '/'.request()->host().'/temp/' . $tempImageInfo->name;
-                    $dPath = public_path() . '/'.request()->host().'/uploads/product/' . $imageName;
+                    $sPath = public_path() . '/temp/' . $tempImageInfo->name;
+                    $dPath = public_path() . '/uploads/product/' . $imageName;
+                    
 
                     File::copy($sPath, $dPath);
                 }
@@ -97,8 +98,6 @@ class ProductController extends Controller
                 'status' => true,
                 'message' => 'Product added succesfully'
             ]);
-            //return redirect()->route('admin.products.index')->with('success','Add Successfully');
-
         }else{
             return response()->json([
                 'status' => false,
@@ -197,42 +196,43 @@ class ProductController extends Controller
         $imageName = $request->product_id . '-' . $productImage->id.'-'.time().'.'.$ext;
         $productImage->image = $imageName;
         $productImage->save();
-        $image->move(public_path(request()->host().'/uploads/product'), $imageName);
+        $image->move(public_path('uploads/product'), $imageName);
 
         return response()->json([
             'status' => true,
             'image_id' => $productImage->id,
-            'imagePath' => asset(request()->host().'/uploads/product/' . $productImage->image),
+            'imagePath' => asset('uploads/product/' . $productImage->image),
             'message' => 'Image saved successfully'
         ]);
     }
     public function delete_photo(Request $request){
-        if ($request->type=="temp_file") {
-
-            $product_image=Temp_Image::find($request->id);
+        if ($request->type == "temp_file") {
+            $product_image = Temp_Image::find($request->id);
             if (!empty($product_image)) {
-                $imagePath = public_path() . '/'.request()->host().'/temp/' . $product_image->name;
+                $imagePath = public_path() . '/temp/' . $product_image->name;
                 if (file_exists($imagePath)) {
                     unlink($imagePath);
                 }
+                $product_image->delete();
+                return response()->json(['success' => true, 'message' => 'Delete Successful']);
             }
-            $product_image->delete();
-            return response()->json(['success'=>true,'message'=>'Delete Successfull']);
-            exit;
-        }
-        /* Product Image Find And Delete it From Database table */
-        $product_image=Product_image::find($request->id);
-        if (!empty($product_image)) {
-            $imagePath = public_path() . '/'.request()->host().'/uploads/product/' . $product_image->image;
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+        } else {
+            /* Product Image Find And Delete it From Database table */
+            $product_image = Product_image::find($request->id);
+            if (!empty($product_image)) {
+                $imagePath = public_path() . '/uploads/product/' . $product_image->image;
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+                /* Now Delete Product Image Name Delete it From Database table */
+                $product_image->delete();
+                return response()->json(['success' => true, 'message' => 'Delete Successful']);
             }
         }
-        /* Now Delete Product Image Name Delete it From Database table */
-        $product_image->delete();
-        return response()->json(['success'=>true,'message'=>'Delete Successfull']);
-        exit;
+        
+        return response()->json(['success' => false, 'message' => 'Image not found']);
     }
+    
     private function validate_ruls(){
             return  [
             'product_name' => 'required',
