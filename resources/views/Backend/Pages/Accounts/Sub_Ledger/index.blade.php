@@ -1,115 +1,58 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-@section('style')
- <!-- vendor css -->
-	<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-  
-    <link href="{{asset('Backend/lib/datatables.net-dt/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <link href="{{asset('Backend/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css')}}" rel="stylesheet">
-
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
-    <style>
-        .loading-spinner {
-        border:4px solid #f1f1f1;
-        border-left-color: #000000;;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-        }
-
-    </style>
-@endsection
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <span class="breadcrumb-item active">All Sub Ledger</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="br-section-wrapper" style="padding: 0px !important;"> 
-  <div class="table-wrapper">
-    <div class="card">
-      <div class="card-header">
-        <button  type="button" class="btn btn btn-success"  data-toggle="modal" data-target="#addModal">Add New Sub Ledger</a>
-      </div>
-      <div class="card-body">
-      <table id="datatable1" class="table display responsive nowrap">
-      <thead>
-        <tr>
-          <th class="">No.</th>
-          
-          <th class="">Ledger Name</th>
-          <th class="">Sub Ledger </th>
-          <th class="">Status</th>
-          <th class="">Create Date</th>
-          <th class="">Action</th>
-        </tr>
-      </thead>
-      <tbody>
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="card">
+            <div class="card-header">
+                  <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                  Add New </button>
+            </div>
+            <div class="card-body">
+              
 
-      </tbody>
-    </table>
-      </div>
-    </div>
-    
-  </div><!-- table-wrapper -->
-</div><!-- br-section-wrapper -->
+                <div class="table-responsive" id="tableStyle">
+                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                              <th class="">No.</th>
+                              <th class="">Ledger Name</th>
+                              <th class="">Sub Ledger </th>
+                              <th class="">Status</th>
+                              <th class="">Create Date</th>
+                              <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-<!--Start Delete MODAL ---->
-<div id="deleteModal" class="modal fade">
-    <div class="modal-dialog modal-dialog-top" role="document">
-        <div class="modal-content tx-size-sm">
-        <div class="modal-body tx-center pd-y-20 pd-x-20">
-            <form action="{{route('admin.sub_ledger.delete')}}" method="post" enctype="multipart/form-data">
-                @csrf
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <i class="icon icon ion-ios-close-outline tx-60 tx-danger lh-1 mg-t-20 d-inline-block"></i>
-                <h4 class="tx-danger  tx-semibold mg-b-20 mt-2">Are you sure! you want to delete this?</h4>
-                <input type="hidden" name="id" value="">
-                <button type="submit" class="btn btn-danger mr-2 text-white tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20">
-                    yes
-                </button>
-                <button type="button" class="btn btn-success tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mg-b-20" data-dismiss="modal" aria-label="Close">
-                    No
-                </button>
-            </form>
-        </div><!-- modal-body -->
-        </div><!-- modal-content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
-<!--End Delete MODAL ---->
-<div id="addModal" class="modal fade effect-scale">
-        <div class="modal-dialog modal-lg modal-dialog-top mt-4" role="document">
-            <div class="modal-content tx-size-sm">
-            <div class="modal-header pd-x-20">
-                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add New Sub Ledger</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+
+<!-- Add Modal -->
+<div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add New Sub Ledger
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        <!----- Start Add  Form ------->
-        <form action="{{route('admin.sub_ledger.store')}}" method="post">
-        @csrf
-
-        <div class="modal-body ">
-            <!----- Start Add  Form input ------->
-            <div class="col-xl-12">
-                <div class="form-layout form-layout-4">
-
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Ledger: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <select type="text" name="ledger_id" class="form-control"  required>
+            <!----- Start Add Form ------->
+            <form id="addSectionForm" action="{{ route('admin.sub_ledger.store') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <!----- Start Add Form input ------->
+                    <div class="row">
+                        <div class="form-group mb-2">
+                            <label for="">Ledger:</label>
+                            <select type="text" name="ledger_id" class="form-control"  required>
                             <option value="">---Select---</option>
                             @foreach ($ledger as $item)
                                  <option value="{{ $item->id }}">{{$item->ledger_name}}</option>
@@ -117,66 +60,48 @@
                            
                           </select>
                         </div>
-                    </div><!-- row -->
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Sub Ledger Name: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <input type="text" name="sub_ledger_name" class="form-control" placeholder="Enter Sub Ledger Name" required>
+                        <div class="form-group mb-2">
+                            <label for="">Sub Ledger Name:</label>
+                            <input type="text" name="sub_ledger_name" class="form-control" placeholder="Enter Sub Ledger Name" required>
                         </div>
-                    </div><!-- row -->
-
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Status: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <select type="text" name="status" class="form-control" required>
-                            <option value="">---Select---</option>
-                            <option value="1">Active</option>
-                            <option value="0">InActive</option>
-                          </select>
+                        <div class="form-group mb-2">
+                            <label for="status">Status</label>
+                            <select name="status" id="" class="form-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
                         </div>
-                    </div><!-- row -->
-
-                    
-
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-            <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
-        </div>
-
-        </form>
-        <!----- End Add Form ------->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+            <!----- End Add Form ------->
         </div>
     </div>
-  </div>
-
-  
-<!----- Edit Modal ------->
-  <div id="editModal" class="modal fade effect-scale">
-        <div class="modal-dialog modal-lg modal-dialog-top mt-4" role="document">
-            <div class="modal-content tx-size-sm">
-            <div class="modal-header pd-x-20">
-                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Update Sub Ledger</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+</div>
+<!-- Edit  Modal -->
+<div class="modal fade bs-example-modal-lg" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLabel">
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Master Ledger
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        <!----- Start Add  Form ------->
-        <form action="{{route('admin.sub_ledger.update')}}" method="post">
-        @csrf
-
-        <div class="modal-body ">
-            <!----- Start Add  Form input ------->
-            <div class="col-xl-12">
-                <div class="form-layout form-layout-4">
-
-                <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Ledger: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                            <input type="text" name="id" class="d-none">
-                          <select type="text" name="ledger_id" class="form-control"  required>
+            <!----- Start Update Form ------->
+            <form id="addSectionForm" action="{{ route('admin.sub_ledger.update') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <!----- Start Update Form input ------->
+                    <div class="row">
+                        <div class="form-group mb-2">
+                            <label for="">Ledger:</label>
+                            <input type="text" name="id" class="d-none" required>
+                            <select type="text" name="ledger_id" class="form-control"  required>
                             <option value="">---Select---</option>
                             @foreach ($ledger as $item)
                                  <option value="{{ $item->id }}">{{$item->ledger_name}}</option>
@@ -184,49 +109,58 @@
                            
                           </select>
                         </div>
-                    </div><!-- row -->
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Sub Ledger Name: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <input type="text" name="sub_ledger_name" class="form-control" placeholder="Enter Ledger Name" required>
+                        <div class="form-group mb-2">
+                            <label for="">Sub Ledger Name:</label>
+                            <input type="text" name="sub_ledger_name" class="form-control" placeholder="Enter Sub Ledger Name" required>
                         </div>
-                    </div><!-- row -->
-
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Status: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <select type="text" name="status" class="form-control" required>
-                            <option value="">---Select---</option>
-                            <option value="1">Active</option>
-                            <option value="0">InActive</option>
-                          </select>
+                        <div class="form-group mb-2">
+                            <label for="status">Status</label>
+                            <select name="status" id="" class="form-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
                         </div>
-                    </div><!-- row -->
-
-                   
+                    </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+            <!----- End Update Form ------->
+        </div>
+    </div>
+</div>
+<div id="deleteModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <form action="{{route('admin.sub_ledger.delete')}}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box">
+                    <i class="fas fa-trash"></i>
+                </div>
+                <h4 class="modal-title w-100">Are you sure?</h4>
+                <input type="hidden" name="id" value="">
+                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-success tx-size-xs">Update Now</button>
-            <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
-        </div>
-
+            <div class="modal-body">
+                <p>Do you really want to delete these records? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+            </div>
         </form>
-        <!----- End Add Form ------->
-        </div>
-      </div>
-  </div>
-<!----- Edit Modal ------->
+    </div>
+</div>
 @endsection
 
 @section('script')
-    <script src="{{asset('Backend/lib/highlightjs/highlight.pack.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
-  <script type="text/javascript">
+
+
+<script type="text/javascript">
     $(document).ready(function(){
      
       var table=$("#datatable1").DataTable({
@@ -259,9 +193,9 @@
             "data":"status",
             render:function(data,type,row){
                 if (row.status==1) {
-                    return '<span class="badge badge-success">Active</span>';
+                    return '<span class="badge bg-success">Active</span>';
                 }else{
-                    return '<span class="badge badge-danger">Inactive</span>';
+                    return '<span class="badge bg-danger">Inactive</span>';
                 }
             }
           },
@@ -337,7 +271,7 @@
     var originalBtnText = submitBtn.html();
 
     /*Change button text to loading state*/ 
-    submitBtn.html(`<div class="loading-spinner"></div>`);
+    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
 
     var form = $(this);
     var url = form.attr('action');
@@ -420,7 +354,7 @@
     var originalBtnText = submitBtn.html();
 
     // Change button text to loading state
-    submitBtn.html(`<div class="loading-spinner"></div>`);
+    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
 
     var form = $(this);
     var url = form.attr('action');
@@ -463,7 +397,6 @@
   });
   </script>
 
-
   @if(session('success'))
     <script>
         toastr.success("{{ session('success') }}");
@@ -473,5 +406,5 @@
         toastr.error("{{ session('error') }}");
     </script>
     @endif
-  
+
 @endsection

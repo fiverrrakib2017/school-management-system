@@ -192,9 +192,9 @@
             "data":"status",
             render:function(data,type,row){
                 if (row.status==1) {
-                    return '<span class="badge badge-success">Active</span>';
+                    return '<span class="badge bg-success">Active</span>';
                 }else{
-                    return '<span class="badge badge-danger">Inactive</span>';
+                    return '<span class="badge bg-danger">Inactive</span>';
                 }
             }
           },
