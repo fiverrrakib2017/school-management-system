@@ -24,7 +24,8 @@
     <link href="{{ asset('Backend/assets/libs/datatables.net-select-bs5/css/select.bootstrap5.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('Backend/assets/css/deleteModal.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('Backend/assets/css/toastr.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />  -->
+     <link href="{{ asset('Backend/assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
     @yield('style')
 </head>
 

@@ -1,154 +1,116 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-@section('style')
- <!-- vendor css -->
-	<link href="{{asset('Backend/lib/highlightjs/styles/github.css')}}" rel="stylesheet">
-  
-    <link href="{{asset('Backend/lib/datatables.net-dt/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <link href="{{asset('Backend/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css')}}" rel="stylesheet">
-
-    <!-- Bracket CSS -->
-    <link rel="stylesheet" href="{{asset('Backend/css/bracket.css')}}">
-    <style>
-        .loading-spinner {
-        border:4px solid #f1f1f1;
-        border-left-color: #000000;;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-        }
-
-    </style>
-@endsection
 @section('content')
-      <div class="br-pageheader">
-        <nav class="breadcrumb pd-0 mg-0 tx-12">
-          <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-          <span class="breadcrumb-item active">Transaction</span>
-        </nav>
-      </div><!-- br-pageheader -->
-<div class="br-section-wrapper" style="padding: 0px !important;"> 
-  <div class="table-wrapper">
-    <div class="card">
-      <div class="card-header">
-       
-      </div>
-      <div class="card-body">
-        <form id="transaction_form" action="{{route('admin.transaction.store')}}" method="post">
-            @csrf
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="">Transaction Type</label>
-                        <select name="transaction_type" class="form-control" style="width: 100%;"  required>
-                            <option value="">---Select---</option>
-                            @foreach ($master_ledger as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="">Refer Number</label>
-                        <input name="refer_no"  class="form-control" placeholder="Enter Refer No.">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="">Description</label>
-                        <textarea name="description"  class="form-control" placeholder="Enter Description" style="height: 43px;"></textarea>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Accounts Transaction</h4>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="">Ledger</label>
-                        <select name="ledger_id" id="ledger_id"  class="form-control" style="width: 100%;"  required>
-                            <option value="">---Select---</option>
-                                @foreach ($ledger as $item)
-                                    <option value="{{$item->id}}">{{ $item->ledger_name }}</option>
-                                @endforeach
-                        </select>
+            <div class="card-body">
+                <form id="transaction_form" action="{{ route('admin.transaction.store') }}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="transaction_type">Transaction Type</label>
+                                <select name="transaction_type" class="form-control" required>
+                                    <option value="">---Select---</option>
+                                    @foreach ($master_ledger as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="refer_no">Refer Number</label>
+                                <input name="refer_no" class="form-control" placeholder="Enter Refer No.">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="description">Description</label>
+                                <textarea name="description" class="form-control" placeholder="Enter Description" rows="1"></textarea>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="">Sub Ledger</label>
-                        <select name="sub_ledger_id" id="sub_ledger_id" style="width: 100%;"   class="form-control" required>
-                            <option value="">---Select---</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="ledger_id">Ledger</label>
+                                <select name="ledger_id" id="ledger_id" class="form-control w-100" required>
+                                    <option value="">---Select---</option>
+                                    @foreach ($ledger as $item)
+                                        <option value="{{ $item->id }}">{{ $item->ledger_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="sub_ledger_id">Sub Ledger</label>
+                                <select name="sub_ledger_id" id="sub_ledger_id" class="form-select w-100" required>
+                                    <option value="">---Select---</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3 d-flex align-items-end">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" class="btn btn-primary mt-2 btn-block w-100">Add Sub Ledger</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for=""></label>
-                        <button type="button" data-toggle="modal" data-target="#addModal" class="btn-block btn btn-primary" style="margin-top: 5px;">Add Sub Ledger</button>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="qty">Quantity</label>
+                                <input type="number" name="qty" class="form-control" placeholder="Enter Quantity" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="amount">Amount</label>
+                                <input name="amount" class="form-control" placeholder="Enter Amount" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="total">Total</label>
+                                <input readonly name="total" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-success mt-2 btn-block w-100">Submit</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="">Quantity</label>
-                        <input type="number" name="qty" class="form-control" placeholder="Enter Quantity" required>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="">Amount</label>
-                        <input name="amount" placeholder="Enter Amount"  class="form-control" required>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="">Total</label>
-                        <input readonly name="total"  class="form-control" required>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for=""></label>
-                        <button type="submit" class="btn-block btn btn-success" style="margin-top: 5px;">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div><!-- table-wrapper -->
-</div><!-- br-section-wrapper -->
+</div>
 
-<div id="addModal" class="modal fade effect-scale">
-        <div class="modal-dialog modal-lg modal-dialog-top mt-4" role="document">
-            <div class="modal-content tx-size-sm">
-            <div class="modal-header pd-x-20">
-                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add New Sub Ledger</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+<!-- Add Section Modal -->
+<div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add New Sub Ledger
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        <!----- Start Add  Form ------->
-        <form id="addSubLedgerForm" action="{{route('admin.sub_ledger.store')}}" method="post">
-        @csrf
-
-        <div class="modal-body ">
-            <!----- Start Add  Form input ------->
-            <div class="col-xl-12">
-                <div class="form-layout form-layout-4">
-
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Ledger: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <select type="text" name="ledger_id" id="modal_ledger_id" class="form-control" style="width: 100%;"  required>
+            <!----- Start Add Form ------->
+            <form id="addForm" action="{{ route('admin.sub_ledger.store') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <!----- Start Add Form input ------->
+                    <div class="row">
+                        <div class="form-group mb-2">
+                            <label for="sectionName">Ledger:</label>
+                            <select type="text" name="ledger_id" id="modal_ledger_id" class="form-control" style="width: 100%;"  required>
                             <option value="">---Select---</option>
                                 @foreach ($ledger as $item)
                                     <option value="{{$item->id}}">{{ $item->ledger_name }}</option>
@@ -156,54 +118,33 @@
                            
                           </select>
                         </div>
-                    </div><!-- row -->
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Sub Ledger Name: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <input type="text" name="sub_ledger_name" class="form-control" placeholder="Enter Sub Ledger Name" required>
+                        <div class="form-group mb-2">
+                            <label for="sectionName">Sub Ledger Name:</label>
+                            <input type="text" name="sub_ledger_name" class="form-control" placeholder="Enter Sub Ledger Name" required>
                         </div>
-                    </div><!-- row -->
-
-                    <div class="row mb-4">
-                        <label class="col-sm-3 form-control-label">Status: <span class="tx-danger">*</span></label>
-                        <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                          <select type="text" name="status" id="modal_status" class="form-control" required>
-                            <option value="">---Select---</option>
-                            <option value="1">Active</option>
-                            <option value="0">InActive</option>
-                          </select>
+                        <div class="form-group mb-2">
+                            <label for="status">Status</label>
+                            <select name="status" id="" class="form-control">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
                         </div>
-                    </div><!-- row -->
-
-                    
-
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-            <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
-        </div>
-
-        </form>
-        <!----- End Add Form ------->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+            <!----- End Add Form ------->
         </div>
     </div>
-  </div>
-
-  
-<!----- Edit Modal ------->
-  
-<!----- Edit Modal ------->
+</div>
 @endsection
 
 @section('script')
-    <script src="{{asset('Backend/lib/highlightjs/highlight.pack.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('Backend/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
-  <script type="text/javascript">
+
+<script type="text/javascript">
     $(document).ready(function() {
         $("select[name='transaction_type']").select2();
         $("select[id='ledger_id']").select2();
@@ -243,7 +184,7 @@
         });
     });
 
-    $('#addSubLedgerForm').submit(function(e) {
+    $('#addForm').submit(function(e) {
         e.preventDefault();
 
         /*Get the submit button*/
@@ -251,7 +192,7 @@
 
         var originalBtnText = submitBtn.html();
 
-        submitBtn.html('<div class="loading-spinner"></div>');
+        submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
         submitBtn.prop('disabled', true); 
 
         var form = $(this);
@@ -294,7 +235,7 @@
         var originalBtnText = submitBtn.html();
 
         /*Change button text to loading state*/ 
-        submitBtn.html(`<div class="loading-spinner"></div>`);
+        submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
         var form = $(this);
         var url = form.attr('action');
         var formData = form.serialize();
@@ -339,5 +280,5 @@
         toastr.error("{{ session('error') }}");
     </script>
     @endif
-  
+
 @endsection

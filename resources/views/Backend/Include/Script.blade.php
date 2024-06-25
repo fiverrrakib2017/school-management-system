@@ -32,8 +32,7 @@
 <script src="{{ asset('Backend/assets/js/toastr.min.js') }}"></script>
 <!-- App js -->
 <script src="{{ asset('Backend/assets/js/app.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+<script src="{{ asset('Backend/assets/libs/select2/js/select2.min.js') }}"></script>
 <!-- Include Morris.js and its dependencies -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
