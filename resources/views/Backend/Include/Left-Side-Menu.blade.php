@@ -108,17 +108,23 @@
              <li>
                 <a href="#accounts_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-receipt "></i>
-                <span> Product Management </span>
+                <span> Accounts Management </span>
                 <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="accounts_management">
                    <ul class="nav-second-level">
                       <li>
                         <a href="{{ route('admin.master_ledger.index') }}">Master Ledger</a>
+                     </li>
+                      <li>
                         <a href="{{ route('admin.ledger.index') }}">Ledger</a>
+                     </li>
+                     <li>
                         <a href="{{ route('admin.sub_ledger.index') }}">Sub Ledger</a>
+                     </li>
+                     <li>
                         <a href="{{ route('admin.transaction.index') }}">Transaction</a>
-                      </li>
+                     </li>
                    </ul>
                 </div>
              </li>
