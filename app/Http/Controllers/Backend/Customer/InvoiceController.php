@@ -18,10 +18,10 @@ use function App\Helpers\__due_payment_received;
 class InvoiceController extends Controller
 {
     public function create_invoice(){
-        $users=User::latest()->get();
+        $customer=Customer::latest()->get();
         $product=Product::latest()->get();
         $products=Product::with('product_image')->paginate(10);
-        return view('Backend.Pages.Customer.invoice_create',compact('users','product','products'));
+        return view('Backend.Pages.Customer.invoice_create',compact('customer','product','products'));
     }
     public function search_product_data(Request $request){
         if ($request->search=='') {
@@ -133,7 +133,7 @@ class InvoiceController extends Controller
         }
         /*Create the invoice*/
         $invoice = new Customer_Invoice();
-        $invoice->user_id = $request->customer_id;
+        $invoice->customer_id = $request->customer_id;
         $invoice->total_amount = $request->total_amount;
         $invoice->paid_amount = $request->paid_amount ?? 0;
         $invoice->due_amount = $request->due_amount ?? $request->total_amount;

@@ -1,17 +1,8 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-@section('style')
-<link href="{{asset('Backend/lib/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
-@endsection
 @section('content')
-<div class="br-pageheader">
-   <nav class="breadcrumb pd-0 mg-0 tx-12">
-      <a class="breadcrumb-item" href="{{route('admin.dashboard')}}">Dashboard</a>
-      <a class="breadcrumb-item" href="{{route('admin.customer.index')}}">Customer</a>
-      <span class="breadcrumb-item active">Create</span>
-   </nav>
-</div>
 <!-- br-pageheader -->
+<div class="row">
 <div class="row d-flex">
    <div class="col-md-12">
       <div class="row d-flex">
@@ -24,7 +15,7 @@
                   </div>
                   <div class="form-group mb-2">
                      <label>Product Name</label>
-                     <select type="text" id="product_name"  class="form-control select2" style="width:100%">
+                     <select type="text" id="product_name"  class="form-select" style="width:100%">
                         <option>Select</option>
                         @foreach ($product as $item)
                             <option value="{{$item->id}}">{{ $item->title }}</option>
@@ -34,10 +25,10 @@
                   </div>
                   <div class="form-group mb-2">
                      <label>Customer Name</label>
-                     <select type="text" id="customer_name" name="customer_id" class="form-control select2" style="width:100%">
+                     <select type="text" id="customer_name" name="customer_id" class="form-select" style="width:100%">
                         <option>---Select---</option>
-                        @foreach ($users as $item)
-                             <option value="{{$item->id}}">{{$item->name}}</option>
+                        @foreach ($customer as $item)
+                             <option value="{{$item->id}}">{{$item->fullname}}</option>
                         @endforeach
 
                      </select>
@@ -95,7 +86,7 @@
                            <div class="col-sm-6 py-1">
                               <div class="product-list-box card p-2">
                                  <a href="javascript:void(0);"   onclick="__get_product({{ $product->id }})">
-                                 <img src="{{ asset(request()->host().'/uploads/product/' . $product->product_image[0]->image ) }}" class="img-fluid" alt="work-thumbnail" style="height: 150px; width: 150px; ">
+                                 <img src="{{ asset('uploads/product/' . $product->product_image[0]->image ) }}" class="img-fluid" alt="work-thumbnail" style="height: 150px; width: 150px; ">
                                  </a>
                                  <div class="detail">
                                  <h6 class="font-size-10 mt-2"><a href="#" onclick="__get_product({{ $product->id }})" class="text-dark">{{ Illuminate\Support\Str::limit($product->title, 40) }}</a> </h6>
@@ -135,11 +126,12 @@
       </div>
    </div>
 </div>
+</div>
 @endsection
 @section('script')
 <script type="text/javascript">
     $(document).ready(function() {
-
+      $("#customer_name").select2();
       $(document).on('change','#product_name',function(){
          var product_id = $(this).val();
          __get_product(product_id);
@@ -171,11 +163,11 @@
 
                      '<td><input type="number" min="1" name="qty[]"  value="1" class="form-control qty"></td>' +
 
-                     '<td><input readonly type="number"  name=price[] class="form-control " value="' + product.price + '"></td>' +
+                     '<td><input readonly type="number"  name=price[] class="form-control " value="' + product.s_price + '"></td>' +
 
-                     '<td><input readonly type="number" id="total_price"  name=total_price[] class="form-control" value="' + product.price+ '"></td>' +
+                     '<td><input readonly type="number" id="total_price"  name=total_price[] class="form-control" value="' + product.s_price+ '"></td>' +
 
-                     '<td><a  type="button" id="itemRow"><i class="icon ion-close" ></i></a></td>' +
+                     '<td><a class="btn-sm  btn-danger" type="button" id="itemRow"><i class="mdi mdi-close" ></i></a></td>' +
                      '</tr>';
 
                // Append row to the table body
@@ -320,7 +312,7 @@
          products_container.empty();
          $.each(products, function(index, product) {
             var imageUrl = product.product_image.length > 0 ? product.product_image[0].image : '';
-            var newImageUrl = imageUrl !== '' ? "{{ asset(request()->host().'/uploads/product/') }}/" + imageUrl : '';
+            var newImageUrl = imageUrl !== '' ? "{{ asset('uploads/product/') }}/" + imageUrl : '';
             products_container.append(
                   `<div class="col-sm-6 py-1">
                      <div class="product-list-box card p-2">

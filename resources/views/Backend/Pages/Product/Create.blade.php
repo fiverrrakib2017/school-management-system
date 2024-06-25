@@ -275,14 +275,21 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group mb-2">
-                <label for="">Price</label>
-                <input type="number" class="form-control" id="price"  name="price" placeholder="Enter Your Price" required/>
+                <label for="">Purchase Price</label>
+                <input type="number" class="form-control" id="p_price"  name="p_price" placeholder="Enter Your Price" required/>
                 <p class="ierr"></p>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <div class="form-group mb-2">
+                <label for="">Sale's Price</label>
+                <input type="number" class="form-control" id="s_price"  name="s_price" placeholder="Enter Your Sale's Price" required/>
+                <p class="ierr"></p>
+              </div>
+            </div>
+            <div class="col-md-4">
               <div class="form-group mb-2">
                 <label for="">Sku</label>
                 <input type="text" class="form-control" name="sku" id="sku" required/>

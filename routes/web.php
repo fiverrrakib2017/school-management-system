@@ -228,6 +228,7 @@ Route::group(['middleware'=>'admin'],function(){
         Route::get('/create',[ProductController::class,'create'])->name('admin.products.create');
         Route::post('/update',[ProductController::class,'product_update'])->name('admin.product.update');
         Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit');
+        Route::get('/view/{id}',[ProductController::class,'view'])->name('admin.products.view');
 
          /* Product Image*/
          Route::post('/upload-temp-image', [TempImageController::class, 'create'])->name('tempimage.create');

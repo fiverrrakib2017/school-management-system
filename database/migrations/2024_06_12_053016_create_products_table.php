@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('slug');
             $table->string('size')->nullable();
             $table->string('color')->nullable();
-            $table->double('price', 10,2)->nullable();
+            $table->double('p_price', 10,2)->nullable();
+            $table->double('s_price', 10,2)->nullable();
             $table->string('tax')->nullable();
             $table->double('delivery_charge', 10,2)->nullable();
             $table->string('product_type');

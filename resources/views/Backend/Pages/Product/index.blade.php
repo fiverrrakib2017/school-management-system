@@ -17,7 +17,8 @@
                             <tr>
                               <th class="">No.</th>
                               <th class="">Product Image</th>
-                              <th class="">Price</th>
+                              <th class="">Purchase Price</th>
+                              <th class="">Sale's Price</th>
                               <th class="">Quantity</th>
                               <th class="">Sku</th>
                               <th class="">Status</th>
@@ -44,7 +45,8 @@
                                     {{ $title }}
                                 @endif
                                 </td>
-                                <td>{{$data->price}}</td>
+                                <td>{{$data->p_price}}</td>
+                                <td>{{$data->s_price}}</td>
                                 <td>{{$data->qty}}</td>
                                 <td>{{$data->sku}}</td>
                                 <td>
@@ -58,6 +60,7 @@
                                   <!-- Add your action buttons here -->
                                   <a class="btn btn-primary btn-sm mr-3" href="{{route('admin.products.edit', $data->id)}}"><i class="fa fa-edit"></i></a>
                                   <button data-bs-toggle="modal" data-bs-target="#deleteModal{{$data->id}}" class="btn btn-danger btn-sm mr-3"><i class="fa fa-trash"></i></button>
+                                  <a class="btn btn-success btn-sm mr-3" href="{{route('admin.products.view', $data->id)}}"><i class="fa fa-eye"></i></a>
                                 </td>
                               </tr>
                             <!--Start Delete MODAL ---->

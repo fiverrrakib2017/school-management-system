@@ -33,6 +33,10 @@ class ProductController extends Controller
         $size=Size::where('status',1)->latest()->get();
         return view('Backend.Pages.Product.Create',compact('category','brand','color','size'));
     }
+    public function view($id){
+        $product=Product::with('product_image','brand','category')->find($id);
+        return view('Backend.Pages.Product.View',compact('product'));
+    }
     public function store(Request $request){
         $validator = Validator::make($request->all(), $this->validate_ruls());
         if($validator->passes()){
@@ -54,7 +58,8 @@ class ProductController extends Controller
 
 
             $product->slug = $request->slug;
-            $product->price = $request->price;
+            $product->p_price = $request->p_price;
+            $product->s_price = $request->s_price;
             $product->description = $request->description;
             $product->short_description = $request->short_description;
             $product->shipping_returns = $request->shipping_returns;
@@ -129,7 +134,8 @@ class ProductController extends Controller
 
 
              $product->slug = $request->slug;
-             $product->price = $request->price;
+             $product->p_price = $request->p_price;
+             $product->s_price = $request->s_price;
              $product->description = $request->description;
              $product->short_description = $request->short_description;
              $product->shipping_returns = $request->shipping_returns;
@@ -239,7 +245,8 @@ class ProductController extends Controller
             'brand_id'=>'required',
             'category_id'=>'required',
             'slug' => 'nullable',
-            'price' => 'required|numeric',
+            'p_price' => 'required|numeric',
+            's_price' => 'required|numeric',
             'description' => 'nullable|max:10000',
             'product_type' => 'required',
         ];

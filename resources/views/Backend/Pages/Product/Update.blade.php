@@ -298,16 +298,23 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group mb-2">
-                <label for="">Price</label>
-                @if (!empty($data->price))
-                     <input type="number" class="form-control" id="price"  name="price" placeholder="Enter Your Price" value="{{$data->price}}" />
+                <label for="">Purchase Price</label>
+                @if (!empty($data->p_price))
+                     <input type="number" class="form-control" id="p_price"  name="p_price" placeholder="Enter Purchase Price" value="{{$data->p_price}}" />
                     <p class="ierr"></p>
                 @endif
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <div class="form-group mb-2">
+                <label for="">Sale's Price</label>
+                <input type="number" class="form-control" id="s_price"  name="s_price" placeholder="Enter Your Sale's Price"  value="{{$data->s_price ?? ''}}" required/>
+                <p class="ierr"></p>
+              </div>
+            </div>
+            <div class="col-md-4">
               <div class="form-group mb-2">
                 <label for="">Sku</label>
                 @if (!empty($data->sku))
