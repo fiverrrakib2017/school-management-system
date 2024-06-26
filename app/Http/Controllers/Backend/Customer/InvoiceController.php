@@ -10,6 +10,7 @@ use App\Models\Customer_Transaction_History;
 use App\Models\Add_Contract;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\InvoiceService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,11 +18,13 @@ use function App\Helpers\__due_payment_received;
 
 class InvoiceController extends Controller
 {
+    protected $invoiceService;
+    public function __construct(InvoiceService $invoiceService)
+    {
+        $this->invoiceService=$invoiceService;
+    }
     public function create_invoice(){
-        $customer=Customer::latest()->get();
-        $product=Product::latest()->get();
-        $products=Product::with('product_image')->paginate(10);
-        return view('Backend.Pages.Customer.invoice_create',compact('customer','product','products'));
+        return $this->invoiceService->createInvoice('Customer');
     }
     public function search_product_data(Request $request){
         if ($request->search=='') {
@@ -36,17 +39,18 @@ class InvoiceController extends Controller
         return view('Backend.Pages.Customer.invoice');
     }
     public function view_invoice($id){
-        $site_details=Add_Contract::find(1);
-       $data=  Customer_Invoice::with('customer','items.product')->find($id);
-       $pdf = Pdf::loadView('Backend.Pages.Customer.invoice_view',compact('data','site_details'));
-       return $pdf->stream('customer_invoice.pdf');
+        return 'view Invoice';
+    //     $site_details=Add_Contract::find(1);
+    //    $data=  Customer_Invoice::with('customer','items.product')->find($id);
+    //    $pdf = Pdf::loadView('Backend.Pages.Customer.invoice_view',compact('data','site_details'));
+    //    return $pdf->stream('customer_invoice.pdf');
     }
     public function edit_invoice($id){
-        $users=User::latest()->get();
+        $customer=Customer::latest()->get();
         $product=Product::latest()->get();
         $products=Product::with('product_image')->paginate(10);
        $data=  Customer_Invoice::with('customer','items')->where('id',$id)->get();
-       return view('Backend.Pages.Customer.invoice_edit',compact('data','users','product','products'));
+       return view('Backend.Pages.Customer.invoice_edit',compact('data','customer','product','products'));
     }
     public function update_invoice(Request $request){
         /* Validate the request data*/
@@ -79,7 +83,7 @@ class InvoiceController extends Controller
             }
         /*Update the invoice*/
         $invoice = Customer_Invoice::find($request->id);
-        $invoice->user_id = $request->customer_id;
+        $invoice->customer_id = $request->customer_id;
         $invoice->total_amount = $request->total_amount;
         $invoice->paid_amount = $request->paid_amount ?? 0;
         $invoice->due_amount = $request->due_amount ?? $request->total_amount;
@@ -105,8 +109,8 @@ class InvoiceController extends Controller
                   ->orWhere('due_amount', 'like', "%$search%")
                   ->orWhere('created_at', 'like', "%$search%")
                   ->orWhereHas('customer', function ($query) use ($search) {
-                      $query->where('name', 'like', "%$search%")
-                            ->orWhere('phone', 'like', "%$search%");
+                      $query->where('fullname', 'like', "%$search%")
+                            ->orWhere('phone_number', 'like', "%$search%");
                   });
         }) ->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection)
         ->paginate($request->length);
@@ -187,12 +191,6 @@ class InvoiceController extends Controller
                 $difference= $request->qty[$index]-$old_qty;
                 $product->qty-=$difference; 
                 $product->save();
-
-                // $old_qty = $existing_qty[$productId] ?? 0;
-                // $new_qty = $request->qty[$index];
-                // $difference= $new_qty-$old_qty;
-                // $product->qty+=$difference; 
-                // $product->save();
             }
         }
     }
