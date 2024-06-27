@@ -52,15 +52,16 @@
     <div class="invoice-wrapper">
         <div class="invoice-header">
             <h1 class="invoice-title" style="text-align:center;">Invoice - {{$site_details->app_name ?? ''}}</h1>
+            <!-- <p class="invoice-title" style="text-align:center;">Start Communication</p> -->
         </div>
         <div class="invoice-details">
             <div class="invoice-details-flex">
                 <div class="invoice-single-details">
                     <h2 class="invoice-details-title">Bill To:</h2>
                     <ul class="details-list">
-                        <li class="list">{{$data->customer->name ?? ''}}</li>
-                        <li class="list"> <a href="#">{{$data->customer->email}} </a> </li>
-                        <li class="list"> <a href="#">{{$data->customer->phone}}</a> </li>
+                        <li class="list">{{$data->customer->fullname ?? ''}}</li>
+                        <li class="list"> <a href="#">{{$data->customer->email_address ?? ''}} </a> </li>
+                        <li class="list"> <a href="#">{{$data->customer->phone_number ?? ''}}</a> </li>
                     </ul>
                 </div>
                 <div class="invoice-single-details">
@@ -95,8 +96,8 @@
                           {{ $title }}
                         </td>
                         <td>{{ $item->qty }}</td>
-                        <td>{{ $item->product->price }}</td>
-                        <td>{{ $item->product->price * $item->qty }}</td>
+                        <td>{{ $item->product->s_price }}</td>
+                        <td>{{ $item->product->s_price * $item->qty }}</td>
                     </tr>
                     @endforeach
                     <tr class="table_footer_row">

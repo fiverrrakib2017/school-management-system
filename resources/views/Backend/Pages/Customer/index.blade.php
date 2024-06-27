@@ -1,24 +1,6 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
 @section('style')
-
-    <style>
-        /* .loading-spinner {
-        border:4px solid #f1f1f1;
-        border-left-color: #000000;;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-        } */
-
-    </style>
 @endsection
 @section('content')
 <div class="row">
@@ -85,12 +67,8 @@
     "processing":true,
     "responsive": true,
     "serverSide":true,
-    beforeSend: function () {
-        //$('#preloader').addClass('active');
-    },
-    complete: function(){
-        //$('.product_loading').css({"display":"none"});
-    },
+    beforeSend: function () {},
+    complete: function(){},
     ajax: "{{ route('admin.customer.get_all_data') }}",
     language: {
         searchPlaceholder: 'Search...',
@@ -106,7 +84,7 @@
             render:function(data,type,row){
 
               if(row.profile_image!==null){
-                return '<img src="{{ asset("Backend/images/customers") }}/' + row.profile_image + '" width="100px" height="90px" class="img-fluid">';
+                return '<img src="{{ asset("Backend/uploads/photos") }}/' + row.profile_image + '" width="100px" height="90px" class="img-fluid">';
               }else{
                 return '<img src="{{ asset("Backend/images/default.jpg") }}" width="100px" height="90px" class="img-fluid">';
               }
@@ -116,9 +94,6 @@
             "data":"fullname",
             render:function(data,type,row){
               var link ="{{ route('admin.customer.view', ':id') }}".replace(':id', row.id);
-              // var randomString = Math.random().toString(36).substring(7);
-              // link = link.replace(':slug', randomString);
-
               return '<a href="'+link+'">'+row.fullname+'</a>';
             }
           },

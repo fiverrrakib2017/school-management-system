@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Customer_Invoice;
+use App\Models\Customer_Transaction_History;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -22,23 +23,6 @@ class CustomerController extends Controller
     }
     public function get_all_data(Request $request)
     {
-        // $search = $request->search['value'];
-        // $columnsForOrderBy = ['id','profile_image', 'fullname', 'phone_number',  'create_at'];
-        // $orderByColumn = $request->order[0]['column'];
-        // $orderDirectection = $request->order[0]['dir'];
-
-        // $object = Customer::when($search, function ($query) use ($search) {
-        //     $query->where('fullname', 'like', "%$search%");
-        //     $query->where('phone_number', 'like', "%$search%");
-        // })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
-        // $total = $object->count();
-        // $item = $object->skip($request->start)->take($request->length)->get();
-        // return response()->json([
-        //     'draw' => $request->draw,
-        //     'recordsTotal' => $total,
-        //     'recordsFiltered' => $total,
-        //     'data' => $item,
-        // ]);
         $search = $request->search['value'];
         $columnsForOrderBy = ['id', 'profile_image','fullname','phone_number', 'created_at'];
         $orderByColumn = $request->order[0]['column'];
@@ -98,7 +82,7 @@ class CustomerController extends Controller
         if ($request->hasFile('profile_image')) {
             $image = $request->file('profile_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('Backend/images/customers'), $imageName);
+            $image->move(public_path('Backend/uploads/photos'), $imageName);
         } else {
             $imageName = '';
         }
@@ -146,7 +130,7 @@ class CustomerController extends Controller
 
         /* Image Find And Delete it From Local Machine */
         if (!empty($object->profile_image)) {
-            $imagePath = public_path('Backend/images/customers/' . $object->profile_image);
+            $imagePath = public_path('Backend/uploads/photos/' . $object->profile_image);
 
             if (file_exists($imagePath)) {
                 unlink($imagePath);
@@ -156,7 +140,7 @@ class CustomerController extends Controller
         /* Delete it From Database Table */
         $object->delete();
 
-        return response()->json(['success' => 'Deleted successfully.']);
+        return response()->json(['success' =>true, 'message'=> 'Deleted successfully.']);
     }
     public function edit($id)
     {
@@ -164,9 +148,13 @@ class CustomerController extends Controller
         return view('Backend.Pages.Customer.Update', compact('data'));
     }
     public function view($id) {
-        // $data = Customer::find($id);
-        // $invoice_data= __get_invoice_data($id,'Customer');
-        // return view('Backend.Pages.Customer.Profile', array_merge(compact('data'), $invoice_data));
+        $total_invoice=Customer_Invoice::where('customer_id',$id)->count();
+        $total_paid_amount=Customer_Invoice::where('customer_id',$id)->sum('paid_amount');
+        $total_due_amount=Customer_Invoice::where('customer_id',$id)->sum('due_amount');
+        $invoices = Customer_Invoice::where('customer_id', $id)->get();
+        $data = Customer::find($id);
+        $customer_transaction_history=Customer_Transaction_History::where('customer_id',$id)->get();
+        return view('Backend.Pages.Customer.Profile',compact('data','total_invoice','total_paid_amount','total_due_amount','invoices','customer_transaction_history'));
     }
 
     public function update(Request $request, $id)
@@ -211,14 +199,14 @@ class CustomerController extends Controller
 
             // Delete previous image
             if (!empty($object->profile_image)) {
-                $imagePath = public_path('Backend/images/customers/' . $object->profile_image);
+                $imagePath = public_path('Backend/uploads/photos/' . $object->profile_image);
                 if (file_exists($imagePath)) {
                     unlink($imagePath);
                 }
             }
 
             $imageName = time() . '.' . $request->file('profile_image')->getClientOriginalExtension();
-            $request->file('profile_image')->move(public_path('Backend/images/customers/'), $imageName);
+            $request->file('profile_image')->move(public_path('Backend/uploads/photos'), $imageName);
 
             $object->profile_image = $imageName;
         }

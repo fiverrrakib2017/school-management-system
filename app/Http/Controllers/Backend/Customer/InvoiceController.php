@@ -39,11 +39,9 @@ class InvoiceController extends Controller
         return view('Backend.Pages.Customer.invoice');
     }
     public function view_invoice($id){
-        return 'view Invoice';
-    //     $site_details=Add_Contract::find(1);
-    //    $data=  Customer_Invoice::with('customer','items.product')->find($id);
-    //    $pdf = Pdf::loadView('Backend.Pages.Customer.invoice_view',compact('data','site_details'));
-    //    return $pdf->stream('customer_invoice.pdf');
+       $data=  Customer_Invoice::with('customer','items.product')->find($id);
+       $pdf = Pdf::loadView('Backend.Pages.Customer.invoice_view',compact('data'));
+       return $pdf->stream('customer_invoice.pdf');
     }
     public function edit_invoice($id){
         $customer=Customer::latest()->get();
@@ -155,8 +153,34 @@ class InvoiceController extends Controller
         return response()->json(['success'=>true,'message' => 'Invoice deleted successfully']);
     }
     public function pay_due_amount(Request $request){
-      $__response= __due_payment_received($request,new Customer_Invoice(),new Customer_Transaction_History(), 'user_id');
-       return ($__response);
+        $request->validate([
+            'id' => 'required|integer',
+            'amount' => 'required|numeric',
+        ]);
+
+        $invoice =Customer_Invoice::find($request->id);
+        $dueAmount = $invoice->due_amount;
+
+        if ($request->amount > $dueAmount) {
+            return response()->json(['success' => false, 'message' => 'Over Amount Not Allowed'], 400);
+        }
+
+        $paid_amount = $invoice->paid_amount + $request->amount;
+        $due_amount = max($invoice->due_amount - $request->amount, 0);
+
+        $invoice->update([
+            'paid_amount' => $paid_amount,
+            'due_amount' => $due_amount,
+        ]);
+        /*Log transaction history*/ 
+        $object = new Customer_Transaction_History();
+        $object->invoice_id = $request->id;
+        $object->customer_id = $invoice->customer_id;
+        $object->amount = $request->amount;
+        $object->status = 1;
+        $object->save();
+
+        return response()->json(['success'=>true,'message' => 'Payment successful'], 200);
     }
     protected function __validate_method($request){
         $ruls=[
