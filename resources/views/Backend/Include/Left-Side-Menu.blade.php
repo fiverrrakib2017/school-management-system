@@ -68,6 +68,29 @@
                 </div>
              </li>
              <li>
+                <a href="#supplier_management" data-bs-toggle="collapse">
+                    <i class="menu-item-icon fas fa-receipt "></i>
+                <span> Supplier Management </span>
+                <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="supplier_management">
+                   <ul class="nav-second-level">
+                      <li>
+                        <a href="{{ route('admin.supplier.create') }}">Supplier Create</a>
+                      </li>
+                      <li>
+                        <a href="{{ route('admin.supplier.index') }}">Supplier List</a>
+                      </li>
+                      <li>
+                        <a href="{{ route('admin.supplier.invoice.create_invoice') }}">Invoice Create</a>
+                      </li>
+                      <li>
+                        <a href="{{ route('admin.supplier.invoice.show_invoice') }}">Invoice Management</a>
+                      </li>
+                   </ul>
+                </div>
+             </li>
+             <li>
                 <a href="#product_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-receipt "></i>
                 <span> Product Management </span>

@@ -5,7 +5,7 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
-                  <a href="{{route('admin.customer.invoice.create_invoice')}}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                  <a href="{{route('admin.supplier.invoice.create_invoice')}}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Invoice</a>
             </div>
             <div class="card-body">
@@ -16,7 +16,7 @@
                         <thead>
                             <tr>
                             <th class="">Invoice No.</th>
-                            <th class="">Customer Name</th>
+                            <th class="">Supplier Name</th>
                             <th class="">Phone Number</th>
                             <th class="">Total Amount</th>
                             <th class="">Paid Amount</th>
@@ -47,7 +47,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!----- Start Add Form ------->
-            <form  action="{{ route('admin.customer.invoice.pay_due_amount') }}" method="post">
+            <form  action="{{ route('admin.supplier.invoice.pay_due_amount') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
@@ -70,7 +70,7 @@
 </div>
 <div id="deleteModal" class="modal fade">
     <div class="modal-dialog modal-confirm">
-        <form action="{{route('admin.customer.invoice.delete_invoice')}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('admin.supplier.invoice.delete_invoice')}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
             <div class="modal-header flex-column">
@@ -105,7 +105,7 @@
         "serverSide":true,
         beforeSend: function () {
         },
-        ajax: "{{ route('admin.customer.invoice.show_invoice_data') }}",
+        ajax: "{{ route('admin.supplier.invoice.show_invoice_data') }}",
         language: {
           searchPlaceholder: 'Search...',
           sSearch: '',
@@ -116,10 +116,10 @@
             "data":"id"
           },
           {
-            "data":"customer.fullname"
+            "data":"supplier.fullname"
           },
           {
-            "data":"customer.phone_number"
+            "data":"supplier.phone_number"
           },
           {
             "data":"total_amount"
@@ -150,8 +150,8 @@
           {
             "data":null,
             render:function(data,type,row){
-                var editUrl = "{{ route('admin.customer.invoice.edit_invoice', ':id') }}";
-                var viewUrl = "{{ route('admin.customer.invoice.view_invoice', ':id') }}";
+                var editUrl = "{{ route('admin.supplier.invoice.edit_invoice', ':id') }}";
+                var viewUrl = "{{ route('admin.supplier.invoice.view_invoice', ':id') }}";
                 editUrl = editUrl.replace(':id', row.id);
                 viewUrl = viewUrl.replace(':id', row.id);
 

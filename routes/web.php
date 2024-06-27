@@ -6,6 +6,8 @@ use App\Http\Controllers\Backend\Accounts\Sub_Ledger\SubLedgerController;
 use App\Http\Controllers\Backend\Accounts\Transaction\TransactionController;
 use App\Http\Controllers\Backend\Admin\AdminController;
 use App\Http\Controllers\Backend\Customer\CustomerController;
+use App\Http\Controllers\Backend\Supplier\Supplier_invoiceController;
+use App\Http\Controllers\Backend\Supplier\Supplier_returnController;
 use App\Http\Controllers\Backend\Customer\InvoiceController;
 use App\Http\Controllers\Backend\Product\BrandController;
 use App\Http\Controllers\Backend\Product\CategoryController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
+use App\Http\Controllers\Backend\Supplier\SupplierController;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
 use Illuminate\Support\Facades\Route;
 
@@ -126,120 +129,145 @@ Route::group(['middleware'=>'admin'],function(){
             });
         });
     });
-    /** Customer  Route **/
-    Route::prefix('admin/customer')->group(function(){
-        Route::get('/list',[CustomerController::class,'index'])->name('admin.customer.index');
+    /** Customer Route **/
+    Route::prefix('admin/customer')->group(function() {
+        Route::controller(CustomerController::class)->group(function() {
+            Route::get('/list', 'index')->name('admin.customer.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.customer.get_all_data');
+            Route::get('/create', 'create')->name('admin.customer.create');
+            Route::get('/edit/{id}', 'edit')->name('admin.customer.edit');
+            Route::get('/view/{id}', 'view')->name('admin.customer.view');
+            Route::post('/delete', 'delete')->name('admin.customer.delete');
+            Route::post('/store', 'store')->name('admin.customer.store');
+            Route::post('/update/{id}', 'update')->name('admin.customer.update');
+        });
 
-        Route::get('/all-data',[CustomerController::class,'get_all_data'])->name('admin.customer.get_all_data');
-
-        Route::get('/create',[CustomerController::class,'create'])->name('admin.customer.create');
-
-        Route::get('/edit/{id}',[CustomerController::class,'edit'])->name('admin.customer.edit');
-
-        Route::get('/view/{id}',[CustomerController::class,'view'])->name('admin.customer.view');
-
-        Route::post('/delete',[CustomerController::class,'delete'])->name('admin.customer.delete');
-
-        Route::post('/store',[CustomerController::class,'store'])->name('admin.customer.store');
-
-        Route::post('/update/{id}',[CustomerController::class,'update'])->name('admin.customer.update');
-
-         /** Customer Invoice  Route **/
-         Route::get('/invoice/create',[InvoiceController::class,'create_invoice'])->name('admin.customer.invoice.create_invoice');
-
-         Route::get('/invoice/get_all_data',[InvoiceController::class,'show_invoice_data'])->name('admin.customer.invoice.show_invoice_data');
-
-         /*Seach Invoice Page Product Data*/
-         Route::post('/invoice/search_data',[InvoiceController::class,'search_product_data'])->name('admin.customer.invoice.search_product_data');
-
-         Route::get('/invoice/show',[InvoiceController::class,'show_invoice'])->name('admin.customer.invoice.show_invoice');
-
-         Route::post('/invoice/pay',[InvoiceController::class,'pay_due_amount'])->name('admin.customer.invoice.pay_due_amount');
-
-        Route::post('/invoice/store',[InvoiceController::class,'store_invoice'])->name('admin.customer.invoice.store_invoice');
-
-        Route::get('/invoice/view/{id}',[InvoiceController::class,'view_invoice'])->name('admin.customer.invoice.view_invoice');
-
-         Route::get('/invoice/edit/{id}',[InvoiceController::class,'edit_invoice'])->name('admin.customer.invoice.edit_invoice');
-
-         Route::post('/invoice/update',[InvoiceController::class,'update_invoice'])->name('admin.customer.invoice.update_invoice');
-
-         Route::post('/invoice/delete',[InvoiceController::class,'delete_invoice'])->name('admin.customer.invoice.delete_invoice');
+        /** Customer Invoice Route **/
+        Route::prefix('invoice')->controller(InvoiceController::class)->group(function() {
+            Route::get('/create', 'create_invoice')->name('admin.customer.invoice.create_invoice');
+            Route::get('/get_all_data', 'show_invoice_data')->name('admin.customer.invoice.show_invoice_data');
+            Route::post('/search_data', 'search_product_data')->name('admin.customer.invoice.search_product_data');
+            Route::get('/show', 'show_invoice')->name('admin.customer.invoice.show_invoice');
+            Route::post('/pay', 'pay_due_amount')->name('admin.customer.invoice.pay_due_amount');
+            Route::post('/store', 'store_invoice')->name('admin.customer.invoice.store_invoice');
+            Route::get('/view/{id}', 'view_invoice')->name('admin.customer.invoice.view_invoice');
+            Route::get('/edit/{id}', 'edit_invoice')->name('admin.customer.invoice.edit_invoice');
+            Route::post('/update', 'update_invoice')->name('admin.customer.invoice.update_invoice');
+            Route::post('/delete', 'delete_invoice')->name('admin.customer.invoice.delete_invoice');
+        });
     });
-    /*Product Route*/
-    Route::prefix('admin/product')->group(function(){
-        /*Brand Route*/
-        Route::get('brand',[BrandController::class,'index'])->name('admin.brand.index');
-        Route::get('brand/create',[BrandController::class,'create'])->name('admin.brand.create');
-        Route::post('brand/store',[BrandController::class,'store'])->name('admin.brand.store');
-        Route::get('/brand/delete/{id}',[BrandController::class,'delete'])->name('admin.brand.delete');
-        Route::get('/brand/edit/{id}',[BrandController::class,'edit'])->name('admin.brand.edit');
-        Route::post('/brand/update',[BrandController::class,'update'])->name('admin.brand.update');
-
-
-        /*Category Route*/
-        Route::get('/category',[CategoryController::class,'index'])->name('admin.category.index');
-        Route::get('/category/create',[CategoryController::class,'create'])->name('admin.category.create');
-        Route::post('/category/store',[CategoryController::class,'store'])->name('admin.category.store');
-        Route::post('/category/delete',[CategoryController::class,'delete'])->name('admin.category.delete');
-        Route::get('/category/edit/{id}',[CategoryController::class,'edit'])->name('admin.category.edit');
-        Route::post('/category/update',[CategoryController::class,'update'])->name('admin.category.update');
-
-
-        /* Sub Category Route*/
-        Route::get('/sub-category',[SubCateogryController::class,'index'])->name('admin.subcategory.index');
-        Route::post('/sub-category/store',[SubCateogryController::class,'store'])->name('admin.subcategory.store');
-        Route::get('/sub-category/edit/{id}',[SubCateogryController::class,'edit'])->name('admin.subcategory.edit');
-        Route::post('/sub-category/delete',[SubCateogryController::class,'delete'])->name('admin.subcategory.delete');
-        Route::post('/sub-category/update/{id}',[SubCateogryController::class,'update'])->name('admin.subcategory.update');
-        /*Get Sub Category*/
-        Route::get('/get-sub_category/{id}',[SubCateogryController::class,'get_sub_category']);
-
-
-        /* Child Category Route*/
-        Route::get('/child-category',[ChildCategoryController::class,'index'])->name('admin.childcategory.index');
-        Route::post('/child-category/store',[ChildCategoryController::class,'store'])->name('admin.childcategory.store');
-        Route::get('/child-category/edit/{id}',[ChildCategoryController::class,'edit'])->name('admin.childcategory.edit');
-        Route::post('/child-category/delete',[ChildCategoryController::class,'delete'])->name('admin.childcategory.delete');
-        Route::post('/child-category/update/{id}',[ChildCategoryController::class,'update'])->name('admin.childcategory.update');
-
-        /*Get child Category*/
-        Route::get('/get-child_category/{id}',[ChildCategoryController::class,'get_child_category']);
-
-         /** Product Color Mangement Route **/
-         Route::get('/color',[ColorController::class,'index'])->name('admin.product.color.index');
-         Route::get('/color/get_all_data',[ColorController::class,'get_all_data'])->name('admin.product.color.all_data');
-         Route::post('/color/store',[ColorController::class,'store'])->name('admin.product.color.store');
-         Route::get('/color/edit/{id}',[ColorController::class,'edit'])->name('admin.product.color.edit');
-         Route::post('/color/update',[ColorController::class,'update'])->name('admin.product.color.update');
-         Route::post('/color/delete',[ColorController::class,'delete'])->name('admin.product.color.delete');
-
-         /**Product Size Mangement Route **/
-         Route::get('/size',[SizeController::class,'index'])->name('admin.product.size.index');
-         Route::get('/size/get_all_data',[SizeController::class,'get_all_data'])->name('admin.product.size.all_data');
-         Route::post('/size/store',[SizeController::class,'store'])->name('admin.product.size.store');
-         Route::get('/size/edit/{id}',[SizeController::class,'edit'])->name('admin.product.size.edit');
-         Route::post('/size/update',[SizeController::class,'update'])->name('admin.product.size.update');
-         Route::post('/size/delete',[SizeController::class,'delete'])->name('admin.product.size.delete');
-
-          /* Product Route*/
-        Route::get('/all',[ProductController::class,'index'])->name('admin.products.index');
-        Route::get('/get_product/{id}',[ProductController::class,'get_product'])->name('admin.products.get_product');
-        Route::get('/create',[ProductController::class,'create'])->name('admin.products.create');
-        Route::post('/update',[ProductController::class,'product_update'])->name('admin.product.update');
-        Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products.edit');
-        Route::get('/view/{id}',[ProductController::class,'view'])->name('admin.products.view');
-
-         /* Product Image*/
-         Route::post('/upload-temp-image', [TempImageController::class, 'create'])->name('tempimage.create');
-         Route::post('/photo/update',[ProductController::class,'photo_update'])->name('admin.product.photo.update');
-         Route::post('/delete/photo',[ProductController::class,'delete_photo'])->name('admin.product.delete.photo');
-
-         /* Product Store*/
-         Route::post('/store',[ProductController::class,'store'])->name('admin.products.store');
-         Route::post('/delete',[ProductController::class,'delete'])->name('admin.products.delete');
-
-         /* Stock Route*/
-         Route::get('/stock',[StockController::class,'index'])->name('admin.product.stock.index');
+    /** Supplier Route **/
+    Route::prefix('admin/supplier')->group(function(){
+        Route::controller(SupplierController::class)->group(function(){
+            Route::get('/list', 'index')->name('admin.supplier.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.supplier.get_all_data');
+            Route::get('/create', 'create')->name('admin.supplier.create');
+            Route::get('/edit/{id}', 'edit')->name('admin.supplier.edit');
+            Route::get('/view/{id}', 'view')->name('admin.supplier.view');
+            Route::post('/delete', 'delete')->name('admin.supplier.delete');
+            Route::post('/store', 'store')->name('admin.supplier.store');
+            Route::post('/update/{id}', 'update')->name('admin.supplier.update');
+        });
+        /** Customer Invoice Route **/
+        Route::prefix('invoice')->controller(Supplier_invoiceController::class)->group(function() {
+            Route::get('/create', 'create_invoice')->name('admin.supplier.invoice.create_invoice');
+            Route::get('/get_all_data', 'show_invoice_data')->name('admin.supplier.invoice.show_invoice_data');
+            Route::post('/search_data', 'search_product_data')->name('admin.supplier.invoice.search_product_data');
+            Route::get('/show', 'show_invoice')->name('admin.supplier.invoice.show_invoice');
+            Route::post('/pay', 'pay_due_amount')->name('admin.supplier.invoice.pay_due_amount');
+            Route::post('/store', 'store_invoice')->name('admin.supplier.invoice.store_invoice');
+            Route::get('/view/{id}', 'view_invoice')->name('admin.supplier.invoice.view_invoice');
+            Route::get('/edit/{id}', 'edit_invoice')->name('admin.supplier.invoice.edit_invoice');
+            Route::post('/update', 'update_invoice')->name('admin.supplier.invoice.update_invoice');
+            Route::post('/delete', 'delete_invoice')->name('admin.supplier.invoice.delete_invoice');
+        });
     });
+   
+    /* Product Route */
+    Route::prefix('admin/product')->group(function() {
+        /* Brand Route */
+        Route::prefix('brand')->controller(BrandController::class)->group(function() {
+            Route::get('/', 'index')->name('admin.brand.index');
+            Route::get('/create', 'create')->name('admin.brand.create');
+            Route::post('/store', 'store')->name('admin.brand.store');
+            Route::get('/delete/{id}', 'delete')->name('admin.brand.delete');
+            Route::get('/edit/{id}', 'edit')->name('admin.brand.edit');
+            Route::post('/update', 'update')->name('admin.brand.update');
+        });
+
+        /* Category Route */
+        Route::prefix('category')->controller(CategoryController::class)->group(function() {
+            Route::get('/', 'index')->name('admin.category.index');
+            Route::get('/create', 'create')->name('admin.category.create');
+            Route::post('/store', 'store')->name('admin.category.store');
+            Route::post('/delete', 'delete')->name('admin.category.delete');
+            Route::get('/edit/{id}', 'edit')->name('admin.category.edit');
+            Route::post('/update', 'update')->name('admin.category.update');
+        });
+
+        /* Sub Category Route */
+        Route::prefix('sub-category')->controller(SubCateogryController::class)->group(function() {
+            Route::get('/', 'index')->name('admin.subcategory.index');
+            Route::post('/store', 'store')->name('admin.subcategory.store');
+            Route::get('/edit/{id}', 'edit')->name('admin.subcategory.edit');
+            Route::post('/delete', 'delete')->name('admin.subcategory.delete');
+            Route::post('/update/{id}', 'update')->name('admin.subcategory.update');
+            Route::get('/get-sub_category/{id}', 'get_sub_category');
+        });
+
+        /* Child Category Route */
+        Route::prefix('child-category')->controller(ChildCategoryController::class)->group(function() {
+            Route::get('/', 'index')->name('admin.childcategory.index');
+            Route::post('/store', 'store')->name('admin.childcategory.store');
+            Route::get('/edit/{id}', 'edit')->name('admin.childcategory.edit');
+            Route::post('/delete', 'delete')->name('admin.childcategory.delete');
+            Route::post('/update/{id}', 'update')->name('admin.childcategory.update');
+            Route::get('/get-child_category/{id}', 'get_child_category');
+        });
+
+        /** Product Color Management Route **/
+        Route::prefix('color')->controller(ColorController::class)->group(function() {
+            Route::get('/', 'index')->name('admin.product.color.index');
+            Route::get('/get_all_data', 'get_all_data')->name('admin.product.color.all_data');
+            Route::post('/store', 'store')->name('admin.product.color.store');
+            Route::get('/edit/{id}', 'edit')->name('admin.product.color.edit');
+            Route::post('/update', 'update')->name('admin.product.color.update');
+            Route::post('/delete', 'delete')->name('admin.product.color.delete');
+        });
+
+        /** Product Size Management Route **/
+        Route::prefix('size')->controller(SizeController::class)->group(function() {
+            Route::get('/', 'index')->name('admin.product.size.index');
+            Route::get('/get_all_data', 'get_all_data')->name('admin.product.size.all_data');
+            Route::post('/store', 'store')->name('admin.product.size.store');
+            Route::get('/edit/{id}', 'edit')->name('admin.product.size.edit');
+            Route::post('/update', 'update')->name('admin.product.size.update');
+            Route::post('/delete', 'delete')->name('admin.product.size.delete');
+        });
+
+        /* Product Route */
+        Route::controller(ProductController::class)->group(function() {
+            Route::get('/all', 'index')->name('admin.products.index');
+            Route::get('/get_product/{id}', 'get_product')->name('admin.products.get_product');
+            Route::get('/create', 'create')->name('admin.products.create');
+            Route::post('/update', 'product_update')->name('admin.product.update');
+            Route::get('/edit/{id}', 'edit')->name('admin.products.edit');
+            Route::get('/view/{id}', 'view')->name('admin.products.view');
+            Route::post('/store', 'store')->name('admin.products.store');
+            Route::post('/delete', 'delete')->name('admin.products.delete');
+        });
+
+        /* Product Image */
+        Route::prefix('photo')->controller(ProductController::class)->group(function() {
+            Route::post('/upload-temp-image', [TempImageController::class, 'create'])->name('tempimage.create');
+            Route::post('/update', 'photo_update')->name('admin.product.photo.update');
+            Route::post('/delete', 'delete_photo')->name('admin.product.delete.photo');
+        });
+
+        /* Stock Route */
+        Route::get('/stock', [StockController::class, 'index'])->name('admin.product.stock.index');
+    });
+
+
+
 });

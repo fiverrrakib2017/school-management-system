@@ -1,13 +1,40 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
+@section('style')
+
+    <style>
+       #preview {
+
+        margin-top: 10px;
+        max-width: 200px;
+        max-height: 200px;
+    }
+
+    .loading-spinner {
+        border:4px solid #f1f1f1;
+        border-left-color: #000000;;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+        }
+
+    </style>
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
-                <h4>Update Customer</h4>
+                <h4>Update Supplier</h4>
             </div>
-            <form action="{{route('admin.customer.update',$data->id)}}" method="post" id="addCustomerForm" enctype="multipart/form-data">
+            <form action="{{route('admin.supplier.update',$data->id)}}" method="post" id="addForm" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
                
@@ -182,7 +209,7 @@
             reader.readAsDataURL(this.files[0]);
         });
 
-        $('#addCustomerForm').submit(function(e) {
+        $('#addForm').submit(function(e) {
             e.preventDefault();
 
             /* Get the submit button */
