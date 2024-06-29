@@ -12,6 +12,26 @@
         margin-bottom: 5px; /* Bottom margin */
         border-radius: 5px; /* Rounded corners */
     }
+    .profile-card {
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .profile-card img {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .profile-card .card-body {
+            padding: 20px;
+        }
+        .profile-card h5 {
+            margin: 0;
+        }
+        .profile-card .text-secondary {
+            margin-top: 10px;
+        }
     </style>
 @endsection
 
@@ -66,153 +86,19 @@
             <div class="main-body">
                 <div class="row gutters-sm">
                     <div class="col-md-4 mb-3">
-                        <div class="card" style="height: 80vh; overflow-y: auto;">
-                            <div class="card-header">
-                                <img src="{{ asset('uploads/photos/' . $student->photo) }}" alt='Profile Picture' class="img-fluid" style="max-width: 300px; max-height:200px;"/>
-                            </div>
-                            <div class="card-body" style="padding: 0 !important">
-                                <ul class="list-group" id="student_info">
-
-                                    <li class="section-header">
-                                        <strong>Personal Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Name:</strong> {{ $student->name }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Birth Date:</strong> {{ $student->birth_date }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Gender:</strong> {{ $student->gender }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Father's Name:</strong> {{ $student->father_name }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Mother's Name:</strong> {{ $student->mother_name }}
-                                    </li>
-                                    <li class="section-header">
-                                        <strong>Contact Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Current Address:</strong> {{ $student->current_address }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Permanent Address:</strong> {{ $student->permanent_address }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Phone:</strong> {{ $student->phone }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Email:</strong> {{ $student->email ?: 'N/A' }}
-                                    </li>
-                                    <li class="section-header">
-                                        <strong>Academic Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Current Class:</strong> {{ $student->current_class }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Previous School:</strong> {{ $student->previous_school ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Previous Class:</strong> {{ $student->previous_class ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Academic Results:</strong> {{ $student->academic_results ?: 'N/A' }}
-                                    </li>
-                                    <li class="section-header">
-                                        <strong>Health Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Blood Group:</strong> {{ $student->blood_group ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Health Conditions:</strong> {{ $student->health_conditions ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Emergency Contact Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Emergency Contact Name:</strong> {{ $student->emergency_contact_name }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Emergency Contact Phone:</strong> {{ $student->emergency_contact_phone }}
-                                    </li>
-                                    <li class="section-header">
-                                        <strong>Additional Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Religion:</strong> {{ $student->religion ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Nationality:</strong> {{ $student->nationality ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Remarks:</strong> {{ $student->remarks ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Status:</strong> {{ $student->status == 1 ? 'Active' : 'Inactive' }}
-                                    </li>
-                                </ul>
-                            </div>
+                    <div class="card profile-card">
+                        <div class="card-header p-0">
+                            <img src="{{ asset('uploads/photos/' . $student->photo) }}" alt='Profile Picture' class="img-fluid" />
                         </div>
+                        <div class="card-body text-center">
+                            <h5>{{$student->name}}</h5>
+                            <p class="text-secondary mb-1">ID: {{ $student->id }}</p>
+                            <p class="text-secondary">{{ $student->phone }}</p>
+                        </div>
+                    </div>
 
                     </div>
                     <div class="col-md-8">
-                        <div class="row">
-
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-4 col-md-6 mb-4">
-                                <div class="card shadow  py-2" style="border-left:3px solid #27F10F;">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                    Total Payable
-                                                </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    00
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 mb-4">
-                                <div class="card shadow  py-2" style="border-left:3px solid #27F10F;">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                    Total Paid
-                                                </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    00
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Pending Requests Card Example -->
-                            <div class="col-xl-4 col-md-6 mb-4">
-                                <div class="card shadow  py-2" style="border-left:3px solid red;">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                    Total Due
-                                                </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    00
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="container">
                             <div class="row">
                                 <div class="card">
@@ -220,25 +106,131 @@
                                         <!-- Nav tabs -->
                                         <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-bs-toggle="tab" href="#transaction"
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#basic_information"
+                                                    role="tab">
+                                                    <span class="d-none d-md-block">Basic Information
+                                                    </span><span class="d-block d-md-none"><i
+                                                            class="mdi mdi-home-variant h5"></i></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link " data-bs-toggle="tab" href="#educations"
+                                                    role="tab">
+                                                    <span class="d-none d-md-block">Educations
+                                                    </span><span class="d-block d-md-none"><i
+                                                            class="mdi mdi-home-variant h5"></i></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link " data-bs-toggle="tab" href="#activities"
+                                                    role="tab">
+                                                    <span class="d-none d-md-block">Activities
+                                                    </span><span class="d-block d-md-none"><i
+                                                            class="mdi mdi-home-variant h5"></i></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link " data-bs-toggle="tab" href="#transaction"
                                                     role="tab">
                                                     <span class="d-none d-md-block">Transaction
                                                     </span><span class="d-block d-md-none"><i
                                                             class="mdi mdi-home-variant h5"></i></span>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" data-bs-toggle="tab" href="#invoice"
-                                                    role="tab">
-                                                    <span class="d-none d-md-block">Invoice</span><span
-                                                        class="d-block d-md-none"><i
-                                                            class="mdi mdi-account h5"></i></span>
-                                                </a>
-                                            </li>
                                         </ul>
                                         <!-- Tab panes -->
                                         <div class="tab-content">
-                                            <div class="tab-pane active p-3" id="transaction" role="tabpanel">
+                                            <div class="tab-pane active" id="basic_information" role="tabpanel">
+                                                <div class="card">
+                                                    <div class="card-body" style="padding: 0 !important;">
+                                                    <ul class="list-group" id="student_info">
+
+<li class="section-header">
+    <strong>Personal Information</strong>
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Name:</strong> {{ $student->name }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Birth Date:</strong> {{ $student->birth_date }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Gender:</strong> {{ $student->gender }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Father's Name:</strong> {{ $student->father_name }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Mother's Name:</strong> {{ $student->mother_name }}
+</li>
+<li class="section-header">
+    <strong>Contact Information</strong>
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Current Address:</strong> {{ $student->current_address }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Permanent Address:</strong> {{ $student->permanent_address }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Phone:</strong> {{ $student->phone }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Email:</strong> {{ $student->email ?: 'N/A' }}
+</li>
+<li class="section-header">
+    <strong>Academic Information</strong>
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Current Class:</strong> {{ $student->current_class }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Previous School:</strong> {{ $student->previous_school ?: 'N/A' }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Previous Class:</strong> {{ $student->previous_class ?: 'N/A' }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Academic Results:</strong> {{ $student->academic_results ?: 'N/A' }}
+</li>
+<li class="section-header">
+    <strong>Health Information</strong>
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Blood Group:</strong> {{ $student->blood_group ?: 'N/A' }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Health Conditions:</strong> {{ $student->health_conditions ?: 'N/A' }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Emergency Contact Information</strong>
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Emergency Contact Name:</strong> {{ $student->emergency_contact_name }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Emergency Contact Phone:</strong> {{ $student->emergency_contact_phone }}
+</li>
+<li class="section-header">
+    <strong>Additional Information</strong>
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Religion:</strong> {{ $student->religion ?: 'N/A' }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Nationality:</strong> {{ $student->nationality ?: 'N/A' }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Remarks:</strong> {{ $student->remarks ?: 'N/A' }}
+</li>
+<li class="list-group-item list-group-item-action list-group-item-primary">
+    <strong>Status:</strong> {{ $student->status == 1 ? 'Active' : 'Inactive' }}
+</li>
+</ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="transaction" role="tabpanel">
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row">
@@ -262,7 +254,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane  p-3" id="invoice" role="tabpanel">
+                                            <div class="tab-pane " id="invoice" role="tabpanel">
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row">
@@ -288,6 +280,32 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                            <div class="tab-pane " id="activities" role="tabpanel">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="table-responsive">
+                                                                <table id="activities_datatable"
+                                                                    class="table table-bordered dt-responsive nowrap"
+                                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Id</th>
+                                                                            <th>Date</th>
+                                                                            <th>In Time</th>
+                                                                            <th>Out Time</th>
+                                                                            <th>Action</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="">
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -299,4 +317,14 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#transaction_datatable").DataTable();
+        $("#activities_datatable").DataTable();
+    });
+</script>
+    
 @endsection
