@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\InvoiceServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        App\Providers\DateServiceProvider::class,
     ])->toArray(),
 
     /*

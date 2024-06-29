@@ -11,18 +11,21 @@ use App\Models\Supplier_Invoice;
 use App\Models\Customer_Invoice;
 use App\Models\Supplier_Invoice_Details;
 use App\Models\Supplier_Transaction_History;
+use App\Services\InvoiceService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use function App\Helpers\__due_payment_received;
+
 
 class Supplier_invoiceController extends Controller
 {
+    protected $invoiceService;
+    public function __construct(InvoiceService $invoiceService)
+    {
+        $this->invoiceService=$invoiceService;
+    }
     public function create_invoice(){
-        $supplier=Supplier::latest()->get();
-        $product=Product::latest()->get();
-        $products=Product::with('product_image')->paginate(10);
-        return view('Backend.Pages.Supplier.invoice_create',compact('supplier','product','products'));
+        return $this->invoiceService->createInvoice('Supplier');
     }
     public function search_product_data(Request $request){
         if ($request->search=='') {

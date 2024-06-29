@@ -11,7 +11,7 @@
              </li>
              <li>
                 <a href="#student_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-receipt "></i>
+                    <i class="menu-item-icon fas fa-user-graduate"></i>
                 <span> Student Management </span>
                 <span class="menu-arrow"></span>
                 </a>
@@ -31,7 +31,7 @@
              </li>
              <li>
                 <a href="#teacher_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-receipt "></i>
+                    <i class="menu-item-icon fas fa-chalkboard-teacher"></i>
                 <span> Teacher Management </span>
                 <span class="menu-arrow"></span>
                 </a>
@@ -46,7 +46,7 @@
              
              <li>
                 <a href="#customer_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-receipt "></i>
+                    <i class="menu-item-icon fas fa-users"></i>
                 <span> Customer Management </span>
                 <span class="menu-arrow"></span>
                 </a>
@@ -69,7 +69,7 @@
              </li>
              <li>
                 <a href="#supplier_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-receipt "></i>
+                    <i class="menu-item-icon fas fa-truck"></i>
                 <span> Supplier Management </span>
                 <span class="menu-arrow"></span>
                 </a>
@@ -92,7 +92,7 @@
              </li>
              <li>
                 <a href="#product_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-receipt "></i>
+                    <i class="menu-item-icon fas fa-box"></i>
                 <span> Product Management </span>
                 <span class="menu-arrow"></span>
                 </a>
@@ -130,7 +130,7 @@
              </li>
              <li>
                 <a href="#accounts_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-receipt "></i>
+                    <i class="menu-item-icon fas fa-file-invoice-dollar"></i>
                 <span> Accounts Management </span>
                 <span class="menu-arrow"></span>
                 </a>
@@ -158,12 +158,3 @@
     </div>
     <!-- Sidebar -left -->
  </div>
-
-
-
-
-
-
-
-
-
