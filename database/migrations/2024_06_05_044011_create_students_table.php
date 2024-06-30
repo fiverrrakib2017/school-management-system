@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('current_address');
             $table->string('permanent_address');
             $table->string('phone');
-            $table->string('email')->nullable();
+            $table->string('phone_2')->nullable();
             $table->unsignedBigInteger('current_class');
             $table->string('previous_school')->nullable();
             $table->unsignedBigInteger('previous_class')->nullable();

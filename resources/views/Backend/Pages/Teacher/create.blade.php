@@ -9,22 +9,6 @@
         max-width: 200px;
         max-height: 200px;
     }
-
-    .loading-spinner {
-        border:4px solid #f1f1f1;
-        border-left-color: #000000;;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-        }
-
     </style>
 @endsection
 @section('content')
@@ -50,8 +34,12 @@
                             <input type="email" class="form-control" name="email" placeholder="Enter email" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="phone">Phone</label>
+                            <label for="phone">Phone Number-1</label>
                             <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone">Phone Number-2</label>
+                            <input type="tel" class="form-control" name="phone_2" placeholder="Enter phone number" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="subject">Subject</label>
@@ -70,12 +58,6 @@
                             <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
                             <img id="preview" src="#" alt="Image Preview" style="max-width: 100px; max-height: 100px;" />
                         </div>
-                    </div>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <!-- Personal Information -->
-                    <h6  style="color:#777878 ">Personal Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="father_name">Father's Name</label>
                             <input type="text" class="form-control" name="father_name" placeholder="Enter father's name" required>
@@ -147,11 +129,11 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="remarks">Remarks</label>
-                            <textarea class="form-control" name="remarks" rows="2" placeholder="Enter any remarks"></textarea>
+                            <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks"></textarea>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="remarks">Status</label>
-                            <select class="form-control" name="status">
+                            <label for="">Status</label>
+                            <select class="form-select" name="status">
                                 <option value="">---Select---</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
@@ -171,8 +153,8 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $("select[name='gender']").select2();
-        $("select[name='status']").select2();
+        // $("select[name='gender']").select2();
+        // $("select[name='status']").select2();
 
         $('#photo').change(function() {
             let reader = new FileReader();

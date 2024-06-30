@@ -61,7 +61,31 @@
                             <div class="col-md-6 mb-3">
                                 <label for="photo">Photo</label>
                                 <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
-                                <img id="preview" class="img-fluid" src="{{ asset('uploads/photos/' . $data->photo) }}" alt="Image Preview" style="max-width: 100px; max-height: 100px;" />
+                                <img id="preview" class="img-fluid" src="{{ asset('Backend/uploads/photos/' . $data->photo) }}" alt="Image Preview" style="max-width: 100px; max-height: 100px;" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="blood_group">Blood Group</label>
+                                <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group" value="{{ $data->blood_group }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="health_conditions">Health Conditions</label>
+                                <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions" value="{{ $data->health_conditions }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="emergency_contact_name">Emergency Contact Name</label>
+                                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" value="{{ $data->emergency_contact_name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="emergency_contact_phone">Emergency Contact Phone</label>
+                                <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" value="{{ $data->emergency_contact_phone }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="religion">Religion</label>
+                                <input type="text" class="form-control" name="religion" placeholder="Enter religion" value="{{ $data->religion }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nationality">Nationality</label>
+                                <input type="text" class="form-control" name="nationality" placeholder="Enter nationality" value="{{ $data->nationality }}">
                             </div>
                         </div>
                     </div>
@@ -102,12 +126,12 @@
                                 <input type="text" class="form-control" name="permanent_address" placeholder="Enter permanent address" value="{{ $data->permanent_address }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="phone">Phone</label>
+                                <label for="phone">Phone Number-1</label>
                                 <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" value="{{ $data->phone }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" placeholder="Enter email" value="{{ $data->email }}">
+                                <label for="phone">Phone Number-2</label>
+                                <input type="tel" class="form-control" name="phone_2" placeholder="Enter phone number" value="{{ $data->phone_2 }}" required>
                             </div>
                         </div>
                     </div>
@@ -153,30 +177,7 @@
                         <h6 style="color:#777878">Additional Information</h6>
                         <hr style="border-top: 1px dashed #d3c6c6;">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="blood_group">Blood Group</label>
-                                <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group" value="{{ $data->blood_group }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="health_conditions">Health Conditions</label>
-                                <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions" value="{{ $data->health_conditions }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="emergency_contact_name">Emergency Contact Name</label>
-                                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" value="{{ $data->emergency_contact_name }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="emergency_contact_phone">Emergency Contact Phone</label>
-                                <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" value="{{ $data->emergency_contact_phone }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="religion">Religion</label>
-                                <input type="text" class="form-control" name="religion" placeholder="Enter religion" value="{{ $data->religion }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="nationality">Nationality</label>
-                                <input type="text" class="form-control" name="nationality" placeholder="Enter nationality" value="{{ $data->nationality }}">
-                            </div>
+                           
                             <div class="col-md-6 mb-3">
                                 <label for="status">Status</label>
                                 <select class="form-select" name="status">
@@ -184,6 +185,10 @@
                                     <option value="1" {{ $data->status == '1' ? 'selected' : '' }}>Active</option>
                                     <option value="0" {{ $data->status == '0' ? 'selected' : '' }}>Inactive</option>
                                 </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="remarks">Remarks</label>
+                                <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks">{{$data->remarks ?? ''}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -202,10 +207,10 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $("select[name='gender']").select2();
-        $("select[name='current_class']").select2();
-        $("select[name='previous_class']").select2();
-        $("select[name='status']").select2();
+        // $("select[name='gender']").select2();
+        // $("select[name='current_class']").select2();
+        // $("select[name='previous_class']").select2();
+        // $("select[name='status']").select2();
 
         $('#photo').change(function() {
             let reader = new FileReader();

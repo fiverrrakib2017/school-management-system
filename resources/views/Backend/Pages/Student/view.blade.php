@@ -88,7 +88,7 @@
                     <div class="col-md-4 mb-3">
                     <div class="card profile-card">
                         <div class="card-header p-0">
-                            <img src="{{ asset('uploads/photos/' . $student->photo) }}" alt='Profile Picture' class="img-fluid" />
+                            <img src="{{ asset('Backend/uploads/photos/'.$student->photo) }}" alt='Profile Picture' class="img-fluid" />
                         </div>
                         <div class="card-body text-center">
                             <h5>{{$student->name}}</h5>

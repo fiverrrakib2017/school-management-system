@@ -65,6 +65,30 @@
                                 <img id="preview" class="img-fluid" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
 
                             </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="blood_group">Blood Group</label>
+                                <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="health_conditions">Health Conditions</label>
+                                <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="emergency_contact_name">Emergency Contact Name</label>
+                                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="emergency_contact_phone">Emergency Contact Phone</label>
+                                <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="religion">Religion</label>
+                                <input type="text" class="form-control" name="religion" placeholder="Enter religion">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nationality">Nationality</label>
+                                <input type="text" class="form-control" name="nationality" placeholder="Enter nationality">
+                            </div>
                         </div>
                     </div>
                     <hr style="border-top: 1px dashed #d3c6c6;">
@@ -105,13 +129,14 @@
                                 <input type="text" class="form-control" name="permanent_address" placeholder="Enter permanent address" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="phone">Phone</label>
+                                <label for="phone">Phone Number-1</label>
                                 <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" placeholder="Enter email">
+                                <label for="phone">Phone Number-2</label>
+                                <input type="tel" class="form-control" name="phone_2" placeholder="Enter phone number" required>
                             </div>
+                           
                         </div>
                     </div>
                     <hr style="border-top: 1px dashed #d3c6c6;">
@@ -156,30 +181,7 @@
                         <h6  style="color:#777878 ">Additional Information</h6>
                         <hr style="border-top: 1px dashed #d3c6c6;">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="blood_group">Blood Group</label>
-                                <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="health_conditions">Health Conditions</label>
-                                <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="emergency_contact_name">Emergency Contact Name</label>
-                                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="emergency_contact_phone">Emergency Contact Phone</label>
-                                <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="religion">Religion</label>
-                                <input type="text" class="form-control" name="religion" placeholder="Enter religion">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="nationality">Nationality</label>
-                                <input type="text" class="form-control" name="nationality" placeholder="Enter nationality">
-                            </div>
+                            
                             <div class="col-md-6 mb-3">
                                 <label for="status">Status</label>
                                 <select type="text" class="form-select" name="status">
@@ -188,9 +190,9 @@
                                     <option value="0">Inactive</option>
                                 </select>
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="remarks">Remarks</label>
-                                <textarea class="form-control" name="remarks" rows="3" placeholder="Enter any remarks"></textarea>
+                                <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks"></textarea>
                             </div>
                         </div>
                     </div>
@@ -207,10 +209,10 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $("select[name='gender']").select2();
-        $("select[name='current_class']").select2();
-        $("select[name='previous_class']").select2();
-        $("select[name='status']").select2();
+        // $("select[name='gender']").select2();
+        // $("select[name='current_class']").select2();
+        // $("select[name='previous_class']").select2();
+        // $("select[name='status']").select2();
 
         $('#photo').change(function() {
             let reader = new FileReader();

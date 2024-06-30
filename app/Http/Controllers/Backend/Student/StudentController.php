@@ -5,11 +5,17 @@ namespace App\Http\Controllers\Backend\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\Student_class;
+use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+    protected $student=Null; 
+    public function __construct(StudentService $student)
+    {
+        $this->student=$student;
+    }
     public function index(){
         return view('Backend.Pages.Student.index');
     }
@@ -18,68 +24,20 @@ class StudentController extends Controller
         return view('Backend.Pages.Student.create',compact('data'));
     }
     public function edit($id){
-        $data = Student::find($id);
-        $class_data=Student_class::latest()->get();
-        if ($data) {
-            return view('Backend.Pages.Student.edit',compact('data','class_data'));
-        }
+        return $this->student->edit($id);
     }
     public function view($id){
-        $student = Student::find($id);
-        if ($student) {
-            return view('Backend.Pages.Student.view',compact('student'));
-        }
+        return $this->student->view($id);
     }
     public function all_data(Request $request){
-        $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name','gender','status', 'created_at'];
-        $orderByColumn = $request->order[0]['column'];
-        $orderDirectection = $request->order[0]['dir'];
-
-        $object = Student::when($search, function ($query) use ($search) {
-            $query->where('name', 'like', "%$search%");
-            $query->where('gender', 'like', "%$search%");
-            $query->where('status', 'like', "%$search%");
-        })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
-
-        $total = $object->count();
-        $item = $object->skip($request->start)->take($request->length)->get();
-
-        return response()->json([
-            'draw' => $request->draw,
-            'recordsTotal' => $total,
-            'recordsFiltered' => $total,
-            'data' => $item,
-        ]);
+    
+        return $this->student->get_data($request);
     }
     public function store(Request $request)
     {
         /*Validate the incoming request data*/
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'birth_date' => 'required|date',
-            'gender' => 'required|string|max:10',
-            'father_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'guardian_name' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'current_address' => 'required|string|max:255',
-            'permanent_address' => 'required|string|max:255',
-            'phone' => 'required|string|max:15',
-            'email' => 'nullable|string|email|max:255',
-            'current_class' => 'required|max:50',
-            'previous_school' => 'nullable|string|max:255',
-            'previous_class' => 'nullable|max:50',
-            'academic_results' => 'nullable|string|max:255',
-            'blood_group' => 'nullable|string|max:10',
-            'health_conditions' => 'nullable|string|max:255',
-            'emergency_contact_name' => 'required|string|max:255',
-            'emergency_contact_phone' => 'required|string|max:15',
-            'religion' => 'nullable|string|max:50',
-            'nationality' => 'nullable|string|max:50',
-            'remarks' => 'nullable|string',
-            'status'=>'required'
-        ]);
+        
+        $validator = StudentService::validate($request);
 
         if ($validator->fails()) {
             return response()->json([
@@ -89,41 +47,9 @@ class StudentController extends Controller
         }
 
         /* Handle the file upload*/
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/photos'), $filename);
-        } else {
-            $filename = null;
-        }
-
-        /*Create a new student record*/
+        $filename = StudentService::handleFileUpload($request);
         $student = new Student();
-        $student->name = $request->name;
-        $student->birth_date = $request->birth_date;
-        $student->gender = $request->gender;
-        $student->father_name = $request->father_name;
-        $student->mother_name = $request->mother_name;
-        $student->guardian_name = $request->guardian_name;
-        $student->photo = $filename;
-        $student->current_address = $request->current_address;
-        $student->permanent_address = $request->permanent_address;
-        $student->phone = $request->phone;
-        $student->email = $request->email;
-        $student->current_class = $request->current_class;
-        $student->previous_school = $request->previous_school;
-        $student->previous_class = $request->previous_class;
-        $student->academic_results = $request->academic_results;
-        $student->blood_group = $request->blood_group;
-        $student->health_conditions = $request->health_conditions;
-        $student->emergency_contact_name = $request->emergency_contact_name;
-        $student->emergency_contact_phone = $request->emergency_contact_phone;
-        $student->religion = $request->religion;
-        $student->nationality = $request->nationality;
-        $student->remarks = $request->remarks;
-        $student->status = $request->status;
-
-        /* Save the student record to the database*/
+        StudentService::setData($student, $request, $filename);
         $student->save();
 
         /* Return success response*/
@@ -134,31 +60,8 @@ class StudentController extends Controller
     }
     public function update(Request $request, $id=NULL){
         /*Validate the incoming request data*/
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'birth_date' => 'required|date',
-            'gender' => 'required|string|max:10',
-            'father_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'guardian_name' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'current_address' => 'required|string|max:255',
-            'permanent_address' => 'required|string|max:255',
-            'phone' => 'required|string|max:15',
-            'email' => 'nullable|string|email|max:255',
-            'current_class' => 'required|string|max:50',
-            'previous_school' => 'nullable|string|max:255',
-            'previous_class' => 'nullable|string|max:50',
-            'academic_results' => 'nullable|string|max:255',
-            'blood_group' => 'nullable|string|max:10',
-            'health_conditions' => 'nullable|string|max:255',
-            'emergency_contact_name' => 'required|string|max:255',
-            'emergency_contact_phone' => 'required|string|max:15',
-            'religion' => 'nullable|string|max:50',
-            'nationality' => 'nullable|string|max:50',
-            'remarks' => 'nullable|string',
-            'status'=>'required'
-        ]);
+        $student = Student::findOrFail($id);
+        $validator = StudentService::validate($request, $student);
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -166,39 +69,10 @@ class StudentController extends Controller
             ], 422);
         }
 
-        $student = Student::find($id);
-        $student->name = $request->name;
-        $student->birth_date = $request->birth_date;
-        $student->gender = $request->gender;
-        $student->father_name = $request->father_name;
-        $student->mother_name = $request->mother_name;
-        $student->guardian_name = $request->guardian_name;
-         /* Handle the file upload*/
-         if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/photos'), $filename);
-            $student->photo = $filename;
-        }
-
-        $student->current_address = $request->current_address;
-        $student->permanent_address = $request->permanent_address;
-        $student->phone = $request->phone;
-        $student->email = $request->email;
-        $student->current_class = $request->current_class;
-        $student->previous_school = $request->previous_school;
-        $student->previous_class = $request->previous_class;
-        $student->academic_results = $request->academic_results;
-        $student->blood_group = $request->blood_group;
-        $student->health_conditions = $request->health_conditions;
-        $student->emergency_contact_name = $request->emergency_contact_name;
-        $student->emergency_contact_phone = $request->emergency_contact_phone;
-        $student->religion = $request->religion;
-        $student->nationality = $request->nationality;
-        $student->remarks = $request->remarks;
-        $student->status = $request->status;
-        /* Save the student record to the database*/
+        $filename = StudentService::handleFileUpload($request, $student);
+        StudentService::setData($student, $request, $filename);
         $student->update();
+
 
         /* Return success response*/
         return response()->json([
