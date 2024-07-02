@@ -83,7 +83,10 @@
             "data":"id"
           },
           {
-            "data":"name"
+            "data": "name",
+            render: function(data, type, row){
+                return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '">' + data + '</a>';
+            }
           },
           {
             "data":"gender"

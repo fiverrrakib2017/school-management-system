@@ -12,7 +12,7 @@
              <li>
                 <a href="#student_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-user-graduate"></i>
-                <span> Student Management </span>
+                <span> Students </span>
                 <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="student_management">
@@ -32,7 +32,7 @@
              <li>
                 <a href="#teacher_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-chalkboard-teacher"></i>
-                <span> Teacher Management </span>
+                <span> Teachers </span>
                 <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="teacher_management">
@@ -47,7 +47,7 @@
              <li>
                 <a href="#customer_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-users"></i>
-                <span> Customer Management </span>
+                <span> Customers </span>
                 <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="customer_management">
@@ -58,19 +58,13 @@
                       <li>
                         <a href="{{ route('admin.customer.index') }}">Customer List</a>
                       </li>
-                      <li>
-                        <a href="{{ route('admin.customer.invoice.create_invoice') }}">Invoice Create</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.customer.invoice.show_invoice') }}">Invoice Management</a>
-                      </li>
                    </ul>
                 </div>
              </li>
              <li>
                 <a href="#supplier_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-truck"></i>
-                <span> Supplier Management </span>
+                <span> Suppliers </span>
                 <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="supplier_management">
@@ -81,19 +75,13 @@
                       <li>
                         <a href="{{ route('admin.supplier.index') }}">Supplier List</a>
                       </li>
-                      <li>
-                        <a href="{{ route('admin.supplier.invoice.create_invoice') }}">Invoice Create</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.supplier.invoice.show_invoice') }}">Invoice Management</a>
-                      </li>
                    </ul>
                 </div>
              </li>
              <li>
                 <a href="#product_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-box"></i>
-                <span> Product Management </span>
+                <span> Products </span>
                 <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="product_management">
@@ -124,6 +112,40 @@
                       </li>
                       <li>
                         <a href="{{ route('admin.product.stock.index') }}">Stock</a>
+                      </li>
+                   </ul>
+                </div>
+             </li>
+             <li>
+                <a href="#sales_management" data-bs-toggle="collapse">
+                    <i class="menu-item-icon fas fa-shopping-cart"></i>
+                <span>Sales </span>
+                <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sales_management">
+                   <ul class="nav-second-level">
+                      <li>
+                        <a href="{{ route('admin.customer.invoice.create_invoice') }}">Sale</a>
+                      </li>
+                      <li>
+                        <a href="{{ route('admin.customer.invoice.show_invoice') }}">Sales Invoice</a>
+                      </li>
+                   </ul>
+                </div>
+             </li>
+             <li>
+                <a href="#purchase_management" data-bs-toggle="collapse">
+                    <i class="menu-item-icon fas fa-shopping-bag"></i>
+                <span>Purchases </span>
+                <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="purchase_management">
+                   <ul class="nav-second-level">
+                      <li>
+                        <a href="{{ route('admin.supplier.invoice.create_invoice') }}">Purchase</a>
+                      </li>
+                      <li>
+                        <a href="{{ route('admin.supplier.invoice.show_invoice') }}">Purchase Invoice</a>
                       </li>
                    </ul>
                 </div>
