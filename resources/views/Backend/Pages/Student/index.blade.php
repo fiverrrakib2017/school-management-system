@@ -16,9 +16,9 @@
                                 <th class="">No.</th>
                                 <th class="">Student Name </th>
                                 <th class="">Gender</th>
-                                <th class="">Status</th>
-                                <th class="">Create Date</th>
-                                <th class="">Action</th>
+                                <th class="">Phone-1</th>
+                                <th class="">Phone-2</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -92,39 +92,31 @@
             "data":"gender"
           },
           {
-            "data":"status",
-            render:function(data,type,row){
-                if (row.status==1) {
-                    return '<span class="badge bg-success">Active</span>';
-                }else{
-                    return '<span class="badge bg-danger">Inactive</span>';
-                }
-            }
+            "data":"phone"
           },
           {
-            "data":"created_at",
-            render: function (data, type, row) {
-                var formattedDate = moment(row.created_at).format('DD MMM YYYY');
-                return formattedDate;
-            }
+            "data":"phone_2"
           },
           {
             "data":null,
             render:function(data,type,row){
-                return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '" class="btn btn-success btn-sm mr-3"><i class="fa fa-eye"></i></a>' +
-                 '<a href="{{ route('admin.student.edit', '') }}/' + row.id + '" class="btn btn-primary btn-sm mr-3"><i class="fa fa-edit"></i></a>' +
-                '<button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + row.id + '"><i class="fa fa-trash"></i></button>';
+                var editUrl = "{{ route('admin.student.edit', ':id') }}".replace(':id', row.id);
+                var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', row.id);
+                return `<a href="${editUrl}" class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></a>
+                <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
+
+                <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
+              `;
             }
           },
         ],
         order:[
           [0, "desc"]
         ],
-
       });
-      $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
     });
 
+  /*Create Filter input box*/
 
 
 

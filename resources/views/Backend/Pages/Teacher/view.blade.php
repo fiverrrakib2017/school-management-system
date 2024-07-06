@@ -88,7 +88,11 @@
                     <div class="col-md-4 mb-3">
                     <div class="card profile-card">
                         <div class="card-header p-0">
-                            <img src="{{ asset('uploads/photos/' . $teacher->photo) }}" alt='Profile Picture' class="img-fluid" />
+                            @if($teacher->photo && file_exists(public_path('Backend/uploads/photos/' . $teacher->photo)))
+                                <img src="{{ asset('Backend/uploads/photos/'.$teacher->photo) }}" alt='Profile Picture' class="img-fluid" />
+                            @else
+                                <img src="{{ asset('Backend/images/default.jpg') }}" alt='Default Profile Picture' class="img-fluid" />
+                            @endif
                         </div>
                         <div class="card-body text-center">
                             <h5>{{$teacher->name}}</h5>

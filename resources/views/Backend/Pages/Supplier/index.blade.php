@@ -18,8 +18,7 @@
                                 <th class="">Photo</th>
                                 <th class="">Fullname</th>
                                 <th class="">Phone Number</th>
-                                <th class="">Create Date</th>
-                                <th class="">Action</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -84,9 +83,9 @@
             render:function(data,type,row){
 
               if(row.profile_image!==null){
-                return '<img src="{{ asset("Backend/uploads/photos") }}/' + row.profile_image + '" width="100px" height="90px" class="img-fluid">';
+                return '<img src="{{ asset("Backend/uploads/photos") }}/' + row.profile_image + '" width="50px" height="50px" class="img-fluid">';
               }else{
-                return '<img src="{{ asset("Backend/images/default.jpg") }}" width="100px" height="90px" class="img-fluid">';
+                return '<img src="{{ asset("Backend/images/default.jpg") }}" width="50px" height="50px" class="img-fluid">';
               }
             }
           },
@@ -99,14 +98,6 @@
           },
           {
             "data":"phone_number"
-          },
-          
-          {
-            "data":"created_at",
-            render: function (data, type, row) {
-              var formattedDate = moment(row.created_at).format('DD MMM YYYY');
-              return formattedDate;
-            }
           },
           {
             data:null,

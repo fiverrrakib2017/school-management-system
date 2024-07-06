@@ -17,15 +17,18 @@
                 </a>
                 <div class="collapse" id="student_management">
                    <ul class="nav-second-level">
-                      <li>
-                         <a href="{{ route('admin.student.section.index') }}">Section List</a>
-                      </li>
-                      <li>
-                         <a href="{{ route('admin.student.class.index') }}">Class List</a>
-                      </li>
-                      <li>
-                         <a href="{{ route('admin.student.index') }}">Student List</a>
-                      </li>
+                        <li>
+                           <a href="{{ route('admin.student.index') }}">Student</a>
+                        </li>
+                        <li>
+                         <a href="{{ route('admin.student.class.index') }}">Class</a>
+                        </li>
+                        <li>
+                         <a href="{{ route('admin.student.section.index') }}">Section</a>
+                        </li>
+                        <li>
+                           <a href="#">Bill Collection</a>
+                        </li>
                    </ul>
                 </div>
              </li>
@@ -38,7 +41,7 @@
                 <div class="collapse" id="teacher_management">
                    <ul class="nav-second-level">
                       <li>
-                         <a href="{{ route('admin.teacher.index') }}">Teacher List</a>
+                         <a href="{{ route('admin.teacher.index') }}">Teacher </a>
                       </li>
                    </ul>
                 </div>
@@ -56,7 +59,7 @@
                         <a href="{{ route('admin.customer.create') }}">Customer Create</a>
                       </li>
                       <li>
-                        <a href="{{ route('admin.customer.index') }}">Customer List</a>
+                        <a href="{{ route('admin.customer.index') }}">Customer </a>
                       </li>
                    </ul>
                 </div>
@@ -73,7 +76,7 @@
                         <a href="{{ route('admin.supplier.create') }}">Supplier Create</a>
                       </li>
                       <li>
-                        <a href="{{ route('admin.supplier.index') }}">Supplier List</a>
+                        <a href="{{ route('admin.supplier.index') }}">Supplier </a>
                       </li>
                    </ul>
                 </div>
@@ -108,7 +111,7 @@
                         <a href="{{ route('admin.products.create') }}">Product Create</a>
                       </li>
                       <li>
-                        <a href="{{ route('admin.products.index') }}">Product List</a>
+                        <a href="{{ route('admin.products.index') }}">Product </a>
                       </li>
                       <li>
                         <a href="{{ route('admin.product.stock.index') }}">Stock</a>
