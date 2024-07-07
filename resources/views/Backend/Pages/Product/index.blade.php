@@ -17,12 +17,12 @@
                             <tr>
                               <th class="">No.</th>
                               <th class="">Product Image</th>
+                              <th class="">Product Name</th>
                               <th class="">Purchase Price</th>
                               <th class="">Sale's Price</th>
                               <th class="">Quantity</th>
                               <th class="">Sku</th>
-                              <th class="">Status</th>
-                              <th class="">Action</th>
+                              <th class=""></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,24 +38,20 @@
                                   $title = strlen($data->title) > 50 ? substr($data->title, 0, 50) . '...' : $data->title;
                                 @endphp
                                 @if (!empty($productImage->image))
-                                <img src="{{ asset('uploads/product/' . $productImage->image) }}" alt="" width="40px" height="40px" class="img-fluid">
-                                    {{ $title }}
+                                <img src="{{ asset('uploads/product/' . $productImage->image) }}" alt="" width="50px" height="50px" class="img-fluid">
+                                    
                                 @else
-                                    <img src="https://dummyimage.com/250/ffffff/000000" alt="" srcset="" width="40px" height="40px" class="w-[40px] h-[40px]">
-                                    {{ $title }}
+                                    <img src="https://dummyimage.com/250/ffffff/000000" alt="" srcset="" width="50px" height="50px" class="w-[40px] h-[40px]">
+                                   
                                 @endif
                                 </td>
+
+                                <td>{{$title}}</td>
                                 <td>{{$data->p_price}}</td>
                                 <td>{{$data->s_price}}</td>
                                 <td>{{$data->qty}}</td>
                                 <td>{{$data->sku}}</td>
-                                <td>
-                                @if ($data->status==1)
-                                  <span class="badge bg-success">Active</span>
-                                  @else
-                                  <span class="badge bg-danger">Inactive</span>
-                                  @endif
-                                </td>
+                               
                                 <td>
                                   <!-- Add your action buttons here -->
                                   <a class="btn btn-primary btn-sm mr-3" href="{{route('admin.products.edit', $data->id)}}"><i class="fa fa-edit"></i></a>

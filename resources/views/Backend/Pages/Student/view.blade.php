@@ -57,22 +57,17 @@
                             </button>
                         </abbr>
                         &nbsp;
-                        <abbr title="Disable">
-                            <button type="button" class="btn-sm btn btn-danger">
-                                <i class="mdi mdi mdi-wifi-off "></i>
+                        
+                        <abbr title="Delete Student">
+                            <button type="button" data-id="{{$student->id ?? ''}}" class="btn-sm btn btn-danger delete-btn">
+                                <i class="mdi mdi-delete"></i>
                             </button>
                         </abbr>
                         &nbsp;
-                        <abbr title="Reconnect">
-                            <button type="button" class="btn-sm btn btn-success">
-                                <i class="mdi mdi-sync"></i>
-                            </button>
-                        </abbr>
-                        &nbsp;
-                        <abbr title="Edit Customer">
+                        <abbr title="Edit Student">
                             <a href="{{ route('admin.student.edit', $student->id) }}">
                                 <button type="button" class="btn-sm btn btn-info">
-                                    <i class="mdi mdi-account-edit"></i>
+                                    <i class="mdi mdi-pencil"></i>
                                 </button>
                             </a>
                         </abbr>
@@ -322,6 +317,36 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<div id="deleteModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <form action="{{route('admin.student.delete')}}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box">
+                    <i class="fas fa-trash"></i>
+                </div>
+                <h4 class="modal-title w-100">Are you sure?</h4>
+                <input type="hidden" name="id" value="">
+                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to delete these records? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @section('script')
@@ -329,7 +354,58 @@
     $(document).ready(function(){
         $("#transaction_datatable").DataTable();
         $("#activities_datatable").DataTable();
+
+        
+        /** Handle Delete button click**/
+        $(document).on('click', '.delete-btn', function () {
+            var id = $(this).data('id');
+            $('#deleteModal').modal('show');
+            console.log("Delete ID: " + id);
+            var value_input = $("input[name*='id']").val(id);
+        });
+
+
+        /** Handle form submission for delete **/
+        $('#deleteModal form').submit(function(e){
+            e.preventDefault();
+            /*Get the submit button*/
+            var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
+
+            /* Save the original button text*/
+            var originalBtnText = submitBtn.html();
+
+            /*Change button text to loading state*/
+            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>');
+
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = form.serialize();
+            /** Use Ajax to send the delete request **/
+            $.ajax({
+            type:'POST',
+            'url':url,
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    $('#deleteModal').modal('hide');
+                    toastr.success(response.message);
+                    window.location.href = "{{ route('admin.student.index') }}";
+                }
+            },
+
+            error: function (xhr, status, error) {
+                /** Handle  errors **/
+                toastr.error(xhr.responseText);
+            },
+            complete: function () {
+                submitBtn.html(originalBtnText);
+                }
+            });
+        });
+
     });
+
+    
 </script>
     
 @endsection

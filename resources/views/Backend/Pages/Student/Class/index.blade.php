@@ -2,23 +2,6 @@
 @section('title','Dashboard | Admin Panel')
 @section('style')
 
-    <style>
-        /* .loading-spinner {
-        border:4px solid #f1f1f1;
-        border-left-color: #000000;;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-        } */
-
-    </style>
 @endsection
 @section('content')
 <div class="row">
@@ -35,9 +18,7 @@
                                 <th class="">No.</th>
                                 <th class="">Class Name</th>
                                 <th class="">Section Name</th>
-                                <th class="">Status</th>
-                                <th class="">Create Date</th>
-                                <th class="">Action</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -204,23 +185,6 @@
             "data":"section.name"
           },
           {
-            "data":"status",
-            render:function(data,type,row){
-                if (row.status==1) {
-                    return '<span class="badge bg-success">Active</span>';
-                }else{
-                    return '<span class="badge bg-danger">Inactive</span>';
-                }
-            }
-          },
-          {
-            "data":"created_at",
-            render: function (data, type, row) {
-                var formattedDate = moment(row.created_at).format('DD MMM YYYY');
-                return formattedDate;
-            }
-          },
-          {
             "data":null,
             render:function(data,type,row){
               return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
@@ -233,7 +197,6 @@
         ],
 
       });
-      $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
     });
 
 

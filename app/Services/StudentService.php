@@ -80,12 +80,12 @@ class StudentService{
     {
         $search = $request->search['value'];
         
-        $columnsForOrderBy = ['id', 'name', 'gender'];
+        $columnsForOrderBy = ['id', 'name', 'current_class'];
         
         $orderByColumn = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
 
-        $query = Student::query();
+        $query = Student::with(['currentClass', 'currentClass.section']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {

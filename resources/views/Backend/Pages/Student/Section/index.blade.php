@@ -17,9 +17,7 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Section Name</th>
-                                <th class="">Status</th>
-                                <th class="">Create Date</th>
-                                <th class="">Action</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -163,23 +161,6 @@
         },
         {
         "data":"name"
-        },
-        {
-        "data":"status",
-        render:function(data,type,row){
-            if (row.status==1) {
-                return '<span class="badge bg-success">Active</span>';
-            }else{
-                return '<span class="badge bg-danger">Inactive</span>';
-            }
-        }
-        },
-        {
-        "data":"created_at",
-        render: function (data, type, row) {
-            var formattedDate = moment(row.created_at).format('DD MMM YYYY');
-            return formattedDate;
-        }
         },
         {
         "data":null,

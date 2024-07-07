@@ -56,9 +56,6 @@
                 <div class="collapse" id="customer_management">
                    <ul class="nav-second-level">
                       <li>
-                        <a href="{{ route('admin.customer.create') }}">Customer Create</a>
-                      </li>
-                      <li>
                         <a href="{{ route('admin.customer.index') }}">Customer </a>
                       </li>
                    </ul>
@@ -72,9 +69,6 @@
                 </a>
                 <div class="collapse" id="supplier_management">
                    <ul class="nav-second-level">
-                      <li>
-                        <a href="{{ route('admin.supplier.create') }}">Supplier Create</a>
-                      </li>
                       <li>
                         <a href="{{ route('admin.supplier.index') }}">Supplier </a>
                       </li>

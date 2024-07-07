@@ -20,8 +20,7 @@
                             <th class="">Image</th>
                             <th class="">Slug</th>
                             <th class="">Status</th>
-                            <th class="">Create Date</th>
-                            <th class="">Action</th>
+                            <th class=""></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,7 +46,7 @@
                   <span class="badge bg-danger">Inactive</span>
                   @endif
                 </td>
-                 <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                
                 <td>
                     <!-- Add your action buttons here -->
                     <a class="btn btn-primary btn-sm mr-3" href="{{route('admin.brand.edit', $item->id)}}"><i class="fa fa-edit"></i></a>

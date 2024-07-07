@@ -17,7 +17,8 @@ class StudentController extends Controller
         $this->student=$student;
     }
     public function index(){
-        return view('Backend.Pages.Student.index');
+        $classes=Student_class::latest()->get();
+        return view('Backend.Pages.Student.index',compact('classes'));
     }
     public function create(){
          $data=Student_class::latest()->get();

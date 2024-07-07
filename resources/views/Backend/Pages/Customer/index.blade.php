@@ -18,8 +18,7 @@
                                 <th class="">Photo</th>
                                 <th class="">Fullname</th>
                                 <th class="">Phone Number</th>
-                                <th class="">Create Date</th>
-                                <th class="">Action</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -101,13 +100,6 @@
             "data":"phone_number"
           },
           
-          {
-            "data":"created_at",
-            render: function (data, type, row) {
-              var formattedDate = moment(row.created_at).format('DD MMM YYYY');
-              return formattedDate;
-            }
-          },
           {
             data:null,
             render: function (data, type, row) {

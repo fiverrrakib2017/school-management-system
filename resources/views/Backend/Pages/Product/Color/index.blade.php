@@ -17,9 +17,7 @@
                             <tr>
                             <th class="">No.</th>
                             <th class="">Name</th>
-                            <th class="">Status</th>
-                            <th class="">Create Date</th>
-                            <th class="">Action</th>
+                            <th class=""></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,23 +158,6 @@
           {
             "data":"name"
           },
-          {
-            "data":"status",
-            render:function(data,type,row){
-              if (row.status==1) {
-                return '<span class="badge bg-success">Active</span>';
-              }else{
-                return '<span class="badge bg-secondary">Inactive</span>';
-              }
-            }
-          },
-          {
-            "data":"created_at",
-            render: function (data, type, row) {
-                var formattedDate = moment(row.created_at).format('DD MMM YYYY');
-                return formattedDate;
-            }
-          },
           { 
             "data":null,
             render:function(data,type,row){
@@ -190,7 +171,7 @@
         ],
 
       });
-      $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+    
       });
 
 
