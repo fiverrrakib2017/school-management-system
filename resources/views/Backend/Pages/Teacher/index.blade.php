@@ -6,9 +6,12 @@
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
+            <div class="card-header">
+              <a href="{{ route('admin.teacher.create') }}" class="btn btn-success"><i class="mdi mdi-account-plus"></i>
+                      Add New Teacher</a>
+            </div>
             <div class="card-body">
-                <a href="{{ route('admin.teacher.create') }}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Add New Teacher</a>
+                
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
@@ -16,9 +19,8 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Teacher Name </th>
-                                <th class="">Gender</th>
-                                <th class="">Phone-1</th>
-                                <th class="">Phone-2</th>
+                                <th class="">Phone Number</th>
+                                <th class="">Subject</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -90,13 +92,10 @@
             }
           },
           {
-            "data":"gender"
-          },
-          {
             "data":"phone"
           },
           {
-            "data":"phone_2"
+            "data":"subject"
           },
           {
             "data":null,
