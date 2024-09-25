@@ -98,4 +98,42 @@ class Bill_CollectionController extends Controller
             'message' => 'Added Successfully'
         ]);
     }
+    public function get_bill_collection($id){
+        $data = Student_bill_collection::find($id);
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+    public function update(Request $request){
+        /*Validate the incoming request data*/
+        $validator = Validator::make($request->all(), [
+            'student_id' => 'required|exists:students,id',
+            'bill_date' => 'required|date',
+            'amount' => 'required|numeric|min:0',
+            'paid_amount' => 'nullable|numeric|min:0',
+            'payment_method' => 'nullable|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        $object =Student_bill_collection::find($request->id);
+        $object->student_id = $request->student_id;
+        $object->bill_date=$request->bill_date;
+        $object->amount = $request->amount;
+        $object->paid_amount = $request->paid_amount;
+        $object->due_amount = $request->due_amount;
+        $object->payment_status = $request->due_amount == 0 ? 'paid' : ($request->due_amount < $request->amount ? 'partial' : 'due');
+        $object->payment_method = $request->payment_method;
+        $object->note = $request->note;
+        /*Update to the database table*/
+        $object->update();
+        return response()->json([
+            'success' => true,
+            'message' => 'Added Successfully'
+        ]);
+    }
 }
