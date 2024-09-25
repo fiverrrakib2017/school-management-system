@@ -136,4 +136,12 @@ class Bill_CollectionController extends Controller
             'message' => 'Added Successfully'
         ]);
     }
+    public function delete(Request $request){
+        $object = Student_bill_collection::find($request->id); 
+        $object->delete(); 
+        return response()->json([
+            'success' => true,
+            'message' => 'Delete Successfully'
+        ]);
+    }
 }

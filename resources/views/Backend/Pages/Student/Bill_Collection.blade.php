@@ -19,7 +19,7 @@
                                 <th class="">Amount </th>
                                 <th class="">Paid Amount</th>
                                 <th class="">Due Amount</th>
-                                <th class="">Payment Status</th>
+                                <th class="">Status</th>
                                 <th class="">Note</th>
                                 <th class=""></th>
                             </tr>
@@ -161,14 +161,39 @@
         </div>
     </div>
 </div>
+
+<div id="deleteModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <form action="{{route('admin.student.bill_collection.delete')}}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box">
+                    <i class="fas fa-trash"></i>
+                </div>
+                <h4 class="modal-title w-100">Are you sure?</h4>
+                <input type="hidden" name="id" value="">
+                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to delete these records? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    var table; 
-    var table=$("#datatable1").DataTable({
+    var table = $("#datatable1").DataTable({
       "processing":true,
       "responsive": true,
       "serverSide":true,
@@ -188,205 +213,172 @@
         lengthMenu: '_MENU_ items/page',
       },
       "columns":[
-        {
-          "data":"id"
-        },
+        {"data":"id"},
         {
           "data": "student.name",
           render: function(data, type, row){
               return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '">' + data + '</a>';
           }
         },
-        {
-          "data":"amount"
-        },
-        {
-          "data":"paid_amount"
-        },
-        {
-          "data":"due_amount"
-        },
+        {"data":"amount"},
+        {"data":"paid_amount"},
+        {"data":"due_amount"},
         {
           "data":"payment_status", 
           render:function(data,type,row){
-              if(data == 'paid'){
-                return '<span class="badge bg-success">Paid</span>';
-              }else{
-                return '<span class="badge bg-danger">Due</span>';
-              }
+              return data === 'paid' 
+                ? '<span class="badge bg-success">Paid</span>' 
+                : '<span class="badge bg-danger">Due</span>';
           }
         },
-        {
-          "data":"note"
-        },
+        {"data":"note"},
         {
           "data":null,
           render:function(data,type,row){
-              var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', row.id);
               return `
-
-              <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
-              <button type="button" class="btn btn-danger btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button> 
+              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button> 
+              <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
             `;
           }
         },
       ],
-      order:[
-        [0, "desc"]
-      ],
+      order:[ [0, "desc"] ],
     });
-      $('#search_class_id').change(function() {
-        $('#datatable1').DataTable().ajax.reload( null , false);
+
+    /* Search filter reload*/
+    $('#search_class_id').change(function() {
+        table.ajax.reload(null, false);
+    });
+
+    /* Initialize select2 for modal dropdowns*/
+    function initializeSelect2(modalId) {
+      $(modalId).on('show.bs.modal', function (event) {
+        if (!$("select[name='student_id']").hasClass("select2-hidden-accessible")) {
+            $("select[name='student_id']").select2({
+                dropdownParent: $(modalId),
+                placeholder: "Select Student"
+            });
+        }
       });
-  });
-  $("#addModal").on('show.bs.modal', function (event) {
-    /*Check if select2 is already initialized*/
-    if (!$("select[name='student_id']").hasClass("select2-hidden-accessible")) {
-        $("select[name='student_id']").select2({
-            dropdownParent: $("#addModal"),
-            placeholder: "Select Student"
+    }
+    
+    /* Initialize modals*/
+    initializeSelect2("#addModal");
+    initializeSelect2("#editModal");
+
+    /* General form submission handler*/
+    function handleFormSubmit(modalId, form) {
+        $(modalId + ' form').submit(function(e){
+            e.preventDefault();
+            var submitBtn = $(this).find('button[type="submit"]');
+            var originalBtnText = submitBtn.html();
+            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+            submitBtn.prop('disabled', true);
+
+            var formData = new FormData(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        table.ajax.reload(null, false);
+                        $(modalId).modal('hide');
+                        form[0].reset();
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) { 
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(field, messages) {
+                            $.each(messages, function(index, message) {
+                                toastr.error(message); 
+                            });
+                        });
+                    } else {
+                        toastr.error('An error occurred. Please try again.');
+                    }
+                },
+                complete: function() {
+                    submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                }
+            });
         });
     }
-  });
-  $("#editModal").on('show.bs.modal', function (event) {
-    /*Check if select2 is already initialized*/
-    if (!$("select[name='student_id']").hasClass("select2-hidden-accessible")) {
-        $("select[name='student_id']").select2({
-            dropdownParent: $("#editModal"),
-            placeholder: "Select Student"
-        });
-    }
-  });
-  /** Add **/
-  $('#addModal form').submit(function(e){
-        e.preventDefault();
-        /* Get the submit button */
-        var submitBtn = $(this).find('button[type="submit"]');
-        var originalBtnText = submitBtn.html();
 
-        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden"></span>');
-        submitBtn.prop('disabled', true);
+    /* Handle Add and Edit Form */
+    handleFormSubmit("#addModal", $('#addModal form'));
+    handleFormSubmit("#editModal", $('#editModal form'));
 
-        var form = $(this);
-        var formData = new FormData(this);
-        $.ajax({
-          type: form.attr('method'),
-          url: form.attr('action'),
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function (response) {
-            if (response.success) {
-              toastr.success(response.message);
-              $('#datatable1').DataTable().ajax.reload( null , false);
-              $("#addModal").modal('hide');
-              form[0].reset();
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 422) { 
-                  /* Validation error*/
-                var errors = xhr.responseJSON.errors;
-
-                /* Loop through the errors and show them using toastr*/
-                $.each(errors, function(field, messages) {
-                    $.each(messages, function(index, message) {
-                        /* Display each error message*/
-                        toastr.error(message); 
-                    });
-                });
-            } else {
-                /*General error message*/ 
-                toastr.error('An error occurred. Please try again.');
-            }
-          },
-          complete: function() {
-              submitBtn.html(originalBtnText);
-              submitBtn.prop('disabled', false);
-          }
-        });
-    });
-  /** Leave Edit **/
-  $(document).on("click", "button[name='edit_button']", function() {
+    /* Edit button click handler*/
+    $(document).on("click", "button[name='edit_button']", function() {
         var _id = $(this).data("id");
         var editUrl = '{{ route("admin.student.bill_collection.get_bill_collection", ":id") }}';
         var url = editUrl.replace(':id', _id);
         $.ajax({
           url: url,
           type: "GET",
-          dataType:'json',
+          dataType: 'json',
           success: function(response) {
-                if (response.success) {
-                  console.log(response.data.student_id);
-                $('#editModal').modal('show');
-                 $('#editModal input[name="id"]').val(response.data.id);
-                 $('#editModal select[name="student_id"]').val(response.data.student_id);
-                 $('#editModal input[name="bill_date"]').val(response.data.bill_date);
-                 $('#editModal input[name="amount"]').val(response.data.amount);
-                 $('#editModal input[name="paid_amount"]').val(response.data.paid_amount);
-                 $('#editModal input[name="due_amount"]').val(response.data.due_amount);
-                 $('#editModal select[name="payment_status"]').val(response.data.payment_status);
-                 $('#editModal input[name="payment_method"]').val(response.data.payment_method);
-                 $('#editModal input[name="note"]').val(response.data.note);
-                } else {
-                    toastr.error("Error fetching data for edit: " + response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                toastr.error('Failed to fetch department details');
-            }
-        });
-    });
-
-    $('#editModal form').submit(function(e){
-        e.preventDefault();
-        /* Get the submit button */
-        var submitBtn = $(this).find('button[type="submit"]');
-        var originalBtnText = submitBtn.html();
-
-        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden"></span>');
-        submitBtn.prop('disabled', true);
-
-        var form = $(this);
-        var formData = new FormData(this);
-        $.ajax({
-          type: form.attr('method'),
-          url: form.attr('action'),
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function (response) {
-            if (response.success) {
-              toastr.success(response.message);
-              $('#datatable1').DataTable().ajax.reload( null , false);
-              $("#editModal").modal('hide');
-              form[0].reset();
-            }
+              if (response.success) {
+                  var data = response.data;
+                  $('#editModal').modal('show');
+                  $('#editModal input[name="id"]').val(data.id);
+                  $('#editModal select[name="student_id"]').val(data.student_id).trigger('change');
+                  $('#editModal input[name="bill_date"]').val(data.bill_date);
+                  $('#editModal input[name="amount"]').val(data.amount);
+                  $('#editModal input[name="paid_amount"]').val(data.paid_amount);
+                  $('#editModal input[name="due_amount"]').val(data.due_amount);
+                  $('#editModal select[name="payment_status"]').val(data.payment_status);
+                  $('#editModal input[name="payment_method"]').val(data.payment_method);
+                  $('#editModal input[name="note"]').val(data.note);
+              } else {
+                  toastr.error("Error fetching data for edit: " + response.message);
+              }
           },
           error: function(xhr) {
-            if (xhr.status === 422) { 
-                  /* Validation error*/
-                var errors = xhr.responseJSON.errors;
-
-                /* Loop through the errors and show them using toastr*/
-                $.each(errors, function(field, messages) {
-                    $.each(messages, function(index, message) {
-                        /* Display each error message*/
-                        toastr.error(message); 
-                    });
-                });
-            } else {
-                /*General error message*/ 
-                toastr.error('An error occurred. Please try again.');
-            }
-          },
-          complete: function() {
-              submitBtn.html(originalBtnText);
-              submitBtn.prop('disabled', false);
+              toastr.error('Failed to fetch bill collection details.');
           }
         });
     });
 
+    /* Handle Delete button click and form submission*/
+    $('#datatable1 tbody').on('click', '.delete-btn', function () {
+        var id = $(this).data('id');
+        $('#deleteModal').modal('show');
+        $("input[name*='id']").val(id);
+    });
+
+    $('#deleteModal form').submit(function(e){
+        e.preventDefault();
+        var submitBtn = $(this).find('button[type="submit"]');
+        var originalBtnText = submitBtn.html();
+        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+        var form = $(this);
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    table.ajax.reload(null, false);
+                    $('#deleteModal').modal('hide');
+                }
+            },
+            error: function(xhr) {
+                toastr.error(xhr.responseText);
+            },
+            complete: function() {
+                submitBtn.html(originalBtnText);
+            }
+        });
+    });
+});
 
   </script>
   
