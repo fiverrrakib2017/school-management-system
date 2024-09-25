@@ -75,6 +75,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::controller(Bill_CollectionController::class)->group(function(){
                 Route::get('/index','index')->name('admin.student.bill_collection.index');
                 Route::get('/all_data','all_data')->name('admin.student.bill_collection.all_data');
+                Route::post('/store','store')->name('admin.student.bill_collection.store');
             });
         });
         

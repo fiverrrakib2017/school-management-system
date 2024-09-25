@@ -59,4 +59,43 @@ class Bill_CollectionController extends Controller
             'data' => $items,
         ]);
     }
+    public function store(Request $request){
+        /* Validate the form data*/
+        $rules=[
+            'student_id' => 'required|exists:students,id',
+            'bill_date' => 'required|date',
+            'amount' => 'required|numeric|min:0',
+            'paid_amount' => 'nullable|numeric|min:0',
+            'payment_method' => 'nullable|string',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+
+        /* Create a new Supplier*/
+       
+
+
+        $object = new Student_bill_collection();
+        $object->student_id = $request->student_id;
+        $object->bill_date=$request->bill_date;
+        $object->amount = $request->amount;
+        $object->paid_amount = $request->paid_amount;
+        $object->due_amount = $request->due_amount;
+        $object->payment_status = $request->due_amount == 0 ? 'paid' : ($request->due_amount < $request->amount ? 'partial' : 'due');
+        $object->payment_method = $request->payment_method;
+        $object->note = $request->note;
+        /*Save to the database table*/
+        $object->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Added Successfully'
+        ]);
+    }
 }
