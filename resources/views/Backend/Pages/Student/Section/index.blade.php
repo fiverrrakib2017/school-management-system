@@ -185,9 +185,11 @@
     /** Handle edit button click**/
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
       var id = $(this).data('id');
+      var editUrl = '{{ route("admin.student.section.edit", ":id") }}';
+      var url = editUrl.replace(':id', id);
       $.ajax({
           type: 'GET',
-          url: '/admin/student/section/edit/' + id,
+          url: url,
           success: function (response) {
               if (response.success) {
                 $('#editModal').modal('show');

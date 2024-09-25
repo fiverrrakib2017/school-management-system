@@ -76,42 +76,78 @@ class StudentService{
         $student->remarks = $request->remarks;
         $student->status = $request->status;
     }
-    public function get_data(Request $request)
-    {
+    // public function get_data(Request $request)
+    // {
+    //     $search = $request->search['value'];
+        
+    //     $columnsForOrderBy = ['id', 'name', 'current_class'];
+        
+    //     $orderByColumn = $request->order[0]['column'];
+    //     $orderDirection = $request->order[0]['dir'];
+
+    //     $query = Student::with(['currentClass', 'currentClass.section']);
+
+    //     if ($search) {
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('name', 'like', "%$search%")
+    //             ->orWhere('gender', 'like', "%$search%")
+    //             ->orWhere('phone', 'like', "%$search%")
+    //             ->orWhere('phone_2', 'like', "%$search%");
+    //         });
+    //     }
+
+    //     if (isset($columnsForOrderBy[$orderByColumn])) {
+    //         $query->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection);
+    //     }
+
+    //     $total = $query->count();
+
+    //     $data = $query->skip($request->start)->take($request->length)->get();
+
+    //     return response()->json([
+    //         'draw' => $request->draw,
+    //         'recordsTotal' => $total,
+    //         'recordsFiltered' => $total,
+    //         'data' => $data,
+    //     ]);
+    // }
+    public function get_data(Request $request){
         $search = $request->search['value'];
-        
         $columnsForOrderBy = ['id', 'name', 'current_class'];
-        
-        $orderByColumn = $request->order[0]['column'];
+        $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
+    
+        $query = Student::with(['currentClass','currentClass.section'])->when($search, function ($query) use ($search) {
 
-        $query = Student::with(['currentClass', 'currentClass.section']);
+            $query->where('name', 'like', "%$search%")
+                  ->orWhere('phone', 'like', "%$search%")
 
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                ->orWhere('gender', 'like', "%$search%")
-                ->orWhere('phone', 'like', "%$search%")
-                ->orWhere('phone_2', 'like', "%$search%");
-            });
+                //   ->orWhereHas('currentClass', function ($query) use ($search) {
+                //       $query->where('name', 'like', "%$search%")
+                //             ->orWhere('district_name_en', 'like', "%$search%");
+                //   })
+                  ->orWhereHas('currentClass', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%");
+                  });
+        });
+    
+        if ($request->has('class_id') && !empty($request->class_id)) {
+            $query->where('current_class', $request->class_id);
         }
-
-        if (isset($columnsForOrderBy[$orderByColumn])) {
-            $query->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection);
-        }
-
+    
         $total = $query->count();
-
-        $data = $query->skip($request->start)->take($request->length)->get();
-
+        $items = $query->orderBy($orderByColumn, $orderDirection)
+                       ->skip($request->start)
+                       ->take($request->length)
+                       ->get();
+    
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
             'recordsFiltered' => $total,
-            'data' => $data,
+            'data' => $items,
         ]);
-    }
-
+    }  
     public function view($id){
         $student = Student::find($id);
         if ($student) {

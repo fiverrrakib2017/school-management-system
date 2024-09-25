@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\Product\TempImageController;
 use App\Http\Controllers\Backend\Product\ChildCategoryController;
 use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Product\StockController;
+use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\StudentController;
@@ -69,6 +70,14 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete','delete')->name('admin.student.delete');
             Route::get('/view/{id}','view')->name('admin.student.view');
         });
+        /*Student Bill Collection */
+        Route::prefix('bill_collection')->group(function(){
+            Route::controller(Bill_CollectionController::class)->group(function(){
+                Route::get('/index','index')->name('admin.student.bill_collection.index');
+                Route::get('/all_data','all_data')->name('admin.student.bill_collection.all_data');
+            });
+        });
+        
     });
      /** Teacher Management  Route **/
     Route::prefix('admin/teacher')->group(function(){
@@ -268,6 +277,9 @@ Route::group(['middleware'=>'admin'],function(){
         Route::get('/stock', [StockController::class, 'index'])->name('admin.product.stock.index');
     });
 
+    Route::get('/profile',function(){
+        return view('Backend.Pages.Profile'); 
+    });
 
 
 });

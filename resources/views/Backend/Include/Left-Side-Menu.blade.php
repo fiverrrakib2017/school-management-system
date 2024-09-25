@@ -27,7 +27,7 @@
                          <a href="{{ route('admin.student.section.index') }}">Section</a>
                         </li>
                         <li>
-                           <a href="#">Bill Collection</a>
+                           <a href="{{route('admin.student.bill_collection.index')}}">Bill Collection</a>
                         </li>
                    </ul>
                 </div>

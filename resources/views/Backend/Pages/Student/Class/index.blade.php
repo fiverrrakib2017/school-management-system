@@ -7,6 +7,7 @@
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
+          
             <div class="card-body">
                 <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Class</button>
@@ -162,12 +163,7 @@
         "processing":true,
         "responsive": true,
         "serverSide":true,
-        beforeSend: function () {
-          //$('#preloader').addClass('active');
-        },
-        complete: function(){
-          //$('.product_loading').css({"display":"none"});
-        },
+        
         ajax: "{{ route('admin.student.class.all_data') }}",
         language: {
           searchPlaceholder: 'Search...',
@@ -204,9 +200,11 @@
     /** Handle edit button click**/
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
       var id = $(this).data('id');
+      var editUrl = '{{ route("admin.student.class.edit", ":id") }}';
+      var url = editUrl.replace(':id', id);
       $.ajax({
           type: 'GET',
-          url: '/admin/student/class/edit/' + id,
+          url: url,
           success: function (response) {
               if (response.success) {
                 $('#editModal').modal('show');

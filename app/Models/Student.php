@@ -12,7 +12,9 @@ class Student extends Model
     {
         return $this->belongsTo(Student_class::class, 'current_class');
     }
-
+    public function section(){
+        return $this->belongsTo(Section::class, 'section_id','id');
+    }
     public function previousClass()
     {
         return $this->belongsTo(Student_class::class, 'previous_class');

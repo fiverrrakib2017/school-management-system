@@ -6,24 +6,8 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <div class="row">
-              <div class="col-md-4 col-sm-3">
-                  <div class="form-group">
-                      <label class="control-label">Class</label>
-                      <select id="search_class_id" class="form-select" required="">
-                          <option value="">---নির্বাচন করুন---</option>
-                          @foreach ($classes as $item)
-                            <option value="{{$item->id}}">{{$item->name}}--{{$item->section->name}}</option>   
-                          @endforeach
-                      </select> 
-                  </div>
-              </div>
-          </div>
-            
-          </div>
-          <div class="card-body">
-             <a href="{{ route('admin.student.create') }}" class="btn btn-success "><i class="mdi mdi-account-plus"></i>
-                    Add New Student</a>
+          <a href="{{ route('admin.student.create') }}" class="btn btn-success "><i class="mdi mdi-account-plus"></i>
+          Add Bill Collection</a>
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
@@ -32,9 +16,11 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Student Name </th>
-                                <th class="">Class </th>
-                                <th class="">Section</th>
-                                <th class="">Phone Number</th>
+                                <th class="">Amount </th>
+                                <th class="">Paid Amount</th>
+                                <th class="">Due Amount</th>
+                                <th class="">Payment Status</th>
+                                <th class="">Note</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -61,7 +47,7 @@
       "responsive": true,
       "serverSide":true,
       ajax: {
-            url: "{{ route('admin.student.all_data') }}",
+            url: "{{ route('admin.student.bill_collection.all_data') }}",
             type: 'GET',
             data: function(d) {
               d.class_id = $('#search_class_id').val();
@@ -80,19 +66,25 @@
           "data":"id"
         },
         {
-          "data": "name",
+          "data": "student.name",
           render: function(data, type, row){
               return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '">' + data + '</a>';
           }
         },
         {
-          "data":"current_class.name"
+          "data":"amount"
         },
         {
-          "data":"current_class.section.name"
+          "data":"paid_amount"
         },
         {
-          "data":"phone"
+          "data":"due_amount"
+        },
+        {
+          "data":"payment_status"
+        },
+        {
+          "data":"note"
         },
         {
           "data":null,

@@ -186,10 +186,10 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $("select[name='gender']").select2();
-        $("select[name='marital_status']").select2();
-        $("select[name='verification_status']").select2();
-        $("select[name='bank_payment_status']").select2();
+        // $("select[name='gender']").select2();
+        // $("select[name='marital_status']").select2();
+        // $("select[name='verification_status']").select2();
+        // $("select[name='bank_payment_status']").select2();
 
         $('#profile_image').change(function() {
             let reader = new FileReader();

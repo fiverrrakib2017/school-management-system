@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\Student_class;
+use App\Models\Section;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,8 +18,9 @@ class StudentController extends Controller
         $this->student=$student;
     }
     public function index(){
-        $classes=Student_class::latest()->get();
-        return view('Backend.Pages.Student.index',compact('classes'));
+        $classes=Student_class::with('section')->latest()->get();
+        $section= Section::latest()->get();
+        return view('Backend.Pages.Student.index',compact('classes','section'));
     }
     public function create(){
          $data=Student_class::latest()->get();
