@@ -21,6 +21,7 @@ use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\SectionController;
+use App\Http\Controllers\Backend\Student\Shift_controller;
 use App\Http\Controllers\Backend\Student\StudentController;
 use App\Http\Controllers\Backend\Supplier\SupplierController;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
@@ -79,6 +80,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.bill_collection.update');
                 Route::post('/delete','delete')->name('admin.student.bill_collection.delete');
                 Route::get('/get_bill_collection/{id}','get_bill_collection')->name('admin.student.bill_collection.get_bill_collection');
+            });
+        });
+        /*Student Shift */
+        Route::prefix('shift')->group(function(){
+            Route::controller(Shift_controller::class)->group(function(){
+                Route::get('/index','index')->name('admin.student.shift.index');
+                 Route::get('/all_data','all_data')->name('admin.student.shift.all_data');
+                 Route::post('/store','store')->name('admin.student.shift.store');
+                 Route::post('/update','update')->name('admin.student.shift.update');
+                 Route::post('/delete','delete')->name('admin.student.shift.delete');
+                 Route::get('/get_shift/{id}','get_shift')->name('admin.student.shift.get_shift');
             });
         });
         

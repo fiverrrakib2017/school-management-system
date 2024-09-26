@@ -6,41 +6,44 @@ use App\Models\Student;
 use App\Models\Student_class;
 use App\Models\Section;
 use App\Models\Student_bill_collection;
+use App\Models\Student_shift;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
-class Bill_CollectionController extends Controller
+class Shift_controller extends Controller
 {
 
     public function index()
     {
        $student=Student::get();
-       return view('Backend.Pages.Student.Bill_Collection',compact('student'));
+       return view('Backend.Pages.Student.Shift.index',compact('student'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'student_id', 'amount', 'paid_amount','due_amount','payment_status','note','created_at'];
+        $columnsForOrderBy = ['id', 'shift_name', 'start_time', 'end_time'];
         $orderByColumnIndex = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
         /*Start building the query*/
-        $query = Student_bill_collection::with('student');
+        $query = Student_shift::query();
 
         /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('amount', 'like', "%$search%")
-                  ->orWhere('payment_status', 'like', "%$search%")
-                  ->orWhereHas('student', function($q) use ($search) {
-                      $q->where('name', 'like', "%$search%");
-                  });
+                $q->where('shift_name', 'like', "%$search%")
+                ->where('time_in', 'like', "%$search%")
+                  ->orWhere('time_out', 'like', "%$search%");
+                //   ->orWhereHas('student', function($q) use ($search) {
+                //       $q->where('name', 'like', "%$search%");
+                //   });
             });
         }
 
         /* Get the total count of records*/
-        $totalRecords = Student_bill_collection::count();
+        $totalRecords = Student_shift::count();
 
         /* Get the count of filtered records*/
         $filteredRecords = $query->count();
@@ -61,12 +64,10 @@ class Bill_CollectionController extends Controller
     }
     public function store(Request $request){
         /* Validate the form data*/
-        $rules=[
-            'student_id' => 'required|exists:students,id',
-            'bill_date' => 'required|date',
-            'amount' => 'required|numeric|min:0',
-            'paid_amount' => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|string',
+        $rules = [
+            'shift_name' => 'required|string|max:255',
+            'start_time' => 'required',
+            'end_time' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -78,19 +79,12 @@ class Bill_CollectionController extends Controller
         }
 
 
-        /* Create a new Supplier*/
-       
+        /* Create a new Instance*/
+        $object = new Student_shift();
+        $object->shift_name = $request->shift_name;
+        $object->start_time = Carbon::createFromFormat('H:i', $request->start_time)->format('H:i:s'); 
+        $object->end_time = Carbon::createFromFormat('H:i', $request->end_time)->format('H:i:s'); 
 
-
-        $object = new Student_bill_collection();
-        $object->student_id = $request->student_id;
-        $object->bill_date=$request->bill_date;
-        $object->amount = $request->amount;
-        $object->paid_amount = $request->paid_amount;
-        $object->due_amount = $request->due_amount;
-        $object->payment_status = $request->due_amount == 0 ? 'paid' : ($request->due_amount < $request->amount ? 'partial' : 'due');
-        $object->payment_method = $request->payment_method;
-        $object->note = $request->note;
         /*Save to the database table*/
         $object->save();
         return response()->json([
@@ -98,46 +92,54 @@ class Bill_CollectionController extends Controller
             'message' => 'Added Successfully'
         ]);
     }
-    public function get_bill_collection($id){
-        $data = Student_bill_collection::find($id);
+    public function get_shift($id){
+        $data = Student_shift::find($id);
         return response()->json([
             'success' => true,
             'data' => $data
         ]);
     }
     public function update(Request $request){
-        /*Validate the incoming request data*/
-        $validator = Validator::make($request->all(), [
-            'student_id' => 'required|exists:students,id',
-            'bill_date' => 'required|date',
-            'amount' => 'required|numeric|min:0',
-            'paid_amount' => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|string',
-        ]);
+        /* Validate the form data */
+        $rules = [
+            'shift_name' => 'required|string|max:255',
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
-        $object =Student_bill_collection::find($request->id);
-        $object->student_id = $request->student_id;
-        $object->bill_date=$request->bill_date;
-        $object->amount = $request->amount;
-        $object->paid_amount = $request->paid_amount;
-        $object->due_amount = $request->due_amount;
-        $object->payment_status = $request->due_amount == 0 ? 'paid' : ($request->due_amount < $request->amount ? 'partial' : 'due');
-        $object->payment_method = $request->payment_method;
-        $object->note = $request->note;
-        /*Update to the database table*/
+
+        /* Find the existing instance */
+        $object = Student_shift::find($request->id);
+        if (!$object) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Shift not found'
+            ], 404);
+        }
+
+        /* Update the Instance */
+        $object->shift_name = $request->shift_name;
+        $object->start_time = $request->start_time;
+        $object->end_time = $request->end_time;
+
+        /* Save the changes to the database table */
         $object->update();
+
         return response()->json([
             'success' => true,
-            'message' => 'Added Successfully'
+            'message' => 'Updated Successfully'
         ]);
     }
+
     public function delete(Request $request){
-        $object = Student_bill_collection::find($request->id); 
+        $object = Student_shift::find($request->id); 
         $object->delete(); 
         return response()->json([
             'success' => true,
