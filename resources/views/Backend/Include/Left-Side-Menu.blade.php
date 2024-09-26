@@ -30,6 +30,9 @@
                          <a href="{{ route('admin.student.shift.index') }}">Shift</a>
                         </li>
                         <li>
+                         <a href="{{ route('admin.student.leave.index') }}">Leave</a>
+                        </li>
+                        <li>
                            <a href="{{route('admin.student.bill_collection.index')}}">Bill Collection</a>
                         </li>
                    </ul>
