@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\Product\TempImageController;
 use App\Http\Controllers\Backend\Product\ChildCategoryController;
 use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Product\StockController;
+use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\Leave_controller;
@@ -103,6 +104,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.leave.update');
                 Route::post('/delete','delete')->name('admin.student.leave.delete');
                 Route::get('/get_leave/{id}','get_leave')->name('admin.student.leave.get_leave');
+            });
+        });
+        /*Student Attendence */
+        Route::prefix('attendence')->group(function(){
+            Route::controller(Attendance_controller::class)->group(function(){
+                Route::get('/index','index')->name('admin.student.attendence.index');
+                Route::get('/all_data','all_data')->name('admin.student.attendence.all_data');
+                Route::post('/store','store')->name('admin.student.attendence.store');
+                // Route::post('/update','update')->name('admin.student.leave.update');
+                // Route::post('/delete','delete')->name('admin.student.leave.delete');
+                // Route::get('/get_leave/{id}','get_leave')->name('admin.student.leave.get_leave');
             });
         });
         

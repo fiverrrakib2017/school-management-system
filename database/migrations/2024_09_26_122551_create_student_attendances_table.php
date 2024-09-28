@@ -19,8 +19,7 @@ return new class extends Migration
             $table->time('time_in'); 
             $table->time('time_out'); 
             $table->enum('status', ['Present', 'Absent','Late'])->default('Present');
-            $table->string('reason')->nullable(); 
-            $table->string('approved_by')->nullable(); 
+          
             $table->timestamps();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->foreign('shift_id')->references('id')->on('student_shifts')->onDelete('cascade');
