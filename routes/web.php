@@ -112,9 +112,9 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/index','index')->name('admin.student.attendence.index');
                 Route::get('/all_data','all_data')->name('admin.student.attendence.all_data');
                 Route::post('/store','store')->name('admin.student.attendence.store');
-                // Route::post('/update','update')->name('admin.student.leave.update');
+                Route::post('/update','update')->name('admin.student.attendence.update');
                 // Route::post('/delete','delete')->name('admin.student.leave.delete');
-                // Route::get('/get_leave/{id}','get_leave')->name('admin.student.leave.get_leave');
+                 Route::get('/get_attendance/{id}','get_attendance')->name('admin.student.attendence.get_attendance');
             });
         });
         

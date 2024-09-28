@@ -101,8 +101,8 @@ class Attendance_controller extends Controller
             'message' => 'Added Successfully'
         ]);
     }
-    public function get_shift($id){
-        $data = Student_shift::find($id);
+    public function get_attendance($id){
+        $data = Student_attendance::find($id);
         return response()->json([
             'success' => true,
             'data' => $data
@@ -111,9 +111,11 @@ class Attendance_controller extends Controller
     public function update(Request $request){
         /* Validate the form data */
         $rules = [
-            'shift_name' => 'required|string|max:255',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'student_id' => 'required|exists:students,id',
+            'attendance_date' => 'required|date',
+            'shift_id' => 'required|exists:student_shifts,id',
+            'time_in' => 'required',
+            'time_out' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -125,18 +127,21 @@ class Attendance_controller extends Controller
         }
 
         /* Find the existing instance */
-        $object = Student_shift::find($request->id);
+        $object = Student_attendance::find($request->id);
         if (!$object) {
             return response()->json([
                 'success' => false,
-                'message' => 'Shift not found'
+                'message' => 'not found'
             ], 404);
         }
 
         /* Update the Instance */
-        $object->shift_name = $request->shift_name;
-        $object->start_time = $request->start_time;
-        $object->end_time = $request->end_time;
+        $object->student_id = $request->student_id;
+        $object->attendance_date = $request->attendance_date;
+        $object->shift_id = $request->shift_id;
+        $object->time_in =$request->time_in;
+        $object->time_out =$request->time_out; 
+        $object->status = $request->status ?? 'Present';
 
         /* Save the changes to the database table */
         $object->update();

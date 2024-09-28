@@ -93,29 +93,47 @@
             <div class="modal-content col-md-12">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"><span
-                        class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Shift</h5>
+                        class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Attendance</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.student.shift.update') }}" method="POST" enctype="multipart/form-data">@csrf        
-                        <div class="form-group mb-2">
-                            <label>Shift Name</label>
-                            <input type="text" class="d-none" name="id">
-                            <input name="shift_name" placeholder="Enter Shift Name" class="form-control" type="text" >
-                        </div>           
-                        <div class="form-group mb-2">
-                            <label>Start TIme</label>
-                            <input name="start_time" class="form-control" type="time" >
-                        </div>           
-                        <div class="form-group mb-2">
-                            <label>End TIme</label>
-                            <input name="end_time" class="form-control" type="time" >
-                        </div>           
-                        <div class="modal-footer ">
-                            <button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </div>
-                    </form>
+                <form action="{{route('admin.student.attendence.update')}}" method="POST" enctype="multipart/form-data">@csrf
+                    <div class="form-group mb-2">
+                        <label>Student Name</label>
+                        <input type="text" class="d-none" name="id">
+                        <select name="student_id" class="form-select" type="text" style="width: 100%;" required>
+                            <option value="">---Select---</option>
+                            @foreach ($student as $item)
+                                <option value="{{$item->id}}">{{$item->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>           
+                    <div class="form-group mb-2">
+                        <label>Attendance Date</label>
+                        <input name="attendance_date" class="form-control" type="date" value="2024-09-28" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label>Shift </label>
+                        <select name="shift_id" class="form-select" type="text" required>
+                            <option >---Select---</option>
+                            @foreach ($shift as $item)
+                                <option value="{{$item->id}}">{{$item->shift_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>        
+                    <div class="form-group mb-2">
+                        <label>Time In</label>
+                        <input name="time_in" class="form-control" type="time"  required>
+                    </div>           
+                    <div class="form-group mb-2">
+                        <label>Time Out</label>
+                        <input name="time_out" class="form-control" type="time"  required>
+                    </div>           
+                    <div class="modal-footer ">
+                        <button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </form>
                 </div>
             </div>
     </div>
@@ -290,7 +308,7 @@
     /* Edit button click handler*/
     $(document).on("click", "button[name='edit_button']", function() {
         var _id = $(this).data("id");
-        var editUrl = '{{ route("admin.student.shift.get_shift", ":id") }}';
+        var editUrl = '{{ route("admin.student.attendence.get_attendance", ":id") }}';
         var url = editUrl.replace(':id', _id);
         $.ajax({
           url: url,
@@ -301,9 +319,11 @@
                 //var data = response.data;
                 $('#editModal').modal('show');
                 $('#editModal input[name="id"]').val(response.data.id);
-                $('#editModal input[name="shift_name"]').val(response.data.shift_name);
-                $('#editModal input[name="start_time"]').val(response.data.start_time);
-                $('#editModal input[name="end_time"]').val(response.data.end_time);
+                $('#editModal select[name="student_id"]').val(response.data.student_id);
+                $('#editModal select[name="shift_id"]').val(response.data.shift_id);
+                $('#editModal input[name="attendance_date"]').val(response.data.attendance_date);
+                $('#editModal input[name="time_in"]').val(response.data.time_in);
+                $('#editModal input[name="time_out"]').val(response.data.time_out);
               } else {
                   toastr.error("Error fetching data for edit: " + response.message);
               }
