@@ -14,13 +14,12 @@ class SectionController extends Controller
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name','status', 'created_at'];
+        $columnsForOrderBy = ['id', 'name', 'created_at'];
         $orderByColumn = $request->order[0]['column'];
         $orderDirectection = $request->order[0]['dir'];
 
         $object = Section::when($search, function ($query) use ($search) {
             $query->where('name', 'like', "%$search%");
-            $query->where('status', 'like', "%$search%");
         })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
 
         $total = $object->count();
@@ -37,7 +36,6 @@ class SectionController extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'status' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -50,7 +48,7 @@ class SectionController extends Controller
         /*Create a new Section record*/
         $section = new Section();
         $section->name = $request->name;
-        $section->status = $request->status;
+        $section->status = 1;
 
         /* Save the section record to the database*/
         $section->save();
@@ -82,7 +80,6 @@ class SectionController extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'status' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -103,7 +100,7 @@ class SectionController extends Controller
 
         /* Update the section record */
         $section->name = $request->name;
-        $section->status = $request->status;
+        $section->status = 1;
 
         /* Save the updated section record to the database*/
         $section->save();

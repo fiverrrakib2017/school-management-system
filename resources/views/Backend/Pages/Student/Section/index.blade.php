@@ -51,13 +51,6 @@
                             <label for="sectionName">Section Name</label>
                             <input type="text" name="name" id="sectionName" placeholder="Enter Section Name" class="form-control">
                         </div>
-                        <div class="form-group mb-2">
-                            <label for="status">Status</label>
-                            <select name="status" id="" class="form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -89,13 +82,6 @@
                             <label for="sectionName">Section Name</label>
                             <input type="text" name="id" class="d-none" required>
                             <input type="text" name="name"  placeholder="Enter Section Name" class="form-control">
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="status">Status</label>
-                            <select name="status"  class="form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
                         </div>
                     </div>
                 </div>
