@@ -129,6 +129,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/get_fees_type/{id}','get_fees_type')->name('admin.student.fees_type.get_fees_type');
             });
         });
+        /*Student Fees Type */
+        Route::prefix('Bill_collection/invoice')->group(function(){
+            Route::controller(Bill_CollectionController::class)->group(function(){
+                 Route::get('/create','create_bill')->name('admin.student.bill_collection.create');
+                // Route::get('/all_data','all_data')->name('admin.student.fees_type.all_data');
+                // Route::post('/store','store')->name('admin.student.fees_type.store');
+                // Route::post('/update','update')->name('admin.student.fees_type.update');
+                // Route::post('/delete','delete')->name('admin.student.fees_type.delete');
+                // Route::get('/get_fees_type/{id}','get_fees_type')->name('admin.student.fees_type.get_fees_type');
+            });
+        });
         
     });
      /** Teacher Management  Route **/

@@ -6,8 +6,8 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <button data-bs-toggle="modal" data-bs-target="#addModal"  class="btn btn-success "><i class="mdi mdi-account-plus"></i>
-          Add Bill Collection</button>
+          <a href="{{route('admin.student.bill_collection.create')}}" class="btn btn-success "><i class="mdi mdi-account-plus"></i>
+          Add Bill Collection</a>
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">

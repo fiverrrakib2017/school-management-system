@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Student_class;
 use App\Models\Section;
 use App\Models\Student_bill_collection;
+use App\Models\Student_fees_type;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,12 @@ class Bill_CollectionController extends Controller
     public function index()
     {
        $student=Student::get();
-       return view('Backend.Pages.Student.Bill_Collection',compact('student'));
+       return view('Backend.Pages.Student.Bill_Collection.index',compact('student'));
+    }
+    public function create_bill(){
+        $student=Student::latest()->get();
+        $fess_type=Student_fees_type::latest()->get();
+        return view('Backend.Pages.Student.Bill_Collection.create',compact('student','fess_type'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
