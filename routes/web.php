@@ -21,6 +21,7 @@ use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
+use App\Http\Controllers\Backend\Student\Fees_type_controller;
 use App\Http\Controllers\Backend\Student\Leave_controller;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\Shift_controller;
@@ -115,6 +116,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.attendence.update');
                 Route::post('/delete','delete')->name('admin.student.attendence.delete');
                  Route::get('/get_attendance/{id}','get_attendance')->name('admin.student.attendence.get_attendance');
+            });
+        });
+        /*Student Attendence */
+        Route::prefix('bill_collection_items')->group(function(){
+            Route::controller(Fees_type_controller::class)->group(function(){
+                Route::get('/index','index')->name('admin.student.fees_type.index');
+                Route::get('/all_data','all_data')->name('admin.student.fees_type.all_data');
+                Route::post('/store','store')->name('admin.student.fees_type.store');
+                Route::post('/update','update')->name('admin.student.fees_type.update');
+                Route::post('/delete','delete')->name('admin.student.fees_type.delete');
+                Route::get('/get_fees_type/{id}','get_fees_type')->name('admin.student.fees_type.get_fees_type');
             });
         });
         

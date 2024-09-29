@@ -14,19 +14,17 @@ return new class extends Migration
         Schema::create('student_bill_collections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('fee_id');
-            $table->date('bill_date');
             $table->decimal('amount', 10, 2);
+            $table->decimal('total_amount', 10, 2)->nullable();
             $table->decimal('paid_amount', 10, 2)->nullable();
             $table->decimal('due_amount', 10, 2)->default(0);
-            $table->enum('payment_status', ['paid', 'partial', 'due'])->default('due');
-            $table->string('payment_method', 50)->nullable();
+            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->enum('payment_status', ['paid', 'unpaid', 'due'])->default('due');
+            $table->enum('payment_method', ['cash', 'cheque', 'card', 'bkash', 'other'])->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-
-            $table->foreign('fee_id')->references('id')->on('student_fees')->onDelete('cascade');
         });
     }
 

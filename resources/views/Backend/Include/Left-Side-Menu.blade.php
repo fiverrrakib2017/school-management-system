@@ -36,6 +36,9 @@
                          <a href="{{ route('admin.student.attendence.index') }}">Attendance</a>
                         </li>
                         <li>
+                           <a href="{{route('admin.student.fees_type.index')}}">Fees Type</a>
+                        </li>
+                        <li>
                            <a href="{{route('admin.student.bill_collection.index')}}">Bill Collection</a>
                         </li>
                    </ul>
