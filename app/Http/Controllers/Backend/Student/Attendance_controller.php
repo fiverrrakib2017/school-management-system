@@ -153,7 +153,7 @@ class Attendance_controller extends Controller
     }
 
     public function delete(Request $request){
-        $object = Student_shift::find($request->id); 
+        $object = Student_attendance::find($request->id); 
         $object->delete(); 
         return response()->json([
             'success' => true,

@@ -214,6 +214,11 @@
         // $("select[name='previous_class']").select2();
         // $("select[name='status']").select2();
 
+        $("input[name='current_address']").on('keyup',function(){
+            var current_address = $(this).val();
+            $("input[name='permanent_address']").val(current_address);
+        });
+
         $('#photo').change(function() {
             let reader = new FileReader();
             reader.onload = function(e) {

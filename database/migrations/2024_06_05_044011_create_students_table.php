@@ -26,7 +26,6 @@ return new class extends Migration
             $table->string('phone_2')->nullable();
             $table->unsignedBigInteger('current_class');
             $table->string('previous_school')->nullable();
-            $table->unsignedBigInteger('previous_class')->nullable();
             $table->string('academic_results')->nullable();
             $table->string('blood_group')->nullable();
             $table->text('health_conditions')->nullable();
@@ -35,13 +34,9 @@ return new class extends Migration
             $table->string('religion')->nullable();
             $table->string('nationality')->nullable();
             $table->text('remarks')->nullable();
-            $table->integer('status');
             $table->timestamps();
 
-            $table->foreign('previous_class')
-            ->on('student_classes')
-            ->references('id')
-            ->onDelete('cascade');
+           
 
             $table->foreign('current_class')
             ->on('student_classes')

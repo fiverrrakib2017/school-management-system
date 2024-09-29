@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('student_bill_collections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('fee_id');
             $table->date('bill_date');
             $table->decimal('amount', 10, 2);
             $table->decimal('paid_amount', 10, 2)->nullable();
@@ -24,6 +25,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+
+            $table->foreign('fee_id')->references('id')->on('student_fees')->onDelete('cascade');
         });
     }
 

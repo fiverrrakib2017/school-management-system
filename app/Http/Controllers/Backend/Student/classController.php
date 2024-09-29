@@ -12,27 +12,26 @@ class classController extends Controller
 {
     public function index(){
         $data=Section::latest()->get();
-       //return  Student_class::with('section')->get();
         return view('Backend.Pages.Student.Class.index',compact('data'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'section_id', 'name', 'status', 'created_at'];
+        $columnsForOrderBy = ['id',  'name', 'created_at'];
         $orderByColumnIndex = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
         /*Start building the query*/
-        $query = Student_class::with('section');
+        $query = Student_class::query();
 
         /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                  ->orWhere('status', 'like', "%$search%")
-                  ->orWhereHas('section', function($q) use ($search) {
-                      $q->where('name', 'like', "%$search%");
-                  });
+                $q->where('name', 'like', "%$search%");
+                //   ->orWhere('status', 'like', "%$search%")
+                //   ->orWhereHas('section', function($q) use ($search) {
+                //       $q->where('name', 'like', "%$search%");
+                //   });
             });
         }
 
@@ -60,8 +59,6 @@ class classController extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'section'=>'required|integer',
-            'status' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -74,8 +71,6 @@ class classController extends Controller
         /*Create a new class record*/
         $object = new Student_class();
         $object->name = $request->name;
-        $object->section_id = $request->section;
-        $object->status = $request->status;
 
         /* Save the class record to the database*/
         $object->save();
@@ -107,8 +102,6 @@ class classController extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'section'=>'required|integer',
-            'status' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -129,8 +122,6 @@ class classController extends Controller
 
         /* Update the Class record */
         $object->name = $request->name;
-        $object->section_id = $request->section;
-        $object->status = $request->status;
 
         /* Save the updated Class record to the database*/
         $object->save();

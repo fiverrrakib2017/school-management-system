@@ -18,7 +18,6 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Class Name</th>
-                                <th class="">Section Name</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -51,7 +50,7 @@
                             <label for="sectionName">Class Name: </label>
                             <input type="text" name="name" class="form-control" placeholder="Enter Class Name" required>
                         </div>
-                        <div class="form-group mb-2">
+                        <!-- <div class="form-group mb-2">
                             <label for="status">Section</label>
                             <select type="text" name="section" class="form-control" required>
                                 <option value="">---Select---</option>
@@ -59,15 +58,15 @@
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                             </select>
-                        </div>
-                        <div class="form-group mb-2">
+                        </div> -->
+                        <!-- <div class="form-group mb-2">
                             <label for="status">Status</label>
                             <select type="text" name="status" class="form-control" required>
                                 <option value="">---Select---</option>
                                 <option value="1">Active</option>
                                 <option value="0">InActive</option>
                               </select>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -100,7 +99,7 @@
                             <input type="text" name="id" class="d-none" required>
                             <input type="text" name="name" class="form-control" placeholder="Enter Class Name" required>
                         </div>
-                        <div class="form-group mb-2">
+                        <!-- <div class="form-group mb-2">
                             <label for="status">Section</label>
                             <select type="text" name="section" class="form-control" required>
                                 <option value="">---Select---</option>
@@ -108,15 +107,15 @@
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                             </select>
-                        </div>
-                        <div class="form-group mb-2">
+                        </div> -->
+                        <!-- <div class="form-group mb-2">
                             <label for="status">Status</label>
                             <select type="text" name="status" class="form-control" required>
                                 <option value="">---Select---</option>
                                 <option value="1">Active</option>
                                 <option value="0">InActive</option>
                               </select>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -176,9 +175,6 @@
           },
           {
             "data":"name"
-          },
-          {
-            "data":"section.name"
           },
           {
             "data":null,
