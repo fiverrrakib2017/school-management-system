@@ -33,7 +33,9 @@
                                 <th class="">No.</th>
                                 <th class="">Student Name </th>
                                 <th class="">Class </th>
-                                <th class="">Section</th>
+                                <th class="">Father Name</th>
+                                <th class="">Mother Name</th>
+                                <th class="">Religion</th>
                                 <th class="">Phone Number</th>
                                 <th class=""></th>
                             </tr>
@@ -89,7 +91,13 @@
           "data":"current_class.name"
         },
         {
-          "data":"current_class.section.name"
+          "data":"father_name"
+        },
+        {
+          "data":"mother_name"
+        },
+        {
+          "data":"religion"
         },
         {
           "data":"phone"
