@@ -159,15 +159,7 @@
                                 <label for="previous_school">Previous School</label>
                                 <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school">
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="previous_class">Previous Class</label>
-                                <select type="text" class="form-select" name="previous_class">
-                                    <option value="">---Select---</option>
-                                    @foreach($data as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                           
                             <div class="col-md-6 mb-3">
                                 <label for="academic_results">Academic Results</label>
                                 <input type="text" class="form-control" name="academic_results" placeholder="Enter academic results">
@@ -182,14 +174,7 @@
                         <hr style="border-top: 1px dashed #d3c6c6;">
                         <div class="row">
                             
-                            <div class="col-md-6 mb-3">
-                                <label for="status">Status</label>
-                                <select type="text" class="form-select" name="status">
-                                    <option value="">---Select---</option>
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
-                            </div>
+                           
                             <div class="col-md-6 mb-3">
                                 <label for="remarks">Remarks</label>
                                 <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks"></textarea>

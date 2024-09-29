@@ -11,9 +11,9 @@
                   <div class="form-group">
                       <label class="control-label">Class</label>
                       <select id="search_class_id" class="form-select" required="">
-                          <option value="">---নির্বাচন করুন---</option>
+                          <option value="">---Select---</option>
                           @foreach ($classes as $item)
-                            <option value="{{$item->id}}">{{$item->name}}--{{$item->section->name}}</option>   
+                            <option value="{{$item->id}}">{{$item->name}}</option>   
                           @endforeach
                       </select> 
                   </div>
@@ -55,7 +55,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-
+    $("#search_class_id").select2();
     var table=$("#datatable1").DataTable({
       "processing":true,
       "responsive": true,

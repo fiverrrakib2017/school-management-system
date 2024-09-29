@@ -29,7 +29,7 @@ class StudentService{
             'religion' => 'nullable|string|max:50',
             'nationality' => 'nullable|string|max:50',
             'remarks' => 'nullable|string',
-            'status'=>'required'
+            'status'=>'nullable'
         ];
 
         return Validator::make($request->all(), $rules);
@@ -65,7 +65,6 @@ class StudentService{
         $student->phone_2 = $request->phone_2;
         $student->current_class = $request->current_class;
         $student->previous_school = $request->previous_school;
-        $student->previous_class = $request->previous_class;
         $student->academic_results = $request->academic_results;
         $student->blood_group = $request->blood_group;
         $student->health_conditions = $request->health_conditions;
@@ -74,7 +73,6 @@ class StudentService{
         $student->religion = $request->religion;
         $student->nationality = $request->nationality;
         $student->remarks = $request->remarks;
-        $student->status = $request->status;
     }
     // public function get_data(Request $request)
     // {
