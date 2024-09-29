@@ -16,7 +16,7 @@
                         <thead>
                             <tr>
                                 <th class="">No.</th>
-                                <th class="">Type Name</th>
+                                <th class="">Billing Item Name</th>
                                 <th class="">Amount</th>
                                 <th class=""></th>
                             </tr>
@@ -49,7 +49,7 @@
                     <!----- Start Add Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
-                            <label for="sectionName">Type Name</label>
+                        <label for="sectionName">Billing Item Name</label>
                             <input type="text" name="type_name"  placeholder="Enter Type Name" class="form-control">
                         </div>
                         <div class="form-group mb-2">
@@ -84,7 +84,7 @@
                     <!----- Start Update Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
-                            <label for="sectionName">Type Name</label>
+                            <label for="sectionName">Billing Item Name</label>
                             <input type="text" name="id" class="d-none" required>
                             <input type="text" name="type_name"  placeholder="Enter Type Name" class="form-control">
                         </div>

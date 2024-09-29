@@ -118,8 +118,8 @@ Route::group(['middleware'=>'admin'],function(){
                  Route::get('/get_attendance/{id}','get_attendance')->name('admin.student.attendence.get_attendance');
             });
         });
-        /*Student Attendence */
-        Route::prefix('bill_collection_items')->group(function(){
+        /*Student Fees Type */
+        Route::prefix('Fees_type')->group(function(){
             Route::controller(Fees_type_controller::class)->group(function(){
                 Route::get('/index','index')->name('admin.student.fees_type.index');
                 Route::get('/all_data','all_data')->name('admin.student.fees_type.all_data');
