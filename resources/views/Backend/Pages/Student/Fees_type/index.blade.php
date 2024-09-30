@@ -17,6 +17,7 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Billing Item Name</th>
+                                <th class="">Student Name</th>
                                 <th class="">Amount</th>
                                 <th class=""></th>
                             </tr>
@@ -170,6 +171,7 @@
       "columns":[
         {"data":"id"},
         {"data": "type_name"},
+        {"data": "student.name"},
         {"data":"amount"},
         {
           "data":null,

@@ -27,16 +27,16 @@ class Fees_type_controller extends Controller
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
         /*Start building the query*/
-        $query = Student_fees_type::query();
+        $query = Student_fees_type::with('student');
 
         /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('type_name', 'like', "%$search%")
-                  ->orWhere('amount', 'like', "%$search%");
-                //   ->orWhereHas('student', function($q) use ($search) {
-                //       $q->where('name', 'like', "%$search%");
-                //   });
+                  ->orWhere('amount', 'like', "%$search%")
+                  ->orWhereHas('student', function($q) use ($search) {
+                      $q->where('name', 'like', "%$search%");
+                  });
             });
         }
 
