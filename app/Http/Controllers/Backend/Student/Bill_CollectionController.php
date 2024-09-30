@@ -118,7 +118,65 @@ class Bill_CollectionController extends Controller
             'message' => 'Added Successfully'
         ]);
     }
-   
+
+    public function edit($id){
+        $student=Student::latest()->get();
+         $data = Student_bill_collection::with('items', 'items.fees_type')->find($id);
+        return view('Backend.Pages.Student.Bill_Collection.update',compact('data','student'));
+    }
+   public function update(Request $request , $id){
+    /* Validate the form data*/
+    $rules=[
+        'student_id' => 'required|exists:students,id',
+        'total_amount' => 'nullable|numeric',
+        'paid_amount' => 'nullable|numeric',
+        'due_amount' => 'nullable|numeric',
+        'discount_amount' => 'nullable|numeric',
+        'payment_status' => 'nullable|in:paid,unpaid,due',
+        'payment_method' => 'nullable|in:cash,cheque,card,bkash,other',
+        'note' => 'nullable|string',
+        'billing_item_id' => 'required|array',
+        'billing_item_id.*' => 'exists:student_fees_types,id',
+        'amount.*' => 'required|numeric',
+    ];
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+     /* Create a new Instance*/
+     $object = Student_bill_collection::findOrFail($id);
+     $object->student_id =$request->student_id;
+     $object->total_amount = $request->total_amount ?? $request->amount;
+     $object->paid_amount= $request->paid_amount ?? 0;
+     $object->due_amount = $request->due_amount ?? ($request->amount - $request->paid_amount);
+     $object->discount_amount = $request->discount_amount ?? 0;
+     $object->payment_status = 'paid';
+     $object->payment_method = 'cash';
+     $object->note = $request->note;
+     /*Save to the database table*/
+     $object->save();
+
+    $object->items()->delete();
+
+    foreach ($request->billing_item_id as $key => $feesTypeId) {
+        $item=new Student_bill_collection_item();
+        $item->bill_collection_id=$object->id;
+        $item->fees_type_id=$feesTypeId;
+        $item->amount=$request->amount[$key];
+        $item->status=1;
+        $item->save();
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Updated Successfully'
+    ]);
+   }
     public function delete(Request $request){
         $object = Student_bill_collection::find($request->id); 
         $object->delete(); 

@@ -89,7 +89,7 @@
         {
           "data": "student.name",
           render: function(data, type, row){
-              return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '">' + data + '</a>';
+              return '<a href="{{ route('admin.student.view', '') }}/' + row.student.id + '">' + data + '</a>';
           }
         },
         {"data":"total_amount"},
@@ -109,8 +109,10 @@
         {
           "data":null,
           render:function(data,type,row){
+            var editUrl="{{ route('admin.student.bill_collection.edit', ':id') }}";
+            var url=editUrl.replace(':id',row.id);
               return `
-              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button> 
+              <a href="${url}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
               <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
             `;
           }

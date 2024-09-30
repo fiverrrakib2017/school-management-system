@@ -129,6 +129,8 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/create','create_bill')->name('admin.student.bill_collection.create');
                 Route::post('/store','store')->name('admin.student.bill_collection.store');
                 Route::post('/delete','delete')->name('admin.student.bill_collection.delete');
+                Route::get('/edit/{id}','edit')->name('admin.student.bill_collection.edit');
+                Route::post('/update/{id}','update')->name('admin.student.bill_collection.update');
             });
         });
         
