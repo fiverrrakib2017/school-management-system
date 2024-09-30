@@ -44,7 +44,7 @@
          <h4>Student Bill Collection</h4>
       </div>
       <div class="card-body">
-         <form id="form-data" action="" method="post">@csrf
+         <form id="form-data" action="{{route('admin.student.bill_collection.store')}}" method="post">@csrf
             <div class="row">
                <div class="col-md-4 col-sm-12 mb-3">
                   <label class="form-label">Student Name</label>
@@ -70,9 +70,6 @@
                   <label for="" class="form-label">Billing Item Name</label>
                   <select type="text" id="billing_item" class="form-control" style="width:100%">
                         <option>---Select---</option>
-                        @foreach ($fess_type as $item)
-                            <option value="{{$item->id}}">{{$item->type_name}}</option>
-                        @endforeach
                   </select>
                </div>
 
@@ -83,9 +80,9 @@
                   <input type="text" class="form-control" name="amount" id="amount" placeholder="Enter Amount"/>
                </div>
 
-               <div class="col-md-4 col-sm-12 d-flex align-items-end mb-3">
+               <div class="col-md-2 col-sm-12 d-flex align-items-end mb-3">
                   <button type="button" id="submitBtn" class="btn btn-primary w-100">Add Now</button>
-               </div>
+               </div> 
             </div>
 
             <div class="table-responsive">
@@ -98,28 +95,12 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="tableRow" class="text-center">
-                    <tr>
-                        <td>
-                            <input type="hidden" name="billing_item_id[]" value="">
-                            Exam Free 
-                        </td>
-                        <td>
-                            <input type="hidden" type="number" name="amount[]" class="form-control" value="2500">2500
-                        </td>
-                        <td>
-                            <input type="hidden" name="total_price[]" class="form-control" value="2500">2500
-                        </td>
-                        <td>
-                            <a class="btn-sm btn-danger" type="button" id="itemRow"><i class="fas fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    </tbody>
+                    <tbody id="tableRow" class="text-center"></tbody>
                     <tfoot>
                         <tr>
                             <th class="text-right" colspan="2">Total Amount</th>
                             <th colspan="2">
-                                <input type="text" readonly  class="form-control total_amount text-right" name="total_amount" value="2500">
+                                <input type="text" readonly  class="form-control total_amount text-right" name="total_amount" value="00">
                             </th>
                         </tr>
                         <tr>
@@ -138,7 +119,8 @@
                 </table>
             </div>
             <div class="text-end">
-               <button type="submit" class="btn btn-success mt-3"><i class="fas fa-dollar-sign"></i> Create Now</button>
+               <button type="button" onclick="history.back();" class="btn btn-danger ">Back</button>
+               <button type="submit" class="btn btn-success "><i class="fas fa-dollar-sign"></i> Create Now</button>
             </div>
          </form>
       </div>
@@ -155,52 +137,147 @@
     $("select[name='student_id']").select2();
     $("#billing_item").select2();
 
-    /* Handle form submit */
-    handleFormSubmit('#form-data', '#submitBtn');
-
-    /* General form submission handler*/
-    function handleFormSubmit(modalId, form) {
-        $(modalId + ' form').submit(function(e){
-            e.preventDefault();
-            var submitBtn = $(this).find('button[type="submit"]');
-            var originalBtnText = submitBtn.html();
-            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-            submitBtn.prop('disabled', true);
-
-            var formData = new FormData(this);
+     $(document).on('change', 'select[name="student_id"]', function () {
+        var studentId = $(this).val();
+        if (studentId !== '---Select---' && studentId !== "") {
+           
+            var editUrl = '{{ route("admin.student.fees_type.get_fees_for_student", ":id") }}';
+            var url = editUrl.replace(':id', studentId);
             $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: formData,
-                processData: false,
-                contentType: false,
+                url: url, 
+                type: 'GET',
+                data: { student_id: studentId , condition:'ok' },
                 success: function (response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        table.ajax.reload(null, false);
-                        $(modalId).modal('hide');
-                        form[0].reset();
-                    }
+                    $('#billing_item').html('<option>---Select---</option>');
+                    console.log(response.data);
+                    $.each(response.data, function (index, item) {
+                        $('#billing_item').append('<option value="' + item.id + '">' + item.type_name + '</option>');
+                    });
                 },
-                error: function(xhr) {
-                    if (xhr.status === 422) { 
-                        var errors = xhr.responseJSON.errors;
-                        $.each(errors, function(field, messages) {
-                            $.each(messages, function(index, message) {
-                                toastr.error(message); 
-                            });
-                        });
-                    } else {
-                        toastr.error('An error occurred. Please try again.');
-                    }
-                },
-                complete: function() {
-                    submitBtn.html(originalBtnText);
-                    submitBtn.prop('disabled', false);
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
                 }
             });
+        } else {
+            $('#billing_item').html('<option>---Select---</option>');
+        }
+    });
+    $("#billing_item").on('change',function(){
+        var billing_item_id = $(this).val();
+        var editUrl = '{{ route("admin.student.fees_type.get_fees_type", ":id") }}';
+        var url=editUrl.replace(':id', billing_item_id);
+        $.ajax({
+            url:url, 
+            type: 'GET',
+            data: { id: billing_item_id},
+            success: function (response) {
+                $('#amount').val(response.data.amount);
+                
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
         });
+    });
+   /*When Add Now Button is Click*/
+     $('#submitBtn').on('click', function() {
+        /*Collect form input value*/
+        var billingItemName = $('#billing_item option:selected').text();
+        var billingItemId = $('#billing_item').val();
+        var amount = $('#amount').val();
+
+        /* Validation*/
+        if (billingItemId === '---Select---' || billingItemId === "" || amount === "") {
+            toastr.error("Please select a billing item and enter a valid amount.");
+            return;
+        }
+
+        /*Create New Row*/ 
+        var newRow = `<tr>
+                        <td>
+                            <input type="hidden" name="billing_item_id[]" value="${billingItemId}">
+                            ${billingItemName}
+                        </td>
+                        <td>
+                            <input type="hidden" name="amount[]" value="${amount}">${amount}
+                        </td>
+                        <td>
+                            <input type="hidden" name="total_price[]" value="${amount}">${amount}
+                        </td>
+                        <td>
+                            <button type="button" class="btn-sm btn-danger removeRow"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+
+       
+        $('#tableRow').append(newRow);
+        updateTotalAmount();
+        $('#amount').val('');
+        $('#billing_item').val('---Select---');
+    });
+
+    $(document).on('click', '.removeRow', function() {
+        $(this).closest('tr').remove();
+        updateTotalAmount();
+    });
+
+    
+    function updateTotalAmount() {
+        var totalAmount = 0;
+        $('input[name="amount[]"]').each(function() {
+            totalAmount += parseFloat($(this).val()) || 0;
+        });
+        $('input[name="total_amount"]').val(totalAmount);
+
+        var paidAmount = parseFloat($('input[name="paid_amount"]').val()) || 0;
+        var dueAmount = totalAmount - paidAmount;
+        $('input[name="due_amount"]').val(dueAmount);
     }
+
+    $('input[name="paid_amount"]').on('input', function() {
+        updateTotalAmount();
+    });
+    /* Handle form submit */
+    $("#form-data").submit(function(e){
+        e.preventDefault();
+        var submitBtn = $(this).find('button[type="submit"]');
+        var originalBtnText = submitBtn.html();
+        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+        submitBtn.prop('disabled', true);
+
+        var formData = new FormData(this);
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(() => {
+                        window.location.href = "{{ route('admin.student.bill_collection.index') }}";
+                    }, 500);
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) { 
+                    var errors = xhr.responseJSON.errors;
+                    $.each(errors, function(field, messages) {
+                        $.each(messages, function(index, message) {
+                            toastr.error(message); 
+                        });
+                    });
+                } else {
+                    toastr.error('An error occurred. Please try again.');
+                }
+            },
+            complete: function() {
+                submitBtn.html(originalBtnText);
+                submitBtn.prop('disabled', false);
+            }
+        });
+    });
 
    
 });

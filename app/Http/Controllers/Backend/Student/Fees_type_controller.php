@@ -92,8 +92,15 @@ class Fees_type_controller extends Controller
             'message' => 'Added Successfully'
         ]);
     }
-    public function get_fees_type($id){
+    public function get_fees_type($id,){
         $data = Student_fees_type::find($id);
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+    public function get_fees_for_student($id){
+        $data = Student_fees_type::where(['student_id'=>$id])->get();
         return response()->json([
             'success' => true,
             'data' => $data

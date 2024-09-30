@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Student_class;
 use App\Models\Section;
 use App\Models\Student_bill_collection;
+use App\Models\Student_bill_collection_item;
 use App\Models\Student_fees_type;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
@@ -66,13 +67,21 @@ class Bill_CollectionController extends Controller
         ]);
     }
     public function store(Request $request){
+        //return $request->all();
         /* Validate the form data*/
         $rules=[
             'student_id' => 'required|exists:students,id',
-            'bill_date' => 'required|date',
-            'amount' => 'required|numeric|min:0',
-            'paid_amount' => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|string',
+            //'amount' => 'required|numeric',
+            'total_amount' => 'nullable|numeric',
+            'paid_amount' => 'nullable|numeric',
+            'due_amount' => 'nullable|numeric',
+            'discount_amount' => 'nullable|numeric',
+            'payment_status' => 'nullable|in:paid,unpaid,due',
+            'payment_method' => 'nullable|in:cash,cheque,card,bkash,other',
+            'note' => 'nullable|string',
+            'billing_item_id' => 'required|array',
+            'billing_item_id.*' => 'exists:student_fees_types,id',
+            'amount.*' => 'required|numeric',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -84,64 +93,32 @@ class Bill_CollectionController extends Controller
         }
 
 
-        /* Create a new Supplier*/
-       
-
-
+        /* Create a new Instance*/
         $object = new Student_bill_collection();
-        $object->student_id = $request->student_id;
-        $object->bill_date=$request->bill_date;
-        $object->amount = $request->amount;
-        $object->paid_amount = $request->paid_amount;
-        $object->due_amount = $request->due_amount;
-        $object->payment_status = $request->due_amount == 0 ? 'paid' : ($request->due_amount < $request->amount ? 'partial' : 'due');
-        $object->payment_method = $request->payment_method;
+        $object->student_id =$request->student_id;
+        $object->total_amount = $request->total_amount ?? $request->amount;
+        $object->paid_amount= $request->paid_amount ?? 0;
+        $object->due_amount = $request->due_amount ?? ($request->amount - $request->paid_amount);
+        $object->discount_amount = $request->discount_amount ?? 0;
+        $object->payment_status = 'paid';
+        $object->payment_method = 'cash';
         $object->note = $request->note;
         /*Save to the database table*/
         $object->save();
-        return response()->json([
-            'success' => true,
-            'message' => 'Added Successfully'
-        ]);
-    }
-    public function get_bill_collection($id){
-        $data = Student_bill_collection::find($id);
-        return response()->json([
-            'success' => true,
-            'data' => $data
-        ]);
-    }
-    public function update(Request $request){
-        /*Validate the incoming request data*/
-        $validator = Validator::make($request->all(), [
-            'student_id' => 'required|exists:students,id',
-            'bill_date' => 'required|date',
-            'amount' => 'required|numeric|min:0',
-            'paid_amount' => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+        foreach ($request->billing_item_id as $key => $feesTypeId) {
+            $item=new Student_bill_collection_item();
+            $item->bill_collection_id=$object->id;
+            $item->fees_type_id=$feesTypeId;
+            $item->amount=$request->amount[$key];
+            $item->status=1;
+            $item->save();
         }
-        $object =Student_bill_collection::find($request->id);
-        $object->student_id = $request->student_id;
-        $object->bill_date=$request->bill_date;
-        $object->amount = $request->amount;
-        $object->paid_amount = $request->paid_amount;
-        $object->due_amount = $request->due_amount;
-        $object->payment_status = $request->due_amount == 0 ? 'paid' : ($request->due_amount < $request->amount ? 'partial' : 'due');
-        $object->payment_method = $request->payment_method;
-        $object->note = $request->note;
-        /*Update to the database table*/
-        $object->update();
         return response()->json([
             'success' => true,
             'message' => 'Added Successfully'
         ]);
     }
+   
     public function delete(Request $request){
         $object = Student_bill_collection::find($request->id); 
         $object->delete(); 

@@ -74,17 +74,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete','delete')->name('admin.student.delete');
             Route::get('/view/{id}','view')->name('admin.student.view');
         });
-        /*Student Bill Collection */
-        Route::prefix('bill_collection')->group(function(){
-            Route::controller(Bill_CollectionController::class)->group(function(){
-                Route::get('/index','index')->name('admin.student.bill_collection.index');
-                Route::get('/all_data','all_data')->name('admin.student.bill_collection.all_data');
-                Route::post('/store','store')->name('admin.student.bill_collection.store');
-                Route::post('/update','update')->name('admin.student.bill_collection.update');
-                Route::post('/delete','delete')->name('admin.student.bill_collection.delete');
-                Route::get('/get_bill_collection/{id}','get_bill_collection')->name('admin.student.bill_collection.get_bill_collection');
-            });
-        });
+        
         /*Student Shift */
         Route::prefix('shift')->group(function(){
             Route::controller(Shift_controller::class)->group(function(){
@@ -127,17 +117,18 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.fees_type.update');
                 Route::post('/delete','delete')->name('admin.student.fees_type.delete');
                 Route::get('/get_fees_type/{id}','get_fees_type')->name('admin.student.fees_type.get_fees_type');
+                Route::get('/get_fees_for_student/{id}','get_fees_for_student')->name('admin.student.fees_type.get_fees_for_student');
             });
         });
-        /*Student Fees Type */
-        Route::prefix('Bill_collection/invoice')->group(function(){
+      
+        /*Student Bill Collection */
+        Route::prefix('Bill_collection')->group(function(){
             Route::controller(Bill_CollectionController::class)->group(function(){
-                 Route::get('/create','create_bill')->name('admin.student.bill_collection.create');
-                // Route::get('/all_data','all_data')->name('admin.student.fees_type.all_data');
-                // Route::post('/store','store')->name('admin.student.fees_type.store');
-                // Route::post('/update','update')->name('admin.student.fees_type.update');
-                // Route::post('/delete','delete')->name('admin.student.fees_type.delete');
-                // Route::get('/get_fees_type/{id}','get_fees_type')->name('admin.student.fees_type.get_fees_type');
+                Route::get('/index','index')->name('admin.student.bill_collection.index');
+                Route::get('/all_data','all_data')->name('admin.student.bill_collection.all_data');
+                Route::get('/create','create_bill')->name('admin.student.bill_collection.create');
+                Route::post('/store','store')->name('admin.student.bill_collection.store');
+                Route::post('/delete','delete')->name('admin.student.bill_collection.delete');
             });
         });
         

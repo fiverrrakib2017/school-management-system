@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('student_bill_collections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
-            $table->decimal('amount', 10, 2);
             $table->decimal('total_amount', 10, 2)->nullable();
             $table->decimal('paid_amount', 10, 2)->nullable();
             $table->decimal('due_amount', 10, 2)->default(0);
