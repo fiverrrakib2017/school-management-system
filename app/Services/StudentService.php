@@ -19,6 +19,7 @@ class StudentService{
             'phone' => 'required|string|max:15',
             'phone_2' => 'nullable|string|max:15',
             'current_class' => 'required|max:50',
+            'section_id' => 'required|max:50',
             'previous_school' => 'nullable|string|max:255',
             'previous_class' => 'nullable|max:50',
             'academic_results' => 'nullable|string|max:255',
@@ -64,6 +65,7 @@ class StudentService{
         $student->phone = $request->phone;
         $student->phone_2 = $request->phone_2;
         $student->current_class = $request->current_class;
+        $student->section_id = $request->section_id;
         $student->previous_school = $request->previous_school;
         $student->academic_results = $request->academic_results;
         $student->blood_group = $request->blood_group;

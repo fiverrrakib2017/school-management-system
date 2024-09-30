@@ -64,6 +64,7 @@ class Fees_type_controller extends Controller
         /* Validate the form data*/
         $rules=[
             'type_name' => 'required|string',
+            'student_id' => 'required|integer',
             'amount' => 'required|numeric|min:0',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -82,6 +83,7 @@ class Fees_type_controller extends Controller
 
         $object = new Student_fees_type();
         $object->type_name = $request->type_name;
+        $object->student_id = $request->student_id;
         $object->amount = $request->amount;
         /*Save to the database table*/
         $object->save();
@@ -101,6 +103,7 @@ class Fees_type_controller extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'type_name' => 'required|string',
+            'student_id' => 'required|integer',
             'amount' => 'required|numeric|min:0',
         ]);
         if ($validator->fails()) {
@@ -111,6 +114,7 @@ class Fees_type_controller extends Controller
         }
         $object =Student_fees_type::find($request->id);
         $object->type_name = $request->type_name;
+        $object->student_id = $request->student_id;
         $object->amount = $request->amount;
         /*Update to the database table*/
         $object->update();

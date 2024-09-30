@@ -49,6 +49,15 @@
                     <!----- Start Add Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
+                        <label for="sectionName">Student Name</label>
+                            <select type="text" name="student_id" class="form-select" style="width: 100%;">
+                                <option value="">---Select---</option>
+                                @foreach ($student as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
                         <label for="sectionName">Billing Item Name</label>
                             <input type="text" name="type_name"  placeholder="Enter Type Name" class="form-control">
                         </div>
@@ -84,8 +93,16 @@
                     <!----- Start Update Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
-                            <label for="sectionName">Billing Item Name</label>
+                            <label for="sectionName">Student Name</label>
                             <input type="text" name="id" class="d-none" required>
+                            <select type="text" name="student_id" class="form-select" style="width: 100%;">
+                                @foreach ($student as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="sectionName">Billing Item Name</label>
                             <input type="text" name="type_name"  placeholder="Enter Type Name" class="form-control">
                         </div>
                         <div class="form-group mb-2">
@@ -185,8 +202,8 @@
     }
     
     /* Initialize select2 modals*/
-    // initializeSelect2("#addModal");
-    // initializeSelect2("#editModal");
+    initializeSelect2("#addModal");
+    initializeSelect2("#editModal");
 
     /* General form submission handler*/
     function handleFormSubmit(modalId, form) {

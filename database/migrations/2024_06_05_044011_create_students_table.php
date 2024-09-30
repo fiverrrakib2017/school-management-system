@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('phone_2')->nullable();
             $table->unsignedBigInteger('current_class');
+            $table->unsignedBigInteger('section_id');
             $table->string('previous_school')->nullable();
             $table->string('academic_results')->nullable();
             $table->string('blood_group')->nullable();
@@ -40,6 +41,11 @@ return new class extends Migration
 
             $table->foreign('current_class')
             ->on('student_classes')
+            ->references('id')
+            ->onDelete('cascade');
+
+            $table->foreign('section_id')
+            ->on('sections')
             ->references('id')
             ->onDelete('cascade');
         });

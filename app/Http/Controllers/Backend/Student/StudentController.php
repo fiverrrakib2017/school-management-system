@@ -24,7 +24,8 @@ class StudentController extends Controller
     }
     public function create(){
          $data=Student_class::latest()->get();
-        return view('Backend.Pages.Student.create',compact('data'));
+         $section= Section::latest()->get();
+        return view('Backend.Pages.Student.create',compact('data', 'section'));
     }
     public function edit($id){
         return $this->student->edit($id);

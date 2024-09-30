@@ -156,6 +156,15 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
+                                <label for="current_class">Section Name</label>
+                                <select type="text" class="form-select" name="section_id" required>
+                                    <option value="">---Select---</option>
+                                    @foreach($section as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label for="previous_school">Previous School</label>
                                 <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school">
                             </div>
@@ -195,7 +204,8 @@
 <script type="text/javascript">
     $(document).ready(function(){
         // $("select[name='gender']").select2();
-        // $("select[name='current_class']").select2();
+         $("select[name='current_class']").select2();
+         $("select[name='section_id']").select2();
         // $("select[name='previous_class']").select2();
         // $("select[name='status']").select2();
 

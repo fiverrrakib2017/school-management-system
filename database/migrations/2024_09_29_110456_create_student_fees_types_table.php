@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('student_fees_types', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('student_id');
             $table->string('type_name');
             $table->double('amount', 10, 2);
             $table->timestamps();
+
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 
