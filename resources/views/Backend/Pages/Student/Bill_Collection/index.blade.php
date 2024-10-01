@@ -116,7 +116,7 @@
             var viewurl=viewUrl.replace(':id',row.id);
               return `
               <a href="${viewurl}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-              <a href="${url}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+              <a href="${url}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
               <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
             `;
           }

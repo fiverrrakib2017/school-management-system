@@ -16,20 +16,20 @@
         background-color: #f8f9fa;
     }
 
-    .form-control {
+    /* .form-control {
         border: none;
         border-bottom: 2px solid #17a2b8;
         box-shadow: none;
-    }
+    } */
 
-    .form-control:focus {
+    /* .form-control:focus {
         border-bottom: 2px solid #117a8b;
         box-shadow: none;
-    }
+    } */
     
-    .table tfoot .form-control[readonly] {
+    /* .table tfoot .form-control[readonly] {
         background-color: transparent;
-    }
+    } */
 
     .table tfoot th {
         font-weight: normal;

@@ -16,20 +16,20 @@
         background-color: #f8f9fa;
     }
 
-    .form-control {
+    /* .form-control {
         border: none;
         border-bottom: 2px solid #17a2b8;
         box-shadow: none;
-    }
+    } */
 
-    .form-control:focus {
+    /* .form-control:focus {
         border-bottom: 2px solid #117a8b;
         box-shadow: none;
-    }
+    } */
     
-    .table tfoot .form-control[readonly] {
+    /* .table tfoot .form-control[readonly] {
         background-color: transparent;
-    }
+    } */
 
     .table tfoot th {
         font-weight: normal;
@@ -50,20 +50,22 @@
                   <label class="form-label">Student Name</label>
                   <select name="student_id" class="form-select" style="width:100%">
                      <option>---Select---</option>
-                    @foreach ($student as $item)
+                     @foreach ($student as $item)
                         <option value="{{$item->id}}" @if($item->id == $data->student_id) selected @endif>{{$item->name}}</option>
                     @endforeach
                   </select>
                </div>
 
                 <div class="col-md-4 col-sm-12 mb-3">
-                  <label for="" class="form-label">Note</label>
-                  <textarea id="note" class="form-control" style="height: 38px;" placeholder="Enter Note">{{$data->note?? ''}}</textarea>
+                  <label for="" class="form-label">Class Name</label>
+                  <select type="text" name="class_id" class="form-control" style="width:100%">
+                        <option>---Select---</option>
+                  </select>
                 </div>
 
                 <div class="col-md-4 col-sm-12 mb-3">
-                  <label for="date" class="form-label">Date</label>
-                  <input type="date" id="date" class="form-control"/>
+                  <label for="date" class="form-label">Previous Due</label>
+                  <input type="text" class="form-control" value="00"/>
                 </div>
 
                <div class="col-md-4 col-sm-12 mb-3">
@@ -115,7 +117,7 @@
                         @endforeach
                     </tbody>
                     <tfoot>
-                        <tr>
+                    <tr>
                             <th class="text-right" colspan="2">Total Amount</th>
                             <th colspan="2">
                                 <input type="text" readonly  class="form-control total_amount text-right" name="total_amount" value="{{floatVal($data->total_amount)}}">
@@ -151,40 +153,58 @@
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    var studentId = '{{ $data->student_id }}'; 
+    var studentId = '{{ $data->student_id }}';
     $("select[name='student_id']").select2();
+    $("select[name='class_id']").select2();
     $("#billing_item").select2();
-    get_billing_item(studentId);
-    $(document).on('change',"select[name='student_id']",function(){
+
+     $(document).on('change', 'select[name="student_id"]', function () {
         var studentId = $(this).val();
-        get_billing_item(studentId);
+        get_billing_item(studentId)
+        
     });
-    function get_billing_item(studentId) {
+    get_billing_item(studentId)
+    function get_billing_item(studentId){
         if (studentId !== '---Select---' && studentId !== "") {
-            var editUrl = '{{ route("admin.student.fees_type.get_fees_for_student", ":id") }}';
-            var url = editUrl.replace(':id', studentId);
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: { student_id: studentId, condition: 'ok' },
-                success: function(response) {
-                    $('#billing_item').html('<option>---Select---</option>');
-                    console.log(response.data);
-                    $.each(response.data, function(index, item) {
-                        $('#billing_item').append('<option value="' + item.id + '">' + item.type_name + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+            var url="{{ route('admin.student.get_student', ':id') }}";
+            url = url.replace(':id', studentId);
+           $.ajax({
+               url: url,
+               type: 'GET',
+               data: { student_id: studentId  },
+               success: function (response) {
+                    console.log(response.current_class.id);
+                    $("select[name='class_id']").html(`<option value="${response.current_class.id}">${response.current_class.name}</option>`);
+                    getFeesType(response.current_class.id);
+               },
+               error: function (xhr, status, error) {
+                   console.error('Error:', error);
+               }
+           });
         } else {
             $('#billing_item').html('<option>---Select---</option>');
         }
     }
-
-    
-
+    function getFeesType(classId) {
+      
+        var editUrl = '{{ route("admin.student.fees_type.get_fees_for_class", ":id") }}';
+        var url = editUrl.replace(':id', classId);
+        $.ajax({
+            url: url, 
+            type: 'GET',
+            data: { class_id: classId },
+            success: function (response) {
+                $('#billing_item').html('<option>---Select---</option>');
+                console.log(response.data);
+                $.each(response.data, function (index, item) {
+                    $('#billing_item').append('<option value="' + item.id + '">' + item.type_name + '</option>');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
     $("#billing_item").on('change',function(){
         var billing_item_id = $(this).val();
         var editUrl = '{{ route("admin.student.fees_type.get_fees_type", ":id") }}';
