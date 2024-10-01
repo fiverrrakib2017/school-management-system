@@ -6,24 +6,9 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <div class="row">
-              <div class="col-md-4 col-sm-3">
-                  <div class="form-group">
-                      <label class="control-label">Class</label>
-                      <select id="search_class_id" class="form-select" required="">
-                          <option value="">---Select---</option>
-                          @foreach ($classes as $item)
-                            <option value="{{$item->id}}">{{$item->name}}</option>   
-                          @endforeach
-                      </select> 
-                  </div>
-              </div>
-          </div>
+          <a href="{{ route('admin.student.create') }}" class="btn btn-success "><i class="mdi mdi-account-plus"></i>
+          Add New Student</a>
             
-          </div>
-          <div class="card-body">
-             <a href="{{ route('admin.student.create') }}" class="btn btn-success "><i class="mdi mdi-account-plus"></i>
-                    Add New Student</a>
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
@@ -57,7 +42,20 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $("#search_class_id").select2();
+    var classes = @json($classes);
+    var class_filter = '<label style="margin-left: 10px;">';
+    class_filter += '<select id="search_class_id" class="form-select select2">';
+    class_filter += '<option value="">--Select Class--</option>';
+    classes.forEach(function(item) {
+        class_filter += '<option value="' + item.id + '">' + item.name + '</option>';
+    });
+    class_filter += '</select></label>';
+    setTimeout(() => {
+        $('.dataTables_length').append(class_filter);
+        $('.select2').select2(); 
+    }, 100);
+
+
     var table=$("#datatable1").DataTable({
       "processing":true,
       "responsive": true,
@@ -107,7 +105,6 @@
           render:function(data,type,row){
               var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', row.id);
               return `
-
               <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
             `;
           }
@@ -117,8 +114,8 @@
         [0, "desc"]
       ],
     });
-      $('#search_class_id').change(function() {
-        $('#datatable1').DataTable().ajax.reload( null , false);
+      $(document).on('change','#search_class_id',function(){
+          table.ajax.reload(null, false);
       });
   });
 
