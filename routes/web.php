@@ -73,6 +73,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/update/{id}','update')->name('admin.student.update');
             Route::post('/delete','delete')->name('admin.student.delete');
             Route::get('/view/{id}','view')->name('admin.student.view');
+            Route::get('/get_student/{id}','get_student')->name('admin.student.get_student');
         });
         
         /*Student Shift */
@@ -117,7 +118,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.fees_type.update');
                 Route::post('/delete','delete')->name('admin.student.fees_type.delete');
                 Route::get('/get_fees_type/{id}','get_fees_type')->name('admin.student.fees_type.get_fees_type');
-                Route::get('/get_fees_for_student/{id}','get_fees_for_student')->name('admin.student.fees_type.get_fees_for_student');
+                Route::get('/get_fees_for_class/{id}','get_fees_for_class')->name('admin.student.fees_type.get_fees_for_class');
             });
         });
       

@@ -57,13 +57,15 @@
                </div>
 
                 <div class="col-md-4 col-sm-12 mb-3">
-                  <label for="" class="form-label">Note</label>
-                  <textarea id="note" class="form-control" style="height: 38px;" placeholder="Enter Note"></textarea>
+                  <label for="" class="form-label">Class Name</label>
+                  <select type="text" name="class_id" class="form-control" style="width:100%">
+                        <option>---Select---</option>
+                  </select>
                 </div>
 
                 <div class="col-md-4 col-sm-12 mb-3">
-                  <label for="date" class="form-label">Date</label>
-                  <input type="date" id="date" class="form-control"/>
+                  <label for="date" class="form-label">Previous Due</label>
+                  <input type="text" class="form-control" value="00"/>
                 </div>
 
                <div class="col-md-4 col-sm-12 mb-3">
@@ -135,33 +137,51 @@
   $(document).ready(function(){
     
     $("select[name='student_id']").select2();
+    $("select[name='class_id']").select2();
     $("#billing_item").select2();
 
      $(document).on('change', 'select[name="student_id"]', function () {
         var studentId = $(this).val();
         if (studentId !== '---Select---' && studentId !== "") {
-           
-            var editUrl = '{{ route("admin.student.fees_type.get_fees_for_student", ":id") }}';
-            var url = editUrl.replace(':id', studentId);
-            $.ajax({
-                url: url, 
-                type: 'GET',
-                data: { student_id: studentId , condition:'ok' },
-                success: function (response) {
-                    $('#billing_item').html('<option>---Select---</option>');
-                    console.log(response.data);
-                    $.each(response.data, function (index, item) {
-                        $('#billing_item').append('<option value="' + item.id + '">' + item.type_name + '</option>');
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+            var url="{{ route('admin.student.get_student', ':id') }}";
+            url = url.replace(':id', studentId);
+           $.ajax({
+               url: url,
+               type: 'GET',
+               data: { student_id: studentId  },
+               success: function (response) {
+                    console.log(response.current_class.id);
+                    $("select[name='class_id']").html(`<option value="${response.current_class.id}">${response.current_class.name}</option>`);
+                    getFeesType(response.current_class.id);
+               },
+               error: function (xhr, status, error) {
+                   console.error('Error:', error);
+               }
+           });
         } else {
             $('#billing_item').html('<option>---Select---</option>');
         }
     });
+    function getFeesType(classId) {
+      
+        var editUrl = '{{ route("admin.student.fees_type.get_fees_for_class", ":id") }}';
+        var url = editUrl.replace(':id', classId);
+        $.ajax({
+            url: url, 
+            type: 'GET',
+            data: { class_id: classId },
+            success: function (response) {
+                $('#billing_item').html('<option>---Select---</option>');
+                console.log(response.data);
+                $.each(response.data, function (index, item) {
+                    $('#billing_item').append('<option value="' + item.id + '">' + item.type_name + '</option>');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
     $("#billing_item").on('change',function(){
         var billing_item_id = $(this).val();
         var editUrl = '{{ route("admin.student.fees_type.get_fees_type", ":id") }}';

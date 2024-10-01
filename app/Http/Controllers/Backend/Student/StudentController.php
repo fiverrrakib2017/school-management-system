@@ -114,4 +114,8 @@ class StudentController extends Controller
         ]);
     }
 
+    public function get_student($id){
+      return   Student::with('currentClass')->find($id);
+    }
+
 }

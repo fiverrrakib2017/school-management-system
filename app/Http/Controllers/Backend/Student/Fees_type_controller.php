@@ -99,8 +99,8 @@ class Fees_type_controller extends Controller
             'data' => $data
         ]);
     }
-    public function get_fees_for_student($id){
-        $data = Student_fees_type::where(['student_id'=>$id])->get();
+    public function get_fees_for_class($id){
+        $data = Student_fees_type::where(['class_id'=>$id])->get();
         return response()->json([
             'success' => true,
             'data' => $data
