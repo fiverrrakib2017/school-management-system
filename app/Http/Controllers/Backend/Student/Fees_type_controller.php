@@ -16,8 +16,8 @@ class Fees_type_controller extends Controller
 
     public function index()
     {
-       $student=Student::get();
-       return view('Backend.Pages.Student.Fees_type.index',compact('student'));
+       $classes=Student_class::get();
+       return view('Backend.Pages.Student.Fees_type.index',compact('classes'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
@@ -27,14 +27,14 @@ class Fees_type_controller extends Controller
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
         /*Start building the query*/
-        $query = Student_fees_type::with('student');
+        $query = Student_fees_type::with('class');
 
         /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('type_name', 'like', "%$search%")
                   ->orWhere('amount', 'like', "%$search%")
-                  ->orWhereHas('student', function($q) use ($search) {
+                  ->orWhereHas('class', function($q) use ($search) {
                       $q->where('name', 'like', "%$search%");
                   });
             });
@@ -64,7 +64,7 @@ class Fees_type_controller extends Controller
         /* Validate the form data*/
         $rules=[
             'type_name' => 'required|string',
-            'student_id' => 'required|integer',
+            'class_id' => 'required|integer',
             'amount' => 'required|numeric|min:0',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -83,7 +83,7 @@ class Fees_type_controller extends Controller
 
         $object = new Student_fees_type();
         $object->type_name = $request->type_name;
-        $object->student_id = $request->student_id;
+        $object->class_id = $request->class_id;
         $object->amount = $request->amount;
         /*Save to the database table*/
         $object->save();
@@ -110,7 +110,7 @@ class Fees_type_controller extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'type_name' => 'required|string',
-            'student_id' => 'required|integer',
+            'class_id' => 'required|integer',
             'amount' => 'required|numeric|min:0',
         ]);
         if ($validator->fails()) {
@@ -121,7 +121,7 @@ class Fees_type_controller extends Controller
         }
         $object =Student_fees_type::find($request->id);
         $object->type_name = $request->type_name;
-        $object->student_id = $request->student_id;
+        $object->class_id = $request->class_id;
         $object->amount = $request->amount;
         /*Update to the database table*/
         $object->update();

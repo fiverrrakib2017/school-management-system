@@ -17,7 +17,7 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Billing Item Name</th>
-                                <th class="">Student Name</th>
+                                <th class="">Class Name</th>
                                 <th class="">Amount</th>
                                 <th class=""></th>
                             </tr>
@@ -50,10 +50,10 @@
                     <!----- Start Add Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
-                        <label for="sectionName">Student Name</label>
-                            <select type="text" name="student_id" class="form-select" style="width: 100%;">
+                        <label for="sectionName">Class Name</label>
+                            <select type="text" name="class_id" class="form-select" style="width: 100%;">
                                 <option value="">---Select---</option>
-                                @foreach ($student as $item)
+                                @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
@@ -94,10 +94,10 @@
                     <!----- Start Update Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
-                            <label for="sectionName">Student Name</label>
+                            <label for="sectionName">Class Name</label>
                             <input type="text" name="id" class="d-none" required>
-                            <select type="text" name="student_id" class="form-select" style="width: 100%;">
-                                @foreach ($student as $item)
+                            <select type="text" name="class_id" class="form-select" style="width: 100%;">
+                                @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
@@ -171,7 +171,7 @@
       "columns":[
         {"data":"id"},
         {"data": "type_name"},
-        {"data": "student.name"},
+        {"data": "class.name"},
         {"data":"amount"},
         {
           "data":null,
@@ -194,10 +194,10 @@
     /* Initialize select2 for modal dropdowns*/
     function initializeSelect2(modalId) {
       $(modalId).on('show.bs.modal', function (event) {
-        if (!$("select[name='student_id']").hasClass("select2-hidden-accessible")) {
-            $("select[name='student_id']").select2({
+        if (!$("select[name='class_id']").hasClass("select2-hidden-accessible")) {
+            $("select[name='class_id']").select2({
                 dropdownParent: $(modalId),
-                placeholder: "Select Student"
+                placeholder: "Select Class"
             });
         }
       });

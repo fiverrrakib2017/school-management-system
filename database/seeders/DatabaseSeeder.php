@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            StudentSeeder::class
-        ]);
+        // $this->call([
+        //     StudentSeeder::class
+        // ]);
         \App\Models\Admin::create([
             'name' => 'Rakib Mahmud',
             'email' => 'rakibas375@gmail.com',

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Student_fees_type extends Model
 {
     use HasFactory;
-    public function student(){
-        return $this->belongsTo(Student::class,'student_id','id');
+    public function class(){
+        return $this->belongsTo(Student_class::class,'class_id','id');
     }
+
 }
