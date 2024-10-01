@@ -111,7 +111,11 @@
           render:function(data,type,row){
             var editUrl="{{ route('admin.student.bill_collection.edit', ':id') }}";
             var url=editUrl.replace(':id',row.id);
+
+            var viewUrl="{{ route('admin.student.bill_collection.invoice_show', ':id') }}";
+            var viewurl=viewUrl.replace(':id',row.id);
               return `
+              <a href="${viewurl}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
               <a href="${url}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
               <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
             `;

@@ -177,6 +177,10 @@ class Bill_CollectionController extends Controller
         'message' => 'Updated Successfully'
     ]);
    }
+   public function invoice_show($id){
+     $data = Student_bill_collection::with('items','student', 'items.fees_type')->find($id);
+    return view('Backend.Pages.Student.Bill_Collection.Invoice.invoice_view',compact('data'));
+   }
     public function delete(Request $request){
         $object = Student_bill_collection::find($request->id); 
         $object->delete(); 
