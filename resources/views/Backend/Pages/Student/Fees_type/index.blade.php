@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-header">
                   <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Add New Fees Type</button>
+                    Add New Billing Type</button>
             </div>
             <div class="card-body">
               
@@ -19,6 +19,7 @@
                                 <th class="">Billing Item Name</th>
                                 <th class="">Class Name</th>
                                 <th class="">Amount</th>
+                                <th class="">Period</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -39,7 +40,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Types Name
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Billing Type
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -66,6 +67,9 @@
                             <label for="sectionName">Amount</label>
                             <input type="text" name="amount"  placeholder="Enter  Amount" class="form-control">
                         </div>
+                        <div class="form-group mb-2">
+                            <input type="checkbox" name="is_monthly" value="2" class="form-check-input"> Monthly
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -83,7 +87,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Section
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Billing Type
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -173,6 +177,11 @@
         {"data": "type_name"},
         {"data": "class.name"},
         {"data":"amount"},
+        {"data":"is_monthly"
+        ,"render": function(data, type, row) {
+            return data == 1 ? 'One Time' : 'Monthly';
+          }
+        },
         {
           "data":null,
           render:function(data,type,row){

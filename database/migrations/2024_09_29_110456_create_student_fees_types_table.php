@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('class_id');
             $table->string('type_name');
             $table->double('amount', 10, 2);
+            $table->enum('is_monthly', ['1', '2'])->default('1');
             $table->timestamps();
 
             $table->foreign('class_id')->references('id')->on('student_classes')->onDelete('cascade');

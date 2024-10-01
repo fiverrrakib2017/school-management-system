@@ -85,6 +85,7 @@ class Fees_type_controller extends Controller
         $object->type_name = $request->type_name;
         $object->class_id = $request->class_id;
         $object->amount = $request->amount;
+        $object->is_monthly = $request->is_monthly;
         /*Save to the database table*/
         $object->save();
         return response()->json([
