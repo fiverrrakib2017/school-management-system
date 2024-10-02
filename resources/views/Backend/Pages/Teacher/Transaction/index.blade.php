@@ -60,11 +60,12 @@
                             </select>
                         </div>
                         <div class="form-group mb-2">
-                        <label for="sectionName">Billing Type</label>
+                        <label for="sectionName">Transaction Type</label>
                             <select type="text" name="type_name"  class="form-select" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 <option value="1">Advance</option>
                                 <option value="2">Loan</option>
+                                <option value="3">Salary</option>
                             </select>
                         </div>
                         <div class="form-group mb-2">
@@ -113,11 +114,12 @@
                             </select>
                         </div>
                         <div class="form-group mb-2">
-                        <label for="sectionName">Billing Type</label>
+                        <label for="sectionName">Transaction Type</label>
                             <select type="text" name="type_name"  class="form-select" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 <option value="1">Advance</option>
                                 <option value="2">Loan</option>
+                                <option value="3">Salary</option>
                             </select>
                         </div>
                         <div class="form-group mb-2">

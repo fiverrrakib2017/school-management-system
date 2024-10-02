@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="to_date" class="form-label">To Date</label>
-                                    <input type="date" name="to_date" id="to_date" class="form-control shadow-sm" required>
+                                    <input type="date" name="to_date" id="to_date" class="form-control shadow-sm" value="{{ date('Y-m-d') }}" required>
                                 </div>
                             </div>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -37,7 +37,7 @@
                 @if(isset($transactions) && $transactions->count() > 0)
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead class="bg-info text-white">
+                        <thead class="bg-info  text-white">
                             <tr>
                                 <th>Teacher Name</th>
                                 <th>Type</th>
@@ -59,10 +59,13 @@
                                         elseif($transaction->type == 3) $type = 'Salary';
                                         $teacherTotal += $transaction->amount;
                                     @endphp
-                                    {{ $type }} ----------- {{ $transaction->amount }}<br>
+                                    <div class="d-flex justify-content-between">
+                                        <span>{{ $type }}</span>
+                                        <span style="text-align: right;">{{ $transaction->amount }}</span>
+                                    </div>
                                 @endforeach
                             </td>
-                            <td>{{ $teacherTotal }}</td>
+                            <td style="text-align: right;">{{ $teacherTotal }}</td>
                         </tr>
                         @php $grandTotal += $teacherTotal; @endphp
                         @endforeach
@@ -70,7 +73,7 @@
                         <tfoot>
                             <tr>
                                 <th colspan="2" style="text-align: right;">Total</th>
-                                <th>{{ $grandTotal }}</th>
+                                <th style="text-align: right;">{{ $grandTotal }}</th>
                             </tr>
                         </tfoot>
                     </table>
