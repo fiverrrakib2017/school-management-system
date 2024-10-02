@@ -28,6 +28,7 @@ use App\Http\Controllers\Backend\Student\Shift_controller;
 use App\Http\Controllers\Backend\Student\StudentController;
 use App\Http\Controllers\Backend\Supplier\SupplierController;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
+use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controller;
 use Illuminate\Support\Facades\Route;
 
 /*Backend Route*/
@@ -150,6 +151,19 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete','delete')->name('admin.teacher.delete');
             Route::get('/view/{id}','view')->name('admin.teacher.view');
         });
+        /*Student Fees Type */
+        Route::prefix('Transaction')->group(function(){
+            Route::controller(TeacherTransaction_controller::class)->group(function(){
+                Route::get('/index','index')->name('admin.teacher.transaction.index');
+                 Route::get('/all_data','all_data')->name('admin.teacher.transaction.all_data');
+                 Route::post('/store','store')->name('admin.teacher.transaction.store');
+                 Route::post('/update','update')->name('admin.teacher.transaction.update');
+                 Route::post('/delete','delete')->name('admin.teacher.transaction.delete');
+                 Route::get('/get_transaction/{id}','get_transaction')->name('admin.teacher.transaction.get_transaction');
+                // Route::get('/get_fees_for_class/{id}','get_fees_for_class')->name('admin.teacher.fees_type.get_fees_for_class');
+            });
+        });
+        
     });
     /** Accounts Management  Route **/
     Route::prefix('admin/accounts')->group(function(){

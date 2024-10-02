@@ -55,6 +55,9 @@
                       <li>
                          <a href="{{ route('admin.teacher.index') }}">Teacher </a>
                       </li>
+                      <li>
+                         <a href="{{ route('admin.teacher.transaction.index') }}">Teacher Transaction</a>
+                      </li>
                    </ul>
                 </div>
              </li>
