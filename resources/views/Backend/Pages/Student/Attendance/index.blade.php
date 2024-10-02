@@ -6,27 +6,29 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <button data-bs-toggle="modal" data-bs-target="#addModal"  class="btn btn-success "><i class="mdi mdi-account-plus"></i>
-          Add New Attendance</button>
+          <!-- <button data-bs-toggle="modal" data-bs-target="#addModal"  class="btn btn-success "><i class="mdi mdi-account-plus"></i>
+          Add New Attendance</button> -->
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Student Name</th>
-                                <th>Attendace Date</th>
-                                <th>Shift</th>
-                                <th>Time In</th>
-                                <th>Time Out</th>
-                                <th>Status</th>
-                                <th></th>
+                                <th><input type="checkbox" class="form-check-input" id="selectAll"> </th>
+                                <th class="">Student Name </th>
+                                <th class="">Class </th>
+                                <th class="">Section</th>
+                                <th class="">Religion</th>
+                                <th class="">Phone Number</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
+            </div>
+            <div class="card-footer text-right">
+                <button type="button" id="submitAttendance" class="btn btn-success">Submit Attendance</button>
             </div>
         </div>
 
@@ -168,207 +170,123 @@
 
 @section('script')
 <script type="text/javascript">
-  $(document).ready(function(){
+$(document).ready(function(){
+    var classes = @json($classes);
+
+    // Create Class Filter
+    var class_filter = '<label style="margin-left: 10px;">';
+    class_filter += '<select id="search_class_id" class="form-select select2">';
+    class_filter += '<option value="">--Select Class--</option>';
+    classes.forEach(function(item) {
+        class_filter += '<option value="' + item.id + '">' + item.name + '</option>';
+    });
+    class_filter += '</select></label>';
+
+    setTimeout(() => {
+        $('.dataTables_length').append(class_filter);
+        $('.select2').select2(); 
+    }, 100);
+
+    // Initialize DataTable
     var table = $("#datatable1").DataTable({
-      "processing":true,
-      "responsive": true,
-      "serverSide":true,
-      ajax: {
+        "processing": true,
+        "responsive": true,
+        "serverSide": true,
+        ajax: {
             url: "{{ route('admin.student.attendence.all_data') }}",
             type: 'GET',
             data: function(d) {
-              d.class_id = $('#search_class_id').val();
+                d.class_id = $('#search_class_id').val();
             },
             beforeSend: function(request) {
                 request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
             }
         },
-      language: {
-        searchPlaceholder: 'Search...',
-        sSearch: '',
-        lengthMenu: '_MENU_ items/page',
-      },
-      "columns":[
-        {"data":"id"},
-        {
-          "data": "student.name",
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
         },
-        {
-          "data": "attendance_date",
-        },
-        {
-          "data": "shift.shift_name",
-        },
-        {"data":"time_in",
-        "render": function(data, type, row) {
-            return moment(data, 'HH:mm:ss').format('hh:mm A');  
-          }
-        },
-        {"data":"time_out",
-        "render": function(data, type, row) {
-            return moment(data, 'HH:mm:ss').format('hh:mm A');  
-          }
-        },
-        {
-            "data":"status",
-            "render": function(data, type, row) {
-                if(data == 'Present'){
-                    return `<span class="badge bg-success">Present</span>`;
+        "columns": [
+            {
+                "data": "id",
+                render: function(data, type, row) {
+                    return '<input type="checkbox" name="student_ids[]" value="' + row.id + '" class="student-checkbox form-check-input" ' + (row.attendance_status === 'Present' ? 'checked' : '') + '>';
                 }
-                if(data == 'Absent'){
-                    return `<span class="badge bg-danger">Absent</span>`;
+            },
+            {
+                "data": "name",
+                render: function(data, type, row) {
+                    return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '">' + data + '</a>';
                 }
-                if(data == 'Late'){
-                    return `<span class="badge bg-warning">Late</span>`;
+            },
+            { "data": "current_class.name" },
+            { "data": "section.name" },
+            { "data": "religion" },
+            { "data": "phone" },
+            {
+                "data": null,
+                render: function(data, type, row) {
+                    var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', row.id);
+                    return `
+                        <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
+                    `;
                 }
-            }
-        },
-        {
-          "data":null,
-          render:function(data,type,row){
-              return `
-              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button> 
-              <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
-            `;
-          }
-        },
-      ],
-      order:[ [0, "desc"] ],
+            },
+        ],
+        order: [
+            [0, "desc"]
+        ],
     });
 
-    /* Search filter reload*/
-    $('#search_class_id').change(function() {
+    // Trigger AJAX reload when the class filter changes
+    $(document).on('change', '#search_class_id', function() {
         table.ajax.reload(null, false);
     });
 
-    /* Initialize select2 for modal dropdowns*/
-    function initializeSelect2(modalId) {
-      $(modalId).on('show.bs.modal', function (event) {
-        if (!$("select[name='student_id']").hasClass("select2-hidden-accessible")) {
-            $("select[name='student_id']").select2({
-                dropdownParent: $(modalId),
-                placeholder: "Select Student"
-            });
+    // Select or Deselect All Checkboxes
+    $(document).on('click', '#selectAll', function() {
+        if ($(this).is(':checked')) {
+            $('.student-checkbox').prop('checked', true);
+        } else {
+            $('.student-checkbox').prop('checked', false);
         }
-      });
-    }
-    
-    /* Initialize select2 modals*/
-     initializeSelect2("#addModal");
-     initializeSelect2("#editModal");
+    });
 
-    /* General form submission handler*/
-    function handleFormSubmit(modalId, form) {
-        $(modalId + ' form').submit(function(e){
-            e.preventDefault();
-            var submitBtn = $(this).find('button[type="submit"]');
-            var originalBtnText = submitBtn.html();
-            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-            submitBtn.prop('disabled', true);
-
-            var formData = new FormData(this);
+    // Ensure checkboxes inside DataTable are properly selected on redraw
+    table.on('draw.dt', function() {
+        if ($('#selectAll').is(':checked')) {
+            $('.student-checkbox').prop('checked', true);
+        } else {
+            $('.student-checkbox').prop('checked', false);
+        }
+    });
+    $(document).on('click', '#submitAttendance', function() {
+        var selectedStudents = [];
+        $('.student-checkbox:checked').each(function() {
+            selectedStudents.push($(this).val());
+        });
+        if(selectedStudents.length > 0) {
             $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        table.ajax.reload(null, false);
-                        $(modalId).modal('hide');
-                        form[0].reset();
-                    }
+                url: "{{ route('admin.student.attendence.store') }}",
+                type: "POST",
+                data: {
+                    student_ids: selectedStudents,
+                    _token: $('meta[name="csrf-token"]').attr('content')
                 },
-                error: function(xhr) {
-                    if (xhr.status === 422) { 
-                        var errors = xhr.responseJSON.errors;
-                        $.each(errors, function(field, messages) {
-                            $.each(messages, function(index, message) {
-                                toastr.error(message); 
-                            });
-                        });
-                    } else {
-                        toastr.error('An error occurred. Please try again.');
-                    }
-                },
-                complete: function() {
-                    submitBtn.html(originalBtnText);
-                    submitBtn.prop('disabled', false);
-                }
-            });
-        });
-    }
-
-    /* Handle Add and Edit Form */
-    handleFormSubmit("#addModal", $('#addModal form'));
-    handleFormSubmit("#editModal", $('#editModal form'));
-
-    /* Edit button click handler*/
-    $(document).on("click", "button[name='edit_button']", function() {
-        var _id = $(this).data("id");
-        var editUrl = '{{ route("admin.student.attendence.get_attendance", ":id") }}';
-        var url = editUrl.replace(':id', _id);
-        $.ajax({
-          url: url,
-          type: "GET",
-          dataType: 'json',
-          success: function(response) {
-              if (response.success) {
-                //var data = response.data;
-                $('#editModal').modal('show');
-                $('#editModal input[name="id"]').val(response.data.id);
-                $('#editModal select[name="student_id"]').val(response.data.student_id);
-                $('#editModal select[name="shift_id"]').val(response.data.shift_id);
-                $('#editModal input[name="attendance_date"]').val(response.data.attendance_date);
-                $('#editModal input[name="time_in"]').val(response.data.time_in);
-                $('#editModal input[name="time_out"]').val(response.data.time_out);
-              } else {
-                  toastr.error("Error fetching data for edit: " + response.message);
-              }
-          },
-          error: function(xhr) {
-              toastr.error('Failed to fetch bill collection details.');
-          }
-        });
-    });
-
-    /* Handle Delete button click and form submission*/
-    $('#datatable1 tbody').on('click', '.delete-btn', function () {
-        var id = $(this).data('id');
-        $('#deleteModal').modal('show');
-        $("input[name*='id']").val(id);
-    });
-
-    $('#deleteModal form').submit(function(e){
-        e.preventDefault();
-        var submitBtn = $(this).find('button[type="submit"]');
-        var originalBtnText = submitBtn.html();
-        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-        var form = $(this);
-        $.ajax({
-            type: 'POST',
-            url: form.attr('action'),
-            data: form.serialize(),
-            success: function(response) {
-                if (response.success) {
+                success: function(response) {
                     toastr.success(response.message);
                     table.ajax.reload(null, false);
-                    $('#deleteModal').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    toastr.error('An error occurred. Please try again.');
                 }
-            },
-            error: function(xhr) {
-                toastr.error(xhr.responseText);
-            },
-            complete: function() {
-                submitBtn.html(originalBtnText);
-            }
-        });
+            });
+        } else {
+            toastr.error('Please select at least one student!');
+        }
     });
 });
-
-  </script>
-  
-
+</script>
 @endsection
+
