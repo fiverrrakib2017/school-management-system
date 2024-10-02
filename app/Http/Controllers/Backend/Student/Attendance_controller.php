@@ -18,10 +18,11 @@ class Attendance_controller extends Controller
 
     public function index()
     {
+      $sections=Section::latest()->get();
        $shift=Student_shift::get();
        $student=Student::get();
-       $classes=Student_class::with('section')->latest()->get();
-       return view('Backend.Pages.Student.Attendance.index',compact('student','shift','classes'));
+        $classes=Student_class::with('section')->latest()->get();
+       return view('Backend.Pages.Student.Attendance.index',compact('student','shift','classes','sections'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
@@ -43,6 +44,9 @@ class Attendance_controller extends Controller
     
         if ($request->has('class_id') && !empty($request->class_id)) {
             $query->where('current_class', $request->class_id);
+        }
+        if ($request->has('section_id') && !empty($request->section_id)) {
+            $query->where('section_id', $request->section_id);
         }
     
         $total = $query->count();
