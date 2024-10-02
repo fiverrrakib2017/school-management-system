@@ -8,6 +8,7 @@ use App\Models\Teacher;
 use App\Models\Teacher_transaction;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherTransaction_controller extends Controller
@@ -132,5 +133,30 @@ class TeacherTransaction_controller extends Controller
             'success' => true,
             'message' => 'Delete Successfully'
         ]);
+    }
+    public function report(){
+        $teachers=Teacher::get();
+        return view('Backend.Pages.Teacher.Transaction.Report.index',compact('teachers'));
+    }
+    public function report_generate(Request $request){
+        /* Validate date inputs*/
+        $request->validate([
+            'from_date' => 'required|date',
+            'to_date' => 'required|date|after_or_equal:from_date',
+        ]);
+
+        /* Get data based on selected date range*/
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+
+    /*Retrieve transactions within the specified date range*/ 
+        $transactions = DB::table('teacher_transactions')
+        ->join('teachers', 'teacher_transactions.teacher_id', '=', 'teachers.id')
+        ->select('teachers.name as teacher_name', 'teacher_transactions.type', 'teacher_transactions.amount', 'teacher_transactions.transaction_date')
+        ->whereBetween('transaction_date', [$from_date, $to_date])
+        ->orderBy('teacher_transactions.transaction_date', 'asc')
+        ->get()
+        ->groupBy('teacher_name');
+        return view('Backend.Pages.Teacher.Transaction.Report.index', compact('transactions', 'from_date', 'to_date'));
     }
 }

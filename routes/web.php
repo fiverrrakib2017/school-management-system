@@ -160,7 +160,8 @@ Route::group(['middleware'=>'admin'],function(){
                  Route::post('/update','update')->name('admin.teacher.transaction.update');
                  Route::post('/delete','delete')->name('admin.teacher.transaction.delete');
                  Route::get('/get_transaction/{id}','get_transaction')->name('admin.teacher.transaction.get_transaction');
-                // Route::get('/get_fees_for_class/{id}','get_fees_for_class')->name('admin.teacher.fees_type.get_fees_for_class');
+                Route::get('/report','report')->name('admin.teacher.transaction.report');
+                Route::post('/report_generate','report_generate')->name('admin.teacher.transaction.report_generate');
             });
         });
         
