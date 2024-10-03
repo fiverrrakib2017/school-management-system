@@ -15,29 +15,23 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <!-- <button data-bs-toggle="modal" data-bs-target="#addModal"  class="btn btn-success "><i class="mdi mdi-account-plus"></i>
-          Add New Attendance</button> -->
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" class="form-check-input" id="selectAll"> </th>
+                                <th class="">Id</th>
                                 <th class="">Student Name </th>
                                 <th class="">Class </th>
                                 <th class="">Section</th>
-                                <th class="">Religion</th>
-                                <th class="">Phone Number</th>
-                                <th class=""></th>
+                                <th class="">Status</th>
+                                <th class="">Time In</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer text-right">
-                <button type="button" id="submitAttendance" class="btn btn-success">Submit Attendance</button>
             </div>
         </div>
 
@@ -89,7 +83,7 @@ $(document).ready(function(){
         "responsive": true,
         "serverSide": true,
         ajax: {
-            url: "{{ route('admin.student.attendence.all_data') }}",
+            url: "{{ route('admin.student.attendence.log.all_data') }}",
             type: 'GET',
             data: function(d) {
                 d.class_id = $('#search_class_id').val();
@@ -105,36 +99,56 @@ $(document).ready(function(){
             lengthMenu: '_MENU_ items/page',
         },
         "columns": [
+            { "data": "id" },
             {
-                "data": "id",
+                "data": "student.name",
                 render: function(data, type, row) {
-                    return '<input type="checkbox" name="student_ids[]" value="' + row.id + '" class="student-checkbox form-check-input" ' + (row.attendance_status === 'Present' ? 'checked' : '') + '>';
+                    return `<a href="{{ route('admin.student.view', '') }}/${row.student.id}">${data}</a>`;
+                }
+            },
+            { 
+                "data": "student.current_class.name", 
+                render: function(data, type, row) {
+                    return data ? data : 'N/A';
+                }
+            },
+            { 
+                "data": "student.section.name", 
+                render: function(data, type, row) {
+                    return data ? data : 'N/A';
                 }
             },
             {
-                "data": "name",
-                render: function(data, type, row) {
-                    return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '">' + data + '</a>';
-                }
+                "data": "status",
+               render:function(data,type,row){
+                   return `<span class="badge bg-${data === 'Present' ? 'success' : 'danger'}">${data}</span>`
+                  
+               }
             },
-            { "data": "current_class.name" },
-            { "data": "section.name" },
-            { "data": "religion" },
-            { "data": "phone" },
-            {
-                "data": null,
-                render: function(data, type, row) {
-                    var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', row.id);
-                    return `
-                        <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
-                    `;
-                }
+            { "data": "time_in",
+                render:function(data,type,row){
+                    if (data) {
+                        let date = new Date(`1970-01-01T${data}Z`); 
+                        let hours = date.getUTCHours();
+                        let minutes = date.getUTCMinutes();
+                        let ampm = hours >= 12 ? 'PM' : 'AM';
+                        hours = hours % 12; 
+                        hours = hours ? hours : 12; 
+                        minutes = minutes < 10 ? '0' + minutes : minutes;
+                        let strTime = hours + ':' + minutes + ' ' + ampm;
+                        return strTime;
+                    }
+                return 'N/A';
+               }
+               
             },
         ],
         order: [
             [0, "desc"]
         ],
     });
+
+
 
     /*** Class filter changes */ 
     $(document).on('change', '#search_class_id', function() {

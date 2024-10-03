@@ -33,7 +33,10 @@
                          <a href="{{ route('admin.student.leave.index') }}">Leave</a>
                         </li>
                         <li>
-                         <a href="{{ route('admin.student.attendence.index') }}">Attendance</a>
+                           <a href="{{ route('admin.student.attendence.index') }}">Attendance</a>
+                        </li>
+                        <li>
+                           <a href="{{ route('admin.student.attendence.log') }}">Attendance Log</a>
                         </li>
                         <li>
                            <a href="{{route('admin.student.fees_type.index')}}">Fees Type</a>

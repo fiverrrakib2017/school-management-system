@@ -73,8 +73,8 @@ class Attendance_controller extends Controller
                 $object->attendance_date =now();
                 $object->shift_id = 1;
                 $object->time_in = Carbon::now()->format('H:i:s'); 
-                $object->time_out =NULL; 
-                $object->status = 'Present';
+                $object->time_out = Carbon::now()->format('H:i:s'); 
+                $object->status ='Present';
                 /*Save to the database table*/
                 $object->save();
 
@@ -97,49 +97,64 @@ class Attendance_controller extends Controller
             'data' => $data
         ]);
     }
-    public function update(Request $request){
-        /* Validate the form data */
-        $rules = [
-            'student_id' => 'required|exists:students,id',
-            'attendance_date' => 'required|date',
-            'shift_id' => 'required|exists:student_shifts,id',
-            'time_in' => 'required',
-            'time_out' => 'required',
-        ];
-        $validator = Validator::make($request->all(), $rules);
+   
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+    public function attendance_log(){
+        $sections=Section::latest()->get();
+        $shift=Student_shift::get();
+        $student=Student::get();
+         $classes=Student_class::with('section')->latest()->get();
+        return view('Backend.Pages.Student.Attendance.Log',compact('student','shift','classes','sections'));
+    }
+    public function attendance_log_all_data(Request $request) {
+        $search = $request->search['value'];
+        
+        $columnsForOrderBy = ['id', 'student.name', 'student.currentClass.name', 'student.section.name', 'status', 'time_in', 'created_at'];
+        $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
+        $orderDirection = $request->order[0]['dir'];
+    
+        $query = Student_attendance::with(['student', 'student.currentClass', 'student.section'])
+            ->when($search, function ($query) use ($search) {
+                $query->where('status', 'like', "%$search%")
+                    ->orWhere('time_in', 'like', "%$search%")
+                    ->orWhereHas('student.currentClass', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('student', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('student.section', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    });
+            });
+    
+        if ($request->has('class_id') && !empty($request->class_id)) {
+            $query->whereHas('student.currentClass', function ($query) use ($request) {
+                $query->where('id', $request->class_id);
+            });
         }
-
-        /* Find the existing instance */
-        $object = Student_attendance::find($request->id);
-        if (!$object) {
-            return response()->json([
-                'success' => false,
-                'message' => 'not found'
-            ], 404);
+    
+        if ($request->has('section_id') && !empty($request->section_id)) {
+            $query->whereHas('student.section', function ($query) use ($request) {
+                $query->where('id', $request->section_id);
+            });
         }
-
-        /* Update the Instance */
-        $object->student_id = $request->student_id;
-        $object->attendance_date = $request->attendance_date;
-        $object->shift_id = $request->shift_id;
-        $object->time_in =$request->time_in;
-        $object->time_out =$request->time_out; 
-        $object->status = $request->status ?? 'Present';
-
-        /* Save the changes to the database table */
-        $object->update();
-
+        $total = $query->count();
+        $items = $query->orderBy($orderByColumn, $orderDirection)
+                       ->skip($request->start)
+                       ->take($request->length)
+                       ->get();
+    
         return response()->json([
-            'success' => true,
-            'message' => 'Updated Successfully'
+            'draw' => $request->draw,
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+            'data' => $items,
         ]);
     }
+    
+    
+    
 
     public function delete(Request $request){
         $object = Student_attendance::find($request->id); 

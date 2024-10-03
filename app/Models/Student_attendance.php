@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Student_attendance extends Model
 {
     use HasFactory;
-    public function shift(){
-        return $this->belongsTo(Student_shift::class,'shift_id','id');
-    }
+    protected $table = 'student_attendances';
+    protected $guarded = [];
     public function student(){
         return $this->belongsTo(Student::class,'student_id','id');
     }
