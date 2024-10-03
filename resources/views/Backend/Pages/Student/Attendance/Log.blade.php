@@ -1,6 +1,8 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
 @section('style')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 <style>
    @media (min-width: 768px) {
     .col-md-6{
@@ -26,6 +28,7 @@
                                 <th class="">Class </th>
                                 <th class="">Section</th>
                                 <th class="">Status</th>
+                                <th class="">Date</th>
                                 <th class="">Time In</th>
                             </tr>
                         </thead>
@@ -44,6 +47,8 @@
 @endsection
 
 @section('script')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     var classes = @json($classes);
@@ -77,7 +82,32 @@ $(document).ready(function(){
         $('.select2').select2(); 
     }, 100);
 
-    // Initialize DataTable
+    /* Create Date Range Filter*/
+     var date_filter = '<label style="margin-left: 10px;">';
+    date_filter += '<input type="text" id="search_date_range" class="form-control" placeholder="Select Date Range" autocomplete="off" />';
+    date_filter += '</label>';
+
+    setTimeout(() => {
+        $('.dataTables_length').append(date_filter);
+
+        // Initialize Date Picker
+        $('#search_date_range').daterangepicker({
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            autoUpdateInput: false
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            table.ajax.reload(null, false); 
+        }).on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            table.ajax.reload(null, false); 
+        });
+
+    }, 100);
+
+
+    /* Initialize DataTable*/
     var table = $("#datatable1").DataTable({
         "processing": true,
         "responsive": true,
@@ -88,6 +118,7 @@ $(document).ready(function(){
             data: function(d) {
                 d.class_id = $('#search_class_id').val();
                 d.section_id = $('#search_section_id').val();
+                d.date_range = $('#search_date_range').val(); 
             },
             beforeSend: function(request) {
                 request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
@@ -125,6 +156,12 @@ $(document).ready(function(){
                   
                }
             },
+            {
+                "data": "attendance_date",
+                render:function(data,type,row){
+                    return moment(data).format("DD MMMM YYYY");
+               }
+            },
             { "data": "time_in",
                 render:function(data,type,row){
                     if (data) {
@@ -142,6 +179,7 @@ $(document).ready(function(){
                }
                
             },
+            
         ],
         order: [
             [0, "desc"]
@@ -159,48 +197,8 @@ $(document).ready(function(){
         table.ajax.reload(null, false);
     });
 
-    /* Select or Deselect All Checkboxes*/
-    $(document).on('click', '#selectAll', function() {
-        if ($(this).is(':checked')) {
-            $('.student-checkbox').prop('checked', true);
-        } else {
-            $('.student-checkbox').prop('checked', false);
-        }
-    });
-
-    /*** Select or Deselect Individual Checkboxes ***/
-    table.on('draw.dt', function() {
-        if ($('#selectAll').is(':checked')) {
-            $('.student-checkbox').prop('checked', true);
-        } else {
-            $('.student-checkbox').prop('checked', false);
-        }
-    });
-    $(document).on('click', '#submitAttendance', function() {
-        var selectedStudents = [];
-        $('.student-checkbox:checked').each(function() {
-            selectedStudents.push($(this).val());
-        });
-        if(selectedStudents.length > 0) {
-            $.ajax({
-                url: "{{ route('admin.student.attendence.store') }}",
-                type: "POST",
-                data: {
-                    student_ids: selectedStudents,
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    toastr.success(response.message);
-                    table.ajax.reload(null, false);
-                },
-                error: function(xhr, status, error) {
-                    toastr.error('An error occurred. Please try again.');
-                }
-            });
-        } else {
-            toastr.error('Please select at least one student!');
-        }
-    });
+    
+    
 });
 </script>
 @endsection

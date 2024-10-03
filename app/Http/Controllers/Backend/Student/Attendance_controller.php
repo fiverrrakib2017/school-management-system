@@ -139,6 +139,12 @@ class Attendance_controller extends Controller
                 $query->where('id', $request->section_id);
             });
         }
+        if ($request->has('date_range') && !empty($request->date_range)) {
+            $dateRange = explode(' - ', $request->date_range);
+            $startDate = trim($dateRange[0]);
+            $endDate = trim($dateRange[1]);
+            $query->whereBetween('attendance_date', [$startDate, $endDate]);
+        }
         $total = $query->count();
         $items = $query->orderBy($orderByColumn, $orderDirection)
                        ->skip($request->start)
