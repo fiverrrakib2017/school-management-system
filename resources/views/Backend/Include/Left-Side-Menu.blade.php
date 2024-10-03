@@ -64,6 +64,12 @@
                       <li>
                          <a href="{{ route('admin.teacher.transaction.report') }}">Report</a>
                       </li>
+                      <li>
+                           <a href="{{ route('admin.teacher.attendence.index') }}">Attendance</a>
+                        </li>
+                      <li>
+                      <a href="{{ route('admin.teacher.attendence.log') }}">Attendance Log</a>
+                        </li>
                    </ul>
                 </div>
              </li>

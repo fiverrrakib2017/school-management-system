@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\Shift_controller;
 use App\Http\Controllers\Backend\Student\StudentController;
 use App\Http\Controllers\Backend\Supplier\SupplierController;
+use App\Http\Controllers\Backend\Teacher\TeacherAttendance_controller;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
 use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controller;
 use Illuminate\Support\Facades\Route;
@@ -164,6 +165,15 @@ Route::group(['middleware'=>'admin'],function(){
                  Route::get('/get_transaction/{id}','get_transaction')->name('admin.teacher.transaction.get_transaction');
                 Route::get('/report','report')->name('admin.teacher.transaction.report');
                 Route::post('/report_generate','report_generate')->name('admin.teacher.transaction.report_generate');
+            });
+        });
+        Route::prefix('attendence')->group(function(){
+            Route::controller(TeacherAttendance_controller::class)->group(function(){
+                Route::get('/index','index')->name('admin.teacher.attendence.index');
+                Route::get('/all_data','all_data')->name('admin.teacher.attendence.all_data');
+                 Route::post('/store','store')->name('admin.teacher.attendence.store');
+                Route::get('/log','attendance_log')->name('admin.teacher.attendence.log');
+                Route::get('/attendance_log_all_data','attendance_log_all_data')->name('admin.teacher.attendence.log.all_data');
             });
         });
         
