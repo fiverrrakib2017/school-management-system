@@ -18,6 +18,7 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Class Name</th>
+                                <th class="">Section</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -175,6 +176,9 @@
           },
           {
             "data":"name"
+          },
+          {
+            "data":"sections"
           },
           {
             "data":null,

@@ -11,34 +11,34 @@ use Illuminate\Support\Facades\Validator;
 class classController extends Controller
 {
     public function index(){
+       // $studentClasses = Student_class::with('sections')->get();
         $data=Section::latest()->get();
         return view('Backend.Pages.Student.Class.index',compact('data'));
     }
-    public function all_data(Request $request){
+    public function all_data(Request $request)
+    {
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id',  'name', 'created_at'];
+        $columnsForOrderBy = ['id', 'name', 'created_at'];
         $orderByColumnIndex = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
-        /*Start building the query*/
-        $query = Student_class::query();
+        $query = Student_class::with('sections');
 
-        /*Apply the search filter*/
+        /*Apply the search filter*/ 
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
-                //   ->orWhere('status', 'like', "%$search%")
-                //   ->orWhereHas('section', function($q) use ($search) {
-                //       $q->where('name', 'like', "%$search%");
-                //   });
+                $q->where('name', 'like', "%$search%")
+                ->orWhereHas('sections', function($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                });
             });
         }
 
         /* Get the total count of records*/
         $totalRecords = Student_class::count();
 
-        /* Get the count of filtered records*/
+        // Get the count of filtered records
         $filteredRecords = $query->count();
 
         /* Apply ordering, pagination and get the data*/
@@ -47,14 +47,24 @@ class classController extends Controller
                     ->take($request->length)
                     ->get();
 
+        /* Format the data for DataTables*/
+        $formattedData = $items->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'sections' => $item->sections->pluck('name')->implode(', '),
+            ];
+        });
+
         /* Return the response in JSON format*/
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $filteredRecords,
-            'data' => $items,
+            'data' => $formattedData,
         ]);
     }
+
     public function store(Request $request){
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
