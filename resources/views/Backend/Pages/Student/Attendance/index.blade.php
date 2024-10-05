@@ -30,7 +30,7 @@
                                 <th class=""></th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="table_data"></tbody>
                     </table>
                 </div>
             </div>
@@ -110,7 +110,7 @@ $(document).ready(function(){
             },
             beforeSend: function(request) {
                 request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-            }
+            },
         },
         language: {
             searchPlaceholder: 'Search...',
@@ -156,6 +156,7 @@ $(document).ready(function(){
     /*section filter changes*/
     $(document).on('change', '#search_section_id', function() {
         table.ajax.reload(null, false);
+        $("#table_data").removeClass('d-none');
     });
 
     /* Select or Deselect All Checkboxes*/
