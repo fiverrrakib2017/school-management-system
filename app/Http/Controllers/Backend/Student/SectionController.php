@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Backend\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Models\Student_class;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class SectionController extends Controller
 {
     public function index(){
-        return view('Backend.Pages.Student.Section.index');
+        $classes = Student_class::all();
+        return view('Backend.Pages.Student.Section.index',compact('classes'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
@@ -36,6 +38,7 @@ class SectionController extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'class_name' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -48,6 +51,7 @@ class SectionController extends Controller
         /*Create a new Section record*/
         $section = new Section();
         $section->name = $request->name;
+        $section->class_id = $request->class_name;
         $section->status = 1;
 
         /* Save the section record to the database*/
@@ -80,6 +84,7 @@ class SectionController extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'class_name' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -100,6 +105,7 @@ class SectionController extends Controller
 
         /* Update the section record */
         $section->name = $request->name;
+        $section->class_id = $request->class_name;
         $section->status = 1;
 
         /* Save the updated section record to the database*/

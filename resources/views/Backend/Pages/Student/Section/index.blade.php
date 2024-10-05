@@ -48,6 +48,15 @@
                     <!----- Start Add Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
+                            <label for="sectionName">Class</label>
+                            <select type="text" name="class_name" id="class_name" class="form-select">
+                                <option value="">---Select---</option>
+                                @foreach ($classes as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
                             <label for="sectionName">Section Name</label>
                             <input type="text" name="name" id="sectionName" placeholder="Enter Section Name" class="form-control">
                         </div>
@@ -78,6 +87,15 @@
                 <div class="modal-body">
                     <!----- Start Update Form input ------->
                     <div class="row">
+                        <div class="form-group mb-2">
+                            <label for="sectionName">Class</label>
+                            <select type="text" name="class_name" id="class_name" class="form-select">
+                                <option value="">---Select---</option>
+                                @foreach ($classes as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Section Name</label>
                             <input type="text" name="id" class="d-none" required>
@@ -180,6 +198,7 @@
               if (response.success) {
                 $('#editModal').modal('show');
                 $('#editModal input[name="id"]').val(response.data.id);
+                $('#editModal select[name="class_name"]').val(response.data.class_id);
                 $('#editModal input[name="name"]').val(response.data.name);
                 $('#editModal select[name="status"]').val(response.data.status);
               } else {

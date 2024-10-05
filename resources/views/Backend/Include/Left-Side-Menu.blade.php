@@ -177,7 +177,7 @@
              <li>
                 <a href="#accounts_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-file-invoice-dollar"></i>
-                <span> Accounts Management </span>
+                <span>Accounts</span>
                 <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="accounts_management">
