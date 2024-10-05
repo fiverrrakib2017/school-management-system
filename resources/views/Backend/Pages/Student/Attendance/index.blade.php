@@ -82,8 +82,23 @@ $(document).ready(function(){
         $('.dataTables_length').append(section_filter);
         $('.select2').select2(); 
     }, 100);
+    $(document).on('change','#search_class_id',function(){
+        var selectedClassId = $(this).val();
+        var filteredSections = sections.filter(function(section) {
+            /*Filter sections by class_id*/ 
+            return section.class_id == selectedClassId; 
+        });
 
-    // Initialize DataTable
+        /* Update Section dropdown*/
+        var sectionOptions = '<option value="">--Select Section--</option>';
+        filteredSections.forEach(function(section) {
+            sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+        });
+
+        $('#search_section_id').html(sectionOptions); 
+        $('#search_section_id').select2(); 
+    });
+    /*Initialize DataTable*/ 
     var table = $("#datatable1").DataTable({
         "processing": true,
         "responsive": true,
