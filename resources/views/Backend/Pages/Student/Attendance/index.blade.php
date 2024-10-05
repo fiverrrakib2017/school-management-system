@@ -15,8 +15,6 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <!-- <button data-bs-toggle="modal" data-bs-target="#addModal"  class="btn btn-success "><i class="mdi mdi-account-plus"></i>
-          Add New Attendance</button> -->
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
@@ -73,9 +71,9 @@ $(document).ready(function(){
     var section_filter = '<label style="margin-left: 10px;">';
     section_filter += '<select id="search_section_id" class="form-select select2">';
     section_filter += '<option value="">--Select Section--</option>';
-    sections.forEach(function(item) {
-        section_filter += '<option value="' + item.id + '">' + item.name + '</option>';
-    });
+    // sections.forEach(function(item) {
+    //     section_filter += '<option value="' + item.id + '">' + item.name + '</option>';
+    // });
     section_filter += '</select></label>';
 
     setTimeout(() => {

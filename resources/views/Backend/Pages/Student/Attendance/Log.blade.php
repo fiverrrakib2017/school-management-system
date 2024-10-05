@@ -72,9 +72,9 @@ $(document).ready(function(){
     var section_filter = '<label style="margin-left: 10px;">';
     section_filter += '<select id="search_section_id" class="form-select select2">';
     section_filter += '<option value="">--Select Section--</option>';
-    sections.forEach(function(item) {
-        section_filter += '<option value="' + item.id + '">' + item.name + '</option>';
-    });
+    // sections.forEach(function(item) {
+    //     section_filter += '<option value="' + item.id + '">' + item.name + '</option>';
+    // });
     section_filter += '</select></label>';
 
     setTimeout(() => {
@@ -105,8 +105,23 @@ $(document).ready(function(){
         });
 
     }, 100);
+    /*get class depending on section*/
+    $(document).on('change','#search_class_id',function(){
+        var selectedClassId = $(this).val();
+        var filteredSections = sections.filter(function(section) {
+            /*Filter sections by class_id*/ 
+            return section.class_id == selectedClassId; 
+        });
 
+        /* Update Section dropdown*/
+        var sectionOptions = '<option value="">--Select Section--</option>';
+        filteredSections.forEach(function(section) {
+            sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+        });
 
+        $('#search_section_id').html(sectionOptions); 
+        $('#search_section_id').select2(); 
+    });
     /* Initialize DataTable*/
     var table = $("#datatable1").DataTable({
         "processing": true,

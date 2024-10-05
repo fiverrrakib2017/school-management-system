@@ -159,9 +159,6 @@
                                 <label for="current_class">Section Name</label>
                                 <select type="text" class="form-select" name="section_id" required>
                                     <option value="">---Select---</option>
-                                    @foreach($section as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -203,15 +200,29 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        // $("select[name='gender']").select2();
          $("select[name='current_class']").select2();
          $("select[name='section_id']").select2();
-        // $("select[name='previous_class']").select2();
-        // $("select[name='status']").select2();
 
         $("input[name='current_address']").on('keyup',function(){
             var current_address = $(this).val();
             $("input[name='permanent_address']").val(current_address);
+        });
+        $(document).on('change','select[name="current_class"]',function(){
+            var sections = @json($section);
+            var selectedClassId = $(this).val();
+            var filteredSections = sections.filter(function(section) {
+                /*Filter sections by class_id*/ 
+                return section.class_id == selectedClassId; 
+            });
+
+            /* Update Section dropdown*/
+            var sectionOptions = '<option value="">--Select Section--</option>';
+            filteredSections.forEach(function(section) {
+                sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+            });
+
+            $('select[name="section_id"]').html(sectionOptions); 
+            $('select[name="section_id"]').select2(); 
         });
 
         $('#photo').change(function() {
