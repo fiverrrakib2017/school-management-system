@@ -16,7 +16,8 @@
                         <thead>
                             <tr>
                                 <th class="">No.</th>
-                                <th class="">Section Name</th>
+                                <th class="">Class Name</th>
+                                <th class="">Sections</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -141,45 +142,42 @@
 @section('script')
 
   <script type="text/javascript">
-     $(document).ready(function(){
+    $(document).ready(function(){
 
-    var table=$("#datatable1").DataTable({
-    "processing":true,
-    "responsive": true,
-    "serverSide":true,
-    beforeSend: function () {
-        //$('#preloader').addClass('active');
-    },
-    complete: function(){
-        //$('.product_loading').css({"display":"none"});
-    },
-    ajax: "{{ route('admin.student.section.all_data') }}",
-    language: {
-        searchPlaceholder: 'Search...',
-        sSearch: '',
-        lengthMenu: '_MENU_ items/page',
-    },
-    "columns":[
-        {
-        "data":"id"
+        var table=$("#datatable1").DataTable({
+        "processing":true,
+        "responsive": true,
+        "serverSide":true,
+        
+        ajax: "{{ route('admin.student.class.all_data') }}",
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
         },
-        {
-        "data":"name"
-        },
-        {
-        "data":null,
-        render:function(data,type,row){
-            return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
-        }
-        },
-    ],
-    order:[
-        [0, "desc"]
-    ],
+        "columns":[
+            {
+            "data":"id"
+            },
+            {
+            "data":"name"
+            },
+            {
+            "data":"sections"
+            },
+            {
+            "data":null,
+            render:function(data,type,row){
+                return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
+            }
+            },
+        ],
+        order:[
+            [0, "desc"]
+        ],
 
-    });
-
+        });
     });
 
 
