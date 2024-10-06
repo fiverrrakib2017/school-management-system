@@ -160,6 +160,7 @@ $(document).ready(function(){
                         });
 
                         $('#datatable1 tbody').html(html);
+                        $('#datatable1').DataTable();
                     } else {
                         $('#datatable1 tbody').html('<tr id="no-data"><td colspan="7" class="text-center">No data available</td></tr>');
                     }

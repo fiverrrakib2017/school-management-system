@@ -100,7 +100,6 @@ class Attendance_controller extends Controller
                     ['student_id', '=', $studentId],
                     ['attendance_date', '=', $today]
                 ])->exists();
-
                 /*if not present*/
                 if (!$attendanceExists) { 
                     $object = new Student_attendance();

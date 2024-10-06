@@ -173,6 +173,9 @@ $(document).ready(function(){
                     if (response.success) {
                         toastr.success(response.message);
                     }
+                    if(response.success==false){
+                        toastr.error(response.message);
+                    }
                 },
                 error: function(xhr, status, error) {
                     toastr.error('An error occurred. Please try again.');
