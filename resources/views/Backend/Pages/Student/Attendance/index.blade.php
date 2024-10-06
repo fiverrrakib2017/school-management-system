@@ -170,8 +170,9 @@ $(document).ready(function(){
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    toastr.success(response.message);
-                    table.ajax.reload(null, false);
+                    if (response.success) {
+                        toastr.success(response.message);
+                    }
                 },
                 error: function(xhr, status, error) {
                     toastr.error('An error occurred. Please try again.');

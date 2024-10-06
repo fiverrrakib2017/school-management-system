@@ -110,7 +110,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/delete','delete')->name('admin.student.attendence.delete');
                 Route::get('/get_attendance/{id}','get_attendance')->name('admin.student.attendence.get_attendance');
                 Route::get('/log','attendance_log')->name('admin.student.attendence.log');
-                Route::get('/attendance_log_all_data','attendance_log_all_data')->name('admin.student.attendence.log.all_data');
+                Route::post('/report','attendance_report')->name('admin.student.attendence.report');
             });
         });
         /*Student Fees Type */

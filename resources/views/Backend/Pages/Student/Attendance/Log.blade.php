@@ -2,22 +2,46 @@
 @section('title','Dashboard | Admin Panel')
 @section('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
-<style>
-   @media (min-width: 768px) {
-    .col-md-6{
-        width: 100% !important;
-    }    
-   }
-</style>
-
 @endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          </div>
+          <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Class</label>
+                        <select name="class_id"  class="form-select">
+                            <option value="">---Select---</option>
+                            @foreach ($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Section </label>
+                        <select name="section_id"  class="form-select">
+                            <option value="">---Select---</option>
+                        
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Date </label>
+                        <input type="text" id="date_range" class="form-control" placeholder="Select Date Range" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mt-2">
+                    <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Report Find</button>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
@@ -32,7 +56,11 @@
                                 <th class="">Time In</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                        <tr id="no-data">
+                            <td colspan="7" class="text-center">No data available</td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -47,173 +75,121 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    var classes = @json($classes);
-    var sections = @json($sections);
+    $("select[name='class_id']").select2();
+    $("select[name='section_id']").select2();
 
-    // Create Class Filter
-    var class_filter = '<label style="margin-left: 10px;">';
-    class_filter += '<select id="search_class_id" class="form-select select2">';
-    class_filter += '<option value="">--Select Class--</option>';
-    classes.forEach(function(item) {
-        class_filter += '<option value="' + item.id + '">' + item.name + '</option>';
-    });
-    class_filter += '</select></label>';
-
-    setTimeout(() => {
-        $('.dataTables_length').append(class_filter);
-        $('.select2').select2(); 
-    }, 100);
-
-    // Create Section Filter
-    var section_filter = '<label style="margin-left: 10px;">';
-    section_filter += '<select id="search_section_id" class="form-select select2">';
-    section_filter += '<option value="">--Select Section--</option>';
-    // sections.forEach(function(item) {
-    //     section_filter += '<option value="' + item.id + '">' + item.name + '</option>';
-    // });
-    section_filter += '</select></label>';
-
-    setTimeout(() => {
-        $('.dataTables_length').append(section_filter);
-        $('.select2').select2(); 
-    }, 100);
-
-    /* Create Date Range Filter*/
-     var date_filter = '<label style="margin-left: 10px;">';
-    date_filter += '<input type="text" id="search_date_range" class="form-control" placeholder="Select Date Range" autocomplete="off" />';
-    date_filter += '</label>';
-
-    setTimeout(() => {
-        $('.dataTables_length').append(date_filter);
-
-        // Initialize Date Picker
-        $('#search_date_range').daterangepicker({
-            locale: {
-                format: 'YYYY-MM-DD'
-            },
-            autoUpdateInput: false
-        }).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-            table.ajax.reload(null, false); 
-        }).on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-            table.ajax.reload(null, false); 
-        });
-
-    }, 100);
-    /*get class depending on section*/
-    $(document).on('change','#search_class_id',function(){
+    $(document).on('change','select[name="class_id"]', function() {
+        var sections = @json($sections);
         var selectedClassId = $(this).val();
+
         var filteredSections = sections.filter(function(section) {
-            /*Filter sections by class_id*/ 
             return section.class_id == selectedClassId; 
         });
 
-        /* Update Section dropdown*/
         var sectionOptions = '<option value="">--Select Section--</option>';
         filteredSections.forEach(function(section) {
             sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
         });
 
-        $('#search_section_id').html(sectionOptions); 
-        $('#search_section_id').select2(); 
+        $('select[name="section_id"]').html(sectionOptions); 
+        $('select[name="section_id"]').select2(); 
     });
-    /* Initialize DataTable*/
-    var table = $("#datatable1").DataTable({
-        "processing": true,
-        "responsive": true,
-        "serverSide": true,
-        ajax: {
-            url: "{{ route('admin.student.attendence.log.all_data') }}",
-            type: 'GET',
-            data: function(d) {
-                d.class_id = $('#search_class_id').val();
-                d.section_id = $('#search_section_id').val();
-                d.date_range = $('#search_date_range').val(); 
-            },
-            beforeSend: function(request) {
-                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-            }
-        },
-        language: {
-            searchPlaceholder: 'Search...',
-            sSearch: '',
-            lengthMenu: '_MENU_ items/page',
-        },
-        "columns": [
-            { "data": "id" },
-            {
-                "data": "student.name",
-                render: function(data, type, row) {
-                    return `<a href="{{ route('admin.student.view', '') }}/${row.student.id}">${data}</a>`;
-                }
-            },
-            { 
-                "data": "student.current_class.name", 
-                render: function(data, type, row) {
-                    return data ? data : 'N/A';
-                }
-            },
-            { 
-                "data": "student.section.name", 
-                render: function(data, type, row) {
-                    return data ? data : 'N/A';
-                }
-            },
-            {
-                "data": "status",
-               render:function(data,type,row){
-                   return `<span class="badge bg-${data === 'Present' ? 'success' : 'danger'}">${data}</span>`
-                  
-               }
-            },
-            {
-                "data": "attendance_date",
-                render:function(data,type,row){
-                    return moment(data).format("DD MMMM YYYY");
-               }
-            },
-            { "data": "time_in",
-                render:function(data,type,row){
-                    if (data) {
-                        let date = new Date(`1970-01-01T${data}Z`); 
-                        let hours = date.getUTCHours();
-                        let minutes = date.getUTCMinutes();
-                        let ampm = hours >= 12 ? 'PM' : 'AM';
-                        hours = hours % 12; 
-                        hours = hours ? hours : 12; 
-                        minutes = minutes < 10 ? '0' + minutes : minutes;
-                        let strTime = hours + ':' + minutes + ' ' + ampm;
-                        return strTime;
+
+    $("button[name='submit_btn']").on('click', function(e) {
+        e.preventDefault();
+
+        var submitBtn = $('button[name="submit_btn"]');
+        var originalBtnText = submitBtn.html();
+        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>');
+        submitBtn.prop('disabled', true);
+
+        var class_id = $("select[name='class_id']").val();
+        var section_id = $("select[name='section_id']").val();
+        var date_range = $('#date_range').val();
+        var student_id = null;
+
+        if (class_id != '' && section_id != '') {
+            $.ajax({
+                url: "{{ route('admin.student.attendence.report') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { class_id: class_id, section_id: section_id, student_id: student_id, date_range: date_range },
+                success: function(data) {
+                    if (data.code == 200 && data.data.length > 0 && data.data != null && data.data != undefined && data.data != '' && data.data != 'null' && data.data != 'undefined') {
+                       
+                        var students = data.data;
+                        var html = ''; 
+
+                        $.each(students, function(index, attendanceArray) {
+                            $.each(attendanceArray, function(index, attendance) {
+                                var student = attendance.student;
+                                var status; 
+                                if (attendance.status == 'Present') {
+                                    status ='<span class="badge bg-success">Present</span>';
+                                }else if(attendance.status == 'Absent'){
+                                    status ='<span class="badge bg-danger">Absent</span>';
+                                }
+                                /*Attendance Time Formate*/
+                                var timeIn = 'N/A';
+                                if (attendance.time_in) {
+                                    let date = new Date(`1970-01-01T${attendance.time_in}Z`);
+                                    let hours = date.getUTCHours();
+                                    let minutes = date.getUTCMinutes();
+
+                                    let ampm = hours >= 12 ? 'PM' : 'AM';
+                                    hours = hours % 12; 
+                                    hours = hours ? hours : 12; 
+                                    minutes = minutes < 10 ? '0' + minutes : minutes; 
+                                    timeIn = hours + ':' + minutes + ' ' + ampm; 
+                                }
+                                html += '<tr>';
+                                html += '<td>' + attendance.id + '</td>'; 
+                                html += '<td>' + student.name + '</td>';   
+                                html += '<td>' + student.current_class.name + '</td>';
+                                html += '<td>' + student.section.name + '</td>'; 
+                                html += '<td>' + status + '</td>'; 
+                                html += '<td>' + attendance.attendance_date + '</td>'; 
+                                html += '<td>' + timeIn + '</td>'; 
+                                html += '</tr>'; 
+                            });
+                        });
+
+                        $('#datatable1 tbody').html(html);
+                    } else {
+                        $('#datatable1 tbody').html('<tr id="no-data"><td colspan="7" class="text-center">No data available</td></tr>');
                     }
-                return 'N/A';
-               }
-               
-            },
-            
-        ],
-        order: [
-            [0, "desc"]
-        ],
+                },
+                error: function(xhr, status, error) {
+                    toastr.error('An error occurred. Please try again.');
+                    submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                }, 
+                complete:function(){
+                    submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                }
+            });
+        } else {
+            toastr.error('Please select class and section.');
+            submitBtn.html(originalBtnText);
+            submitBtn.prop('disabled', false);
+        }
     });
 
-
-
-    /*** Class filter changes */ 
-    $(document).on('change', '#search_class_id', function() {
-        table.ajax.reload(null, false);
+    // Date Range Picker Initialization
+    $('#date_range').daterangepicker({
+        locale: { format: 'YYYY-MM-DD' },
+        autoUpdateInput: false
+    }).on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    }).on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
     });
-    /*section filter changes*/
-    $(document).on('change', '#search_section_id', function() {
-        table.ajax.reload(null, false);
-    });
-
-    
-    
 });
 </script>
 @endsection

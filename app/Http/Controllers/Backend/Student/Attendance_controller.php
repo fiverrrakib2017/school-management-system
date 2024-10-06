@@ -65,31 +65,78 @@ class Attendance_controller extends Controller
     
     public function store(Request $request){
         $studentIds = $request->input('student_ids');
-    
+        $students = Student::whereIn('id', $studentIds)->get();
+        
+        $first_class_check=$students->first()->current_class;
+        $first_section_check=$students->first()->section_id;
+
+        foreach ($students as $student) {
+            if ($student->current_class != $first_class_check) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'All students must be in the same class.'
+                ], 400);
+            }
+            if ($student->section_id != $first_section_check) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'All students must be in the same section.'
+                ], 400);
+            }
+        }
+        $all_students = Student::where([
+            'current_class' => $first_class_check,
+            'section_id' => $first_section_check
+        ])->pluck('id')->toArray(); 
+
+        $absentStudents = array_diff($all_students, $studentIds);
+        $today = now()->format('Y-m-d');
+
         if (!empty($studentIds)) {
             foreach ($studentIds as $studentId) {
 
-                $object = new Student_attendance();
-                $object->student_id = $studentId;
-                $object->attendance_date =now();
-                $object->shift_id = 1;
-                $object->time_in = Carbon::now()->format('H:i:s'); 
-                $object->time_out = Carbon::now()->format('H:i:s'); 
-                $object->status ='Present';
-                /*Save to the database table*/
-                $object->save();
+                /*To check whether the student has attended today*/ 
+                $attendanceExists = Student_attendance::where([
+                    ['student_id', '=', $studentId],
+                    ['attendance_date', '=', $today]
+                ])->exists();
 
-
+                /*if not present*/
+                if (!$attendanceExists) { 
+                    $object = new Student_attendance();
+                    $object->student_id = $studentId;
+                    $object->attendance_date = $today;
+                    $object->shift_id = 1;
+                    $object->time_in = Carbon::now()->format('H:i:s');
+                    $object->time_out = Carbon::now()->format('H:i:s');
+                    $object->status = 'Present';
+                    $object->save(); 
+                }
             }
-            return response()->json([
-                'success' => true,
-                'message' => 'Completed'
-            ]);
+        }
+
+        if (!empty($absentStudents)) {
+            foreach ($absentStudents as $absentStudentId) {
+                $attendanceExists = Student_attendance::where([
+                    ['student_id', '=', $absentStudentId],
+                    ['attendance_date', '=', $today]
+                ])->exists();
+
+                /*If Not Absent Record Exists*/ 
+                if (!$attendanceExists) { 
+                    $object = new Student_attendance();
+                    $object->student_id = $absentStudentId;
+                    $object->attendance_date = $today;
+                    $object->shift_id = 1;
+                    $object->status = 'Absent';
+                    $object->save(); 
+                }
+            }
         }
         return response()->json([
-            'success'=>false,
-            'message' => 'No student selected.'
-        ], 400);
+            'success'=>true,
+            'message' => 'Attendance marked successfully'
+        ]);
     }
     public function get_attendance($id){
         $data = Student_attendance::find($id);
@@ -171,4 +218,50 @@ class Attendance_controller extends Controller
             'message' => 'Delete Successfully'
         ]);
     }
+    public function attendance_report(Request $request){
+        $filters = []; 
+
+        if (isset($request->class_id) && !empty($request->class_id)) {
+            $filters['current_class'] = $request->class_id;
+        }
+        if (isset($request->section_id) && !empty($request->section_id)) {
+            $filters['section_id'] = $request->section_id;
+        }
+
+        $startDate = null;
+        $endDate = null;
+
+        if (isset($request->date_range) && !empty($request->date_range)) {
+            $dateRange = explode(' - ', $request->date_range);
+            $startDate = $dateRange[0]; 
+            $endDate = $dateRange[1];   
+        }
+        $students = Student::where($filters)->get();
+        $students_data = []; 
+
+        foreach ($students as $student) {
+            $attendanceQuery = Student_attendance::with('student', 'student.currentClass', 'student.section')->where('student_id', $student->id);
+
+            if ($startDate && $endDate) {
+                $attendanceQuery->whereBetween('attendance_date', [$startDate, $endDate]);
+            }
+            $attendance = $attendanceQuery->get();
+            $students_data[] = $attendance;
+        }
+    
+        if ($students->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'code' => 200,
+                'data' => []
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'code' => 200,
+            'data' => $students_data
+        ]);
+    }
+
+    
 }

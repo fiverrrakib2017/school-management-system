@@ -11,6 +11,7 @@ class Student_attendance extends Model
     protected $table = 'student_attendances';
     protected $guarded = [];
     public function student(){
-        return $this->belongsTo(Student::class,'student_id','id');
+        return $this->belongsTo(Student::class,'student_id', 'id');
     }
+    
 }
