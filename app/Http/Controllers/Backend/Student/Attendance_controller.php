@@ -62,6 +62,7 @@ class Attendance_controller extends Controller
             'data' => $items,
         ]);
     }
+    
     public function store(Request $request){
         $studentIds = $request->input('student_ids');
     

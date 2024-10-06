@@ -76,6 +76,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete','delete')->name('admin.student.delete');
             Route::get('/view/{id}','view')->name('admin.student.view');
             Route::get('/get_student/{id}','get_student')->name('admin.student.get_student');
+            Route::post('/student_filter','student_filter')->name('admin.student.student_filter');
         });
         
         /*Student Shift */
@@ -104,7 +105,6 @@ Route::group(['middleware'=>'admin'],function(){
         Route::prefix('attendence')->group(function(){
             Route::controller(Attendance_controller::class)->group(function(){
                 Route::get('/index','index')->name('admin.student.attendence.index');
-                Route::get('/all_data','all_data')->name('admin.student.attendence.all_data');
                 Route::post('/store','store')->name('admin.student.attendence.store');
                 Route::post('/update','update')->name('admin.student.attendence.update');
                 Route::post('/delete','delete')->name('admin.student.attendence.delete');

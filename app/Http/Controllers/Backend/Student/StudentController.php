@@ -118,4 +118,32 @@ class StudentController extends Controller
       return   Student::with('currentClass')->find($id);
     }
 
+    public function student_filter(Request $request){
+        $filters=array(); 
+
+        if (isset($request->class_id) && !empty($request->class_id)) {
+            $filters['current_class']=$request->class_id;
+        }
+        if (isset($request->section_id) && !empty($request->section_id)) {
+           $filters['section_id']=$request->section_id;
+        }
+        if (isset($request->student_id) && !empty($request->section_id)) {
+           $filters['id']=$request->student_id;
+        }
+
+        $students =  Student::with('currentClass','section')->where($filters)->get();
+        if ($students->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'code'=>200,
+                'data' => []
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'code'=>200,
+            'data' => $students
+        ]);
+    }
+
 }

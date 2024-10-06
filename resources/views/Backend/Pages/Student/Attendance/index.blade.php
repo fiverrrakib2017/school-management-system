@@ -1,21 +1,39 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-@section('style')
-<style>
-   @media (min-width: 768px) {
-    .col-md-6{
-        width: 100% !important;
-    }    
-   }
-</style>
 
-@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          </div>
+          <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Class</label>
+                            <select name="class_id"  class="form-select">
+                                <option value="">---Select---</option>
+                                @foreach ($classes as $class)
+                                    <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Section </label>
+                            <select name="section_id"  class="form-select">
+                                <option value="">---Select---</option>
+                            
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mt-2">
+                        <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Now</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
@@ -30,11 +48,15 @@
                                 <th class=""></th>
                             </tr>
                         </thead>
-                        <tbody id="table_data"></tbody>
+                        <tbody>
+                        <tr id="no-data">
+                            <td colspan="7" class="text-center">No data available</td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer text-right d-none">
                 <button type="button" id="submitAttendance" class="btn btn-success">Submit Attendance</button>
             </div>
         </div>
@@ -50,37 +72,10 @@
 @section('script')
 <script type="text/javascript">
 $(document).ready(function(){
-    var classes = @json($classes);
-    var sections = @json($sections);
-
-    // Create Class Filter
-    var class_filter = '<label style="margin-left: 10px;">';
-    class_filter += '<select id="search_class_id" class="form-select select2">';
-    class_filter += '<option value="">--Select Class--</option>';
-    classes.forEach(function(item) {
-        class_filter += '<option value="' + item.id + '">' + item.name + '</option>';
-    });
-    class_filter += '</select></label>';
-
-    setTimeout(() => {
-        $('.dataTables_length').append(class_filter);
-        $('.select2').select2(); 
-    }, 100);
-
-    // Create Section Filter
-    var section_filter = '<label style="margin-left: 10px;">';
-    section_filter += '<select id="search_section_id" class="form-select select2">';
-    section_filter += '<option value="">--Select Section--</option>';
-    // sections.forEach(function(item) {
-    //     section_filter += '<option value="' + item.id + '">' + item.name + '</option>';
-    // });
-    section_filter += '</select></label>';
-
-    setTimeout(() => {
-        $('.dataTables_length').append(section_filter);
-        $('.select2').select2(); 
-    }, 100);
-    $(document).on('change','#search_class_id',function(){
+    $("select[name='class_id']").select2();
+    $("select[name='section_id']").select2();
+    $(document).on('change','select[name="class_id"]',function(){
+        var sections = @json($sections);
         var selectedClassId = $(this).val();
         var filteredSections = sections.filter(function(section) {
             /*Filter sections by class_id*/ 
@@ -93,89 +88,74 @@ $(document).ready(function(){
             sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
         });
 
-        $('#search_section_id').html(sectionOptions); 
-        $('#search_section_id').select2(); 
+        $('select[name="section_id"]').html(sectionOptions); 
+        $('select[name="section_id"]').select2(); 
     });
-    /*Initialize DataTable*/ 
-    var table = $("#datatable1").DataTable({
-        "processing": true,
-        "responsive": true,
-        "serverSide": true,
-        ajax: {
-            url: "{{ route('admin.student.attendence.all_data') }}",
-            type: 'GET',
-            data: function(d) {
-                d.class_id = $('#search_class_id').val();
-                d.section_id = $('#search_section_id').val();
-            },
-            beforeSend: function(request) {
-                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-            },
-        },
-        language: {
-            searchPlaceholder: 'Search...',
-            sSearch: '',
-            lengthMenu: '_MENU_ items/page',
-        },
-        "columns": [
-            {
-                "data": "id",
-                render: function(data, type, row) {
-                    return '<input type="checkbox" name="student_ids[]" value="' + row.id + '" class="student-checkbox form-check-input" ' + (row.attendance_status === 'Present' ? 'checked' : '') + '>';
+    $("button[name='submit_btn']").on('click', function(e) {
+        e.preventDefault();
+        var submitBtn = $('button[name="submit_btn"]');
+        var originalBtnText = submitBtn.html();
+        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>');
+        submitBtn.prop('disabled', true);
+        var class_id = $("select[name='class_id']").val();
+        var section_id = $("select[name='section_id']").val();
+        var student_id = null;
+        if(class_id != '' && section_id != ''){
+            $.ajax({
+                url:"{{ route('admin.student.student_filter') }}",
+                type:"POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data:{class_id:class_id,section_id:section_id, student_id:student_id},
+                success:function(data){
+                    if(data.code == 200 && data.data.length > 0 && data.data != null && data.data != undefined && data.data != '' && data.data != 'null' && data.data != 'undefined'){
+                        $('.card-footer').removeClass('d-none');
+                        var students = data.data;
+                        var html=''; 
+                       
+                        $.each(students, function (index, student) {
+                            var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', student.id);
+                            html += '<tr>';
+                            html += '<td><input type="checkbox"  value="' + student.id + '" name="student_ids[]" class="form-check-input student-checkbox"></td>';
+                            html += '<td>' + student.name + '</td>';
+                            html += '<td>' + student.current_class.name + '</td>';
+                            html += '<td>' + student.section.name + '</td>';
+                            html += '<td>' + student.religion + '</td>';
+                            html += '<td>' + student.phone + '</td>';
+                            html += '<td><a href="' + viewUrl + '" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a></td>';
+                            html += '</tr>';
+                        });
+                        $('#datatable1 tbody').html(html);
+                    }else{
+                        $('#datatable1 tbody').html('<tr id="no-data"><td colspan="7" class="text-center">No data available</td></tr>');
+                    }
+                }, 
+                error: function(xhr, status, error) {
+                    toastr.error('An error occurred. Please try again.');
+                    submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                }, 
+                complete:function(){
+                    submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
                 }
-            },
-            {
-                "data": "name",
-                render: function(data, type, row) {
-                    return '<a href="{{ route('admin.student.view', '') }}/' + row.id + '">' + data + '</a>';
-                }
-            },
-            { "data": "current_class.name" },
-            { "data": "section.name" },
-            { "data": "religion" },
-            { "data": "phone" },
-            {
-                "data": null,
-                render: function(data, type, row) {
-                    var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', row.id);
-                    return `
-                        <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
-                    `;
-                }
-            },
-        ],
-        order: [
-            [0, "desc"]
-        ],
+            });
+        }else{
+            toastr.error('Please select class and section.');
+            submitBtn.html(originalBtnText);
+            submitBtn.prop('disabled', false);
+        }
     });
-
-    /*** Class filter changes */ 
-    $(document).on('change', '#search_class_id', function() {
-        table.ajax.reload(null, false);
-    });
-    /*section filter changes*/
-    $(document).on('change', '#search_section_id', function() {
-        table.ajax.reload(null, false);
-        $("#table_data").removeClass('d-none');
-    });
-
     /* Select or Deselect All Checkboxes*/
     $(document).on('click', '#selectAll', function() {
-        if ($(this).is(':checked')) {
-            $('.student-checkbox').prop('checked', true);
-        } else {
-            $('.student-checkbox').prop('checked', false);
-        }
+    if ($(this).is(':checked')) {
+        $('.student-checkbox').prop('checked', true);
+    } else {
+        $('.student-checkbox').prop('checked', false);
+    }
     });
-
-    /*** Select or Deselect Individual Checkboxes ***/
-    table.on('draw.dt', function() {
-        if ($('#selectAll').is(':checked')) {
-            $('.student-checkbox').prop('checked', true);
-        } else {
-            $('.student-checkbox').prop('checked', false);
-        }
-    });
+    /* Submit Attendance*/
     $(document).on('click', '#submitAttendance', function() {
         var selectedStudents = [];
         $('.student-checkbox:checked').each(function() {
