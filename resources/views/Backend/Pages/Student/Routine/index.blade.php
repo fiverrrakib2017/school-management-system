@@ -215,12 +215,32 @@
             $('select[name="subject_id"]').html(sectionOptions); 
             //$('select[name="subject_id"]').select2(); 
         });
+        var classes = @json($classes);
+        var class_filter = '<label style="margin-left: 10px;">';
+        class_filter += '<select id="search_class_id" class="form-select select2">';
+        class_filter += '<option value="">--Select Class--</option>';
+        classes.forEach(function(item) {
+            class_filter += '<option value="' + item.id + '">' + item.name + '</option>';
+        });
+        class_filter += '</select></label>';
+        setTimeout(() => {
+            $('.dataTables_length').append(class_filter);
+            $('.select2').select2(); 
+        }, 100);
         var table=$("#datatable1").DataTable({
         "processing":true,
         "responsive": true,
         "serverSide":true,
-        
-        ajax: "{{ route('admin.student.class.routine.all_data') }}",
+        ajax: {
+            url: "{{ route('admin.student.class.routine.all_data') }}",
+            type: 'GET',
+            data: function(d) {
+              d.class_id = $('#search_class_id').val();
+            },
+            beforeSend: function(request) {
+                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
+            }
+        },
         language: {
             searchPlaceholder: 'Search...',
             sSearch: '',
@@ -253,6 +273,9 @@
         ],
 
         });
+        $(document).on('change','#search_class_id',function(){
+          table.ajax.reload(null, false);
+        });
     });
 
 
@@ -262,7 +285,7 @@
     /** Handle edit button click**/
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
       var id = $(this).data('id');
-      var editUrl = '{{ route("admin.student.subject.edit", ":id") }}';
+      var editUrl = '{{ route("admin.student.class.routine.edit", ":id") }}';
       var url = editUrl.replace(':id', id);
       $.ajax({
           type: 'GET',
@@ -272,7 +295,8 @@
                 $('#editModal').modal('show');
                 $('#editModal input[name="id"]').val(response.data.id);
                 $('#editModal select[name="class_id"]').val(response.data.class_id);
-                $('#editModal input[name="name"]').val(response.data.name);
+                $('#editModal select[name="subject_id"]').val(response.data.subject_id);
+                $('#editModal select[name="teacher_id"]').val(response.data.teacher_id);
               } else {
                 toastr.error("Error fetching data for edit!");
               }

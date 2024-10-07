@@ -50,14 +50,17 @@ class ClassRoutine_controller extends Controller
 
         // Get the count of filtered records
         $filteredRecords = $query->count();
-
+        
+        if ($request->has('class_id') && !empty($request->class_id)) {
+            $query->where('class_id', $request->class_id);
+        }
         /* Apply ordering, pagination and get the data*/
         $items = $query->orderBy($orderByColumn, $orderDirection)
                     ->skip($request->start)
                     ->take($request->length)
                     ->get();
     
-
+        
         /* Format the data for DataTables*/
         // $formattedData = $items->map(function ($item) {
         //     return [
