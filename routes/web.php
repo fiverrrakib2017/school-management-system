@@ -21,6 +21,7 @@ use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
+use App\Http\Controllers\Backend\Student\ClassRoutine_controller;
 use App\Http\Controllers\Backend\Student\Fees_type_controller;
 use App\Http\Controllers\Backend\Student\Leave_controller;
 use App\Http\Controllers\Backend\Student\SectionController;
@@ -64,6 +65,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.class.update');
                 Route::post('/store','store')->name('admin.student.class.store');
                 Route::post('/delete','delete')->name('admin.student.class.delete');
+            });
+            /** Class  Routine route **/
+            Route::prefix('routine')->group(function(){
+                Route::controller(ClassRoutine_controller::class)->group(function(){
+                    Route::get('/list','index')->name('admin.student.class.routine.index');
+                    Route::get('/all_data','all_data')->name('admin.student.class.routine.all_data');
+                    Route::get('/edit/{id}','edit')->name('admin.student.class.routine.edit');
+                    Route::post('/update','update')->name('admin.student.class.routine.update');
+                    Route::post('/store','store')->name('admin.student.class.routine.store');
+                    Route::post('/delete','delete')->name('admin.student.class.routine.delete');
+                });
             });
         });
         /** Subject  Route **/

@@ -27,6 +27,9 @@
                          <a href="{{ route('admin.student.subject.index') }}">Subject</a>
                         </li>
                         <li>
+                         <a href="{{ route('admin.student.class.routine.index') }}">Class Routine</a>
+                        </li>
+                        <li>
                          <a href="{{ route('admin.student.section.index') }}">Section</a>
                         </li>
                         <li>
