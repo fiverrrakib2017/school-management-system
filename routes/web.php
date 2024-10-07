@@ -26,6 +26,7 @@ use App\Http\Controllers\Backend\Student\Leave_controller;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\Shift_controller;
 use App\Http\Controllers\Backend\Student\StudentController;
+use App\Http\Controllers\Backend\Student\Subject_controller;
 use App\Http\Controllers\Backend\Supplier\SupplierController;
 use App\Http\Controllers\Backend\Teacher\TeacherAttendance_controller;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
@@ -63,6 +64,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.class.update');
                 Route::post('/store','store')->name('admin.student.class.store');
                 Route::post('/delete','delete')->name('admin.student.class.delete');
+            });
+        });
+        /** Subject  Route **/
+        Route::prefix('subject')->group(function(){
+            Route::controller(Subject_controller::class)->group(function(){
+                Route::get('/list','index')->name('admin.student.subject.index');
+                // Route::get('/all_data','all_data')->name('admin.student.class.all_data');
+                // Route::get('/edit/{id}','edit')->name('admin.student.class.edit');
+                // Route::post('/update','update')->name('admin.student.class.update');
+                // Route::post('/store','store')->name('admin.student.class.store');
+                // Route::post('/delete','delete')->name('admin.student.class.delete');
             });
         });
         /** Student  Route **/

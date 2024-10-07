@@ -51,26 +51,29 @@ class TeacherAttendance_controller extends Controller
         ]);
     }
     public function store(Request $request){
-        $studentIds = $request->input('student_ids');
-    
-        if (!empty($studentIds)) {
-            foreach ($studentIds as $studentId) {
-
-                $object = new Teacher_attendance();
-                $object->teacher_id = $studentId;
-                $object->attendance_date =now();
-                $object->shift_id = NULL;
-                $object->time_in = Carbon::now()->format('H:i:s'); 
-                $object->time_out = Carbon::now()->format('H:i:s'); 
-                $object->status ='Present';
-                /*Save to the database table*/
-                $object->save();
-
-
+        $teacherIds = $request->input('student_ids');
+        $today = now()->format('Y-m-d');
+        if (!empty($teacherIds)) {
+            foreach ($teacherIds as $teacherId) {
+                $attendanceExists = Teacher_attendance::where([
+                    ['teacher_id', '=', $teacherId],
+                    ['attendance_date', '=', $today]
+                ])->exists();
+                if (!$attendanceExists) {
+                    $object = new Teacher_attendance();
+                    $object->teacher_id = $teacherId;
+                    $object->attendance_date =now();
+                    $object->shift_id = NULL;
+                    $object->time_in = Carbon::now()->format('H:i:s'); 
+                    $object->time_out = Carbon::now()->format('H:i:s'); 
+                    $object->status ='Present';
+                    /*Save to the database table*/
+                    $object->save();
+                }
             }
             return response()->json([
                 'success' => true,
-                'message' => 'Completed'
+                'message' => 'Attendance marked successfully'
             ]);
         }
         return response()->json([
@@ -115,6 +118,8 @@ class TeacherAttendance_controller extends Controller
             $startDate = trim($dateRange[0]);
             $endDate = trim($dateRange[1]);
             $query->whereBetween('attendance_date', [$startDate, $endDate]);
+        }else{
+            $query->whereDate('attendance_date', Carbon::today());
         }
         $total = $query->count();
         $items = $query->orderBy($orderByColumn, $orderDirection)
