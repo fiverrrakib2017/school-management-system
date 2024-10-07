@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-header">
                   <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Add New Section</button>
+                    Add New Subject</button>
             </div>
             <div class="card-body">
               
@@ -17,7 +17,7 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Class Name</th>
-                                <th class="">Sections</th>
+                                <th class="">Subject Name</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -38,19 +38,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Section
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Subject
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!----- Start Add Form ------->
-            <form id="addSectionForm" action="{{ route('admin.student.section.store') }}" method="post">
+            <form id="addSectionForm" action="{{ route('admin.student.subject.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
                             <label for="sectionName">Class</label>
-                            <select type="text" name="class_name" id="class_name" class="form-select">
+                            <select type="text" name="class_id"  class="form-select">
                                 <option value="">---Select---</option>
                                 @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -58,8 +58,8 @@
                             </select>
                         </div>
                         <div class="form-group mb-2">
-                            <label for="sectionName">Section Name</label>
-                            <input type="text" name="name" id="sectionName" placeholder="Enter Section Name" class="form-control">
+                            <label for="sectionName"> Subject Name</label>
+                            <input type="text" name="name" id="subject_name" placeholder="Enter Subject Name" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Section
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Subject
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -89,8 +89,9 @@
                     <!----- Start Update Form input ------->
                     <div class="row">
                         <div class="form-group mb-2">
-                            <label for="sectionName">Class</label>
-                            <select type="text" name="class_name" id="class_name" class="form-select">
+                            <label for="">Class</label>
+                            <input type="text" name="id"  class="d-none">
+                            <select type="text" name="class_id"  class="form-select">
                                 <option value="">---Select---</option>
                                 @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -98,9 +99,8 @@
                             </select>
                         </div>
                         <div class="form-group mb-2">
-                            <label for="sectionName">Section Name</label>
-                            <input type="text" name="id" class="d-none" required>
-                            <input type="text" name="name"  placeholder="Enter Section Name" class="form-control">
+                            <label for="sectionName"> Subject Name</label>
+                            <input type="text" name="name" id="subject_name" placeholder="Enter Subject Name" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -149,7 +149,7 @@
         "responsive": true,
         "serverSide":true,
         
-        ajax: "{{ route('admin.student.class.all_data') }}",
+        ajax: "{{ route('admin.student.subject.all_data') }}",
         language: {
             searchPlaceholder: 'Search...',
             sSearch: '',
@@ -160,16 +160,17 @@
             "data":"id"
             },
             {
-            "data":"name"
+            "data":"class.name"
             },
             {
-            "data":"sections"
+            "data":"name"
             },
             {
             "data":null,
             render:function(data,type,row){
-                return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-                <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
+                 return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
+                 <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
+                
             }
             },
         ],

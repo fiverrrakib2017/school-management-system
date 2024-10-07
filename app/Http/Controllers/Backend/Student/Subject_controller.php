@@ -5,15 +5,16 @@ namespace App\Http\Controllers\Backend\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\Student_class;
+use App\Models\Student_subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class Subject_controller extends Controller
 {
     public function index(){
-       // $studentClasses = Student_class::with('sections')->get();
-        $data=Section::latest()->get();
-        return view('Backend.Pages.Student.Subject.index',compact('data'));
+      // return  Student_subject::with('class')->get();
+       $classes = Student_class::get();
+        return view('Backend.Pages.Student.Subject.index',compact('classes'));
     }
     public function all_data(Request $request)
     {
@@ -23,20 +24,20 @@ class Subject_controller extends Controller
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
-        $query = Student_class::with('sections');
+        $query =  Student_subject::with('class');
 
         /*Apply the search filter*/ 
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
-                ->orWhereHas('sections', function($q) use ($search) {
+                ->orWhereHas('class', function($q) use ($search) {
                     $q->where('name', 'like', "%$search%");
                 });
             });
         }
 
         /* Get the total count of records*/
-        $totalRecords = Student_class::count();
+        $totalRecords = Student_subject::count();
 
         // Get the count of filtered records
         $filteredRecords = $query->count();
@@ -46,28 +47,30 @@ class Subject_controller extends Controller
                     ->skip($request->start)
                     ->take($request->length)
                     ->get();
+    
 
         /* Format the data for DataTables*/
-        $formattedData = $items->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'sections' => $item->sections->pluck('name')->implode(', '),
-            ];
-        });
+        // $formattedData = $items->map(function ($item) {
+        //     return [
+        //         'id' => $item->id,
+        //         'name' => $item->name,
+        //         'subjects' => $item->subjects->pluck('name')->implode(', '),
+        //     ];
+        // });
 
         /* Return the response in JSON format*/
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $filteredRecords,
-            'data' => $formattedData,
+            'data' => $items,
         ]);
     }
 
     public function store(Request $request){
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
+            'class_id' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 
@@ -78,8 +81,9 @@ class Subject_controller extends Controller
             ], 422);
         }
 
-        /*Create a new class record*/
-        $object = new Student_class();
+        /*Create a new  record*/
+        $object = new Student_subject();
+        $object->class_id = $request->class_id;
         $object->name = $request->name;
 
         /* Save the class record to the database*/

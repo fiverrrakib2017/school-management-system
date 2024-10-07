@@ -70,10 +70,10 @@ Route::group(['middleware'=>'admin'],function(){
         Route::prefix('subject')->group(function(){
             Route::controller(Subject_controller::class)->group(function(){
                 Route::get('/list','index')->name('admin.student.subject.index');
-                // Route::get('/all_data','all_data')->name('admin.student.class.all_data');
+                 Route::get('/all_data','all_data')->name('admin.student.subject.all_data');
                 // Route::get('/edit/{id}','edit')->name('admin.student.class.edit');
                 // Route::post('/update','update')->name('admin.student.class.update');
-                // Route::post('/store','store')->name('admin.student.class.store');
+                Route::post('/store','store')->name('admin.student.subject.store');
                 // Route::post('/delete','delete')->name('admin.student.class.delete');
             });
         });
