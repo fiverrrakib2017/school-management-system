@@ -97,7 +97,7 @@ class Subject_controller extends Controller
     }
 
     public function edit($id){
-        $object = Student_class::find($id);
+        $object = Student_subject::find($id);
 
         if ($object) {
             return response()->json([
@@ -108,13 +108,14 @@ class Subject_controller extends Controller
 
         return response()->json([
             'success' => false,
-            'message' => 'Class not found'
+            'message' => 'Subject not found'
         ], 404);
     }
 
     public function update(Request $request){
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
+            'class_id' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 
@@ -125,35 +126,34 @@ class Subject_controller extends Controller
             ], 422);
         }
 
-        $object = Student_class::find($request->id);
+        $object = Student_subject::find($request->id);
 
         if (!$object) {
             return response()->json([
                 'success' => false,
-                'message' => 'Class not found'
+                'message' => 'Subject not found'
             ], 404);
         }
 
-        /* Update the Class record */
+        /* Update the  record */
+        $object->class_id = $request->class_id;
         $object->name = $request->name;
-
-        /* Save the updated Class record to the database*/
         $object->save();
 
         /* Return success response*/
         return response()->json([
             'success' => true,
-            'message' => 'Class updated successfully!'
+            'message' => 'Updated successfully!'
         ]);
     }
 
     public function delete(Request $request){
-        $object = Student_class::find($request->id);
+        $object = Student_subject::find($request->id);
 
         if (!$object) {
             return response()->json([
                 'success' => false,
-                'message' => 'Section not found'
+                'message' => 'not found'
             ], 404);
         }
 
@@ -163,7 +163,7 @@ class Subject_controller extends Controller
         /* Return success response*/
         return response()->json([
             'success' => true,
-            'message' => 'Class deleted successfully!'
+            'message' => 'Deleted successfully!'
         ]);
     }
 }

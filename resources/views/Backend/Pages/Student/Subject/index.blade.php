@@ -83,7 +83,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!----- Start Update Form ------->
-            <form id="addSectionForm" action="{{ route('admin.student.section.update') }}" method="post">
+            <form id="addSectionForm" action="{{ route('admin.student.subject.update') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Update Form input ------->
@@ -115,7 +115,7 @@
 </div>
 <div id="deleteModal" class="modal fade">
     <div class="modal-dialog modal-confirm">
-        <form action="{{route('admin.student.section.delete')}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('admin.student.subject.delete')}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
             <div class="modal-header flex-column">
@@ -188,7 +188,7 @@
     /** Handle edit button click**/
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
       var id = $(this).data('id');
-      var editUrl = '{{ route("admin.student.section.edit", ":id") }}';
+      var editUrl = '{{ route("admin.student.subject.edit", ":id") }}';
       var url = editUrl.replace(':id', id);
       $.ajax({
           type: 'GET',
@@ -197,9 +197,8 @@
               if (response.success) {
                 $('#editModal').modal('show');
                 $('#editModal input[name="id"]').val(response.data.id);
-                $('#editModal select[name="class_name"]').val(response.data.class_id);
+                $('#editModal select[name="class_id"]').val(response.data.class_id);
                 $('#editModal input[name="name"]').val(response.data.name);
-                $('#editModal select[name="status"]').val(response.data.status);
               } else {
                 toastr.error("Error fetching data for edit!");
               }
