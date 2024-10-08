@@ -10,12 +10,14 @@
           Add Bill Collection</a>
           </div>
             <div class="card-body">
-                <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
+                <div class="table table-responsive" id="tableStyle">
+                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Student Name </th>
+                                <th class="">Class </th>
+                                <th class="">Section </th>
                                 <th class="">Total Amount </th>
                                 <th class="">Paid Amount</th>
                                 <th class="">Due Amount</th>
@@ -65,20 +67,32 @@
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
+    var classes = @json($student);
+    var student_filter = '<label style="margin-left: 10px;">';
+    student_filter += '<select id="search_student_id" class="form-select select2">';
+    student_filter += '<option value="">--Select Student--</option>';
+    classes.forEach(function(item) {
+        student_filter += '<option value="' + item.id + '">' + item.name + '</option>';
+    });
+    student_filter += '</select></label>';
+    setTimeout(() => {
+        $('.dataTables_length').append(student_filter);
+        $('.select2').select2(); 
+    }, 100);
     var table = $("#datatable1").DataTable({
       "processing":true,
       "responsive": true,
       "serverSide":true,
       ajax: {
-            url: "{{ route('admin.student.bill_collection.all_data') }}",
-            type: 'GET',
-            data: function(d) {
-              d.class_id = $('#search_class_id').val();
-            },
-            beforeSend: function(request) {
-                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-            }
+        url: "{{ route('admin.student.bill_collection.all_data') }}",
+        type: 'GET',
+        data: function(d) {
+          d.student_id = $('#search_student_id').val();
         },
+        beforeSend: function(request) {
+          request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
+        }
+      },
       language: {
         searchPlaceholder: 'Search...',
         sSearch: '',
@@ -92,6 +106,8 @@
               return '<a href="{{ route('admin.student.view', '') }}/' + row.student.id + '">' + data + '</a>';
           }
         },
+        {"data":"student.current_class.name"},
+        {"data":"student.section.name"},
         {"data":"total_amount"},
         {"data":"paid_amount"},
         {"data":"due_amount"},
@@ -126,12 +142,9 @@
     });
 
     /* Search filter reload*/
-    $('#search_class_id').change(function() {
-        table.ajax.reload(null, false);
-    });
-
-  
-    
+    $(document).on('change', '#search_student_id', function() {
+      table.ajax.reload(null, false);
+    })
 
     /* Handle Delete button click and form submission*/
     $('#datatable1 tbody').on('click', '.delete-btn', function () {

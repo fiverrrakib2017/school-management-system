@@ -173,6 +173,7 @@
     $(document).ready(function(){
         /* Initialize select2 modals*/
         initializeSelect2("#addModal");
+        initializeSelect2("#editModal");
         /* Initialize select2 for modal dropdowns*/
         function initializeSelect2(modalId) {
         $(modalId).on('show.bs.modal', function (event) {
@@ -261,9 +262,13 @@
                             html += '<td>' + i++ + '</td>';
                             html += '<td>' + routine.subject.name + '</td>'; 
                             html += '<td>' + routine.teacher.name + '</td>'; 
-                            html += '<td></td>'; 
+                            html += '<td>';
+                            html += '<button class="btn btn-primary btn-sm mr-2 edit-btn" data-id="' + routine.id + '" style="margin-right: 5px"><i class="fa fa-edit"></i></button>';
+                            html += '<button class="btn btn-danger btn-sm mr-2 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + routine.id + '"><i class="fa fa-trash"></i></button>';
+                            html += '</td>';
                             html += '</tr>';
                         });
+
                         $('#datatable1 tbody').html(html);
                         //table.draw(true); 
                     }else{

@@ -27,37 +27,48 @@ class Bill_CollectionController extends Controller
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'student_id', 'amount', 'paid_amount','due_amount','payment_status','note','created_at'];
+        $columnsForOrderBy = ['id', 'student.name', 'student.currentClass.name', 'student.section.name', 'total_amount', 'paid_amount','due_amount','payment_status','note','created_at']; // Update the column names correctly
         $orderByColumnIndex = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
-
+    
         /*Start building the query*/
-        $query = Student_bill_collection::with('student');
-
+        $query = Student_bill_collection::with('student', 'student.currentClass','student.section');
+    
         /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('amount', 'like', "%$search%")
-                  ->orWhere('payment_status', 'like', "%$search%")
-                  ->orWhereHas('student', function($q) use ($search) {
-                      $q->where('name', 'like', "%$search%");
-                  });
+                $q->whereHas('student', function($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                })
+                ->orWhereHas('student.currentClass', function($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                })
+                ->orWhereHas('student.section', function($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                })
+                ->orWhere('total_amount', 'like', "%$search%")
+                ->orWhere('paid_amount', 'like', "%$search%")
+                ->orWhere('due_amount', 'like', "%$search%")
+                ->orWhere('payment_status', 'like', "%$search%");
             });
         }
-
+    
         /* Get the total count of records*/
         $totalRecords = Student_bill_collection::count();
-
+    
         /* Get the count of filtered records*/
         $filteredRecords = $query->count();
-
+    
+        if ($request->has('student_id') && !empty($request->student_id)) {
+            $query->where('student_id', $request->student_id);
+        }
         /* Apply ordering, pagination and get the data*/
         $items = $query->orderBy($orderByColumn, $orderDirection)
                     ->skip($request->start)
                     ->take($request->length)
                     ->get();
-
+    
         /* Return the response in JSON format*/
         return response()->json([
             'draw' => $request->draw,
@@ -66,6 +77,7 @@ class Bill_CollectionController extends Controller
             'data' => $items,
         ]);
     }
+    
     public function store(Request $request){
         //return $request->all();
         /* Validate the form data*/
