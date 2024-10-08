@@ -22,9 +22,8 @@
                                 <th class=""></th>
                             </tr>
                         </thead>
-                        <tbody>
-
-                        </tbody>
+                        <tbody></tbody>
+                        
                     </table>
                 </div>
             </div>
@@ -227,6 +226,14 @@
             $('.dataTables_length').append(class_filter);
             $('.select2').select2(); 
         }, 100);
+
+        var print_ = '<label style="margin-left: 10px;">';
+        print_+='<button type="button" name="print_btn" class="btn btn-success"><i class="fas fa-print"></i></button>';
+        setTimeout(() => {
+            $('.dataTables_length').append(print_);
+            $('.select2').select2(); 
+        }, 100);
+
         var table=$("#datatable1").DataTable({
         "processing":true,
         "responsive": true,
@@ -279,7 +286,39 @@
     });
 
 
+    $(document).on('click','button[name=print_btn]', function(){
+        var classId = $('#search_class_id').val();
+        if (!classId) {
+            toastr.error("Please select class");
+            return ; 
+        }
+        $.ajax({
+            url: "{{ route('admin.student.class.routine.print') }}", 
+            type: "GET",
+            data: { class_id: classId },
+            beforeSend: function(request) {
+                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
+            },
+            success: function(response) {
+                print_content(response);
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                alert('Failed to load print data. Please try again.');
+            }
+        });
 
+    });
+
+     function print_content(content) {
+        var printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Class Routine</title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
 
 
     /** Handle edit button click**/

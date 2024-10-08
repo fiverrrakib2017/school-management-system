@@ -182,4 +182,13 @@ class ClassRoutine_controller extends Controller
             'message' => 'Deleted successfully!'
         ]);
     }
+    public function print(Request $request){
+        $class_id = $request->input('class_id');
+    
+        $routines = Student_class_routine::where('class_id', $class_id)->get();
+        
+        $view = view('Backend.Pages.Student.Routine.print_routine', compact('routines'))->render();
+        
+        return response()->json($view);
+    }
 }

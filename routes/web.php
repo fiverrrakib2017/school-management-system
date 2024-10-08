@@ -75,6 +75,8 @@ Route::group(['middleware'=>'admin'],function(){
                     Route::post('/update','update')->name('admin.student.class.routine.update');
                     Route::post('/store','store')->name('admin.student.class.routine.store');
                     Route::post('/delete','delete')->name('admin.student.class.routine.delete');
+                    Route::get('/print','print')->name('admin.student.class.routine.print');
+                    
                 });
             });
         });
