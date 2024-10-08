@@ -126,6 +126,20 @@ class ClassRoutine_controller extends Controller
         ], 404);
     }
 
+    public function get_routine_data(Request $request){   
+        $class_id = $request->input('class_id');
+    
+        $routines = Student_class_routine::with('class', 'subject', 'teacher')->where('class_id', $class_id)->get();
+
+        if ($routines) {
+            return response()->json([
+                'success' => true,
+                'code'=>200,
+                'data' => $routines
+            ]);
+        }
+    }
+
     public function update(Request $request){
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [

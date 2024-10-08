@@ -1,5 +1,6 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
+
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
@@ -16,9 +17,8 @@
                         <thead>
                             <tr>
                                 <th class="">No.</th>
-                                <th class="">Class Name</th>
                                 <th class="">Subject Name</th>
-                                <th class="">Class Teacher</th>
+                                <th class="">Subject Teacher</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -234,54 +234,48 @@
             $('.select2').select2(); 
         }, 100);
 
-        var table=$("#datatable1").DataTable({
-        "processing":true,
-        "responsive": true,
-        "serverSide":true,
-        ajax: {
-            url: "{{ route('admin.student.class.routine.all_data') }}",
-            type: 'GET',
-            data: function(d) {
-              d.class_id = $('#search_class_id').val();
-            },
-            beforeSend: function(request) {
-                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-            }
-        },
-        language: {
-            searchPlaceholder: 'Search...',
-            sSearch: '',
-            lengthMenu: '_MENU_ items/page',
-        },
-        "columns":[
-            {
-            "data":"id"
-            },
-            {
-            "data":"class.name"
-            },
-            {
-            "data":"subject.name"
-            },
-            {
-            "data":"teacher.name"
-            },
-            {
-            "data":null,
-            render:function(data,type,row){
-                 return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-                 <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
-                
-            }
-            },
-        ],
-        order:[
-            [0, "desc"]
-        ],
-
-        });
+        var table=$("#datatable1").DataTable();
+        // var table=$('#datatable1').DataTable({
+        //     "paging": false,  
+        //     "ordering": false, 
+        //     "info": false,     // Information বার্তা (Showing 1 to 10 of 50 entries) দেখাতে চাইলে true রাখুন
+        //     "searching": false, // সার্চ ফিল্ড রাখার জন্য true রাখুন
+        //     "lengthMenu": false, // Show entries অপশন সরাতে false করে দিন
+        //     "dom": 'tip' // "Show entries" অপশন সরানোর জন্য l সরিয়ে দিন। শুধু 'tip' রাখুন
+        // });
         $(document).on('change','#search_class_id',function(){
-          table.ajax.reload(null, false);
+            var dataId=$(this).val(); 
+            $.ajax({
+                url: "{{ route('admin.student.class.routine.data') }}", 
+                type: "GET",
+                data: { class_id: dataId },
+                beforeSend: function(request) {
+                    request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
+                },
+                success: function(response) {
+                    if(response.code == 200 && response.data.length > 0 && response.data != null && response.data != undefined && response.data != '' && response.data != 'null' && response.data != 'undefined'){
+                        var html=''; 
+                        var i = 1;
+                        $.each(response.data, function(key, routine) {
+                            html += '<tr>';
+                            html += '<td>' + i++ + '</td>';
+                            html += '<td>' + routine.subject.name + '</td>'; 
+                            html += '<td>' + routine.teacher.name + '</td>'; 
+                            html += '<td></td>'; 
+                            html += '</tr>';
+                        });
+                        $('#datatable1 tbody').html(html);
+                        //table.draw(true); 
+                    }else{
+                        $('#datatable1 tbody').html('<tr id="no-data"><td colspan="7" class="text-center">No data available</td></tr>');
+                    }
+                    
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    alert('Failed to load data. Please try again.');
+                }
+            })
         });
     });
 
@@ -403,7 +397,14 @@
   /** Store The data from the database table **/
   $('#addModal form').submit(function(e){
     e.preventDefault();
+    /*Get the submit button*/
+    var submitBtn =  $('#addModal form').find('button[type="submit"]');
 
+    /* Save the original button text*/
+    var originalBtnText = submitBtn.html();
+
+    /*Change button text to loading state*/
+    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
     var form = $(this);
     var url = form.attr('action');
     var formData = form.serialize();
@@ -418,7 +419,11 @@
             $('#addModal ').modal('hide');
             $('#addModal form')[0].reset();
             toastr.success(response.message);
-            $('#datatable1').DataTable().ajax.reload( null , false);
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+            submitBtn.html(originalBtnText);
+            //$('#datatable1').DataTable().ajax.reload( null , false);
         }
       },
 

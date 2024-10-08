@@ -27,18 +27,19 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Class</th>
+                <th>No.</th>
                 <th>Subject</th>
                 <th>Teacher</th>
                 <th>Time</th>
             </tr>
         </thead>
         <tbody>
+            @php
+                $i = 1
+            @endphp
             @foreach($routines as $routine)
                 <tr>
-                    <td>{{ $routine->id }}</td>
-                    <td>{{ $routine->class->name }}</td>
+                    <td>{{ $i++ }}</td>
                     <td>{{ $routine->subject->name }}</td>
                     <td>{{ $routine->teacher->name }}</td>
                     <td>11.30 Am</td>
