@@ -12,9 +12,13 @@ use Illuminate\Support\Facades\Validator;
 class Subject_controller extends Controller
 {
     public function index(){
-      // return  Student_subject::with('class')->get();
+       
        $classes = Student_class::get();
-        return view('Backend.Pages.Student.Subject.index',compact('classes'));
+       $subjects = Student_subject::join('student_classes', 'student_subjects.class_id', '=', 'student_classes.id')
+       ->select('student_subjects.*', 'student_classes.name as class_name')
+       ->orderBy('student_subjects.class_id')
+       ->get();
+        return view('Backend.Pages.Student.Subject.index',compact('classes', 'subjects'));
     }
     public function all_data(Request $request)
     {
@@ -24,20 +28,20 @@ class Subject_controller extends Controller
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
-        $query =  Student_subject::with('class');
+        $query = Student_class::with('subjects');
 
         /*Apply the search filter*/ 
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
-                ->orWhereHas('class', function($q) use ($search) {
+                ->orWhereHas('subjects', function($q) use ($search) {
                     $q->where('name', 'like', "%$search%");
                 });
             });
         }
 
         /* Get the total count of records*/
-        $totalRecords = Student_subject::count();
+        $totalRecords = Student_class::count();
 
         // Get the count of filtered records
         $filteredRecords = $query->count();
@@ -47,26 +51,24 @@ class Subject_controller extends Controller
                     ->skip($request->start)
                     ->take($request->length)
                     ->get();
-    
 
         /* Format the data for DataTables*/
-        // $formattedData = $items->map(function ($item) {
-        //     return [
-        //         'id' => $item->id,
-        //         'name' => $item->name,
-        //         'subjects' => $item->subjects->pluck('name')->implode(', '),
-        //     ];
-        // });
+        $formattedData = $items->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'subjects' => $item->subjects->pluck('name')->implode(', '),
+            ];
+        });
 
         /* Return the response in JSON format*/
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $filteredRecords,
-            'data' => $items,
+            'data' => $formattedData,
         ]);
     }
-
     public function store(Request $request){
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [

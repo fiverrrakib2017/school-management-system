@@ -21,9 +21,7 @@
                                 <th class=""></th>
                             </tr>
                         </thead>
-                        <tbody>
-
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -160,10 +158,10 @@
             "data":"id"
             },
             {
-            "data":"class.name"
+            "data":"name"
             },
             {
-            "data":"name"
+            "data":"subjects"
             },
             {
             "data":null,
