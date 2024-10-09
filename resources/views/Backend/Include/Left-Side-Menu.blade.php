@@ -200,6 +200,9 @@
                      <li>
                         <a href="{{ route('admin.transaction.index') }}">Transaction</a>
                      </li>
+                     <li>
+                        <a href="{{ route('admin.transaction.report.index') }}">Report</a>
+                     </li>
                    </ul>
                 </div>
              </li>

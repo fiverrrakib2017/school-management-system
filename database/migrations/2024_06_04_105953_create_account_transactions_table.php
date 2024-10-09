@@ -16,12 +16,17 @@ return new class extends Migration
             $table->integer('type'); //asset, liablities,revenue,expense
             $table->text('refer_no');
             $table->text('description');
+            $table->unsignedBigInteger('master_ledger_id');
             $table->unsignedBigInteger('ledger_id');
             $table->unsignedBigInteger('sub_ledger_id');
             $table->integer('qty');
             $table->integer('value');
             $table->integer('total');
             $table->timestamps();
+
+            $table->foreign('master_ledger_id')->on('master_ledgers')
+            ->references('id')
+            ->onDelete('cascade');
 
             $table->foreign('ledger_id')->on('ledgers')
             ->references('id')
