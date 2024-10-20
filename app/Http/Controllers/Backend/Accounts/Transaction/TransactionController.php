@@ -40,6 +40,7 @@ class TransactionController extends Controller
            $object->save();
            return response()->json(['success' =>true, 'message'=>'Added Successfully']);
     }
+
     public function transaction_report(){
         $master_ledger=Master_ledger::where('status',1)->latest()->get();
         return view('Backend.Pages.Accounts.Transaction.Report.index',compact('master_ledger'));

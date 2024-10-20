@@ -10,7 +10,7 @@
                     Add New </button>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody></tbody>
-                        
+
                     </table>
                 </div>
             </div>
@@ -67,6 +67,19 @@
                             </select>
                         </div>
                         <div class="form-group mb-2">
+                            <label for="sectionName">Day Of Week</label>
+                            <select type="text" name="day"  class="form-select" style="width: 100%;">
+                                <option value="">---Select---</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
                             <label for="sectionName">Teacher Name</label>
                             <select type="text" name="teacher_id"  class="form-select" style="width: 100%;">
                                 <option value="">---Select---</option>
@@ -74,6 +87,14 @@
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">Start Time</label>
+                            <input type="time" name="start_time"  class="form-control">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">End Time</label>
+                            <input type="time" name="end_time"  class="form-control">
                         </div>
                     </div>
                 </div>
@@ -195,6 +216,12 @@
                     placeholder: "Select Teacher"
                 });
             }
+            if (!$("select[name='day']").hasClass("select2-hidden-accessible")) {
+                $("select[name='day']").select2({
+                    dropdownParent: $(modalId),
+                    placeholder: "---Select---"
+                });
+            }
         });
         }
 
@@ -202,8 +229,8 @@
             var items = @json($subjects);
             var selectedClassId = $(this).val();
             var filteredSubjects = items.filter(function(subject) {
-                /*Filter sections by class_id*/ 
-                return subject.class_id == selectedClassId; 
+                /*Filter sections by class_id*/
+                return subject.class_id == selectedClassId;
             });
 
             /* Update Section dropdown*/
@@ -212,8 +239,8 @@
                 sectionOptions += '<option value="' + item.id + '">' + item.name + '</option>';
             });
 
-            $('select[name="subject_id"]').html(sectionOptions); 
-            //$('select[name="subject_id"]').select2(); 
+            $('select[name="subject_id"]').html(sectionOptions);
+            //$('select[name="subject_id"]').select2();
         });
         var classes = @json($classes);
         var class_filter = '<label style="margin-left: 10px;">';
@@ -225,29 +252,29 @@
         class_filter += '</select></label>';
         setTimeout(() => {
             $('.dataTables_length').append(class_filter);
-            $('.select2').select2(); 
+            $('.select2').select2();
         }, 100);
 
         var print_ = '<label style="margin-left: 10px;">';
         print_+='<button type="button" name="print_btn" class="btn btn-success"><i class="fas fa-print"></i></button>';
         setTimeout(() => {
             $('.dataTables_length').append(print_);
-            $('.select2').select2(); 
+            $('.select2').select2();
         }, 100);
 
         var table=$("#datatable1").DataTable();
         // var table=$('#datatable1').DataTable({
-        //     "paging": false,  
-        //     "ordering": false, 
+        //     "paging": false,
+        //     "ordering": false,
         //     "info": false,     // Information বার্তা (Showing 1 to 10 of 50 entries) দেখাতে চাইলে true রাখুন
         //     "searching": false, // সার্চ ফিল্ড রাখার জন্য true রাখুন
         //     "lengthMenu": false, // Show entries অপশন সরাতে false করে দিন
         //     "dom": 'tip' // "Show entries" অপশন সরানোর জন্য l সরিয়ে দিন। শুধু 'tip' রাখুন
         // });
         $(document).on('change','#search_class_id',function(){
-            var dataId=$(this).val(); 
+            var dataId=$(this).val();
             $.ajax({
-                url: "{{ route('admin.student.class.routine.data') }}", 
+                url: "{{ route('admin.student.class.routine.data') }}",
                 type: "GET",
                 data: { class_id: dataId },
                 beforeSend: function(request) {
@@ -255,13 +282,13 @@
                 },
                 success: function(response) {
                     if(response.code == 200 && response.data.length > 0 && response.data != null && response.data != undefined && response.data != '' && response.data != 'null' && response.data != 'undefined'){
-                        var html=''; 
+                        var html='';
                         var i = 1;
                         $.each(response.data, function(key, routine) {
                             html += '<tr>';
                             html += '<td>' + i++ + '</td>';
-                            html += '<td>' + routine.subject.name + '</td>'; 
-                            html += '<td>' + routine.teacher.name + '</td>'; 
+                            html += '<td>' + routine.subject.name + '</td>';
+                            html += '<td>' + routine.teacher.name + '</td>';
                             html += '<td>';
                             html += '<button class="btn btn-primary btn-sm mr-2 edit-btn" data-id="' + routine.id + '" style="margin-right: 5px"><i class="fa fa-edit"></i></button>';
                             html += '<button class="btn btn-danger btn-sm mr-2 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + routine.id + '"><i class="fa fa-trash"></i></button>';
@@ -270,11 +297,11 @@
                         });
 
                         $('#datatable1 tbody').html(html);
-                        //table.draw(true); 
+                        //table.draw(true);
                     }else{
                         $('#datatable1 tbody').html('<tr id="no-data"><td colspan="7" class="text-center">No data available</td></tr>');
                     }
-                    
+
                 },
                 error: function(xhr) {
                     console.log(xhr.responseText);
@@ -289,10 +316,10 @@
         var classId = $('#search_class_id').val();
         if (!classId) {
             toastr.error("Please select class");
-            return ; 
+            return ;
         }
         $.ajax({
-            url: "{{ route('admin.student.class.routine.print') }}", 
+            url: "{{ route('admin.student.class.routine.print') }}",
             type: "GET",
             data: { class_id: classId },
             beforeSend: function(request) {
