@@ -108,21 +108,9 @@
                           <li>
                             <a href="{{ route('admin.unit.index') }}">Units</a>
                           </li>
-                          {{-- <li>
-                            <a href="{{ route('admin.product.color.index') }}">Color</a>
-                          </li>
-                          <li>
-                            <a href="{{ route('admin.product.size.index') }}">Size</a>
-                          </li> --}}
-                          <li>
-                            <a href="{{ route('admin.products.create') }}">Product Create</a>
-                          </li>
                           <li>
                             <a href="{{ route('admin.products.index') }}">Products</a>
                           </li>
-                          {{-- <li>
-                            <a href="{{ route('admin.product.stock.index') }}">Stock</a>
-                          </li> --}}
                           <li>
                             <a href="{{ route('admin.supplier.index') }}">Supplier </a>
                           </li>

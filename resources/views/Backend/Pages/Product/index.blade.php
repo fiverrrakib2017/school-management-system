@@ -1,94 +1,30 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
+@section('style')
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
-            <div class="card-header">
-                  <a href="{{route('admin.products.create')}}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Add New Product</a>
-            </div>
             <div class="card-body">
-
+                <button data-bs-toggle="modal" data-bs-target="#productModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                    Add New Product</button>
 
                 <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                              <th class="">No.</th>
-                              <th class="">Product Image</th>
-                              <th class="">Product Name</th>
-                              <th class="">Purchase Price</th>
-                              <th class="">Sale's Price</th>
-                              <th class="">Quantity</th>
-                              <th class="">Sku</th>
-                              <th class=""></th>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Purchase Price</th>
+                                <th>Sale Price</th>
+                                <th>unit</th>
+                                <th>Store</th>
+                                <th>Quantity</th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                        @php $i = 1; @endphp
-                          @if ($product->isNotEmpty())
-
-                          @foreach ($product as $data)
-                              <tr>
-                                <td>{{$i++}}</td>
-                                <td>
-                                @php
-                                  $productImage = $data->product_image->first();
-                                  $title = strlen($data->title) > 50 ? substr($data->title, 0, 50) . '...' : $data->title;
-                                @endphp
-                                @if (!empty($productImage->image))
-                                <img src="{{ asset('uploads/product/' . $productImage->image) }}" alt="" width="50px" height="50px" class="img-fluid">
-
-                                @else
-                                    <img src="https://dummyimage.com/250/ffffff/000000" alt="" srcset="" width="50px" height="50px" class="w-[40px] h-[40px]">
-
-                                @endif
-                                </td>
-
-                                <td>{{$title}}</td>
-                                <td>{{$data->p_price}}</td>
-                                <td>{{$data->s_price}}</td>
-                                <td>{{$data->qty}}</td>
-                                <td>{{$data->sku}}</td>
-
-                                <td>
-                                  <!-- Add your action buttons here -->
-                                  <a class="btn btn-primary btn-sm mr-3" href="{{route('admin.products.edit', $data->id)}}"><i class="fa fa-edit"></i></a>
-                                  <button data-bs-toggle="modal" data-bs-target="#deleteModal{{$data->id}}" class="btn btn-danger btn-sm mr-3"><i class="fa fa-trash"></i></button>
-                                  <a class="btn btn-success btn-sm mr-3" href="{{route('admin.products.view', $data->id)}}"><i class="fa fa-eye"></i></a>
-                                </td>
-                              </tr>
-                            <!--Start Delete MODAL ---->
-                            <div id="deleteModal{{$data->id}}" class="modal fade">
-                              <div class="modal-dialog modal-confirm">
-                                  <form action="{{route('admin.products.delete')}}" method="post" enctype="multipart/form-data">
-                                      @csrf
-                                      <div class="modal-content">
-                                      <div class="modal-header flex-column">
-                                          <div class="icon-box">
-                                              <i class="fas fa-trash"></i>
-                                          </div>
-                                          <h4 class="modal-title w-100">Are you sure?</h4>
-                                          <input type="hidden" name="id" value="{{$data->id}}">
-                                          <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
-                                      </div>
-                                      <div class="modal-body">
-                                          <p>Do you really want to delete these records? This process cannot be undone.</p>
-                                      </div>
-                                      <div class="modal-footer justify-content-center">
-                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                          <button type="submit" class="btn btn-danger">Delete</button>
-                                      </div>
-                                      </div>
-                                  </form>
-                              </div>
-                          </div>
-                            <!--End Delete MODAL ---->
-                          @endforeach
-
-                          @endif
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -96,24 +32,107 @@
 
     </div>
 </div>
+@include('Backend.Modal.unit_modal')
+@include('Backend.Modal.delete_modal')
 
 
 @endsection
 
 @section('script')
+<script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
+<script  src="{{ asset('Backend/assets/js/delete_data.js') }}"></script>
+
   <script type="text/javascript">
     $(document).ready(function(){
-      $('#datatable1').DataTable({
-          responsive: true,
-          language: {
-            searchPlaceholder: 'Search...',
-            sSearch: '',
-            lengthMenu: '_MENU_ items/page',
-          }
-        });
-        $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
-    });
-  </script>
+    handleSubmit('#unitForm','#unitModal');
+    var table=$("#datatable1").DataTable({
+    "processing":true,
+    "responsive": true,
+    "serverSide":true,
+    beforeSend: function () {},
+    complete: function(){},
+    ajax: "{{ route('admin.unit.get_all_data') }}",
+    language: {
+        searchPlaceholder: 'Search...',
+        sSearch: '',
+        lengthMenu: '_MENU_ items/page',
+    },
+    "columns":[
+          {
+            "data":"id"
+          },
+          {
+            "data":"unit_name"
+          },
 
-  
+          {
+            data:null,
+            render: function (data, type, row) {
+
+
+
+              return `<button  class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
+
+              <button class="btn btn-danger btn-sm mr-3 delete-btn"  data-id="${row.id}"><i class="fa fa-trash"></i></button>
+              `;
+            }
+
+          },
+        ],
+    order:[
+        [0, "desc"]
+    ],
+
+    });
+
+    });
+
+
+
+
+
+
+
+
+    /** Handle Edit button click **/
+    $('#datatable1 tbody').on('click', '.edit-btn', function () {
+        var id = $(this).data('id');
+
+        // AJAX call to fetch unit data
+        $.ajax({
+            url: "{{ route('admin.unit.edit', ':id') }}".replace(':id', id),
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    $('#unitForm').attr('action', "{{ route('admin.unit.update', ':id') }}".replace(':id', id));
+                    $('#unitModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Unit');
+                    $('#unitForm input[name="name"]').val(response.data.unit_name);
+
+                    // Show the modal
+                    $('#unitModal').modal('show');
+                } else {
+                    toastr.error('Failed to fetch Supplier data.');
+                }
+            },
+            error: function() {
+                toastr.error('An error occurred. Please try again.');
+            }
+        });
+    });
+
+    /** Handle Delete button click**/
+    $('#datatable1 tbody').on('click', '.delete-btn', function () {
+        var id = $(this).data('id');
+        var deleteUrl = "{{ route('admin.unit.delete', ':id') }}".replace(':id', id);
+
+        $('#deleteForm').attr('action', deleteUrl);
+        $('#deleteModal').find('input[name="id"]').val(id);
+        $('#deleteModal').modal('show');
+    });
+
+
+
+
+
+  </script>
 @endsection
