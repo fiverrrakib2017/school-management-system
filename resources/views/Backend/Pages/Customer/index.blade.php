@@ -7,8 +7,10 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-body">
-                <a href="{{ route('admin.customer.create') }}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Add New Customer</a>
+                {{-- <button href="{{ route('admin.customer.create') }}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                    Add New Customer</button> --}}
+                <button data-bs-toggle="modal" data-bs-target="#CustomerModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                    Add New Customer</button>
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
@@ -30,39 +32,19 @@
 
     </div>
 </div>
+@include('Backend.Modal.customer_modal')
+@include('Backend.Modal.delete_modal')
 
 
-<div id="deleteModal" class="modal fade">
-    <div class="modal-dialog modal-confirm">
-        <form action="{{route('admin.customer.delete')}}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div class="modal-content">
-            <div class="modal-header flex-column">
-                <div class="icon-box">
-                    <i class="fas fa-trash"></i>
-                </div>
-                <h4 class="modal-title w-100">Are you sure?</h4>
-                <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
-            </div>
-            <div class="modal-body">
-                <p>Do you really want to delete these records? This process cannot be undone.</p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </div>
-            </div>
-        </form>
-    </div>
-</div>
 @endsection
 
 @section('script')
+<script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
+<script  src="{{ asset('Backend/assets/js/delete_data.js') }}"></script>
 
   <script type="text/javascript">
-     $(document).ready(function(){
-
+    $(document).ready(function(){
+    handleSubmit('#CustomerForm','#CustomerModal');
     var table=$("#datatable1").DataTable({
     "processing":true,
     "responsive": true,
@@ -99,14 +81,13 @@
           {
             data:null,
             render: function (data, type, row) {
-              var editUrl = "{{ route('admin.customer.edit', ':id') }}".replace(':id', row.id);
-
 
               var viewUrl = "{{ route('admin.customer.view', ':id') }}".replace(':id', row.id);
 
 
-              return `<a href="${editUrl}" class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></a>
-              <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
+              return `<button  class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
+
+              <button class="btn btn-danger btn-sm mr-3 delete-btn"  data-id="${row.id}"><i class="fa fa-trash"></i></button>
 
               <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
 
@@ -131,63 +112,50 @@
 
 
 
-  /** Handle Delete button click**/
-  $('#datatable1 tbody').on('click', '.delete-btn', function () {
-    var id = $(this).data('id');
-    $('#deleteModal').modal('show');
-    var value_input = $("input[name*='id']").val(id);
-  });
+    /** Handle Edit button click **/
+    $('#datatable1 tbody').on('click', '.edit-btn', function () {
+        var id = $(this).data('id');
 
+        // AJAX call to fetch customer data
+        $.ajax({
+            url: "{{ route('admin.customer.edit', ':id') }}".replace(':id', id),
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    $('#CustomerForm').attr('action', "{{ route('admin.customer.update', ':id') }}".replace(':id', id));
+                    $('#customerModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Customer');
+                    $('#CustomerForm input[name="fullname"]').val(response.data.fullname);
+                    $('#CustomerForm input[name="company"]').val(response.data.company_name);
+                    $('#CustomerForm input[name="phone_number"]').val(response.data.phone_number);
+                    $('#CustomerForm input[name="email"]').val(response.data.email_address);
+                    $('#CustomerForm input[name="address"]').val(response.data.address);
+                    $('#CustomerForm select[name="status"]').val(response.data.status);
 
-
-  /** Handle form submission for delete **/
-  $('#deleteModal form').submit(function(e){
-    e.preventDefault();
-    /*Get the submit button*/
-    var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
-
-    /* Save the original button text*/
-    var originalBtnText = submitBtn.html();
-
-    /*Change button text to loading state*/
-    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
-
-    var form = $(this);
-    var url = form.attr('action');
-    var formData = form.serialize();
-    /** Use Ajax to send the delete request **/
-    $.ajax({
-      type:'POST',
-      'url':url,
-      data: formData,
-      success: function (response) {
-        $('#deleteModal').modal('hide');
-        if (response.success) {
-          toastr.success(response.message);
-          $('#datatable1').DataTable().ajax.reload( null , false);
-        }
-      },
-
-      error: function (xhr, status, error) {
-         /** Handle  errors **/
-         toastr.error(xhr.responseText);
-      },
-      complete: function () {
-        submitBtn.html(originalBtnText);
-        }
+                    // Show the modal
+                    $('#CustomerModal').modal('show');
+                } else {
+                    toastr.error('Failed to fetch customer data.');
+                }
+            },
+            error: function() {
+                toastr.error('An error occurred. Please try again.');
+            }
+        });
     });
-  });
+
+    /** Handle Delete button click**/
+    $('#datatable1 tbody').on('click', '.delete-btn', function () {
+        var id = $(this).data('id');
+        var deleteUrl = "{{ route('admin.customer.delete', ':id') }}".replace(':id', id);
+
+        $('#deleteForm').attr('action', deleteUrl);
+        $('#deleteModal').find('input[name="id"]').val(id);
+        $('#deleteModal').modal('show');
+    });
+
+
+
+
+
   </script>
-
-
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
-
 @endsection

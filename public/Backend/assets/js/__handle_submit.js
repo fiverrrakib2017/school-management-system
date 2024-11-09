@@ -1,4 +1,4 @@
-  function handleSubmit(formSelector) {
+function handleSubmit(formSelector, modalSelector) {
     $(formSelector).submit(function(e) {
         e.preventDefault();
 
@@ -22,10 +22,13 @@
                 if (response.success) {
                     toastr.success(response.message);
                     form[0].reset();
+                   /* Hide the modal */
+                   $(modalSelector).modal('hide');
+                   $('#datatable1').DataTable().ajax.reload( null , false);
                 }
             },
             error: function(xhr) {
-                if (xhr.status === 422) { 
+                if (xhr.status === 422) {
                      /* Validation error*/
                     var errors = xhr.responseJSON.errors;
 
@@ -33,11 +36,11 @@
                     $.each(errors, function(field, messages) {
                         $.each(messages, function(index, message) {
                             /* Display each error message*/
-                            toastr.error(message); 
+                            toastr.error(message);
                         });
                     });
                 } else {
-                    /*General error message*/ 
+                    /*General error message*/
                     toastr.error('An error occurred. Please try again.');
                 }
             },
