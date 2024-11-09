@@ -14,11 +14,12 @@
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="">No.</th>
-                                <th class="">Photo</th>
-                                <th class="">Fullname</th>
-                                <th class="">Phone Number</th>
-                                <th class=""></th>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Company</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -79,17 +80,6 @@
             "data":"id"
           },
           {
-            "data":"profile_image",
-            render:function(data,type,row){
-
-              if(row.profile_image!==null){
-                return '<img src="{{ asset("Backend/uploads/photos") }}/' + row.profile_image + '" width="50px" height="50px" class="img-fluid">';
-              }else{
-                return '<img src="{{ asset("Backend/images/default.jpg") }}" width="100px" height="90px" class="img-fluid">';
-              }
-            }
-          },
-          {
             "data":"fullname",
             render:function(data,type,row){
               var link ="{{ route('admin.customer.view', ':id') }}".replace(':id', row.id);
@@ -97,9 +87,15 @@
             }
           },
           {
+            "data":"company_name"
+          },
+          {
             "data":"phone_number"
           },
-          
+          {
+            "data":"email_address"
+          },
+
           {
             data:null,
             render: function (data, type, row) {

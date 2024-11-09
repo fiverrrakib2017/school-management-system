@@ -24,20 +24,20 @@ class CustomerController extends Controller
     public function get_all_data(Request $request)
     {
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'profile_image','fullname','phone_number', 'created_at'];
+        $columnsForOrderBy = ['id', 'fullname','company_name','phone_number', 'email_address'];
         $orderByColumn = $request->order[0]['column'];
         $orderDirectection = $request->order[0]['dir'];
-    
+
         $object = Customer::when($search, function ($query) use ($search) {
-            $query->where('profile_image', 'like', "%$search%");
             $query->where('fullname', 'like', "%$search%");
+            $query->where('company_name', 'like', "%$search%");
             $query->where('phone_number', 'like', "%$search%");
-            $query->where('created_at', 'like', "%$search%");
+            $query->where('email_address', 'like', "%$search%");
         })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
-    
+
         $total = $object->count();
         $item = $object->skip($request->start)->take($request->length)->get();
-    
+
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
@@ -159,7 +159,7 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-        /*Validate the form data*/ 
+        /*Validate the form data*/
         $rules=[
             'fullname' => 'required|string',
             'email_address' => 'required|email',
@@ -188,12 +188,12 @@ class CustomerController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        
+
         /* Find the Customer*/
 
         $object = Customer::findOrFail($id);
         $object->fullname = $request->fullname;
-        
+
         // Handle profile image update
         if ($request->hasFile('profile_image')) {
 
