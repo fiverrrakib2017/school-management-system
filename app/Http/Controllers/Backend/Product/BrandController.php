@@ -8,115 +8,101 @@ use Illuminate\Support\Facades\Validator;
 
 class BrandController extends Controller
 {
-    public function index(){
-        $data=Product_Brand::latest()->get();
-        return view('Backend.Pages.Product.Brand.index',compact('data'));
-    }
-    public function create(){
-        return view('Backend.Pages.Product.Brand.Add');
-    }
-    public function store(Request $request){
-         //Validate the form data
-        $rules = [
-            'brand_name' => 'required|string',
-            'brand_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'slug' => 'nullable|string',
-            'status' => 'required|in:1,0',
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors()->all())->withInput();
-        }
-        // Handle file upload
-        if ($request->hasFile('brand_image')) {
-            $image = $request->file('brand_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('Backend/uploads/photos'), $imageName);
-        }else{
-            $imageName =NULL;
-        }
-
-        // Create a new brand object
-        $brand = new Product_Brand();
-        $brand->brand_name=$request->brand_name;
-        $brand->brand_image=$imageName;
-        $brand->slug=$request->slug;
-        $brand->status=$request->status;
-        // Save the brand to the database
-        $brand->save();
-         // Redirect or return a response as needed
-        return redirect()->route('admin.brand.index')->with('success','Add Successfully');
-    }
-    public function edit($id){
-         $data = Product_Brand::findOrFail($id);
-        return view('Backend.Pages.Product.Brand.Update', compact('data'));
-    }
-    public function update(Request $request)
+    public function index()
     {
-        // Validation rules
-        $rules = [
-            'brand_name' => 'required|string',
-            'brand_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'slug' => 'nullable|string',
-            'status' => 'required|in:1,0',
-        ];
-    
-        // Validate the request
-        $validator = Validator::make($request->all(), $rules);
-    
-        // Handle validation failure
-        if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors()->all())->withInput();
-        }
-    
-        // Find the brand by ID
-        $brand = Product_Brand::find($request->id);
-    
-        // Check if the brand exists
-        if (!$brand) {
-            return redirect()->back()->with('error', 'Brand not found')->withInput();
-        }
-    
-        // Update brand details
-        $brand->brand_name = $request->brand_name;
-    
-        // Handle the image upload if a new image is provided
-        if ($request->hasFile('brand_image')) {
-            // Delete the existing image
-            if ($brand->brand_image && file_exists(public_path('Backend/uploads/photos/' . $brand->brand_image))) {
-                File::delete(public_path('Backend/uploads/photos/' . $brand->brand_image));
-            }
-    
-            // Upload and save the new image
-            $image = $request->file('brand_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('Backend/uploads/photos'), $imageName);
-            $brand->brand_image = $imageName;
-        }
-    
-        // Update other fields
-        $brand->slug = $request->slug;
-        $brand->status = $request->status;
-    
-        // Save the updated brand
-        $brand->update();
-    
-        // Redirect with success message
-        return redirect()->route('admin.brand.index')->with('success', 'Brand updated successfully');
+        return view('Backend.Pages.Product.Brand.index');
     }
-    
-    public function delete($id){
+    public function get_all_data(Request $request)
+    {
+        $search = $request->search['value'];
+        $columnsForOrderBy = ['id', 'brand_name'];
+        $orderByColumn = $request->order[0]['column'];
+        $orderDirectection = $request->order[0]['dir'];
+
+        $object = Product_Brand::when($search, function ($query) use ($search) {
+            $query->where('brand_name', 'like', "%$search%");
+        })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
+
+        $total = $object->count();
+        $item = $object->skip($request->start)->take($request->length)->get();
+
+        return response()->json([
+            'draw' => $request->draw,
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+            'data' => $item,
+        ]);
+    }
+    public function store(Request $request)
+    {
+        /*Validate the form data*/
+        $this->validateForm($request);
+
+        $object = new Product_Brand();
+        $object->brand_name = $request->name;
+
+        /* Save to the database table*/
+        $object->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Added successfully!'
+        ]);
+    }
+
+
+    public function delete(Request $request)
+    {
+        $object = Product_Brand::find($request->id);
+
+        if (empty($object)) {
+            return response()->json(['error' => 'Brand not found.'], 404);
+        }
+        /* Delete it From Database Table */
+        $object->delete();
+
+        return response()->json(['success' =>true, 'message'=> 'Deleted successfully.']);
+    }
+    public function edit($id)
+    {
+        $data = Product_Brand::find($id);
+        if ($data) {
+            return response()->json(['success' => true, 'data' => $data]);
+            exit;
+        } else {
+            return response()->json(['success' => false, 'message' => 'Brand not found.']);
+        }
+    }
+
+
+    public function update(Request $request, $id)
+    {
+
+        $this->validateForm($request);
 
         $object = Product_Brand::findOrFail($id);
+        $object->brand_name = $request->name;
+        $object->update();
 
-        // Delete the brand image
-        if ($object->brand_image!=NULL) {
-            File::delete(public_path('Backend/uploads/photos/' . $object->brand_image));
-        }
-
-
-        // Delete the brand from the database
-        $object->delete();
-        return redirect()->route('admin.brand.index')->with('success','Delete Successfull');
+        return response()->json([
+            'success' => true,
+            'message' => 'Update successfully!'
+        ]);
     }
+    private function validateForm($request)
+    {
+
+        /*Validate the form data*/
+        $rules=[
+            'brand_name' => 'required|string',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+    }
+
 }

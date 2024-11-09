@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('product__brands', function (Blueprint $table) {
             $table->id();
             $table->string('brand_name');
-            $table->string('brand_image')->nullable();
-            $table->string('slug')->nullable();
-            $table->integer('status');
             $table->timestamps();
         });
     }

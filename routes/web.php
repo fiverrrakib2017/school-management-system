@@ -310,16 +310,6 @@ Route::group(['middleware'=>'admin'],function(){
 
     /* Product Route */
     Route::prefix('admin/product')->group(function() {
-        /* Brand Route */
-        Route::prefix('brand')->controller(BrandController::class)->group(function() {
-            Route::get('/', 'index')->name('admin.brand.index');
-            Route::get('/create', 'create')->name('admin.brand.create');
-            Route::post('/store', 'store')->name('admin.brand.store');
-            Route::get('/delete/{id}', 'delete')->name('admin.brand.delete');
-            Route::get('/edit/{id}', 'edit')->name('admin.brand.edit');
-            Route::post('/update', 'update')->name('admin.brand.update');
-        });
-
         /* Sub Category Route */
         Route::prefix('sub-category')->controller(SubCateogryController::class)->group(function() {
             Route::get('/', 'index')->name('admin.subcategory.index');
@@ -377,17 +367,24 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/store', 'store')->name('admin.category.store');
             Route::post('/update/{id}', 'update')->name('admin.category.update');
         });
+         /** Product Brand Management Route **/
+        Route::prefix('brand')->controller(BrandController::class)->group(function() {
+            Route::get('/list', 'index')->name('admin.brand.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.brand.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.brand.edit');
+            Route::post('/delete', 'delete')->name('admin.brand.delete');
+            Route::post('/store', 'store')->name('admin.brand.store');
+            Route::post('/update/{id}', 'update')->name('admin.brand.update');
+        });
 
         /* Product Route */
         Route::controller(ProductController::class)->group(function() {
-            Route::get('/all', 'index')->name('admin.products.index');
-            Route::get('/get_product/{id}', 'get_product')->name('admin.products.get_product');
-            Route::get('/create', 'create')->name('admin.products.create');
-            Route::post('/update', 'product_update')->name('admin.product.update');
-            Route::get('/edit/{id}', 'edit')->name('admin.products.edit');
-            Route::get('/view/{id}', 'view')->name('admin.products.view');
-            Route::post('/store', 'store')->name('admin.products.store');
-            Route::post('/delete', 'delete')->name('admin.products.delete');
+            Route::get('/list', 'index')->name('admin.product.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.product.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.product.edit');
+            Route::post('/delete', 'delete')->name('admin.product.delete');
+            Route::post('/store', 'store')->name('admin.product.store');
+            Route::post('/update/{id}', 'update')->name('admin.product.update');
         });
 
         /* Product Image */
