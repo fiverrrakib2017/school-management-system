@@ -33,6 +33,7 @@ use App\Http\Controllers\Backend\Supplier\SupplierController;
 use App\Http\Controllers\Backend\Teacher\TeacherAttendance_controller;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
 use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controller;
+use App\Models\Product_Category;
 use Illuminate\Support\Facades\Route;
 
 /*Backend Route*/
@@ -319,16 +320,6 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/update', 'update')->name('admin.brand.update');
         });
 
-        /* Category Route */
-        Route::prefix('category')->controller(CategoryController::class)->group(function() {
-            Route::get('/', 'index')->name('admin.category.index');
-            Route::get('/create', 'create')->name('admin.category.create');
-            Route::post('/store', 'store')->name('admin.category.store');
-            Route::post('/delete', 'delete')->name('admin.category.delete');
-            Route::get('/edit/{id}', 'edit')->name('admin.category.edit');
-            Route::post('/update', 'update')->name('admin.category.update');
-        });
-
         /* Sub Category Route */
         Route::prefix('sub-category')->controller(SubCateogryController::class)->group(function() {
             Route::get('/', 'index')->name('admin.subcategory.index');
@@ -376,6 +367,15 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete', 'delete')->name('admin.unit.delete');
             Route::post('/store', 'store')->name('admin.unit.store');
             Route::post('/update/{id}', 'update')->name('admin.unit.update');
+        });
+         /** Product Category Management Route **/
+        Route::prefix('category')->controller(CategoryController::class)->group(function() {
+            Route::get('/list', 'index')->name('admin.category.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.category.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.category.edit');
+            Route::post('/delete', 'delete')->name('admin.category.delete');
+            Route::post('/store', 'store')->name('admin.category.store');
+            Route::post('/update/{id}', 'update')->name('admin.category.update');
         });
 
         /* Product Route */
