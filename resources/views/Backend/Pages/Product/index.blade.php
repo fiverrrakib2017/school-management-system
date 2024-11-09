@@ -9,7 +9,7 @@
                     Add New Product</a>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -39,10 +39,10 @@
                                 @endphp
                                 @if (!empty($productImage->image))
                                 <img src="{{ asset('uploads/product/' . $productImage->image) }}" alt="" width="50px" height="50px" class="img-fluid">
-                                    
+
                                 @else
                                     <img src="https://dummyimage.com/250/ffffff/000000" alt="" srcset="" width="50px" height="50px" class="w-[40px] h-[40px]">
-                                   
+
                                 @endif
                                 </td>
 
@@ -51,7 +51,7 @@
                                 <td>{{$data->s_price}}</td>
                                 <td>{{$data->qty}}</td>
                                 <td>{{$data->sku}}</td>
-                               
+
                                 <td>
                                   <!-- Add your action buttons here -->
                                   <a class="btn btn-primary btn-sm mr-3" href="{{route('admin.products.edit', $data->id)}}"><i class="fa fa-edit"></i></a>
@@ -115,14 +115,5 @@
     });
   </script>
 
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
-
+  
 @endsection
