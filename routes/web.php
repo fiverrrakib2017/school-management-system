@@ -77,7 +77,7 @@ Route::group(['middleware'=>'admin'],function(){
                     Route::post('/delete','delete')->name('admin.student.class.routine.delete');
                     Route::get('/print','print')->name('admin.student.class.routine.print');
                     Route::get('/get_routine_data','get_routine_data')->name('admin.student.class.routine.data');
-                    
+
                 });
             });
         });
@@ -105,7 +105,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::get('/get_student/{id}','get_student')->name('admin.student.get_student');
             Route::post('/student_filter','student_filter')->name('admin.student.student_filter');
         });
-        
+
         /*Student Shift */
         Route::prefix('shift')->group(function(){
             Route::controller(Shift_controller::class)->group(function(){
@@ -152,7 +152,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/get_fees_for_class/{id}','get_fees_for_class')->name('admin.student.fees_type.get_fees_for_class');
             });
         });
-      
+
         /*Student Bill Collection */
         Route::prefix('Bill_collection')->group(function(){
             Route::controller(Bill_CollectionController::class)->group(function(){
@@ -165,9 +165,9 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update/{id}','update')->name('admin.student.bill_collection.update');
                 Route::get('Invoice/view/{id}','invoice_show')->name('admin.student.bill_collection.invoice_show');
             });
-            
+
         });
-        
+
     });
      /** Teacher Management  Route **/
     Route::prefix('admin/teacher')->group(function(){
@@ -203,7 +203,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/attendance_log_all_data','attendance_log_all_data')->name('admin.teacher.attendence.log.all_data');
             });
         });
-        
+
     });
     /** Accounts Management  Route **/
     Route::prefix('admin/accounts')->group(function(){
@@ -258,7 +258,6 @@ Route::group(['middleware'=>'admin'],function(){
         Route::controller(CustomerController::class)->group(function() {
             Route::get('/list', 'index')->name('admin.customer.index');
             Route::get('/all-data', 'get_all_data')->name('admin.customer.get_all_data');
-            Route::get('/create', 'create')->name('admin.customer.create');
             Route::get('/edit/{id}', 'edit')->name('admin.customer.edit');
             Route::get('/view/{id}', 'view')->name('admin.customer.view');
             Route::post('/delete', 'delete')->name('admin.customer.delete');
@@ -306,7 +305,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete', 'delete_invoice')->name('admin.supplier.invoice.delete_invoice');
         });
     });
-   
+
     /* Product Route */
     Route::prefix('admin/product')->group(function() {
         /* Brand Route */
@@ -393,7 +392,7 @@ Route::group(['middleware'=>'admin'],function(){
     });
 
     Route::get('/profile',function(){
-        return view('Backend.Pages.Profile'); 
+        return view('Backend.Pages.Profile');
     });
 
 
