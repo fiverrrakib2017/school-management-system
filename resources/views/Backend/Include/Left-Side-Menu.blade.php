@@ -79,104 +79,53 @@
                    </ul>
                 </div>
              </li>
-             
              <li>
-                <a href="#customer_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-users"></i>
-                <span> Customers </span>
+                <a href="#inventory_management" data-bs-toggle="collapse">
+                    <i class="menu-item-icon fas fa-boxes"></i>
+                <span>Inventory</span>
                 <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="customer_management">
+                <div class="collapse" id="inventory_management">
                    <ul class="nav-second-level">
-                      <li>
-                        <a href="{{ route('admin.customer.index') }}">Customer </a>
-                      </li>
-                   </ul>
-                </div>
-             </li>
-             <li>
-                <a href="#supplier_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-truck"></i>
-                <span> Suppliers </span>
-                <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="supplier_management">
-                   <ul class="nav-second-level">
-                      <li>
-                        <a href="{{ route('admin.supplier.index') }}">Supplier </a>
-                      </li>
-                   </ul>
-                </div>
-             </li>
-             <li>
-                <a href="#product_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-box"></i>
-                <span> Products </span>
-                <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="product_management">
-                   <ul class="nav-second-level">
-                      <li>
-                        <a href="{{ route('admin.brand.index') }}">Brand</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.category.index') }}">Category</a>
-                      </li>
-                      <!-- <li>
-                        <a href="{{ route('admin.subcategory.index') }}">Sub Category</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.childcategory.index') }}">Child Category</a>
-                      </li> -->
-                      <li>
-                        <a href="{{ route('admin.product.color.index') }}">Color</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.product.size.index') }}">Size</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.products.create') }}">Product Create</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.products.index') }}">Product </a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.product.stock.index') }}">Stock</a>
-                      </li>
-                   </ul>
-                </div>
-             </li>
-             <li>
-                <a href="#sales_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-shopping-cart"></i>
-                <span>Sales </span>
-                <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sales_management">
-                   <ul class="nav-second-level">
-                      <li>
-                        <a href="{{ route('admin.customer.invoice.create_invoice') }}">Sale</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.customer.invoice.show_invoice') }}">Sales Invoice</a>
-                      </li>
-                   </ul>
-                </div>
-             </li>
-             <li>
-                <a href="#purchase_management" data-bs-toggle="collapse">
-                    <i class="menu-item-icon fas fa-shopping-bag"></i>
-                <span>Purchases </span>
-                <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="purchase_management">
-                   <ul class="nav-second-level">
-                      <li>
-                        <a href="{{ route('admin.supplier.invoice.create_invoice') }}">Purchase</a>
-                      </li>
-                      <li>
-                        <a href="{{ route('admin.supplier.invoice.show_invoice') }}">Purchase Invoice</a>
-                      </li>
+                        <li>
+                            <a href="{{ route('admin.customer.invoice.create_invoice') }}">Sale</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.customer.invoice.show_invoice') }}">Sales Invoice</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.supplier.invoice.create_invoice') }}">Purchase</a>
+                          </li>
+                        <li>
+                            <a href="{{ route('admin.supplier.invoice.show_invoice') }}">Purchase Invoice</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.brand.index') }}">Brand</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.category.index') }}">Category</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.product.color.index') }}">Color</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.product.size.index') }}">Size</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.products.create') }}">Product Create</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.products.index') }}">Products</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.product.stock.index') }}">Stock</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.supplier.index') }}">Supplier </a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.customer.index') }}">Customer </a>
+                          </li>
                    </ul>
                 </div>
              </li>
