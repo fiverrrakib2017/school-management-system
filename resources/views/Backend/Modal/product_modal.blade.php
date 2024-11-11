@@ -18,7 +18,7 @@
 
                         <div class="col-md-6 mb-2">
                             <label for="unit_id">Units</label>
-                            <select id="unit_id" name="unit_id" class="form-select" required>
+                            <select id="unit_id" name="unit_id"  class="form-select" style="width: 100%;" required>
                                 <option value="">---Select---</option>
                                 @php
                                     $units = \App\Models\Unit::all();
@@ -33,7 +33,7 @@
                     <div class="row">
                          <div class="col-md-6 mb-2">
                             <label for="brand_id">Brand</label>
-                            <select id="brand_id" name="brand_id" class="form-select" required>
+                            <select id="brand_id" name="brand_id" class="form-select" style="width: 100%;" required>
                                 <option value="">---Select---</option>
                                 @php
                                     $brands = \App\Models\Product_Brand::latest()->get();
@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="category_id">Category</label>
-                            <select id="category_id" name="category_id" class="form-select" required>
+                            <select id="category_id" name="category_id" style="width: 100%;" class="form-select" required>
                                 <option value="">---Select---</option>
                                 @php
                                     $categories = \App\Models\Product_Category::latest()->get();
@@ -69,7 +69,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-2">
                             <label for="purchase_ac">Purchase A/C</label>
-                            <select id="purchase_ac" name="purchase_ac" class="form-select" required>
+                            <select id="purchase_ac" name="purchase_ac" style="width: 100%;" class="form-select" required>
                                 <option value="">---Select---</option>
                                 @php
                                     $purchaseAccounts = \App\Models\Ledger::where('master_ledger_id', 2)->get();
@@ -88,7 +88,7 @@
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="sales_ac">Sales A/C</label>
-                            <select id="sales_ac" name="sales_ac" class="form-select" required>
+                            <select id="sales_ac" name="sales_ac" class="form-select" style="width: 100%;" width="100%" required>
                                 <option value="">---Select---</option>
                                 @php
                                     $salesAccounts = \App\Models\Ledger::where('master_ledger_id', 1)->get();
@@ -120,7 +120,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-2">
                             <label for="store">Store</label>
-                            <select  name="store_id" class="form-select" required>
+                            <select  name="store_id" class="form-select" style="width: 100%;" required>
                                 <option value="">---Select---</option>
                                 @php
                                     $stores = \App\Models\Store::all();

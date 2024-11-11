@@ -91,7 +91,7 @@ class ProductController extends Controller
         $object = Product::find($request->id);
 
         if (empty($object)) {
-            return response()->json(['error' => 'Brand not found.'], 404);
+            return response()->json(['error' => 'Product not found.'], 404);
         }
         /* Delete it From Database Table */
         $object->delete();
@@ -105,7 +105,7 @@ class ProductController extends Controller
             return response()->json(['success' => true, 'data' => $data]);
             exit;
         } else {
-            return response()->json(['success' => false, 'message' => 'Brand not found.']);
+            return response()->json(['success' => false, 'message' => 'Product not found.']);
         }
     }
 
@@ -113,11 +113,20 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
 
-        $this->validateForm($request, $id);
+        $this->validateForm($request);
 
-        $object = Product::findOrFail($id);
-        $object->brand_name = $request->name;
-        $object->update();
+        $product = Product::findOrFail($id);
+        $product->name = $request->name;
+        $product->brand_id = $request->brand_id;
+        $product->category_id = $request->category_id;
+        $product->purchase_ac = $request->purchase_ac;
+        $product->sales_ac = $request->sales_ac;
+        $product->purchase_price = $request->purchase_price;
+        $product->sale_price = $request->sales_price;
+        $product->unit_id = $request->unit_id;
+        $product->store_id = $request->store_id;
+        $product->qty = $request->qty;
+        $product->update();
 
         return response()->json([
             'success' => true,

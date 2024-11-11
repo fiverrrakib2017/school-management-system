@@ -41,9 +41,11 @@
 @section('script')
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script  src="{{ asset('Backend/assets/js/delete_data.js') }}"></script>
+<script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
 
   <script type="text/javascript">
     $(document).ready(function(){
+    custom_select2('#productModal');
     handleSubmit('#productForm','#productModal');
     var table=$("#datatable1").DataTable({
     "processing":true,
@@ -119,9 +121,19 @@
             method: 'GET',
             success: function(response) {
                 if (response.success) {
-                    $('#productForm').attr('action', "{{ route('admin.unit.update', ':id') }}".replace(':id', id));
+                    $('#productForm').attr('action', "{{ route('admin.product.update', ':id') }}".replace(':id', id));
                     $('#productModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Product');
                     $('#productForm input[name="name"]').val(response.data.name);
+                    $('#productForm select[name="unit_id"]').val(response.data.unit_id);
+                    $('#productForm select[name="brand_id"]').val(response.data.brand_id);
+                    $('#productForm select[name="category_id"]').val(response.data.category_id);
+                    $('#productForm select[name="purchase_ac"]').val(response.data.purchase_ac);
+                    $('#productForm select[name="sales_ac"]').val(response.data.sales_ac);
+                    $('#productForm input[name="purchase_price"]').val(response.data.purchase_price);
+                    $('#productForm input[name="sales_price"]').val(response.data.sale_price);
+                    $('#productForm select[name="store_id"]').val(response.data.store_id);
+                    $('#productForm input[name="note"]').val(response.data.note);
+                    $('#productForm input[name="qty"]').val(response.data.qty);
 
                     // Show the modal
                     $('#productModal').modal('show');
