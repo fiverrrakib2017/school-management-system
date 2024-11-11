@@ -140,6 +140,7 @@ button#submitButton {
 </div>
 @include('Backend.Modal.customer_modal')
 @include('Backend.Modal.product_modal')
+@include('Backend.Modal.invoice_modal')
 @endsection
 
 
@@ -149,12 +150,204 @@ button#submitButton {
 
 <script type="text/javascript">
     $(document).ready(function() {
+        var selectedProductId = null;
+        /*********** Select 2 *****************/
         custom_select2_without_modal('#form-data');
         custom_select2('#productModal');
         custom_select2('#CustomerModal');
+
+
+        /*********** Submit Customer Form AND Product Form *****************/
         handleSubmit('#CustomerForm','#CustomerModal');
         handleSubmit('#productForm','#productModal');
-    });
+            $("#product_name").change(function() {
+                var id = $(this).val();
+                $.ajax({
+                    url: "{{ route('admin.product.edit', ':id') }}".replace(':id', id),
+                    method: 'GET',
+                    success: function(response) {
+                        selectedProductId = response.data.id;
+                        var price =response.data.sale_price;
+
+                        $('#price').val(price);
+                        updateTotalPrice();
+
+                    },
+                    error: function(xhr, status, error) {
+                        /*handle the error response*/
+                        console.log(error);
+                    }
+                });
+            });
+            $('#qty').on('input', function() {
+                updateTotalPrice();
+            });
+            $('#price').on('input', function() {
+                updateTotalPrice();
+            });
+
+            function updateTotalPrice() {
+                var qty = $('#qty').val();
+                var price = $('#price').val();
+                var total = qty * price;
+                $('#total_price').val(total);
+            }
+            $(document).on('click','#submitButton',function(e){
+                e.preventDefault();
+                var productName = $('#product_name option:selected').text();
+                var quantity = $('#qty').val();
+                var price = $('#price').val();
+                var totalPrice = $('#total_price').val();
+
+                if(!selectedProductId || !quantity || !price || !totalPrice) {
+                    toastr.error('Please fill in all fields');
+                    return;
+                }
+                /*Check if the product is already added to the table*/
+                var isProductAdded = false;
+                $('#tableRow tr').each(function() {
+                    var tableProductId = $(this).find('input[name="table_product_id[]"]').val();
+                    if (tableProductId == selectedProductId) {
+                        isProductAdded = true;
+                        return false;
+                    }
+                });
+
+                if (isProductAdded) {
+                    toastr.error('Product is already added. <br> Please update the quantity instead.');
+                    return;
+                }
+                $('#submitButton').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`).prop('disabled', true);
+                $.ajax({
+                    url: "{{ route('admin.product.check_product_qty') }}",
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: { product_id: selectedProductId, qty: quantity },
+                    success: function(response) {
+                        if (response.success==true) {
+                            var row = `<tr>
+                                <td><input type="hidden" name="table_product_id[]" value="`+ selectedProductId +`">${productName}</td>
+                                <td><input type="hidden" min="1" name="table_qty[]" value="${quantity}" class="form-control table_qty">${quantity}</td>
+                                <td><input type="hidden" name="table_price[]" class="form-control table_price" value="${price}">${price}</td>
+                                <td><input type="hidden" id="table_total_price" name="table_total_price[]" class="form-control" value="${totalPrice}">${totalPrice}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm removeRow">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>`;
+                            $("#tableRow").append(row);
+
+
+                            calculateTotalAmount();
+
+                            /*Clear The Fild*/
+                            $('#product_name').val('');
+                            $('#qty').val('1');
+                            $('#price').val('');
+                            $('#total_price').val('');
+                            selectedProductId = null;
+                        } else if(response.success==false) {
+                            /*IF The Stock Is Not Available*/
+                            toastr.error(response.message);
+                        }
+
+                    },
+                    error: function() {
+                      //  toastr.error('Error checking product stock.');
+
+                    },
+                    complete:function(){
+                        $('#submitButton').html('Submit').prop('disabled', false);
+                    }
+                });
+            });
+            $(document).on('click', '.removeRow', function() {
+                $(this).closest('tr').remove();
+                calculateTotalAmount();
+            });
+            /* Calculate total amount function*/
+            function calculateTotalAmount() {
+                var totalAmount = 0;
+                $('#tableRow tr').each(function() {
+                    var total_price = $(this).find('input[name="table_total_price[]"]').val();
+                    totalAmount += parseFloat(total_price);
+                });
+                $('input[name="table_total_amount"]').val(totalAmount);
+
+                // Calculate Due Amount
+                var paidAmount = parseFloat($('input[name="table_paid_amount"]').val()) || 0;
+                var discountAmount = parseFloat($('input[name="table_discount_amount"]').val()) || 0;
+                var dueAmount = totalAmount - paidAmount - discountAmount;
+                $('input[name="table_due_amount"]').val(dueAmount);
+            }
+            /*Update Due Amount when Paid Amount or Discount changes*/
+            $(document).on('input', 'input[name="table_paid_amount"], input[name="table_discount_amount"]', function() {
+                calculateTotalAmount();
+            });
+            $('#save_invoice_btn').on('click', function() {
+                var mainFormData = $('#form-data').serializeArray();
+                var modalFormData = $('#paymentForm').serializeArray();
+                var allFormData = $.merge(mainFormData, modalFormData);
+                var isValid = true;
+                /*Validate each form data field*/
+                $.each(allFormData, function(index, field) {
+                    if (field.name==='client_id' && field.value === '') {
+                        toastr.error("Client must be selected!");
+                        isValid = false;
+                        return false;
+                    }
+                    else if (field.name === 'table_paid_amount' && field.value === '') {
+                        toastr.error("Paid Amount is required");
+                        isValid = false;
+                        return false;
+                    }
+                    else if (field.name === 'date' && field.value === '') {
+                        toastr.error("Date is required!");
+                        isValid = false;
+                        return false;
+                    }
+                    else if (field.name === 'table_status' && field.value === '') {
+                        toastr.error("Type is required!");
+                        isValid = false;
+                        return false;
+                    }
+                });
+
+                if (!isValid) {
+                    return false;
+                }
+                $(this).prop('disable',true).html('Saving...');
+                $.ajax({
+                    type:'POST',
+                    url:$("#form-data").attr('action'),
+                    data:$.param(allFormData),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            /*Close the invoice modal*/
+                            $('#invoiceModal').modal('hide');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                        $('#save_invoice_btn').prop('disabled', false).html('Save Invoice');
+                    },
+                    error:function(xhr,status,error){
+                        toastr.error("Error:"+error);
+                        $('#save_invoice_btn').prop('disabled', false).html('Save Invoice');
+                    }
+                });
+            });
+            $(document).on('click','button[name="finished_btn"]',function(){
+                $('#invoiceModal').modal('show');
+            });
+        });
     function __get_short_string(str,num){
         if(str.length <=num){
           return str;

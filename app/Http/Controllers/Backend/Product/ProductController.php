@@ -108,6 +108,46 @@ class ProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Product not found.']);
         }
     }
+    public function check_product_qty(Request $request){
+        /*Validate the form data*/
+        $rules=[
+            'product_id' => 'required|exists:products,id',
+            'qty' => 'required|integer|min:1',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+         /*Find the product*/
+        $product = Product::find($request->product_id);
+
+        /* Check if product exists*/
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found.'
+            ]);
+        }
+
+        /* Check if product quantity is sufficient*/
+        if ($product->qty < $request->qty) {
+            return response()->json([
+                'success' => false,
+                'message' => ' Stock Not available.'
+            ]);
+        }
+
+        // If everything is fine, return success
+        return response()->json([
+            'success' => true,
+            'message' => 'Product quantity is Available.',
+        ]);
+    }
 
 
     public function update(Request $request, $id)

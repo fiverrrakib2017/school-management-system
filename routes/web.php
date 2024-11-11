@@ -394,6 +394,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete', 'delete')->name('admin.product.delete');
             Route::post('/store', 'store')->name('admin.product.store');
             Route::post('/update/{id}', 'update')->name('admin.product.update');
+            Route::post('/check_product_qty', 'check_product_qty')->name('admin.product.check_product_qty');
         });
 
         /* Product Image */
