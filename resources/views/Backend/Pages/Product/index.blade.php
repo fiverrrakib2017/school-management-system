@@ -32,7 +32,7 @@
 
     </div>
 </div>
-@include('Backend.Modal.unit_modal')
+@include('Backend.Modal.product_modal')
 @include('Backend.Modal.delete_modal')
 
 
@@ -44,14 +44,14 @@
 
   <script type="text/javascript">
     $(document).ready(function(){
-    handleSubmit('#unitForm','#unitModal');
+    handleSubmit('#productForm','#productModal');
     var table=$("#datatable1").DataTable({
     "processing":true,
     "responsive": true,
     "serverSide":true,
     beforeSend: function () {},
     complete: function(){},
-    ajax: "{{ route('admin.unit.get_all_data') }}",
+    ajax: "{{ route('admin.product.get_all_data') }}",
     language: {
         searchPlaceholder: 'Search...',
         sSearch: '',
@@ -62,7 +62,22 @@
             "data":"id"
           },
           {
-            "data":"unit_name"
+            "data":"name"
+          },
+          {
+            "data":"purchase_price"
+          },
+          {
+            "data":"sale_price"
+          },
+          {
+            "data":"unit.unit_name"
+          },
+          {
+            "data":"store.name"
+          },
+          {
+            "data":"qty"
           },
 
           {
@@ -100,16 +115,16 @@
 
         // AJAX call to fetch unit data
         $.ajax({
-            url: "{{ route('admin.unit.edit', ':id') }}".replace(':id', id),
+            url: "{{ route('admin.product.edit', ':id') }}".replace(':id', id),
             method: 'GET',
             success: function(response) {
                 if (response.success) {
-                    $('#unitForm').attr('action', "{{ route('admin.unit.update', ':id') }}".replace(':id', id));
-                    $('#unitModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Unit');
-                    $('#unitForm input[name="name"]').val(response.data.unit_name);
+                    $('#productForm').attr('action', "{{ route('admin.unit.update', ':id') }}".replace(':id', id));
+                    $('#productModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Product');
+                    $('#productForm input[name="name"]').val(response.data.name);
 
                     // Show the modal
-                    $('#unitModal').modal('show');
+                    $('#productModal').modal('show');
                 } else {
                     toastr.error('Failed to fetch Supplier data.');
                 }
@@ -123,7 +138,7 @@
     /** Handle Delete button click**/
     $('#datatable1 tbody').on('click', '.delete-btn', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('admin.unit.delete', ':id') }}".replace(':id', id);
+        var deleteUrl = "{{ route('admin.product.delete', ':id') }}".replace(':id', id);
 
         $('#deleteForm').attr('action', deleteUrl);
         $('#deleteModal').find('input[name="id"]').val(id);

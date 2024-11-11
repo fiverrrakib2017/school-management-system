@@ -19,7 +19,7 @@ function handleSubmit(formSelector, modalSelector) {
             processData: false,
             contentType: false,
             success: function(response) {
-                if (response.success) {
+                if (response.success==true) {
                     toastr.success(response.message);
                     form[0].reset();
                    /* Hide the modal */

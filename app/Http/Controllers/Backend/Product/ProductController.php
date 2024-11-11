@@ -3,31 +3,61 @@
 namespace App\Http\Controllers\Backend\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Illuminate\Support\Facades\Validator;
+
 class ProductController extends Controller
 {
     public function index()
     {
         return view('Backend.Pages.Product.index');
+        //return Product::with(['brand','category','unit','store'])->get();
     }
     public function get_all_data(Request $request)
     {
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'brand_name'];
-        $orderByColumn = $request->order[0]['column'];
-        $orderDirectection = $request->order[0]['dir'];
+        $columnsForOrderBy = ['id', 'name','purchase_price','sale_price','unit','store','qty'];
+        $orderByColumnIndex = $request->order[0]['column'];
+        $orderDirection = $request->order[0]['dir'];
+        $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
-        $object = Product_Brand::when($search, function ($query) use ($search) {
-            $query->where('brand_name', 'like', "%$search%");
-        })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
+        /*Start building the query*/
+        $query = Product::with('brand','category','unit','store');
 
-        $total = $object->count();
-        $item = $object->skip($request->start)->take($request->length)->get();
+        /*Apply the search filter*/
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->whereHas('unit', function($q) use ($search) {
+                    $q->where('unit_name', 'like', "%$search%");
+                })
+                ->orWhereHas('store', function($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                })
+                ->orWhere('name', 'like', "%$search%")
+                ->orWhere('purchase_price', 'like', "%$search%")
+                ->orWhere('sale_price', 'like', "%$search%");
+            });
+        }
 
+        /* Get the total count of records*/
+        $totalRecords = Product::count();
+
+        /* Get the count of filtered records*/
+        $filteredRecords = $query->count();
+
+
+        /* Apply ordering, pagination and get the data*/
+        $items = $query->orderBy($orderByColumn, $orderDirection)
+                    ->skip($request->start)
+                    ->take($request->length)
+                    ->get();
+
+        /* Return the response in JSON format*/
         return response()->json([
             'draw' => $request->draw,
-            'recordsTotal' => $total,
-            'recordsFiltered' => $total,
-            'data' => $item,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $items,
         ]);
     }
     public function store(Request $request)
@@ -35,11 +65,20 @@ class ProductController extends Controller
         /*Validate the form data*/
         $this->validateForm($request);
 
-        $object = new Product_Brand();
-        $object->brand_name = $request->name;
+        $product = new Product();
+        $product->name = $request->name;
+        $product->brand_id = $request->brand_id;
+        $product->category_id = $request->category_id;
+        $product->purchase_ac = $request->purchase_ac;
+        $product->sales_ac = $request->sales_ac;
+        $product->purchase_price = $request->purchase_price;
+        $product->sale_price = $request->sales_price;
+        $product->unit_id = $request->unit_id;
+        $product->store_id = $request->store_id;
+        $product->qty = $request->qty;
 
         /* Save to the database table*/
-        $object->save();
+        $product->save();
         return response()->json([
             'success' => true,
             'message' => 'Added successfully!'
@@ -49,7 +88,7 @@ class ProductController extends Controller
 
     public function delete(Request $request)
     {
-        $object = Product_Brand::find($request->id);
+        $object = Product::find($request->id);
 
         if (empty($object)) {
             return response()->json(['error' => 'Brand not found.'], 404);
@@ -61,7 +100,7 @@ class ProductController extends Controller
     }
     public function edit($id)
     {
-        $data = Product_Brand::find($id);
+        $data = Product::find($id);
         if ($data) {
             return response()->json(['success' => true, 'data' => $data]);
             exit;
@@ -74,9 +113,9 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
 
-        $this->validateForm($request);
+        $this->validateForm($request, $id);
 
-        $object = Product_Brand::findOrFail($id);
+        $object = Product::findOrFail($id);
         $object->brand_name = $request->name;
         $object->update();
 
@@ -90,9 +129,16 @@ class ProductController extends Controller
 
         /*Validate the form data*/
         $rules=[
-            'brand_name' => 'required|string',
+            'name' => 'required|string|max:255|unique:products,name',
+            'brand' => 'required|integer|exists:product_brands,id',
+            'category' => 'required|integer|exists:product_categories,id',
+            'purchase_ac' => 'required|integer|exists:sub_ledgers,id',
+            'sales_ac' => 'required|integer|exists:sub_ledgers,id',
+            'unit_id' => 'required|integer|exists:units,id',
+            'store' => 'required|integer|exists:stores,id',
         ];
         $validator = Validator::make($request->all(), $rules);
+
 
         if ($validator->fails()) {
             return response()->json([
