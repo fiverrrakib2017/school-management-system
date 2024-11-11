@@ -26,15 +26,7 @@ class InvoiceController extends Controller
     public function create_invoice(){
         return $this->invoiceService->createInvoice('Customer');
     }
-    public function search_product_data(Request $request){
-        if ($request->search=='') {
-            $products = Product::with('product_image')->latest()->get();
-            return response()->json(['success'=>true,'data' => $products]);
-            exit;
-        }
-        $products = Product::with('product_image')->where('title', 'like', "%$request->search%")->get();
-        return response()->json(['success'=>true,'data' => $products]);
-    }
+    
     public function show_invoice(){
         return view('Backend.Pages.Customer.invoice');
     }
@@ -65,7 +57,7 @@ class InvoiceController extends Controller
         foreach ($existing_items as $item) {
             $existing_qty[$item->product_id] = $item->qty;
         }
-        /*Validate new quantities against current stock*/ 
+        /*Validate new quantities against current stock*/
         foreach ($request->product_id as $index => $productId) {
             $product = Product::find($productId);
             if ($product) {
@@ -172,7 +164,7 @@ class InvoiceController extends Controller
             'paid_amount' => $paid_amount,
             'due_amount' => $due_amount,
         ]);
-        /*Log transaction history*/ 
+        /*Log transaction history*/
         $object = new Customer_Transaction_History();
         $object->invoice_id = $request->id;
         $object->customer_id = $invoice->customer_id;
@@ -213,7 +205,7 @@ class InvoiceController extends Controller
             if ($product) {
                 $old_qty = $existing_qty[$productId] ?? 0;
                 $difference= $request->qty[$index]-$old_qty;
-                $product->qty-=$difference; 
+                $product->qty-=$difference;
                 $product->save();
             }
         }

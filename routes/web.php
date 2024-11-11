@@ -272,7 +272,6 @@ Route::group(['middleware'=>'admin'],function(){
         Route::prefix('invoice')->controller(InvoiceController::class)->group(function() {
             Route::get('/create', 'create_invoice')->name('admin.customer.invoice.create_invoice');
             Route::get('/get_all_data', 'show_invoice_data')->name('admin.customer.invoice.show_invoice_data');
-            Route::post('/search_data', 'search_product_data')->name('admin.customer.invoice.search_product_data');
             Route::get('/show', 'show_invoice')->name('admin.customer.invoice.show_invoice');
             Route::post('/pay', 'pay_due_amount')->name('admin.customer.invoice.pay_due_amount');
             Route::post('/store', 'store_invoice')->name('admin.customer.invoice.store_invoice');

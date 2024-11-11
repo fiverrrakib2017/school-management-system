@@ -10,3 +10,13 @@ function custom_select2(modalId) {
         });
     });
 }
+function custom_select2_without_modal(form) {
+    $(form).find('select').each(function () {
+        if (!$(this).hasClass("select2-hidden-accessible")) {
+            $(this).select2({
+                dropdownParent: $(form),
+                placeholder: "---Select---"
+            });
+        }
+    });
+}

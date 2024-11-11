@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="form-group mb-2">
                                         <label for="">Status</label>
-                                        <select class="form-select" type="text" name="status">
+                                        <select class="form-select" type="text" style="width: 100%; " name="status">
                                             <option value="">---Select---</option>
                                             <option value="1">Active</option>
                                             <option value="0">Expire</option>
