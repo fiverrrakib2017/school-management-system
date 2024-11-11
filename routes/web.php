@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\Product\TempImageController;
 use App\Http\Controllers\Backend\Product\ChildCategoryController;
 use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Product\StockController;
+use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
@@ -375,6 +376,15 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete', 'delete')->name('admin.brand.delete');
             Route::post('/store', 'store')->name('admin.brand.store');
             Route::post('/update/{id}', 'update')->name('admin.brand.update');
+        });
+        /** Product Store Management Route **/
+        Route::prefix('store')->controller(StoreController::class)->group(function() {
+            Route::get('/list', 'index')->name('admin.store.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.store.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.store.edit');
+            Route::post('/delete', 'delete')->name('admin.store.delete');
+            Route::post('/store', 'store')->name('admin.store.store');
+            Route::post('/update/{id}', 'update')->name('admin.store.update');
         });
 
         /* Product Route */

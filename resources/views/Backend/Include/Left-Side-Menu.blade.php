@@ -109,7 +109,10 @@
                             <a href="{{ route('admin.unit.index') }}">Units</a>
                           </li>
                           <li>
-                            <a href="{{ route('admin.products.index') }}">Products</a>
+                            <a href="{{ route('admin.store.index') }}">Store</a>
+                          </li>
+                          <li>
+                            <a href="{{ route('admin.product.index') }}">Products</a>
                           </li>
                           <li>
                             <a href="{{ route('admin.supplier.index') }}">Supplier </a>

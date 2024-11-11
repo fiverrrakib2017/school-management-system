@@ -160,7 +160,7 @@
     </div>
   </div>
 </div>
-<div class="row">        
+<div class="row">
         <!-- Total Students Card -->
         <div class="col-xl-4 col-md-6 mb-4">
             <div class="card shadow py-2" style="border-left:3px solid #4e73df;">
@@ -181,7 +181,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Total Teachers Card -->
         <div class="col-xl-4 col-md-6 mb-4">
             <div class="card shadow py-2" style="border-left:3px solid #f6c23e;">
@@ -202,7 +202,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Total Classes Card -->
         <div class="col-xl-4 col-md-6 mb-4">
             <div class="card shadow py-2" style="border-left:3px solid #e74a3b;">
@@ -274,13 +274,13 @@
         </table>
       </div>
       <div class="card-footer text-center">
-        <a href="{{route('admin.products.index')}}" class="m-0 small text-primary">View All Products</a>
+        <a href="{{route('admin.product.index')}}" class="m-0 small text-primary">View All Products</a>
       </div>
     </div>
   </div>
 </div>
-   
-    
+
+
     <div class="row">
         <!-- Latest Students -->
         <div class="col-lg-6 mb-4">
@@ -306,7 +306,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Top Performing Students -->
         <div class="col-lg-6 mb-4">
             <div class="card shadow mb-4">
@@ -400,8 +400,8 @@ function __fetch_data(date) {
                     formatted_date.getDate() + ', ' +
                     formatted_date.getFullYear() + ' ' +
                     formatted_date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-                    var __profile_image = customer.profile_image == null ? 
-                        'https://via.placeholder.com/500' : 
+                    var __profile_image = customer.profile_image == null ?
+                        'https://via.placeholder.com/500' :
                         __baseUrl + '/Backend/uploads/photos/' + customer.profile_image;
 
                     var newRow = $("<tr>");
