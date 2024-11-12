@@ -28,7 +28,7 @@ button#submitButton {
                                 <div class="col">
                                     <div class="form-group mt-2">
                                         <label>Client Name</label>
-                                        <div class="input-group">
+                                        <div class="d-flex">
                                         <select type="text" id="client_name" name="client_id" class="form-select select2">
                                             <option value="">---Select---</option>
                                             @php
@@ -65,7 +65,7 @@ button#submitButton {
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="product_item" class="form-label">Product</label>
-                                        <div class="input-group">
+                                        <div class="d-flex">
                                             <select id="product_name" class="form-select select2" aria-label="Product Name">
                                                 <option value="">---Select---</option>
                                                 @php
@@ -228,17 +228,30 @@ button#submitButton {
                     success: function(response) {
                         if (response.success==true) {
                             var row = `<tr>
-                                <td><input type="hidden" name="table_product_id[]" value="`+ selectedProductId +`">${productName}</td>
-                                <td><input type="hidden" min="1" name="table_qty[]" value="${quantity}" class="form-control table_qty">${quantity}</td>
-                                <td><input type="hidden" name="table_price[]" class="form-control table_price" value="${price}">${price}</td>
-                                <td><input type="hidden" id="table_total_price" name="table_total_price[]" class="form-control" value="${totalPrice}">${totalPrice}</td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm removeRow">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>`;
-                            $("#tableRow").append(row);
+                                        <td>
+                                            <input type="hidden" name="table_product_id[]" value="${selectedProductId}" class="d-none">
+                                            ${productName}
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="table_qty[]" value="${quantity}" class="d-none">
+                                            ${quantity}
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="table_price[]" value="${price}" class="d-none">
+                                            ${price}
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="table_total_price[]" value="${totalPrice}" class="d-none">
+                                            ${totalPrice}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm removeRow">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>`;
+                                $("#tableRow").append(row);
+
 
 
                             calculateTotalAmount();
