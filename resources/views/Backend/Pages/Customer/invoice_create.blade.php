@@ -333,22 +333,22 @@ button#submitButton {
                 if (!isValid) {
                     return false;
                 }
-                $(this).prop('disable',true).html('Saving...');
+                $(this).prop('disable',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>');
                 $.ajax({
                     type:'POST',
                     url:$("#form-data").attr('action'),
                     data:$.param(allFormData),
                     dataType: 'json',
                     success: function(response) {
-                        if (response.success) {
-                            toastr.success(response.message);
+                        if (response.original.success) {
+                            toastr.success(response.original.message);
                             /*Close the invoice modal*/
                             $('#invoiceModal').modal('hide');
                             setTimeout(() => {
                                 location.reload();
                             }, 500);
                         } else {
-                            toastr.error(response.message);
+                            toastr.error(response.original.message);
                         }
                         $('#save_invoice_btn').prop('disabled', false).html('Save Invoice');
                     },

@@ -9,7 +9,7 @@
                     Add New Invoice</a>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -122,7 +122,7 @@
             "data":"customer.phone_number"
           },
           {
-            "data":"total_amount"
+            "data":"sub_total"
           },
           {
             "data":"paid_amount"
@@ -203,7 +203,7 @@
       type:'POST',
       'url':url,
       data: formData,
-      success: function (response) {        
+      success: function (response) {
         if (response.success==true) {
           $('#deleteModal').modal('hide');
           toastr.success(response.message);
@@ -255,16 +255,5 @@
     });
   });
   </script>
-
-
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
 
 @endsection
