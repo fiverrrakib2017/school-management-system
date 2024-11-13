@@ -1,32 +1,6 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-@section('style')
 
-    <style>
-       #preview {
-
-        margin-top: 10px;
-        max-width: 200px;
-        max-height: 200px;
-    }
-
-    .loading-spinner {
-        border:4px solid #f1f1f1;
-        border-left-color: #000000;;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-        }
-
-    </style>
-@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
@@ -136,7 +110,7 @@
                                 <label for="phone">Phone Number-2</label>
                                 <input type="tel" class="form-control" name="phone_2" placeholder="Enter phone number" required>
                             </div>
-                           
+
                         </div>
                     </div>
                     <hr style="border-top: 1px dashed #d3c6c6;">
@@ -165,7 +139,7 @@
                                 <label for="previous_school">Previous School</label>
                                 <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school">
                             </div>
-                           
+
                             <div class="col-md-6 mb-3">
                                 <label for="academic_results">Academic Results</label>
                                 <input type="text" class="form-control" name="academic_results" placeholder="Enter academic results">
@@ -179,8 +153,8 @@
                         <h6  style="color:#777878 ">Additional Information</h6>
                         <hr style="border-top: 1px dashed #d3c6c6;">
                         <div class="row">
-                            
-                           
+
+
                             <div class="col-md-6 mb-3">
                                 <label for="remarks">Remarks</label>
                                 <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks"></textarea>
@@ -211,8 +185,8 @@
             var sections = @json($section);
             var selectedClassId = $(this).val();
             var filteredSections = sections.filter(function(section) {
-                /*Filter sections by class_id*/ 
-                return section.class_id == selectedClassId; 
+                /*Filter sections by class_id*/
+                return section.class_id == selectedClassId;
             });
 
             /* Update Section dropdown*/
@@ -221,8 +195,8 @@
                 sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
             });
 
-            $('select[name="section_id"]').html(sectionOptions); 
-            $('select[name="section_id"]').select2(); 
+            $('select[name="section_id"]').html(sectionOptions);
+            $('select[name="section_id"]').select2();
         });
 
         $('#photo').change(function() {

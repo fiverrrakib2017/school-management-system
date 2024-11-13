@@ -26,21 +26,21 @@ class InvoiceController extends Controller
     public function create_invoice(){
         return $this->invoiceService->createInvoice('Customer');
     }
-    
+
     public function show_invoice(){
         return view('Backend.Pages.Customer.invoice');
     }
     public function view_invoice($id){
-       $data=  Customer_Invoice::with('customer','items.product')->find($id);
-       $pdf = Pdf::loadView('Backend.Pages.Customer.invoice_view',compact('data'));
-       return $pdf->stream('customer_invoice.pdf');
+    //    $data=  Customer_Invoice::with('customer','items.product')->find($id);
+    //    $pdf = Pdf::loadView('Backend.Pages.Customer.invoice_view',compact('data'));
+    //    return $pdf->stream('customer_invoice.pdf');
     }
     public function edit_invoice($id){
-        $customer=Customer::latest()->get();
-        $product=Product::latest()->get();
-        $products=Product::with('product_image')->paginate(10);
-       $data=  Customer_Invoice::with('customer','items')->where('id',$id)->get();
-       return view('Backend.Pages.Customer.invoice_edit',compact('data','customer','product','products'));
+    //     $customer=Customer::latest()->get();
+    //     $product=Product::latest()->get();
+    //     $products=Product::with('product_image')->paginate(10);
+    //    $data=  Customer_Invoice::with('customer','items')->where('id',$id)->get();
+    //    return view('Backend.Pages.Customer.invoice_edit',compact('data','customer','product','products'));
     }
     public function update_invoice(Request $request){
         /* Validate the request data*/
@@ -114,6 +114,7 @@ class InvoiceController extends Controller
         ]);
     }
     public function store_invoice(Request $request){
+        return $request->all(); exit;
         /* Validate the request data*/
         $this->__validate_method($request)->validate();
 

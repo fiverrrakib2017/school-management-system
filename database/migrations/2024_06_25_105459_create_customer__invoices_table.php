@@ -13,10 +13,17 @@ return new class extends Migration
     {
         Schema::create('customer__invoices', function (Blueprint $table) {
             $table->id();
+            $table->text('transaction_number')->nullable();
+            $table->integer('usr_id')->nullable();
             $table->unsignedBigInteger('customer_id');
-            $table->decimal('total_amount', 10, 2);
-            $table->decimal('paid_amount', 10, 2);
-            $table->decimal('due_amount', 10, 2);
+            $table->date('invoice_date');
+            $table->decimal('sub_total', 10, 0);
+            $table->decimal('discount', 10, 0);
+            $table->decimal('grand_total', 10, 0);
+            $table->decimal('due_amount');
+            $table->decimal('paid_amount');
+            $table->text('note')->nullable();
+            $table->integer('status')->comment('0=Draf,1=Completed');
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');

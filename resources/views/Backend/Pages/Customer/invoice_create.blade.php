@@ -14,6 +14,7 @@ button#submitButton {
 <div class="row">
     <div class="container-fluid">
         <form id="form-data" action="{{ route('admin.customer.invoice.store_invoice') }}" method="post">
+            @csrf
             <div class="row">
                 <div class="col-md-12">
                     <div class="card shadow-sm mb-4">
@@ -318,7 +319,7 @@ button#submitButton {
                         return false;
                     }
                     else if (field.name === 'date' && field.value === '') {
-                        toastr.error("Date is required!");
+                        toastr.error("Invoice Date is required!");
                         isValid = false;
                         return false;
                     }

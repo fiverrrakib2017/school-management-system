@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
-    protected $student=Null; 
+    protected $student=Null;
     public function __construct(StudentService $student)
     {
         $this->student=$student;
@@ -28,19 +28,23 @@ class StudentController extends Controller
         return view('Backend.Pages.Student.create',compact('data', 'section'));
     }
     public function edit($id){
-        return $this->student->edit($id);
+       // return $this->student->edit($id);
+       $student = Student::find($id);
+       $data=Student_class::latest()->get();
+       $section= Section::latest()->get();
+       return view('Backend.Pages.Student.edit',compact('student','data', 'section'));
     }
     public function view($id){
         return $this->student->view($id);
     }
     public function all_data(Request $request){
-    
+
         return $this->student->get_data($request);
     }
     public function store(Request $request)
     {
         /*Validate the incoming request data*/
-        
+
         $validator = StudentService::validate($request);
 
         if ($validator->fails()) {
@@ -119,7 +123,7 @@ class StudentController extends Controller
     }
 
     public function student_filter(Request $request){
-        $filters=array(); 
+        $filters=array();
 
         if (isset($request->class_id) && !empty($request->class_id)) {
             $filters['current_class']=$request->class_id;

@@ -35,6 +35,7 @@ use App\Http\Controllers\Backend\Teacher\TeacherAttendance_controller;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
 use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controller;
 use App\Models\Product_Category;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*Backend Route*/
@@ -293,7 +294,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/store', 'store')->name('admin.supplier.store');
             Route::post('/update/{id}', 'update')->name('admin.supplier.update');
         });
-        /** Customer Invoice Route **/
+        /** Supplier Invoice Route **/
         Route::prefix('invoice')->controller(Supplier_invoiceController::class)->group(function() {
             Route::get('/create', 'create_invoice')->name('admin.supplier.invoice.create_invoice');
             Route::get('/get_all_data', 'show_invoice_data')->name('admin.supplier.invoice.show_invoice_data');
@@ -411,6 +412,9 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/profile',function(){
         return view('Backend.Pages.Profile');
     });
-
+    Route::get('/optimize',function(){
+        Artisan::call('optimize:clear');
+        return 'Optimize Clear Completed';
+    });
 
 });
