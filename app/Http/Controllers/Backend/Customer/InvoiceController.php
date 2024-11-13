@@ -158,8 +158,8 @@ class InvoiceController extends Controller
                                 $account_transaction->ledger_id=$ledger_id;
                                 $account_transaction->sub_ledger_id=$sub_ledger_id;
                                 $account_transaction->qty=$request->table_qty[$index];
-                                $account_transaction->value=$request->table_price[$index];
-                                $account_transaction->total=$request->table_qty[$index] * $request->table_price[$index];
+                                $account_transaction->value=intval($request->table_price[$index]);
+                                $account_transaction->total=intval($request->table_qty[$index] * $request->table_price[$index]);
                                 $account_transaction->save();
                             }
                         }
@@ -173,6 +173,7 @@ class InvoiceController extends Controller
                 $inv_details->qty = $request->table_qty[$index];
                 $inv_details->price = $request->table_price[$index];
                 $inv_details->total_price = $request->table_qty[$index] * $request->table_price[$index];
+                $inv_details->status = $request->table_status ?? 0;
                 $inv_details->save();
             }
 

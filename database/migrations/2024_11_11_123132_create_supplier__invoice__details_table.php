@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('qty');
             $table->decimal('price', 10, 2);
             $table->decimal('total_price', 10, 2);
+            $table->integer('status');
             $table->timestamps();
 
              $table->foreign('invoice_id')->references('id')->on('supplier__invoices')->onDelete('cascade');
