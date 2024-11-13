@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('account_transactions', function (Blueprint $table) {
             $table->id();
+            $table->text('transaction_number');
             $table->integer('type'); //asset, liablities,revenue,expense
             $table->text('refer_no');
             $table->text('description');

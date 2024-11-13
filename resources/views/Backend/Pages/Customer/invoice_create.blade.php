@@ -41,7 +41,7 @@ button#submitButton {
                                                 @endforeach
                                             @endif
                                         </select>
-                                            <button type="button" class="btn btn-primary add-client-btn" data-bs-toggle="modal" data-bs-target="#CustomerModal"><span>+</span>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CustomerModal"><span>+</span>
                                             </button>
                                         </div>
                                     </div>
