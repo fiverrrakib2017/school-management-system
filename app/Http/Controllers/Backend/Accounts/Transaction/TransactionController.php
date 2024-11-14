@@ -82,6 +82,14 @@ class TransactionController extends Controller
         $to_date = Carbon::createFromFormat('Y-m-d', $request->to_date)->endOfDay();
         $master_ledger_id = $request->master_ledger_id;
 
+        /* Check if the dates are the same */
+        $same_date_flag = '';
+        if ($from_date->isSameDay($to_date)) {
+            $same_date_flag=true;
+        } else {
+            $same_date_flag=false;
+        }
+
         /* Fetch data with relations*/
         $transactions = Account_transaction::with(['ledger', 'sub_ledger'])
         ->where('master_ledger_id', $master_ledger_id)
@@ -92,8 +100,7 @@ class TransactionController extends Controller
 
         $master_ledger = Master_ledger::where('status', 1)->latest()->get();
         $ledger = Ledger::where('status', 1)->latest()->get();
-
-        return view('Backend.Pages.Accounts.Transaction.Report.index', compact('transactions', 'master_ledger', 'ledger'));
+        return view('Backend.Pages.Accounts.Transaction.Report.index', compact('transactions', 'master_ledger', 'ledger','same_date_flag'));
     }
 
 }

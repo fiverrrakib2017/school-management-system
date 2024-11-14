@@ -72,10 +72,17 @@
                                     $ledgerTotal += $transaction->total;
                                 @endphp
                                 <!-- Display each sub-ledger and its amount -->
+                                @if ($same_date_flag==1)
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ $transaction->sub_ledger->sub_ledger_name ?? '' }}<br>{{ $transaction->note ?? '' }}</span>
+                                    <span style="text-align: right;">{{ $transaction->total }}</span>
+                                </div>
+                                @else
                                 <div class="d-flex justify-content-between">
                                     <span>{{ $transaction->sub_ledger->sub_ledger_name ?? '' }}</span>
                                     <span style="text-align: right;">{{ $transaction->total }}</span>
                                 </div>
+                                @endif
                             @endforeach
                         </td>
                         <td style="text-align: right;">{{ $ledgerTotal }}</td>
@@ -168,7 +175,7 @@
         printWindow.document.write(`
             <html>
                 <head>
-                    <title>Teacher Transaction Report</title>
+                    <title>Accounts Transaction Report</title>
                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
                     <style>
                         body { font-family: Arial, sans-serif; }
