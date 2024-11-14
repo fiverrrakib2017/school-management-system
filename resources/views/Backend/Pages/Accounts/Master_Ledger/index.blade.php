@@ -4,12 +4,8 @@
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
-            <div class="card-header">
-                  <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                  Add New </button>
-            </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -19,7 +15,6 @@
                               <th class="">Master Ledger Name</th>
                               <th class="">Status</th>
                               <th class="">Create Date</th>
-                              <th class="">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,114 +28,15 @@
     </div>
 </div>
 
-<!-- Add Modal -->
-<div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add New Master Ledger
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <!----- Start Add Form ------->
-            <form id="addSectionForm" action="{{ route('admin.master_ledger.store') }}" method="post">
-                @csrf
-                <div class="modal-body">
-                    <!----- Start Add Form input ------->
-                    <div class="row">
-                        <div class="form-group mb-2">
-                            <label for="">Master Ledger Name:</label>
-                            <input type="text" name="master_ledger_name" class="form-control" placeholder="Enter Master Ledger Name"  required>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="status">Status</label>
-                            <select name="status" id="" class="form-select">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
-                </div>
-            </form>
-            <!----- End Add Form ------->
-        </div>
-    </div>
-</div>
-<!-- Edit  Modal -->
-<div class="modal fade bs-example-modal-lg" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Master Ledger
-                </h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <!----- Start Update Form ------->
-            <form id="addSectionForm" action="{{ route('admin.master_ledger.update') }}" method="post">
-                @csrf
-                <div class="modal-body">
-                    <!----- Start Update Form input ------->
-                    <div class="row">
-                        <div class="form-group mb-2">
-                            <label for="">Master Ledger Name:</label>
-                            <input type="text" name="id" class="d-none">
-                            <input type="text" name="master_ledger_name" class="form-control" placeholder="Enter Master Ledger Name"  required>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="status">Status</label>
-                            <select name="status"  class="form-select">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
-                </div>
-            </form>
-            <!----- End Update Form ------->
-        </div>
-    </div>
-</div>
-<div id="deleteModal" class="modal fade">
-    <div class="modal-dialog modal-confirm">
-        <form action="{{route('admin.master_ledger.delete')}}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div class="modal-content">
-            <div class="modal-header flex-column">
-                <div class="icon-box">
-                    <i class="fas fa-trash"></i>
-                </div>
-                <h4 class="modal-title w-100">Are you sure?</h4>
-                <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
-            </div>
-            <div class="modal-body">
-                <p>Do you really want to delete these records? This process cannot be undone.</p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </div>
-            </div>
-        </form>
-    </div>
-</div>
+
+
 @endsection
 
 @section('script')
 
 <script type="text/javascript">
     $(document).ready(function(){
-     
+
      var table=$("#datatable1").DataTable({
        "processing":true,
        "responsive": true,
@@ -179,13 +75,6 @@
            render: function (data, type, row) {
                var formattedDate = moment(row.created_at).format('DD MMM YYYY');
                return formattedDate;
-           }
-         },
-         {
-           "data":null,
-           render:function(data,type,row){
-             return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-               <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
            }
          },
        ],
@@ -234,17 +123,17 @@
  });
 
 
- 
+
  /** Handle form submission for delete **/
  $('#deleteModal form').submit(function(e){
    e.preventDefault();
-   /*Get the submit button*/ 
+   /*Get the submit button*/
    var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
-   
+
    /* Save the original button text*/
    var originalBtnText = submitBtn.html();
 
-   /*Change button text to loading state*/ 
+   /*Change button text to loading state*/
    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
 
    var form = $(this);
@@ -323,7 +212,7 @@
 
    // Get the submit button
    var submitBtn = form.find('button[type="submit"]');
-   
+
    // Save the original button text
    var originalBtnText = submitBtn.html();
 
@@ -339,10 +228,10 @@
      'url':url,
      data: formData,
      beforeSend: function () {
-       form.find(':input').prop('disabled', true);  
+       form.find(':input').prop('disabled', true);
      },
      success: function (response) {
-       
+
        $('#editModal').modal('hide');
        $('#editModal form')[0].reset();
        if (response.success) {
