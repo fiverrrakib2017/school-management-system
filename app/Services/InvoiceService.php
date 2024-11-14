@@ -79,6 +79,8 @@ class InvoiceService{
                                 $account_transaction->qty=$request->table_qty[$index];
                                 $account_transaction->value=intval($request->table_price[$index]);
                                 $account_transaction->total=intval($request->table_qty[$index] * $request->table_price[$index]);
+                                $account_transaction->status=1;
+                                $account_transaction->date=$request->date;
                                 $account_transaction->save();
                             }
                         }
