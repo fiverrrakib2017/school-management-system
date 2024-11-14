@@ -38,11 +38,8 @@ class InvoiceController extends Controller
     //    return $pdf->stream('customer_invoice.pdf');
     }
     public function edit_invoice($id){
-    //     $customer=Customer::latest()->get();
-    //     $product=Product::latest()->get();
-    //     $products=Product::with('product_image')->paginate(10);
-    //    $data=  Customer_Invoice::with('customer','items')->where('id',$id)->get();
-    //    return view('Backend.Pages.Customer.invoice_edit',compact('data','customer','product','products'));
+       $invoice_data=  Customer_Invoice::with('customer','items.product')->find($id);
+       return view('Backend.Pages.Customer.invoice_edit',compact('invoice_data'));
     }
     public function update_invoice(Request $request){
         /* Validate the request data*/
