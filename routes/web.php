@@ -232,6 +232,8 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store','store')->name('admin.ledger.store');
                 Route::post('/update','update')->name('admin.ledger.update');
                 Route::post('/delete','delete')->name('admin.ledger.delete');
+                /*get  ledger from master ledger id*/
+                Route::get('/get/{id}','get_ledger')->name('admin.ledger.get_ledger');
             });
         });
         /**Sub Ledger Route **/
@@ -254,6 +256,8 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store','store')->name('admin.transaction.store');
                 Route::get('/report','transaction_report')->name('admin.transaction.report.index');
                 Route::post('/report_generate','report_generate')->name('admin.accounts.transaction.report_generate');
+                Route::get('/show','show_account_transaction')->name('admin.transaction.show');
+                Route::post('/finished','finished_account_transaction')->name('admin.transaction.finished');
             });
         });
     });

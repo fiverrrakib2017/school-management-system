@@ -19,7 +19,7 @@ class LedgerController extends Controller
         $columnsForOrderBy = ['id', 'master_ledger_id','ledger_name','status', 'created_at'];
         $orderByColumn = $request->order[0]['column'];
         $orderDirectection = $request->order[0]['dir'];
-    
+
         $states = Ledger::with('master_ledger')
         ->when($search, function ($query) use ($search) {
             $query->whereHas('master_ledger', function ($q) use ($search) {
@@ -42,7 +42,11 @@ class LedgerController extends Controller
         if (!$data) {
             return response()->json(['error' => 'Api not found']);
         }
-        return response()->json(['success'=>true,'data' => $data]); 
+        return response()->json(['success'=>true,'data' => $data]);
+    }
+    public function get_ledger($id){
+      $data=  Ledger::Where('master_ledger_id', $id)->get();
+      return response()->json(['success'=>true,'data' => $data],200);
     }
     public function update(Request $request){
         $request->validate([
@@ -78,6 +82,6 @@ class LedgerController extends Controller
         }
         /* Delete the data*/
         $object->delete();
-        return response()->json(['success' => true , 'message'=> 'Deleted successfully']); 
+        return response()->json(['success' => true , 'message'=> 'Deleted successfully']);
     }
 }

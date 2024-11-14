@@ -54,8 +54,8 @@
                 </tr>
             </thead>
             <tbody>
-                @php 
-                    $grandTotal = 0; 
+                @php
+                    $grandTotal = 0;
                     $i = 1;
                 @endphp
                 @foreach($transactions as $ledger_name => $ledger_transactions)
@@ -64,12 +64,12 @@
                         <td>
                             <!-- Ledger Name -->
                             <b>{{ $ledger_name }}</b>
-                            
+
                             <!-- Display sub-ledgers under each ledger -->
                             @php $ledgerTotal = 0; @endphp
                             @foreach($ledger_transactions as $transaction)
                                 @php
-                                    $ledgerTotal += $transaction->total; // Calculate total for each ledger
+                                    $ledgerTotal += $transaction->total;
                                 @endphp
                                 <!-- Display each sub-ledger and its amount -->
                                 <div class="d-flex justify-content-between">
@@ -99,7 +99,7 @@
 @else
     <h5 class="text-center text-danger">No Transactions Found For The Selected Date Range</h5>
 @endif
-                
+
             </div>
         </div>
     </div>
@@ -136,7 +136,7 @@
                 // }
             },
             error: function(xhr) {
-                if (xhr.status === 422) { 
+                if (xhr.status === 422) {
                      /* Validation error*/
                     var errors = xhr.responseJSON.errors;
 
@@ -144,11 +144,11 @@
                     $.each(errors, function(field, messages) {
                         $.each(messages, function(index, message) {
                             /* Display each error message*/
-                            toastr.error(message); 
+                            toastr.error(message);
                         });
                     });
                 } else {
-                    /*General error message*/ 
+                    /*General error message*/
                     toastr.error('An error occurred. Please try again.');
                 }
             },
@@ -194,6 +194,6 @@
         };
     }
 </script>
-  
+
 
 @endsection

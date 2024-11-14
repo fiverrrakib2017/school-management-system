@@ -13,16 +13,18 @@ return new class extends Migration
     {
         Schema::create('account_transactions', function (Blueprint $table) {
             $table->id();
-            $table->text('transaction_number');
-            $table->integer('type'); //asset, liablities,revenue,expense
-            $table->text('refer_no');
-            $table->text('description');
+            $table->text('transaction_number')->nullable();
+            $table->text('refer_no')->nullable();
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('master_ledger_id');
             $table->unsignedBigInteger('ledger_id');
             $table->unsignedBigInteger('sub_ledger_id');
             $table->integer('qty');
             $table->integer('value');
             $table->integer('total');
+            $table->integer('status');
+            $table->date('date');
+            $table->text('note')->nullable();
             $table->timestamps();
 
             $table->foreign('master_ledger_id')->on('master_ledgers')

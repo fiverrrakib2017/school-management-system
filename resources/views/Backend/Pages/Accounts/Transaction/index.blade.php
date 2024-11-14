@@ -3,92 +3,120 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
+        <div class="card shadow-sm rounded-3 border-0">
             <div class="card-header">
-                <h4>Accounts Transaction</h4>
+                <h4 class="mb-0">Accounts Transaction</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4">
                 <form id="transaction_form" action="{{ route('admin.transaction.store') }}" method="post">
                     @csrf
-                    <div class="row">
+                    <div class="row g-3">
                         <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="transaction_type">Transaction Type</label>
-                                <select name="transaction_type" class="form-control" required>
-                                    <option value="">---Select---</option>
-                                    @foreach ($master_ledger as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="refer_no">Refer Number</label>
+                            <div class="form-group">
+                                <label for="refer_no" class="form-label">Refer Number</label>
                                 <input name="refer_no" class="form-control" placeholder="Enter Refer No.">
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="description">Description</label>
+                            <div class="form-group">
+                                <label for="description" class="form-label">Description</label>
                                 <textarea name="description" class="form-control" placeholder="Enter Description" rows="1"></textarea>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="ledger_id">Ledger</label>
-                                <select name="ledger_id" id="ledger_id" class="form-control w-100" required>
-                                    <option value="">---Select---</option>
-                                    @foreach ($ledger as $item)
-                                        <option value="{{ $item->id }}">{{ $item->ledger_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="sub_ledger_id">Sub Ledger</label>
-                                <select name="sub_ledger_id" id="sub_ledger_id" class="form-select w-100" required>
-                                    <option value="">---Select---</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3 d-flex align-items-end">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" class="btn btn-primary mt-2 btn-block w-100">Add Sub Ledger</button>
+                            <div class="form-group">
+                                <label for="date" class="form-label">Create Date</label>
+                                <input type="date" name="create_date" class="form-control" required>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group mb-3">
-                                <label for="qty">Quantity</label>
-                                <input type="number" name="qty" class="form-control" placeholder="Enter Quantity" required>
+                    <div class="row g-3 mt-3">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="sub_ledger_id" class="form-label">Sub Ledger</label>
+                                <div class="input-group">
+                                    <select name="sub_ledger_id" id="sub_ledger_id" class="form-select" required>
+                                        <option value="">---Select---</option>
+                                        @foreach ($ledger as $item)
+                                            <optgroup label="{{ $item->ledger_name }}">
+                                                @php
+                                                $sub_ledger = \App\Models\Sub_ledger::where('ledger_id', $item->id)->get();
+                                                @endphp
+                                                @foreach ($sub_ledger as $sub_ledger_item)
+                                                    <option value="{{ $sub_ledger_item->id }}">{{ $sub_ledger_item->sub_ledger_name }}</option>
+                                                @endforeach
+
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn-sm btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fas fa-user-plus"></i></button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group mb-3">
-                                <label for="amount">Amount</label>
-                                <input name="amount" class="form-control" placeholder="Enter Amount" required>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="qty" class="form-label">Quantity</label>
+                                <input type="number" name="qty" class="form-control" placeholder="Enter Quantity" value="1" min="1" required>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group mb-3">
-                                <label for="total">Total</label>
-                                <input readonly name="total" class="form-control" required>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="amount" class="form-label">Amount</label>
+                                <input name="amount" class="form-control" placeholder="Enter Amount" value="0" required>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group mb-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-success mt-2 btn-block w-100">Submit</button>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="total" class="form-label">Total</label>
+                                <input readonly name="total" class="form-control bg-light" value="0" required>
                             </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="note" class="form-label">Note</label>
+                                <input name="note" class="form-control" placeholder="Enter Note">
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-success w-100 mt-2">Add</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm rounded-3 border-0">
+
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table id="transaction_table" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No.</th>
+                                <th class="text-center">Sub Ledger</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction_table_data"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" style="text-align: right;">
+                                    <button type="submit" name="finished_button" class="btn btn-success">Finished</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -115,7 +143,7 @@
                                 @foreach ($ledger as $item)
                                     <option value="{{$item->id}}">{{ $item->ledger_name }}</option>
                                 @endforeach
-                           
+
                           </select>
                         </div>
                         <div class="form-group mb-2">
@@ -143,14 +171,37 @@
 @endsection
 
 @section('script')
-
+<script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script type="text/javascript">
+
     $(document).ready(function() {
+
         $("select[name='transaction_type']").select2();
         $("select[id='ledger_id']").select2();
         $("select[id='sub_ledger_id']").select2();
 
 
+        $("select[name='transaction_type']").on('change', function() {
+            var master_ledger_id = $(this).val();
+            if(master_ledger_id){
+                    $.ajax({
+                    url: "{{ route('admin.ledger.get_ledger', ':id') }}".replace(':id', master_ledger_id),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success==true) {
+                            $("select[name='ledger_id']").empty();
+                            $("select[name='ledger_id']").append('<option value="">---Select---</option>');
+                            $.each(response.data, function(key, item) {
+                                $("select[name='ledger_id']").append('<option value="' + item.id + '">' + item.ledger_name + '</option>');
+                            });
+                        }
+
+
+                    }
+                });
+            }
+        });
         $("select[name='ledger_id']").on('change', function() {
             var ledger_id = $(this).val();
             if(ledger_id){
@@ -166,18 +217,19 @@
                                 $("select[name='sub_ledger_id']").append('<option value="' + item.id + '">' + item.sub_ledger_name + '</option>');
                             });
                         }
-                         
-                        
+
+
                     }
                 });
             }
         });
+
         function calculateTotal() {
-            /*Get quantity amount*/ 
-            var qty = parseFloat($("input[name='qty']").val()) || 0; 
-            var amount = parseFloat($("input[name='amount']").val()) || 0; 
+            /*Get quantity amount*/
+            var qty = parseFloat($("input[name='qty']").val()) || 0;
+            var amount = parseFloat($("input[name='amount']").val()) || 0;
             var total = qty * amount; /*Calculate total*/
-            $("input[name='total']").val(Math.round(total)); 
+            $("input[name='total']").val(Math.round(total));
         }
         $("input[name='qty'], input[name='amount']").on('input', function() {
             calculateTotal();
@@ -193,26 +245,26 @@
         var originalBtnText = submitBtn.html();
 
         submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
-        submitBtn.prop('disabled', true); 
+        submitBtn.prop('disabled', true);
 
         var form = $(this);
         var url = form.attr('action');
         var formData = form.serialize();
 
-        /*Use Ajax to send the request*/ 
+        /*Use Ajax to send the request*/
         $.ajax({
             type: 'POST',
             url: url,
             data: formData,
             success: function(response) {
-                if (response.success) { 
+                if (response.success) {
                     $('#addModal').modal('hide');
                     toastr.success(response.message);
                     form[0].reset();
-                } 
+                }
             },
             error: function(xhr, status, error) {
-                /*Handle errors*/ 
+                /*Handle errors*/
                 console.error(xhr.responseText);
                 toastr.error('An error occurred while processing the request.');
             },
@@ -223,31 +275,95 @@
             }
         });
     });
+    /*Show Account Transaction*/
+    show_transaction();
+    function show_transaction() {
+        $.ajax({
+            type: 'GET',
+            url: "{{ route('admin.transaction.show') }}",
+            cache: true,
+            success: function(response) {
+            var _number = 1;
+            var html = '';
 
-    
+            /*Check if the response data is an array*/
+            if (Array.isArray(response.data) && response.data.length > 0) {
+                response.data.forEach(function(transaction) {
+                    html += '<tr>';
+                    html += '<td>' + (_number++) + '</td>';
+                    html += '<td>' +
+                            (transaction.sub_ledger ? transaction.sub_ledger.sub_ledger_name : '') +
+                            '<br><i>' + (transaction.note ? transaction.note : '') + '</i></td>';
+                    html += '<td>' + transaction.qty + '</td>';
+                    html += '<td>' + transaction.value + '</td>';
+                    html += '<td>' + transaction.total + '</td>';
+                    html += '</tr>';
+                });
+            } else {
+                html += '<tr>';
+                html += '<td colspan="5" style="text-align: center;">No Data Available</td>';
+                html += '</tr>';
+            }
+
+            $("#transaction_table_data").html(html);
+        }
+
+        });
+    }
+    $(document).on('click','button[name="finished_button"]',function(e){
+        e.preventDefault();
+        var submitBtn =  $('#transaction_table').find('button[name="finished_button"]');
+        submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
+        submitBtn.prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('admin.transaction.finished') }}",
+            cache: true,
+            data: {
+                "_token": "{{ csrf_token() }}",
+            },
+            success: function(response) {
+                if (response.success==true) {
+                    toastr.success(response.message);
+                    show_transaction();
+                }else if(response.success==false){
+                    toastr.error(response.message);
+                }else{
+                    toastr.error('Server Problem');
+                }
+            },
+            complete:function(){
+                submitBtn.html('Finished');
+                submitBtn.prop('disabled', false);
+            }
+
+        });
+    });
+
     /*Transaction Form Submit*/
     $("#transaction_form").submit(function(e){
         e.preventDefault();
-        /*Get the submit button*/ 
+        /*Get the submit button*/
         var submitBtn =  $('form').find('button[type="submit"]');
-        
+
         /* Save the original button text*/
         var originalBtnText = submitBtn.html();
 
-        /*Change button text to loading state*/ 
+        /*Change button text to loading state*/
         submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
+        submitBtn.prop('disabled', true);
         var form = $(this);
         var url = form.attr('action');
         var formData = form.serialize();
-        /** Use Ajax to send the delete request **/
         $.ajax({
         type:'POST',
         'url':url,
         data: formData,
             success: function (response) {
-                $('form')[0].reset();
                 if (response.success) {
+                    $(form)[0].reset();
                     toastr.success(response.message);
+                    show_transaction();
                 }
             },
 
@@ -265,20 +381,11 @@
             },
             complete: function () {
                 submitBtn.html(originalBtnText);
+                submitBtn.prop('disabled', false);
             }
         });
     });
+    //handle_submit_form('#transaction_form')
   </script>
-
-
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
 
 @endsection
