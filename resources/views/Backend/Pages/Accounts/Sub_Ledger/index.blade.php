@@ -9,7 +9,7 @@
                   Add New </button>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -57,7 +57,7 @@
                             @foreach ($ledger as $item)
                                  <option value="{{ $item->id }}">{{$item->ledger_name}}</option>
                             @endforeach
-                           
+
                           </select>
                         </div>
                         <div class="form-group mb-2">
@@ -106,7 +106,7 @@
                             @foreach ($ledger as $item)
                                  <option value="{{ $item->id }}">{{$item->ledger_name}}</option>
                             @endforeach
-                           
+
                           </select>
                         </div>
                         <div class="form-group mb-2">
@@ -162,7 +162,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-     
+
       var table=$("#datatable1").DataTable({
         "processing":true,
         "responsive": true,
@@ -229,7 +229,7 @@
       var id = $(this).data('id');
       $.ajax({
           type: 'GET',
-          url: '/admin/accounts/sub_ledger/edit/' + id,
+          url: "{{route('admin.sub_ledger.edit', ':id')}}".replace(':id', id),
           success: function (response) {
               if (response.success) {
                 $('#editModal').modal('show');
@@ -260,17 +260,17 @@
   });
 
 
-  
+
   /** Handle form submission for delete **/
   $('#deleteModal form').submit(function(e){
     e.preventDefault();
-    /*Get the submit button*/ 
+    /*Get the submit button*/
     var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
-    
+
     /* Save the original button text*/
     var originalBtnText = submitBtn.html();
 
-    /*Change button text to loading state*/ 
+    /*Change button text to loading state*/
     submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
 
     var form = $(this);
@@ -349,7 +349,7 @@
 
     // Get the submit button
     var submitBtn = form.find('button[type="submit"]');
-    
+
     // Save the original button text
     var originalBtnText = submitBtn.html();
 
@@ -365,10 +365,10 @@
       'url':url,
       data: formData,
       beforeSend: function () {
-        form.find(':input').prop('disabled', true);  
+        form.find(':input').prop('disabled', true);
       },
       success: function (response) {
-        
+
         $('#editModal').modal('hide');
         $('#editModal form')[0].reset();
         if (response.success) {
