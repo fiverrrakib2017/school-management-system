@@ -1,5 +1,5 @@
 @extends('Backend.Layout.App')
-@section('title', 'Customer Profile | Admin Panel')
+@section('title', 'Supplier Profile | Admin Panel')
 @section('style')
     <style>
         #supplier_info > li {
@@ -280,7 +280,7 @@
                                 </div>
                             </div>
                         </div>
-                   
+
                     </div>
                 </div>
             </div>

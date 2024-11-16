@@ -116,7 +116,11 @@
             "data":"id"
           },
           {
-            "data":"supplier.fullname"
+            "data":"supplier.fullname",
+            render:function(data,type,row){
+                var link ="{{ route('admin.supplier.view', ':id') }}".replace(':id', row.supplier.id);
+                return '<a href="'+link+'">'+row.supplier.fullname+'</a>';
+            }
           },
           {
             "data":"supplier.phone_number"
