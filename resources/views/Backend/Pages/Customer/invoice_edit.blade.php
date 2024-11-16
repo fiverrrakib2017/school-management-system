@@ -13,8 +13,9 @@ button#submitButton {
 <!-- br-pageheader -->
 <div class="row">
     <div class="container-fluid">
-        <form id="form-data" action="{{ route('admin.customer.invoice.store_invoice') }}" method="post">
+        <form id="form-data" action="{{ route('admin.customer.invoice.update_invoice') }}" method="post">
             @csrf
+            <input type="text" value="{{ $invoice_data->id }}" name="id" class="d-none">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card shadow-sm mb-4">

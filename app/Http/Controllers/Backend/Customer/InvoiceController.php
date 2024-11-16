@@ -42,49 +42,8 @@ class InvoiceController extends Controller
        return view('Backend.Pages.Customer.invoice_edit',compact('invoice_data'));
     }
     public function update_invoice(Request $request){
-        /* Validate the request data*/
-        $this->__validate_method($request)->validate();
-        /*check invoice existing*/
-        $invoice = Customer_Invoice::find($request->id);
-        if (!$invoice) {
-            return response()->json(['success' => false, 'message' => 'Invoice not found'], 404);
-        }
-        /* Fetch existing invoice details*/
-        $existing_items = $invoice->items;
-        /*crate a map for existing quantity*/
-        $existing_qty=[];
-        foreach ($existing_items as $item) {
-            $existing_qty[$item->product_id] = $item->qty;
-        }
-        /*Validate new quantities against current stock*/
-        foreach ($request->product_id as $index => $productId) {
-            $product = Product::find($productId);
-            if ($product) {
-                $request_qty = $request->qty[$index];
-                $old_qty = $existing_qty[$productId] ?? 0;
-                $difference = $request_qty - $old_qty;
-
-                if ($difference > 0 && $difference > $product->qty) {
-                    return response()->json(['success' => false, 'message' => 'Insufficient quantity for product ID: ' . $productId], 400);
-                }
-            } else {
-                return response()->json(['success' => false, 'message' => 'Product not found for ID: ' . $productId], 404);
-            }
-        /*Update the invoice*/
-        $invoice = Customer_Invoice::find($request->id);
-        $invoice->customer_id = $request->customer_id;
-        $invoice->total_amount = $request->total_amount;
-        $invoice->paid_amount = $request->paid_amount ?? 0;
-        $invoice->due_amount = $request->due_amount ?? $request->total_amount;
-        $invoice->update();
-
-        /* Delete existing invoice items */
-        $invoice->items()->delete();
-
-        /* Create new invoice items*/
-        $this->__create_invoice($request,$invoice,$existing_qty);
-        return response()->json(['success' => true, 'message' => 'Invoice updated successfully'], 201);
-    }
+        /* 1= user id by default */
+        return response()->json($this->invoiceService->update_invoice($request,$request->id,1,'customer'));
     }
     public function show_invoice_data(Request $request){
         $search = $request->search['value'];
@@ -151,37 +110,5 @@ class InvoiceController extends Controller
         $object->save();
 
         return response()->json(['success'=>true,'message' => 'Payment successful'], 200);
-    }
-
-
-    private function __create_invoice($request,$invoice,$existing_qty){
-        foreach ($request->product_id as $index => $productId) {
-            $item = new Customer_Invoice_Details();
-            $item->invoice_id = $invoice->id;
-            $item->product_id = $productId;
-            $item->qty = $request->qty[$index];
-            $item->price = $request->price[$index];
-            $item->total_price = $request->qty[$index] * $request->price[$index];
-            $item->save();
-            /*Update product stock*/
-            $product = Product::find($productId);
-            if ($product) {
-                $old_qty = $existing_qty[$productId] ?? 0;
-                $difference= $request->qty[$index]-$old_qty;
-                $product->qty-=$difference;
-                $product->save();
-            }
-        }
-    }
-    public function  __get_product_qty($product_id){
-        $product = Product::find($product_id);
-
-        /*Check if the product exists*/
-        if (!$product) {
-            return 0;
-        }
-
-        /*Return the quantity */
-        return $product->qty;
     }
 }
