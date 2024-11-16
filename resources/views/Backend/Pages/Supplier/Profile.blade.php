@@ -31,7 +31,7 @@
                         </abbr>
                         &nbsp;
                         <abbr title="Payment received">
-                            <button type="button" data-bs-target="#paymentModal" data-bs-toggle="modal"
+                            <button type="button" data-bs-target="" data-bs-toggle="modal"
                                 class="btn-sm btn btn-info">
                                 <i class="mdi mdi mdi-cash-multiple"></i>
                             </button>
@@ -66,9 +66,9 @@
             <div class="main-body">
                 <div class="row gutters-sm">
                     <div class="col-md-4 mb-3">
-                        <div class="card" style="height: 80vh; overflow-y: auto;">
+                        <div class="card" >
                             <div class="card-header">
-                                <img src="{{ asset('Backend/uploads/photos/' . $data->profile_image) }}" alt='Profile Picture' class="img-fluid" style="max-width: 300px; max-height:200px;"/>
+                                <img src="{{ asset('Backend/images/avatar.png') }}" alt='Profile Picture' class="img-fluid" style="max-width: 300px; max-height:200px;"/>
                             </div>
                             <div class="card-body" style="padding: 0 !important">
                                 <ul class="list-group" id="supplier_info">
@@ -85,58 +85,7 @@
                                         <strong>Phone Number:</strong> {{ $data->phone_number }}
                                     </li>
                                     <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Emergency Contact:</strong> {{ $data->emergency_contact }}
-                                    </li>
-                                    <li class="section-header">
-                                        <strong>Address Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>City:</strong> {{ $data->city }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>State:</strong> {{ $data->state }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
                                         <strong>Address:</strong> {{ $data->address }}
-                                    </li>
-                                    <li class="section-header">
-                                        <strong>Additional Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Date of Birth:</strong> {{ $data->dob }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Gender:</strong> {{ $data->gender == 1 ? 'Male' : 'Female' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Marital Status:</strong> {{ $data->marital_status }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Verification Status:</strong> {{ $data->verification_status == 1 ? 'Verified' : 'Unverified' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Verification Info:</strong> {{ $data->verification_info ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Opening Balance:</strong> {{ $data->opening_balance }}
-                                    </li>
-                                    <li class="section-header">
-                                        <strong>Bank Information</strong>
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Bank Name:</strong> {{ $data->bank_name ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Bank Account Name:</strong> {{ $data->bank_acc_name ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Bank Account Number:</strong> {{ $data->bank_acc_no ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Bank Routing Number:</strong> {{ $data->bank_routing_no ?: 'N/A' }}
-                                    </li>
-                                    <li class="list-group-item list-group-item-action list-group-item-primary">
-                                        <strong>Bank Payment Status:</strong> {{ $data->bank_payment_status == 1 ? 'Active' : 'Inactive' }}
                                     </li>
                                 </ul>
                             </div>
@@ -202,7 +151,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table id="datatable-buttons"
+                                            <table id="datatable2"
                                                 class="table table-striped table-bordered dt-responsive nowrap"
                                                 cellspacing="0" width="100%">
                                                 <thead>
@@ -221,7 +170,7 @@
                                                     @foreach ( $invoices as $item)
                                                     <tr>
                                                         <td>{{$item->id}}</td>
-                                                        <td>{{intval($item->total_amount)}}</td>
+                                                        <td>{{intval($item->sub_total)}}</td>
                                                         <td>{{intval($item->paid_amount)}}</td>
                                                         <td>{{intval($item->due_amount)}}</td>
                                                         <td>
@@ -233,6 +182,9 @@
                                                         </td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</td>
                                                         <td>
+                                                        @if ($item->due_amount > 0)
+                                                        <button type="button" class="btn btn-primary btn-sm mr-3 pay-button"  data-id="{{ $item->id }}">Pay Now</button>
+                                                        @endif
                                                         <a href="{{ route('admin.supplier.invoice.view_invoice',$item->id) }}" class="btn btn-success btn-sm mr-3" ><i class="fa fa-eye"></i></a>
                                                         <a href="{{ route('admin.supplier.invoice.edit_invoice',$item->id) }}" class="btn btn-primary btn-sm mr-3 "><i class="fa fa-edit"></i></a>
                                                         <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="{{$item->id}}"><i class="fa fa-trash"></i></button>
@@ -251,7 +203,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table id="datatable-buttons datatable2"
+                                            <table id="transaction_datatable"
                                                 class="table table-striped table-bordered dt-responsive nowrap"
                                                 cellspacing="0" width="100%">
                                                 <thead>
@@ -288,12 +240,78 @@
     </div>
 </div>
 
+<div class="modal fade bs-example-modal-lg" id="payModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Payment
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!----- Start Add Form ------->
+            <form  action="{{ route('admin.supplier.invoice.pay_due_amount') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <!----- Start Add Form input ------->
+                    <input type="number" name="id"  class="d-none" required>
+                    <div class="row">
+                        <div class="form-group mb-2">
+                            <label for="sectionName">Amount:</label>
+                            <input type="number" name="amount" class="form-control" placeholder="Enter Your Amount" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+            <!----- End Add Form ------->
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
 <script type="text/javascript">
     $(document).ready(function(){
         $("#datatable2").DataTable();
+        $("#transaction_datatable").DataTable();
+
+        $('#datatable2 tbody').on('click', '.pay-button', function () {
+            var id = $(this).data('id');
+            $('#payModal').modal('show');
+            var value_input = $("input[name*='id']").val(id);
+        });
+        /** Handle form submission for Pay **/
+        $('#payModal form').submit(function(e){
+            e.preventDefault();
+
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = form.serialize();
+            /** Use Ajax to send the delete request **/
+            $.ajax({
+            type:'POST',
+            'url':url,
+            data: formData,
+            success: function (response) {
+                if (response.success==true) {
+                $('#payModal').modal('hide');
+                toastr.success(response.message);
+                $('#datatable1').DataTable().ajax.reload( null , false);
+                }
+            },
+
+            error: function(xhr, status, error) {
+                /** Handle errors **/
+                var err = eval("(" + xhr.responseText + ")");
+                toastr.error(err.message);
+            }
+
+            });
+        });
     });
 </script>
 
