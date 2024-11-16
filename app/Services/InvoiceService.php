@@ -110,7 +110,7 @@ class InvoiceService{
         DB::beginTransaction();
         try {
             $invoice = $type === 'supplier' ? Supplier_Invoice::find($invoiceId) : Customer_Invoice::find($invoiceId);
-            $invoice->transaction_number =$invoice->transaciotn_number ?? "TRANSID-".strtoupper(uniqid());
+            //$invoice->transaction_number=$invoice->transaciotn_number;
             $invoice->usr_id = $userId;
 
             /*Create A logic for customer and supplier*/
@@ -198,6 +198,9 @@ class InvoiceService{
             $invoice = $type ==='customer' ? Customer_Invoice::find($request->id) : Supplier_Invoice::find($request->id);
             if (empty($invoice)) {
                 return response()->json(['success' => false, 'message' => 'Invoice not found.']);
+            }
+            if(!empty($invoice->transaction_number) && isset($invoice->transaction_number)){
+                Account_transaction::where('transaction_number', $invoice->transaction_number)->delete();
             }
             $invoice->delete();
             return response()->json(['success' => true, 'message' => 'Invoice deleted successfully.']);

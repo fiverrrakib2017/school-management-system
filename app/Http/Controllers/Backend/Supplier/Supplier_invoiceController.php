@@ -43,8 +43,8 @@ class Supplier_invoiceController extends Controller
 
     }
     public function edit_invoice($id){
-
-       return view('Backend.Pages.Supplier.invoice_edit');
+        $invoice_data=  Supplier_Invoice::with('supplier','items.product')->find($id);
+       return view('Backend.Pages.Supplier.invoice_edit', compact('invoice_data'));
     }
     public function update_invoice(Request $request){
         /* 1= user id by default */

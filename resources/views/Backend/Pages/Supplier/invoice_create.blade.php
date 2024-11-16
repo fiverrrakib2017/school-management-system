@@ -169,7 +169,7 @@ button#submitButton {
                     method: 'GET',
                     success: function(response) {
                         selectedProductId = response.data.id;
-                        var price =response.data.sale_price;
+                        var price =response.data.purchase_price;
 
                         $('#price').val(price);
                         updateTotalPrice();
