@@ -193,6 +193,18 @@ class InvoiceService{
             return response()->json(['success' => false, 'message' => 'Error Update invoice: ' . $e->getMessage()]);
         }
     }
+    public function delete_invoice($request,$type='customer'){
+        try {
+            $invoice = $type ==='customer' ? Customer_Invoice::find($request->id) : Supplier_Invoice::find($request->id);
+            if (empty($invoice)) {
+                return response()->json(['success' => false, 'message' => 'Invoice not found.']);
+            }
+            $invoice->delete();
+            return response()->json(['success' => true, 'message' => 'Invoice deleted successfully.']);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => 'Error deleting invoice: ' . $e->getMessage()]);
+        }
+    }
     private function __validate_method($request){
 
         /*Validate the form data*/

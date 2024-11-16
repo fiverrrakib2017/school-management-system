@@ -204,9 +204,9 @@
       'url':url,
       data: formData,
       success: function (response) {
-        if (response.success==true) {
+        if (response.original.success==true) {
           $('#deleteModal').modal('hide');
-          toastr.success(response.message);
+          toastr.success(response.original.message);
           $('#datatable1').DataTable().ajax.reload( null , false);
         } else {
            /** Handle  errors **/

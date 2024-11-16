@@ -33,9 +33,7 @@ class InvoiceController extends Controller
         return view('Backend.Pages.Customer.invoice');
     }
     public function view_invoice($id){
-    //    $data=  Customer_Invoice::with('customer','items.product')->find($id);
-    //    $pdf = Pdf::loadView('Backend.Pages.Customer.invoice_view',compact('data'));
-    //    return $pdf->stream('customer_invoice.pdf');
+        
     }
     public function edit_invoice($id){
        $invoice_data=  Customer_Invoice::with('customer','items.product')->find($id);
@@ -77,9 +75,7 @@ class InvoiceController extends Controller
     }
 
     public function delete_invoice(Request $request){
-        $invoice = Customer_Invoice::find($request->id);
-        $invoice->delete();
-        return response()->json(['success'=>true,'message' => 'Invoice deleted successfully']);
+        return response()->json($this->invoiceService->delete_invoice($request,'customer'));
     }
     public function pay_due_amount(Request $request){
         $request->validate([
