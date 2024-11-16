@@ -116,7 +116,11 @@
             "data":"id"
           },
           {
-            "data":"customer.fullname"
+            "data":"customer.fullname",
+            render:function(data,type,row){
+                var link ="{{ route('admin.customer.view', ':id') }}".replace(':id', row.customer.id);
+                return '<a href="'+link+'">'+row.customer.fullname+'</a>';
+            }
           },
           {
             "data":"customer.phone_number"

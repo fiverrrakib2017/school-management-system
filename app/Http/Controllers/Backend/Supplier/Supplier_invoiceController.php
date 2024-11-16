@@ -40,7 +40,8 @@ class Supplier_invoiceController extends Controller
         return view('Backend.Pages.Supplier.invoice');
     }
     public function view_invoice($id){
-
+        $data=  Supplier_Invoice::with('supplier','items.product')->find($id);
+        return view('Backend.Pages.Supplier.invoice_view',compact('data'));
     }
     public function edit_invoice($id){
         $invoice_data=  Supplier_Invoice::with('supplier','items.product')->find($id);
