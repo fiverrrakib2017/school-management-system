@@ -3,18 +3,9 @@
 namespace App\Http\Controllers\Backend\Customer;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\Account_transaction;
-use App\Models\Customer;
 use App\Models\Customer_Invoice;
-use App\Models\Customer_Invoice_Details;
 use App\Models\Customer_Transaction_History;
-use App\Models\Add_Contract;
-use App\Models\Ledger;
-use App\Models\Product;
-use App\Models\Sub_ledger;
-use App\Models\User;
 use App\Services\InvoiceService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 
@@ -33,7 +24,8 @@ class InvoiceController extends Controller
         return view('Backend.Pages.Customer.invoice');
     }
     public function view_invoice($id){
-        
+        $data=  Customer_Invoice::with('customer','items.product')->find($id);
+        return view('Backend.Pages.Customer.invoice_view',compact('data'));
     }
     public function edit_invoice($id){
        $invoice_data=  Customer_Invoice::with('customer','items.product')->find($id);

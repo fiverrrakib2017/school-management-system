@@ -1,124 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js" lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Customer Billing Invoice </title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="rakibas375">
+    <!-- Site Title -->
+    <title>Sales Billing Invoice</title>
+    <link rel="stylesheet" href="{{asset('Backend/assets/css/style.css')}}">
     <style>
-       * {font-family: 'Roboto', sans-serif;line-height: 26px;font-size: 15px}
-    .custom--table {width: 100%;color: inherit;vertical-align: top;font-weight: 400;border-collapse: collapse;border-bottom: 2px dashed  #ddd;margin-top: 0;}
-    .table-title{font-size: 18px;font-weight: 600;line-height: 32px;margin-bottom: 10px}
-    .custom--table thead {font-weight: 700;background: inherit;color: inherit;font-size: 16px;font-weight: 500}
-    .custom--table tbody {border-top: 0;overflow: hidden;border-radius: 10px;}
-    .custom--table thead tr {border-top: 2px dashed  #ddd;border-bottom: 2px dashed  #ddd;text-align: left}
-    .custom--table thead tr th {border-top: 2px dashed  #ddd;border-bottom: 2px dashed  #ddd;text-align: left;font-size: 16px;padding: 10px 0}
-    .custom--table tbody tr {vertical-align: top;}
-    .custom--table tbody tr td {font-size: 14px;line-height: 18px vertical-align:top 10}
-    .custom--table tbody tr td:last-child{padding-bottom: 10px;}
-    .custom--table tbody tr td .data-span {font-size: 14px;font-weight: 500;line-height: 18px;}
-    .custom--table tbody .table_footer_row {border-top: 2px dashed  #ddd;margin-bottom: 10px !important;padding-bottom: 10px !important}
-    /* invoice area */
-    .invoice-area {padding: 10px 0}
-    .invoice-wrapper {max-width: 650px;margin: 0 auto;box-shadow: 0 0 10px #f3f3f3;padding: 0px;}
-    .invoice-header {margin-bottom: 40px;}
-    .invoice-flex-contents {display: flex;align-items: center;justify-content: space-between;gap: 24px;flex-wrap: wrap;}
-    .invoice-title {font-size: 25px;font-weight: 700}
-    .invoice-details {margin-top: 20px}
-    .invoice-details-flex {display: flex;align-items: flex-start;justify-content: space-between;gap: 24px;flex-wrap: wrap;}
-    .invoice-details-title {font-size: 18px;font-weight: 700;line-height: 32px;color: #333;margin: 0;padding: 0}
-    .invoice-single-details {padding:10px}
-    .details-list {margin: 0;padding: 0;list-style: none;margin-top: 10px;}
-    .details-list .list {font-size: 14px;font-weight: 400;line-height: 18px;color: #666;margin: 0;padding: 0;transition: all .3s;}
-    .details-list .list strong {font-size: 14px;font-weight: 500;line-height: 18px;color: #666;margin: 0;padding: 0;transition: all .3s}
-    .details-list .list a {display: inline-block;color: #666;transition: all .3s;text-decoration: none;margin: 0;line-height: 18px}
-    .item-description {margin-top: 10px;padding:10px;}
-    .products-item {text-align: left}
-    .invoice-total-count .list-single {display: flex;align-items: center;gap: 30px;font-size: 16px;line-height: 28px}
-    .invoice-subtotal {border-bottom: 2px dashed  #ddd;padding-bottom: 15px}
-    .invoice-total {padding-top: 10px}
-    .invoice-flex-footer {display: flex;align-items: flex-start;justify-content: space-between;flex-wrap: wrap;gap: 30px;}
-    .single-footer-item {flex: 1}
-    .single-footer {display: flex;align-items: center;gap: 10px}
-    .single-footer .icon {display: flex;align-items: center;justify-content: center;height: 30px;width: 30px;font-size: 16px;background-color: #000e8f;color: #fff}
+        .tm_invoice.tm_style1 .tm_logo img {
+            max-height: 100px;
+        }
     </style>
 </head>
-<body>
-<!-- Invoice area Starts -->
-<div class="invoice-area">
-    <div class="invoice-wrapper">
-        <div class="invoice-header">
-            <h1 class="invoice-title" style="text-align:center;">Invoice - {{$site_details->app_name ?? ''}}</h1>
-            <!-- <p class="invoice-title" style="text-align:center;">Start Communication</p> -->
-        </div>
-        <div class="invoice-details">
-            <div class="invoice-details-flex">
-                <div class="invoice-single-details">
-                    <h2 class="invoice-details-title">Bill To:</h2>
-                    <ul class="details-list">
-                        <li class="list">{{$data->customer->fullname ?? ''}}</li>
-                        <li class="list"> <a href="#">{{$data->customer->email_address ?? ''}} </a> </li>
-                        <li class="list"> <a href="#">{{$data->customer->phone_number ?? ''}}</a> </li>
-                    </ul>
-                </div>
-                <div class="invoice-single-details">
-                    <h4 class="invoice-details-title">Ship To:</h4>
-                    <ul class="details-list">
-                        <li class="list"> <strong>City: </strong>{{$data->customer->city}}</li>
-                        <li class="list"> <strong>Area: </strong>{{$data->customer->state}}</li>
-                        <li class="list"> <strong>Address: </strong>{{$data->customer->address}}</li>
-                    </ul>
+
+<body style="margin-top: 1%">
+    <div class="tm_container">
+        <div class="tm_invoice_wrap">
+            <div class="tm_invoice tm_style1" id="tm_download_section">
+                <div class="tm_invoice_in">
+                    <div class="tm_invoice_head tm_mb20">
+                        <div class="tm_invoice_left">
+                            <div class="tm_logo"><img src="{{ asset('Backend/assets/images/it-fast.png') }}" alt="Logo"><br> </div>
+                        </div>
+                        <div class="tm_invoice_right tm_text_right">
+                            <div class="tm_primary_color tm_f50 tm_text_uppercase">Invoice</div>
+                        </div>
+                    </div>
+                    <div class="tm_invoice_info tm_mb20">
+                        <div class="tm_invoice_seperator tm_gray_bg"></div>
+                        <div class="tm_invoice_info_list">
+                            <p class="tm_invoice_number tm_m0">Invoice No: <b class="tm_primary_color">{{$data->id}}</b></p>
+                            <p class="tm_invoice_date tm_m0">Date:
+                            {{ \Carbon\Carbon::parse($data->invoice_date)->format('d M Y') }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="tm_invoice_head tm_mb10">
+                        <div class="tm_invoice_left">
+                            <p class="tm_mb2 tm_f16"><b class="tm_primary_color tm_text_uppercase">STAR COMMUNICATION</b></p>
+                            <p>
+                                Sarkar super market 2nd floor <br>Gouripur Bazar, Daudkandi, Cumilla <br>
+                                www.sr-communication.com <br>
+                                hello@sr-cummunication.com<br>
+                                01580-651309
+                            </p>
+                        </div>
+                        <div class="tm_invoice_right" style="width:69% !important">
+                            <div class="tm_grid_row tm_col_2  tm_col_2_sm tm_invoice_table tm_round_border">
+
+                                <div>
+                                    <p class="tm_m0">Customer ID:</p>
+                                    <b class="tm_primary_color">{{$data->customer->id}}</b>
+                                </div>
+                                <div>
+                                    <p class="tm_m0">Customer Name:</p>
+                                    <b class="tm_primary_color">{{$data->customer->fullname}}</b>
+                                </div>
+                                <div>
+                                    <p class="tm_m0">Phone Number:</p>
+                                    <b class="tm_primary_color">{{$data->customer->phone_number}}</b>
+                                </div>
+
+
+                                <div>
+                                    <p class="tm_m0">Customer Create Date</p>
+                                    <b class="tm_primary_color">
+                                    {{ \Carbon\Carbon::parse($data->customer->created_at)->format('d M Y') }}
+
+                                    </b>
+                                </div>
+
+
+
+
+                                <div>
+                                    <p class="tm_m0">Address</p>
+                                    <b class="tm_primary_color">
+                                        {{$data->customer->address}}
+                                    </b>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="tm_table tm_style1">
+                        <div class="tm_round_border">
+                            <div class="tm_table_responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="tm_width_4 tm_semi_bold tm_primary_color">Item Name</th>
+
+                                            <th class="tm_width_2 tm_semi_bold tm_primary_color">Quantity</th>
+
+                                            <th class="tm_width_2 tm_semi_bold tm_primary_color">Amount</th>
+
+                                            <th class="tm_width_2 tm_semi_bold tm_primary_color tm_text_right">Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($data->items as $item)
+                                            <tr class="tm_gray_bg">
+                                            <td class="tm_width_4">
+                                                {{ $item->product->name }}</td>
+
+                                            <td class="tm_width_2 "><b>{{ $item->qty}}</b></td>
+
+                                            <td class="tm_width_2 "><b>{{ $item->price  }} ৳</b></td>
+
+                                            <td class="tm_width_2 tm_text_right"><b> {{ $item->total_price }} ৳</b></td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tm_invoice_footer">
+                            <div class="tm_left_footer">
+
+                            </div>
+                            <div class="tm_right_footer">
+                                <table>
+                                    <tbody>
+                                    <tr class="table_footer_row">
+                                        <td colspan="3"><strong>Total Amount</strong></td>
+                                        <td><strong>{{ isset($data->sub_total) ? number_format(floatval($data->sub_total), 0, '.', '') : '0' }}৳</strong> </td>
+                                    </tr>
+                                    <tr class="table_footer_row">
+                                        <td colspan="3"><strong>Paid Amount</strong></td>
+                                        <td><strong>{{ isset($data->paid_amount) ? number_format(floatval($data->paid_amount), 0, '.', '') : '0' }}৳</strong></td>
+                                    </tr>
+
+
+
+                                    <tr class="table_footer_row">
+                                        <td colspan="3"><strong>Due Amount</strong></td>
+                                        <td><strong>{{ isset($data->due_amount) ? number_format(floatval($data->due_amount), 0, '.', '') : '0' }}৳</strong></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tm_note tm_text_center tm_m0_md">
+                        <p class="tm_m0" align=""><br> <br>Authorization signature and seal. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+                            Prepared By:Rakib Mahmud
+                        </p>
+                    </div><!-- .tm_note -->
                 </div>
             </div>
+            <div class="tm_invoice_btns tm_hide_print">
+                <a href="javascript:window.print()" class="tm_invoice_btn tm_color1">
+                    <span class="tm_btn_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                            <path d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" />
+                            <rect x="128" y="240" width="256" height="208" rx="24.32" ry="24.32" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" />
+                            <path d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" />
+                            <circle cx="392" cy="184" r="24" fill='currentColor' />
+                        </svg>
+                    </span>
+                    <span class="tm_btn_text">Print</span>
+                </a>
+                <button id="tm_download_btn" class="tm_invoice_btn tm_color2">
+                    <span class="tm_btn_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                            <path d="M320 336h76c55 0 100-21.21 100-75.6s-53-73.47-96-75.6C391.11 99.74 329 48 256 48c-69 0-113.44 45.79-128 91.2-60 5.7-112 35.88-112 98.4S70 336 136 336h56M192 400.1l64 63.9 64-63.9M256 224v224.03" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+                        </svg>
+                    </span>
+                    <span class="tm_btn_text">Download</span>
+                </button>
+            </div>
         </div>
-
-        <div class="item-description">
-
-            <table class="custom--table">
-                <thead>
-                <tr>
-                  <th>Product Name</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                  @foreach ($data->items as $item)
-                    <tr>
-                        <td>
-                          @php
-                            $title = strlen($item->product->title) > 50 ? substr($item->product->title, 0, 50) . '...' : $item->product->title;
-                          @endphp
-                          {{ $title }}
-                        </td>
-                        <td>{{ $item->qty }}</td>
-                        <td>{{ $item->product->s_price }}</td>
-                        <td>{{ $item->product->s_price * $item->qty }}</td>
-                    </tr>
-                    @endforeach
-                    <tr class="table_footer_row">
-                        <td colspan="3"><strong>Total Amount</strong></td>
-                        <td><strong>{{ isset($data->total_amount) ? intval($data->total_amount) : 00 }}</strong></td>
-                    </tr>
-                    <tr class="table_footer_row">
-                        <td colspan="3"><strong>Paid Amount</strong></td>
-                        <td><strong>{{ isset($data->paid_amount) ? intval($data->paid_amount) : 00 }}</strong></td>
-                    </tr>
-                    <tr class="table_footer_row">
-                        <td colspan="3"><strong>Due Amount</strong></td>
-                        <td><strong>{{ isset($data->due_amount) ? intval($data->due_amount)  : 00 }}</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
     </div>
-</div>
-
 </body>
 
 </html>
