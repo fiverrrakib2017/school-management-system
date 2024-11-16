@@ -148,6 +148,7 @@ button#submitButton {
 @section('script')
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
+<script  src="{{ asset('Backend/assets/js/invoice.js') }}"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -362,12 +363,6 @@ button#submitButton {
                 $('#invoiceModal').modal('show');
             });
         });
-    function __get_short_string(str,num){
-        if(str.length <=num){
-          return str;
-        }
-       return str.slice(0,num)+'...';
-    }
 </script>
 
 

@@ -9,7 +9,7 @@
                     Add New Invoice</a>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -122,7 +122,7 @@
             "data":"supplier.phone_number"
           },
           {
-            "data":"total_amount"
+            "data":"sub_total"
           },
           {
             "data":"paid_amount"
@@ -203,10 +203,10 @@
       type:'POST',
       'url':url,
       data: formData,
-      success: function (response) {        
-        if (response.success==true) {
+      success: function (response) {
+        if (response.original.success==true) {
           $('#deleteModal').modal('hide');
-          toastr.success(response.message);
+          toastr.success(response.original.message);
           $('#datatable1').DataTable().ajax.reload( null , false);
         } else {
            /** Handle  errors **/
