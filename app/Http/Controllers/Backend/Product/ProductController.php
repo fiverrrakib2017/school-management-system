@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Backend\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Customer_Invoice_Details;
 use App\Models\Product;
+use App\Models\Supplier_Invoice_Details;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -107,6 +110,16 @@ class ProductController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => 'Product not found.']);
         }
+    }
+    public function product_view($id){
+        /*Find the product Purchase History*/
+
+
+        /*Find the product Sales History*/
+        $sales_invoice_history = Customer_Invoice_Details::with('invoice.customer')->where('product_id','=',$id)->get();
+        $purchase_invoice_history = Supplier_Invoice_Details::with('invoice.supplier')->where('product_id','=',$id)->get();
+        $data = Product::with('brand','category','unit','store')->find($id);
+        return view('Backend.Pages.Product.view',compact('data','sales_invoice_history','purchase_invoice_history'));
     }
     public function check_product_qty(Request $request){
         /*Validate the form data*/

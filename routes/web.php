@@ -396,6 +396,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::get('/list', 'index')->name('admin.product.index');
             Route::get('/all-data', 'get_all_data')->name('admin.product.get_all_data');
             Route::get('/edit/{id}', 'edit')->name('admin.product.edit');
+            Route::get('/view/{id}', 'product_view')->name('admin.product.view');
             Route::post('/delete', 'delete')->name('admin.product.delete');
             Route::post('/store', 'store')->name('admin.product.store');
             Route::post('/update/{id}', 'update')->name('admin.product.update');

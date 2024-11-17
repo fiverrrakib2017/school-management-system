@@ -17,4 +17,5 @@ class Customer_Invoice_Details extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+    
 }

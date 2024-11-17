@@ -21,4 +21,8 @@ class Product extends Model
     public function store(){
         return $this->belongsTo(Store::class);
     }
+
+    // public function purchase_ac(){
+    //     return $this->belongsTo(Sub_ledger::class);
+    // }
 }
