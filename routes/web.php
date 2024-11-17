@@ -34,6 +34,7 @@ use App\Http\Controllers\Backend\Supplier\SupplierController;
 use App\Http\Controllers\Backend\Teacher\TeacherAttendance_controller;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
 use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controller;
+use App\Http\Controllers\Backend\Tickets\Complain_typeController;
 use App\Models\Product_Category;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -209,6 +210,20 @@ Route::group(['middleware'=>'admin'],function(){
         });
 
     });
+     /** Tickets  Route **/
+     Route::prefix('admin/ticket')->group(function(){
+        /*Complain Type */
+        Route::prefix('complain_type')->group(function(){
+            Route::controller(Complain_typeController::class)->group(function(){
+                Route::get('/list', 'index')->name('admin.tickets.complain_type.index');
+                Route::get('/all-data', 'get_all_data')->name('admin.tickets.complain_type.get_all_data');
+                Route::get('/edit/{id}', 'edit')->name('admin.tickets.complain_type.edit');
+                Route::post('/delete', 'delete')->name('admin.tickets.complain_type.delete');
+                Route::post('/store', 'store')->name('admin.tickets.complain_type.store');
+                Route::post('/update/{id}', 'update')->name('admin.tickets.complain_type.update');
+            });
+        });
+     });
     /** Accounts Management  Route **/
     Route::prefix('admin/accounts')->group(function(){
 

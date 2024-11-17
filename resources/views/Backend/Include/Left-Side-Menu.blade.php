@@ -87,9 +87,9 @@
                 </a>
                 <div class="collapse" id="ticket_management">
                    <ul class="nav-second-level">
-                      <li>
-                         <a href="{{ route('admin.teacher.index') }}">Ticket List </a>
-                      </li>
+                        <li><a href="{{ route('admin.teacher.index') }}">Ticket List </a> </li>
+                        <li> <a href="{{ route('admin.tickets.complain_type.index') }}">Complain Type </a> </li>
+                        <li> <a href="#">Ticket Assign</a> </li>
                    </ul>
                 </div>
              </li>
