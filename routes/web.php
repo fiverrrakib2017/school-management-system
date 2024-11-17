@@ -34,6 +34,7 @@ use App\Http\Controllers\Backend\Supplier\SupplierController;
 use App\Http\Controllers\Backend\Teacher\TeacherAttendance_controller;
 use App\Http\Controllers\Backend\Teacher\TeacherController;
 use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controller;
+use App\Http\Controllers\Backend\Tickets\Assign_Controller;
 use App\Http\Controllers\Backend\Tickets\Complain_typeController;
 use App\Models\Product_Category;
 use Illuminate\Support\Facades\Artisan;
@@ -221,6 +222,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/delete', 'delete')->name('admin.tickets.complain_type.delete');
                 Route::post('/store', 'store')->name('admin.tickets.complain_type.store');
                 Route::post('/update/{id}', 'update')->name('admin.tickets.complain_type.update');
+            });
+        });
+        /*Assign To */
+        Route::prefix('assign')->group(function(){
+            Route::controller(Assign_Controller::class)->group(function(){
+                Route::get('/list', 'index')->name('admin.tickets.assign.index');
+                Route::get('/all-data', 'get_all_data')->name('admin.tickets.assign.get_all_data');
+                Route::get('/edit/{id}', 'edit')->name('admin.tickets.assign.edit');
+                Route::post('/delete', 'delete')->name('admin.tickets.assign.delete');
+                Route::post('/store', 'store')->name('admin.tickets.assign.store');
+                Route::post('/update/{id}', 'update')->name('admin.tickets.assign.update');
             });
         });
      });
