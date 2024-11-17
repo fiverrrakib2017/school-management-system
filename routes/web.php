@@ -36,6 +36,7 @@ use App\Http\Controllers\Backend\Teacher\TeacherController;
 use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controller;
 use App\Http\Controllers\Backend\Tickets\Assign_Controller;
 use App\Http\Controllers\Backend\Tickets\Complain_typeController;
+use App\Http\Controllers\Backend\Tickets\Ticket_controller;
 use App\Models\Product_Category;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -234,6 +235,15 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store', 'store')->name('admin.tickets.assign.store');
                 Route::post('/update/{id}', 'update')->name('admin.tickets.assign.update');
             });
+        });
+         /*Ticket Route To */
+        Route::controller(Ticket_controller::class)->group(function(){
+            Route::get('/list', 'index')->name('admin.tickets.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.tickets.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.tickets.edit');
+            Route::post('/delete', 'delete')->name('admin.tickets.delete');
+            Route::post('/store', 'store')->name('admin.tickets.store');
+            Route::post('/update/{id}', 'update')->name('admin.tickets.update');
         });
      });
     /** Accounts Management  Route **/
