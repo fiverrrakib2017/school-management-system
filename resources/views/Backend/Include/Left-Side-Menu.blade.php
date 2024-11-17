@@ -80,6 +80,20 @@
                 </div>
              </li>
              <li>
+                <a href="#ticket_management" data-bs-toggle="collapse">
+                    <i class="menu-item-icon fas fa-ticket-alt"></i>
+                <span> Tickets </span>
+                <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="ticket_management">
+                   <ul class="nav-second-level">
+                      <li>
+                         <a href="{{ route('admin.teacher.index') }}">Ticket List </a>
+                      </li>
+                   </ul>
+                </div>
+             </li>
+             <li>
                 <a href="#inventory_management" data-bs-toggle="collapse">
                     <i class="menu-item-icon fas fa-boxes"></i>
                 <span>Inventory</span>
