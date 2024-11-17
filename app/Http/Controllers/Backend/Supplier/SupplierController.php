@@ -101,7 +101,7 @@ class SupplierController extends Controller
         $total_due_amount=Supplier_Invoice::where('supplier_id',$id)->sum('due_amount');
         $invoices = Supplier_Invoice::where('supplier_id', $id)->get();
         $data = Supplier::find($id);
-        $supplier_transaction_history=Supplier_Transaction_History::where('supplier_id',$id)->get();
+         $supplier_transaction_history=Supplier_Transaction_History::where('supplier_id',$id)->get();
         return view('Backend.Pages.Supplier.Profile',compact('data','total_invoice','total_paid_amount','total_due_amount','invoices','supplier_transaction_history'));
     }
 

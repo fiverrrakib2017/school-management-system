@@ -50,7 +50,7 @@
                         </abbr>
                         &nbsp;
                         <abbr title="Edit Customer">
-                            <a href="{{ route('admin.supplier.edit', $data->id) }}">
+                            <a href="#">
                                 <button type="button" class="btn-sm btn btn-info">
                                     <i class="mdi mdi-account-edit"></i>
                                 </button>
@@ -121,7 +121,7 @@
                                                     Total Paid
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    {{ $total_paid_amount ?? 0 }}
+                                                    {{round( $total_paid_amount ?? 0) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +138,7 @@
                                                     Total Due
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    {{ $total_due_amount ?? 0 }}
+                                                    {{ round( $total_due_amount ?? 0) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -170,9 +170,9 @@
                                                     @foreach ( $invoices as $item)
                                                     <tr>
                                                         <td>{{$item->id}}</td>
-                                                        <td>{{intval($item->sub_total)}}</td>
-                                                        <td>{{intval($item->paid_amount)}}</td>
-                                                        <td>{{intval($item->due_amount)}}</td>
+                                                        <td>{{round($item->sub_total)}}</td>
+                                                        <td>{{round($item->paid_amount)}}</td>
+                                                        <td>{{round($item->due_amount)}}</td>
                                                         <td>
                                                         @if ($item->due_amount==0)
                                                         <span class="badge badge-success">Paid</span>
@@ -298,9 +298,11 @@
             data: formData,
             success: function (response) {
                 if (response.success==true) {
-                $('#payModal').modal('hide');
-                toastr.success(response.message);
-                $('#datatable1').DataTable().ajax.reload( null , false);
+                    $('#payModal').modal('hide');
+                    toastr.success(response.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
                 }
             },
 
