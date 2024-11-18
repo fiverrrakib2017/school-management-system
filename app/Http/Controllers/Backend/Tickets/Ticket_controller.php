@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Customer_Invoice;
 use App\Models\Customer_Transaction_History;
+use App\Models\Ticket;
 use App\Models\Ticket_complain_type;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -48,9 +49,16 @@ class Ticket_controller extends Controller
     {
         /*Validate the form data*/
         $this->validateForm($request);
-
-        $object = new Ticket_complain_type();
-        $object->name = $request->name;
+        $object = new Ticket();
+        $object->student_id = $request->student_id;
+        $object->ticket_for = $request->ticket_for;
+        $object->ticket_assign_id = $request->ticket_assign_id;
+        $object->ticket_complain_id = $request->ticket_complain_id;
+        $object->priority_id = $request->priority_id;
+        $object->subject = $request->subject;
+        $object->description = $request->description;
+        $object->note = $request->note;
+        $object->percentage = $request->percentage ?? '0%';
 
         /* Save to the database table*/
         $object->save();
@@ -63,7 +71,7 @@ class Ticket_controller extends Controller
 
     public function delete(Request $request)
     {
-        $object = Ticket_complain_type::find($request->id);
+        $object = Ticket::find($request->id);
 
         if (empty($object)) {
             return response()->json(['error' => 'Not found.'], 404);
@@ -77,7 +85,7 @@ class Ticket_controller extends Controller
     }
     public function edit($id)
     {
-        $data = Ticket_complain_type::find($id);
+        $data = Ticket::find($id);
         if ($data) {
             return response()->json(['success' => true, 'data' => $data]);
             exit;
@@ -92,8 +100,16 @@ class Ticket_controller extends Controller
 
         $this->validateForm($request);
 
-        $object = Ticket_complain_type::findOrFail($id);
-        $object->name = $request->name;
+        $object = Ticket::findOrFail($id);
+        $object->student_id = $request->student_id;
+        $object->ticket_for = $request->ticket_for;
+        $object->ticket_assign_id = $request->ticket_assign_id;
+        $object->ticket_complain_id = $request->ticket_complain_id;
+        $object->priority_id = $request->priority_id;
+        $object->subject = $request->subject;
+        $object->description = $request->description;
+        $object->note = $request->note;
+        $object->percentage = $request->percentage ?? '0%';
         $object->update();
 
         return response()->json([
@@ -106,7 +122,13 @@ class Ticket_controller extends Controller
 
         /*Validate the form data*/
         $rules=[
-            'name' => 'required|string',
+            'student_id' => 'required|integer',
+            'ticket_for' => 'required|integer',
+            'ticket_assign_id' => 'required|integer',
+            'ticket_complain_id' => 'required|integer',
+            'priority_id' => 'required|integer',
+            'subject' => 'required|string',
+            'description' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -117,4 +139,6 @@ class Ticket_controller extends Controller
             ], 422);
         }
     }
+
+
 }

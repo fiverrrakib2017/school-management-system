@@ -46,10 +46,11 @@
 @section('script')
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script  src="{{ asset('Backend/assets/js/delete_data.js') }}"></script>
-
+<script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-    handleSubmit('#complainForm','#complainModal');
+    custom_select2('#ticketModal');
+    handleSubmit('#ticketForm','#ticketModal');
     var table=$("#datatable1").DataTable({
     "processing":true,
     "responsive": true,

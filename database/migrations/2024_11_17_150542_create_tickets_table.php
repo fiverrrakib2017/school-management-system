@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('subject');
             $table->text('description');
             $table->text('note')->nullable();
+            $table->string('percentage');
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
