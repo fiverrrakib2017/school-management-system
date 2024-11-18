@@ -21,16 +21,22 @@ class Ticket_controller extends Controller
 
     public function get_all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'status', 'created','priority', 'student_name', 'phone_number','ticekt_type','assign_to','ticket_for','acctual_work','percentage','note','created_at'];
+        $columnsForOrderBy = ['id', 'status', 'created_at','priority_id', 'student_id', 'student_id','student_id','student_id','student_id','student_id','student_id','student_id','created_at'];
         $orderByColumn = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
 
         $query = Ticket::with(['student','assign','complain_type'])->when($search, function ($query) use ($search) {
             $query->where('status', 'like', "%$search%")
-                   ->orWhere('priority', 'like', "%$search%")
+                //    ->orWhere('priority', 'like', "%$search%")
                   ->orWhereHas('student', function ($query) use ($search) {
                       $query->where('name', 'like', "%$search%")
-                            ->orWhere('phone_number', 'like', "%$search%");
+                            ->orWhere('phone', 'like', "%$search%");
+                  })
+                  ->orWhereHas('complain_type', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%");
+                  })
+                  ->orWhereHas('assign', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%");
                   });
         }) ->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection)
         ->paginate($request->length);

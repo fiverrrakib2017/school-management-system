@@ -71,7 +71,7 @@
             "data":"status",
             render:function(data,type,row){
                 if(row.status == 0){
-                    return '<span class="badge bg-danger">Open</span>';
+                    return '<span class="badge bg-danger">Active</span>';
                 }else if(row.status == 2){
                     return '<span class="badge bg-warning">Pending</span>';
                 }else if(row.status==1){
@@ -137,10 +137,18 @@
             }
           },
           {
-            "data":"ticket_for",
+            "data":null,
             render: function (data, type, row) {
-                if (row.ticket_for == 1) {
-                    return `<span class="badge bg-success">Default</span>`;
+                if(row.updated_at == row.created_at){
+                    return 'N/A';
+                }
+                if (row.updated_at && row.created_at) {
+                    let start = moment(row.created_at);
+                    let end = moment(row.updated_at);
+
+                    return end.from(start);
+                } else {
+                    return 'N/A';
                 }
             }
           },
@@ -195,6 +203,7 @@
                     $('#ticketForm textarea[name="description"]').val(response.data.description);
                     $('#ticketForm input[name="note"]').val(response.data.note);
                     $('#ticketForm select[name="status_id"]').val(response.data.status_id);
+                    $('#ticketForm select[name="percentage"]').val(response.data.percentage);
 
                     // Show the modal
                     $('#ticketModal').modal('show');
