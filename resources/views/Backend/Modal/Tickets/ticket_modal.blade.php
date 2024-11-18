@@ -4,7 +4,7 @@
                         <div class="modal-content col-md-12">
                            <div class="modal-header">
                               <h5 class="modal-title" id="ticketModalLabel"><span
-                                 class="mdi mdi-account-check mdi-18px"></span> &nbsp;New Assign To </h5>
+                                 class="mdi mdi-account-check mdi-18px"></span> &nbsp;New Ticket </h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                            </div>
 						   <div class="modal-body">
@@ -85,6 +85,14 @@
 									<div class="form-group mb-2">
 										<label>Description</label>
 										<textarea name="description" class="form-control" type="text" placeholder="Enter Description" required></textarea>
+									</div>
+                                    <div class="form-group mb-2">
+										<label>Ticket Status</label>
+										<select name="status_id" class="form-select" type="text" style="width: 100%;" required>
+                                            <option value="">---Select---</option>
+                                            <option value="0" selected>Active</option>
+                                            <option value="1">Completed</option>
+                                        </select>
 									</div>
                                     <div class="form-group mb-2">
 										<label>Note</label>

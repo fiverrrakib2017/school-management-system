@@ -19,19 +19,17 @@ class Ticket_controller extends Controller
         return view('Backend.Pages.Tickets.index');
     }
 
-    public function show_invoice_data(Request $request){
+    public function get_all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'status', 'created','priority', 'paid_amount', 'due_amount','status','created_at'];
+        $columnsForOrderBy = ['id', 'status', 'created','priority', 'student_name', 'phone_number','ticekt_type','assign_to','ticket_for','acctual_work','percentage','note','created_at'];
         $orderByColumn = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
 
-        $query = Customer_Invoice::with('customer')->when($search, function ($query) use ($search) {
-            $query->where('total_amount', 'like', "%$search%")
-                  ->orWhere('paid_amount', 'like', "%$search%")
-                  ->orWhere('due_amount', 'like', "%$search%")
-                  ->orWhere('created_at', 'like', "%$search%")
-                  ->orWhereHas('customer', function ($query) use ($search) {
-                      $query->where('fullname', 'like', "%$search%")
+        $query = Ticket::with(['student','assign','complain_type'])->when($search, function ($query) use ($search) {
+            $query->where('status', 'like', "%$search%")
+                   ->orWhere('priority', 'like', "%$search%")
+                  ->orWhereHas('student', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%")
                             ->orWhere('phone_number', 'like', "%$search%");
                   });
         }) ->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection)
@@ -59,6 +57,7 @@ class Ticket_controller extends Controller
         $object->description = $request->description;
         $object->note = $request->note;
         $object->percentage = $request->percentage ?? '0%';
+        $object->status = $request->status_id;
 
         /* Save to the database table*/
         $object->save();
@@ -110,6 +109,7 @@ class Ticket_controller extends Controller
         $object->description = $request->description;
         $object->note = $request->note;
         $object->percentage = $request->percentage ?? '0%';
+        $object->status = $request->status_id ;
         $object->update();
 
         return response()->json([
@@ -129,6 +129,7 @@ class Ticket_controller extends Controller
             'priority_id' => 'required|integer',
             'subject' => 'required|string',
             'description' => 'required',
+            'status_id'=>'required|integer',
         ];
         $validator = Validator::make($request->all(), $rules);
 

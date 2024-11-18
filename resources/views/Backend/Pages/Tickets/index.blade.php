@@ -68,7 +68,87 @@
             "data":"id"
           },
           {
-            "data":"name"
+            "data":"status",
+            render:function(data,type,row){
+                if(row.status == 0){
+                    return '<span class="badge bg-danger">Open</span>';
+                }else if(row.status == 2){
+                    return '<span class="badge bg-warning">Pending</span>';
+                }else if(row.status==1){
+                    return '<span class="badge bg-success">Completed</span>';
+                }
+            }
+          },
+          {
+            "data":"created_at",
+            render: function (data, type, row) {
+                return moment(row.created_at).format('D MMMM YYYY');
+            }
+          },
+          {
+            "data": "priority_id",
+            render: function (data, type, row) {
+                let priorityLabel = '';
+                switch (row.priority_id) {
+                    case 1:
+                        priorityLabel = 'Low';
+                        break;
+                    case 2:
+                        priorityLabel = 'Normal';
+                        break;
+                    case 3:
+                        priorityLabel = 'Standard';
+                        break;
+                    case 4:
+                        priorityLabel = 'Medium';
+                        break;
+                    case 5:
+                        priorityLabel = 'High';
+                        break;
+                    case 6:
+                        priorityLabel = 'Very High';
+                        break;
+                    default:
+                        priorityLabel = 'Unknown';
+                        break;
+                }
+                return priorityLabel;
+            }
+
+          },
+          {
+            "data":"student.name"
+          },
+          {
+            "data":"student.phone"
+          },
+          {
+            "data":"complain_type.name"
+          },
+          {
+            "data":"assign.name"
+          },
+          {
+            "data":"ticket_for",
+            render: function (data, type, row) {
+                if (row.ticket_for == 1) {
+                    return `Default`;
+                }
+            }
+          },
+          {
+            "data":"ticket_for",
+            render: function (data, type, row) {
+                if (row.ticket_for == 1) {
+                    return `<span class="badge bg-success">Default</span>`;
+                }
+            }
+          },
+          {
+            "data":"percentage"
+          },
+          {
+            "data":"note"
           },
 
           {
@@ -100,16 +180,24 @@
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
         $.ajax({
-            url: "{{ route('admin.tickets.complain_type.edit', ':id') }}".replace(':id', id),
+            url: "{{ route('admin.tickets.edit', ':id') }}".replace(':id', id),
             method: 'GET',
             success: function(response) {
                 if (response.success) {
-                    $('#complainForm').attr('action', "{{ route('admin.tickets.complain_type.update', ':id') }}".replace(':id', id));
-                    $('#complainModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Complain Type');
-                    $('#complainForm input[name="name"]').val(response.data.name);
+                    $('#ticketForm').attr('action', "{{ route('admin.tickets.update', ':id') }}".replace(':id', id));
+                    $('#ticketModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Ticket');
+                    $('#ticketForm select[name="student_id"]').val(response.data.student_id);
+                    $('#ticketForm select[name="ticket_for"]').val(response.data.ticket_for);
+                    $('#ticketForm select[name="ticket_assign_id"]').val(response.data.ticket_assign_id);
+                    $('#ticketForm select[name="ticket_complain_id"]').val(response.data.ticket_complain_id);
+                    $('#ticketForm select[name="priority_id"]').val(response.data.priority_id);
+                    $('#ticketForm input[name="subject"]').val(response.data.subject);
+                    $('#ticketForm textarea[name="description"]').val(response.data.description);
+                    $('#ticketForm input[name="note"]').val(response.data.note);
+                    $('#ticketForm select[name="status_id"]').val(response.data.status_id);
 
                     // Show the modal
-                    $('#complainModal').modal('show');
+                    $('#ticketModal').modal('show');
                 } else {
                     toastr.error('Failed to fetch Supplier data.');
                 }
@@ -123,7 +211,7 @@
     /** Handle Delete button click**/
     $('#datatable1 tbody').on('click', '.delete-btn', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('admin.tickets.complain_type.delete', ':id') }}".replace(':id', id);
+        var deleteUrl = "{{ route('admin.tickets.delete', ':id') }}".replace(':id', id);
 
         $('#deleteForm').attr('action', deleteUrl);
         $('#deleteModal').find('input[name="id"]').val(id);
