@@ -127,14 +127,14 @@ class ProductController extends Controller
         $data = Product::with('brand','category','unit','store')->find($id);
         return view('Backend.Pages.Product.view',compact('data','sales_invoice_history','purchase_invoice_history'));
     }
-    public function check_product_qty(Request $request){
-        /*Validate the form data*/
-        $rules=[
+    public function check_product_qty(Request $request)
+    {
+        /* Validate the form data*/
+        $rules = [
             'product_id' => 'required|exists:products,id',
             'qty' => 'required|integer|min:1',
         ];
         $validator = Validator::make($request->all(), $rules);
-
 
         if ($validator->fails()) {
             return response()->json([
@@ -142,10 +142,11 @@ class ProductController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-         /*Find the product*/
-        $product = Product::find($request->product_id);
 
-        /* Check if product exists*/
+        /* Find the product*/
+        $product = Product::with('purchases', 'sales')->find($request->product_id);
+
+        // Check if product exists
         if (!$product) {
             return response()->json([
                 'success' => false,
@@ -153,20 +154,26 @@ class ProductController extends Controller
             ]);
         }
 
+        /* Calculate the actual available quantity*/
+        $totalPurchased = $product->purchases->sum('quantity');
+        $totalSold = $product->sales->sum('quantity');
+        $availableQty = $totalPurchased - $totalSold;
+
         /* Check if product quantity is sufficient*/
-        if ($product->qty < $request->qty) {
+        if ($availableQty < $request->qty) {
             return response()->json([
                 'success' => false,
-                'message' => ' Stock Not available.'
+                'message' => 'Stock not available.'
             ]);
         }
 
-        // If everything is fine, return success
+        /*If everything is fine, return success*/
         return response()->json([
             'success' => true,
-            'message' => 'Product quantity is Available.',
+            'message' => 'Product quantity is available.',
         ]);
     }
+
 
 
     public function update(Request $request, $id)
