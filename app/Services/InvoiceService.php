@@ -53,51 +53,7 @@ class InvoiceService{
             $invoice->status = $request->table_status ?? 0;
             $invoice->save();
             /* Add invoice details */
-            foreach ($request->table_product_id as $index => $productId) {
-                if (!empty($request->table_status) && $request->table_status == '1' && isset($request->table_status)) {
-                    $product = Product::find($productId);
-                    if (!empty($product)) {
-                        $sub_ledger_id = $product->sales_ac;
-                        $sub_ledger_id = $type === 'supplier' ? $product->purchase_ac : $product->sales_ac;
-                        $sub_ledger = Sub_ledger::find($sub_ledger_id);
-
-                        if (!empty($sub_ledger)) {
-                            $ledger_id = $sub_ledger->ledger_id;
-                            $master_ledger = Ledger::find($ledger_id);
-
-                            if (!empty($master_ledger)) {
-                                $master_ledger_id = $master_ledger->master_ledger_id ;
-                                /*Ledger Transaction Data Insert*/
-                                $account_transaction=new Account_transaction();
-                                $account_transaction->type=$master_ledger_id;
-                                $account_transaction->refer_no=$type==='supplier'?'SI-'.strtoupper(uniqid()):'CI-'.strtoupper(uniqid());
-                                $account_transaction->transaction_number=$invoice->transaction_number;
-                                $account_transaction->description='default===oops';
-                                $account_transaction->master_ledger_id=$master_ledger_id;
-                                $account_transaction->ledger_id=$ledger_id;
-                                $account_transaction->sub_ledger_id=$sub_ledger_id;
-                                $account_transaction->qty=$request->table_qty[$index];
-                                $account_transaction->value=intval($request->table_price[$index]);
-                                $account_transaction->total=intval($request->table_qty[$index] * $request->table_price[$index]);
-                                $account_transaction->status=1;
-                                $account_transaction->date=$request->date;
-                                $account_transaction->save();
-                            }
-                        }
-                    }
-
-                }
-                $inv_details = $type ==='customer' ? new Customer_Invoice_Details() : new Supplier_Invoice_Details();
-                $inv_details->invoice_id = $invoice->id;
-                $inv_details->transaction_number = $invoice->transaction_number;
-                $inv_details->product_id = $productId;
-                $inv_details->qty = $request->table_qty[$index];
-                $inv_details->price = intval($request->table_price[$index]);
-                $inv_details->total_price = intval($request->table_qty[$index] * $request->table_price[$index]);
-                $inv_details->status = $request->table_status ?? 0;
-                $inv_details->save();
-            }
-
+            $this->_hadle_invoice_details($request,$invoice,$type);
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Invoice created successfully.']);
         } catch (\Throwable $e) {
@@ -110,7 +66,6 @@ class InvoiceService{
         DB::beginTransaction();
         try {
             $invoice = $type === 'supplier' ? Supplier_Invoice::find($invoiceId) : Customer_Invoice::find($invoiceId);
-            //$invoice->transaction_number=$invoice->transaciotn_number;
             $invoice->usr_id = $userId;
 
             /*Create A logic for customer and supplier*/
@@ -140,51 +95,8 @@ class InvoiceService{
                 Account_transaction::where('transaction_number', $invoice->transaction_number)->delete();
             }
 
-            /* Add New invoice details */
-            foreach ($request->table_product_id as $index => $productId) {
-                if (!empty($request->table_status) && $request->table_status == '1' && isset($request->table_status)) {
-                    $product = Product::find($productId);
-                    if (!empty($product)) {
-                        $sub_ledger_id = $product->sales_ac;
-                        $sub_ledger_id = $type === 'supplier' ? $product->purchase_ac : $product->sales_ac;
-                        $sub_ledger = Sub_ledger::find($sub_ledger_id);
-
-                        if (!empty($sub_ledger)) {
-                            $ledger_id = $sub_ledger->ledger_id;
-                            $master_ledger = Ledger::find($ledger_id);
-
-                            if (!empty($master_ledger)) {
-                                $master_ledger_id = $master_ledger->master_ledger_id ;
-                                /*Ledger Transaction Data Insert*/
-                                $account_transaction=new Account_transaction();
-                                $account_transaction->type=$master_ledger_id;
-                                $account_transaction->refer_no=$type==='supplier'?'SI-'.strtoupper(uniqid()):'CI-'.strtoupper(uniqid());
-                                $account_transaction->transaction_number=$invoice->transaction_number;
-                                $account_transaction->description='default===oops';
-                                $account_transaction->master_ledger_id=$master_ledger_id;
-                                $account_transaction->ledger_id=$ledger_id;
-                                $account_transaction->sub_ledger_id=$sub_ledger_id;
-                                $account_transaction->qty=$request->table_qty[$index];
-                                $account_transaction->value=intval($request->table_price[$index]);
-                                $account_transaction->total=intval($request->table_qty[$index] * $request->table_price[$index]);
-                                $account_transaction->status=1;
-                                $account_transaction->date=$request->date;
-                                $account_transaction->save();
-                            }
-                        }
-                    }
-
-                }
-                $inv_details = $type ==='customer' ? new Customer_Invoice_Details() : new Supplier_Invoice_Details();
-                $inv_details->invoice_id = $invoice->id;
-                $inv_details->transaction_number = $invoice->transaction_number;
-                $inv_details->product_id = $productId;
-                $inv_details->qty = $request->table_qty[$index];
-                $inv_details->price = intval($request->table_price[$index]);
-                $inv_details->total_price = intval($request->table_qty[$index] * $request->table_price[$index]);
-                $inv_details->status = $request->table_status ?? 0;
-                $inv_details->save();
-            }
+            /* Insert invoice details AND Accounts transaction*/
+            $this->_hadle_invoice_details($request,$invoice,$type);
 
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Invoice Update successfully.']);
@@ -235,5 +147,50 @@ class InvoiceService{
                'errors' => $validator->errors()
            ], 422);
        }
+   }
+   private function _hadle_invoice_details($request,$invoice,$type){
+    foreach ($request->table_product_id as $index => $productId) {
+        if (!empty($request->table_status) && $request->table_status == '1' && isset($request->table_status)) {
+            $product = Product::find($productId);
+            if (!empty($product)) {
+                $sub_ledger_id = $product->sales_ac;
+                $sub_ledger_id = $type === 'supplier' ? $product->purchase_ac : $product->sales_ac;
+                $sub_ledger = Sub_ledger::find($sub_ledger_id);
+
+                if (!empty($sub_ledger)) {
+                    $ledger_id = $sub_ledger->ledger_id;
+                    $master_ledger = Ledger::find($ledger_id);
+
+                    if (!empty($master_ledger)) {
+                        $master_ledger_id = $master_ledger->master_ledger_id ;
+                        /*Ledger Transaction Data Insert*/
+                        $account_transaction=new Account_transaction();
+                        $account_transaction->refer_no=$type==='supplier'?'SI-'.strtoupper(uniqid()):'CI-'.strtoupper(uniqid());
+                        $account_transaction->transaction_number=$invoice->transaction_number;
+                        $account_transaction->description='default===oops';
+                        $account_transaction->master_ledger_id=$master_ledger_id;
+                        $account_transaction->ledger_id=$ledger_id;
+                        $account_transaction->sub_ledger_id=$sub_ledger_id;
+                        $account_transaction->qty=$request->table_qty[$index];
+                        $account_transaction->value=intval($request->table_price[$index]);
+                        $account_transaction->total=intval($request->table_qty[$index] * $request->table_price[$index]);
+                        $account_transaction->status=1;
+                        $account_transaction->date=$request->date;
+                        $account_transaction->save();
+                    }
+                }
+            }
+
+        }
+        $inv_details = $type ==='customer' ? new Customer_Invoice_Details() : new Supplier_Invoice_Details();
+        $inv_details->invoice_id = $invoice->id;
+        $inv_details->transaction_number = $invoice->transaction_number;
+        $inv_details->product_id = $productId;
+        $inv_details->qty = $request->table_qty[$index];
+        $inv_details->price = intval($request->table_price[$index]);
+        $inv_details->total_price = intval($request->table_qty[$index] * $request->table_price[$index]);
+        $inv_details->status = $request->table_status ?? 0;
+        $inv_details->save();
+    }
    }
 }

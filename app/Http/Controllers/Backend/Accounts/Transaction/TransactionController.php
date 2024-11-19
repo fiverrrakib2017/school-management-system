@@ -34,7 +34,6 @@ class TransactionController extends Controller
                 $object=new Account_transaction();
                 $object->refer_no=$request->refer_no ?? strtoupper(uniqid());
                 $object->transaction_number = "TRANSID-".strtoupper(uniqid());
-                $object->type=$master_ledger_id ?? 0;
                 $object->description=$request->description ?? strtoupper(uniqid());
                 $object->master_ledger_id=$master_ledger_id;
                 $object->ledger_id=$ledger_id;
