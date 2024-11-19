@@ -16,7 +16,7 @@
 									</div>
 									<div class="form-group mb-2">
 										<label>Exam Year</label>
-										<select  name="year"  class="form-select" required>
+										<select  name="year"  class="form-select" style="width: 100%;" required>
                                             @php
                                                 for ($year = (int)date('Y'); $year >= 1900; $year--) {
                                                     echo "<option value='$year'>$year</option>";

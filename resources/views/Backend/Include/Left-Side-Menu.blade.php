@@ -36,6 +36,12 @@
                             <a href="{{ route('admin.student.exam.index') }}">Examination</a>
                         </li>
                         <li>
+                            <a href="#">Examination Routine</a>
+                        </li>
+                        <li>
+                            <a href="#">Examination Result</a>
+                        </li>
+                        <li>
                          <a href="{{ route('admin.student.shift.index') }}">Shift</a>
                         </li>
                         <li>
