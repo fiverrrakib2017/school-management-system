@@ -51,9 +51,15 @@ class ProductController extends Controller
 
         /* Apply ordering, pagination and get the data*/
         $items = $query->orderBy($orderByColumn, $orderDirection)
-                    ->skip($request->start)
-                    ->take($request->length)
-                    ->get();
+               ->skip($request->start)
+               ->take($request->length)
+               ->get()
+               ->map(function ($product) {
+                   $totalPurchased = $product->purchases->sum('quantity');
+                   $totalSold = $product->sales->sum('quantity');
+                   $product->qty = $totalPurchased - $totalSold;
+                   return $product;
+               });
 
         /* Return the response in JSON format*/
         return response()->json([

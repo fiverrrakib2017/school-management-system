@@ -22,7 +22,10 @@ class Product extends Model
         return $this->belongsTo(Store::class);
     }
 
-    // public function purchase_ac(){
-    //     return $this->belongsTo(Sub_ledger::class);
-    // }
+    public function purchases(){
+        return $this->hasMany(Supplier_Invoice_Details::class);
+    }
+    public function sales(){
+        return $this->hasMany(Customer_Invoice_Details::class);
+    }
 }
