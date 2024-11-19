@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\Accounts\Sub_Ledger\SubLedgerController;
 use App\Http\Controllers\Backend\Accounts\Transaction\TransactionController;
 use App\Http\Controllers\Backend\Admin\AdminController;
 use App\Http\Controllers\Backend\Customer\CustomerController;
+use App\Http\Controllers\Backend\Student\ExamRoutine_controller;
 use App\Http\Controllers\Backend\Supplier\Supplier_invoiceController;
 use App\Http\Controllers\Backend\Supplier\Supplier_returnController;
 use App\Http\Controllers\Backend\Customer\InvoiceController;
@@ -99,6 +100,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.subject.update');
                 Route::post('/store','store')->name('admin.student.subject.store');
                 Route::post('/delete','delete')->name('admin.student.subject.delete');
+                Route::post('/get_subject_by_class','get_subject_by_class')->name('admin.student.subject.get_subject_by_class');
             });
         });
         /** Examination  Route **/
@@ -110,6 +112,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update/{id}','update')->name('admin.student.exam.update');
                 Route::post('/store','store')->name('admin.student.exam.store');
                 Route::post('/delete','delete')->name('admin.student.exam.delete');
+            });
+        });
+        /** Examination Routine  Route **/
+        Route::prefix('examination/routine')->group(function(){
+            Route::controller(ExamRoutine_controller::class)->group(function(){
+                Route::get('/list','index')->name('admin.student.exam.routine.index');
+                Route::get('/all_data','get_all_data')->name('admin.student.exam.routine.get_all_data');
+                Route::get('/edit/{id}','edit')->name('admin.student.exam.routine.edit');
+                Route::post('/update/{id}','update')->name('admin.student.exam.routine.update');
+                Route::post('/store','store')->name('admin.student.exam.routine.store');
+                Route::post('/delete','delete')->name('admin.student.exam.routine.delete');
             });
         });
         /** Student  Route **/

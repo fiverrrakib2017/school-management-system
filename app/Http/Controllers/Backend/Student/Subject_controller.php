@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class Subject_controller extends Controller
 {
     public function index(){
-       
+
        $classes = Student_class::get();
        $subjects = Student_subject::join('student_classes', 'student_subjects.class_id', '=', 'student_classes.id')
        ->select('student_subjects.*', 'student_classes.name as class_name')
@@ -30,7 +30,7 @@ class Subject_controller extends Controller
 
         $query = Student_class::with('subjects');
 
-        /*Apply the search filter*/ 
+        /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
@@ -100,6 +100,21 @@ class Subject_controller extends Controller
 
     public function edit($id){
         $object = Student_subject::find($id);
+
+        if ($object) {
+            return response()->json([
+                'success' => true,
+                'data' => $object
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Subject not found'
+        ], 404);
+    }
+    public function get_subject_by_class(Request $request){
+        $object = Student_subject::where('class_id', $request->class_id)->get();
 
         if ($object) {
             return response()->json([

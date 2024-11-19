@@ -36,7 +36,7 @@
                             <a href="{{ route('admin.student.exam.index') }}">Examination</a>
                         </li>
                         <li>
-                            <a href="#">Examination Routine</a>
+                            <a href="{{ route('admin.student.exam.routine.index') }}">Examination Routine</a>
                         </li>
                         <li>
                             <a href="#">Examination Result</a>
