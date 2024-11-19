@@ -14,20 +14,19 @@ class ProductController extends Controller
     public function index()
     {
         return view('Backend.Pages.Product.index');
-        //return Product::with(['brand','category','unit','store'])->get();
     }
     public function get_all_data(Request $request)
     {
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name','purchase_price','sale_price','unit','store','qty'];
+        $columnsForOrderBy = ['id', 'name', 'purchase_price', 'sale_price', 'unit', 'store', 'qty'];
         $orderByColumnIndex = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
-        /*Start building the query*/
-        $query = Product::with('brand','category','unit','store');
+        /* Start building the query */
+        $query = Product::with('brand', 'category', 'unit', 'store', 'purchases', 'sales');
 
-        /*Apply the search filter*/
+        /* Apply the search filter */
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->whereHas('unit', function($q) use ($search) {
@@ -42,26 +41,29 @@ class ProductController extends Controller
             });
         }
 
-        /* Get the total count of records*/
+        /* Get the total count of records */
         $totalRecords = Product::count();
 
-        /* Get the count of filtered records*/
+        /* Get the count of filtered records */
         $filteredRecords = $query->count();
 
-
-        /* Apply ordering, pagination and get the data*/
+        /* Apply ordering, pagination and get the data */
         $items = $query->orderBy($orderByColumn, $orderDirection)
-               ->skip($request->start)
-               ->take($request->length)
-               ->get()
-               ->map(function ($product) {
-                   $totalPurchased = $product->purchases->sum('quantity');
-                   $totalSold = $product->sales->sum('quantity');
-                   $product->qty = $totalPurchased - $totalSold;
-                   return $product;
-               });
+                    ->skip($request->start)
+                    ->take($request->length)
+                    ->get()
+                    ->map(function ($product) {
+                        $totalPurchased = $product->purchases->sum('qty');
+                        $totalSold = $product->sales->sum('qty');
+                        $availableQty = ($totalPurchased - $totalSold) + $product->qty;
 
-        /* Return the response in JSON format*/
+                        /* Add availableQty to the product data*/
+                        $product->available_qty = $availableQty;
+
+                        return $product;
+                    });
+
+        /* Return the response in JSON format */
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $totalRecords,
@@ -69,6 +71,7 @@ class ProductController extends Controller
             'data' => $items,
         ]);
     }
+
     public function store(Request $request)
     {
         /*Validate the form data*/
@@ -155,10 +158,10 @@ class ProductController extends Controller
         }
 
         /* Calculate the actual available quantity*/
-        $totalPurchased = $product->purchases->sum('quantity');
-        $totalSold = $product->sales->sum('quantity');
-        $availableQty = $totalPurchased - $totalSold;
-
+        $totdalQty = $product->qty;
+        $totalPurchased = $product->purchases->sum('qty');
+        $totalSold = $product->sales->sum('qty');
+        $availableQty = ($totalPurchased - $totalSold) + $totdalQty;
         /* Check if product quantity is sufficient*/
         if ($availableQty < $request->qty) {
             return response()->json([

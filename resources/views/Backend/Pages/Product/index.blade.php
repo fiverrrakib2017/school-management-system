@@ -79,7 +79,7 @@
             "data":"store.name"
           },
           {
-            "data":"qty"
+            "data":"available_qty"
           },
 
           {

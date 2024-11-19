@@ -23,9 +23,9 @@ class Product extends Model
     }
 
     public function purchases(){
-        return $this->hasMany(Supplier_Invoice_Details::class);
+        return $this->hasMany(Supplier_Invoice_Details::class)->where('status',1);
     }
     public function sales(){
-        return $this->hasMany(Customer_Invoice_Details::class);
+        return $this->hasMany(Customer_Invoice_Details::class)->where('status',1);
     }
 }
