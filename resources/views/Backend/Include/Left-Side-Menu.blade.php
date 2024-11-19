@@ -134,6 +134,9 @@
                           <li>
                             <a href="{{ route('admin.customer.index') }}">Customer </a>
                           </li>
+                          <li>
+                            <a href="{{ route('admin.customer.tickets.index') }}">Customer Ticket</a>
+                          </li>
                    </ul>
                 </div>
              </li>

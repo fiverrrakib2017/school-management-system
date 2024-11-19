@@ -8,22 +8,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('admin.tickets.store') }}" method="POST"  id="ticketForm">
+                <form action="{{ route('admin.customer.tickets.store') }}" method="POST"  id="ticketForm">
                     @csrf
                     <div class="row">
                         <div class="col-md-6 mb-2">
-                            <label>Student Name</label>
-                            <select name="student_id" class="form-select" type="text" style="width: 100%;" required>
+                            <label>Customer Name</label>
+                            <select name="customer_id" class="form-select" type="text" style="width: 100%;" required>
                                 <option value="">---Select---</option>
                                 @php
-                                    $students = \App\Models\Student::latest()->get();
+                                    $customers = \App\Models\Customer::latest()->get();
                                 @endphp
-                                @if($students->isNotEmpty())
-                                    @foreach($students as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @if($customers->isNotEmpty())
+                                    @foreach($customers as $item)
+                                        <option value="{{ $item->id }}">{{ $item->fullname }}</option>
                                     @endforeach
-                                @else
-                                    <option value="">No student available</option>
                                 @endif
                             </select>
 
@@ -51,8 +49,6 @@
                                     @foreach($tickets_assign as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
-                                @else
-                                    <option value="">Not Data available</option>
                                 @endif
                             </select>
 
@@ -69,8 +65,7 @@
                                     @foreach($tickets_complain as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
-                                @else
-                                    <option value="">Not Data available</option>
+
                                 @endif
                             </select>
                         </div>
@@ -106,6 +101,7 @@
                         <div class="col-md-6 mb-2">
                             <label>Ticket Status</label>
                             <select name="status_id" class="form-select" type="text" style="width: 100%;" required>
+                                <option value="">---Select---</option>
                                 <option value="0">Active</option>
                                 <option value="1">Completed</option>
                             </select>

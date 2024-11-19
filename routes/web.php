@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\Customer\CustomerController;
 use App\Http\Controllers\Backend\Supplier\Supplier_invoiceController;
 use App\Http\Controllers\Backend\Supplier\Supplier_returnController;
 use App\Http\Controllers\Backend\Customer\InvoiceController;
+use App\Http\Controllers\Backend\Customer\TicketController;
 use App\Http\Controllers\Backend\Product\BrandController;
 use App\Http\Controllers\Backend\Product\CategoryController;
 use App\Http\Controllers\Backend\Product\SubCateogryController;
@@ -321,6 +322,15 @@ Route::group(['middleware'=>'admin'],function(){
             Route::get('/edit/{id}', 'edit_invoice')->name('admin.customer.invoice.edit_invoice');
             Route::post('/update', 'update_invoice')->name('admin.customer.invoice.update_invoice');
             Route::post('/delete', 'delete_invoice')->name('admin.customer.invoice.delete_invoice');
+        });
+        /** Customer Ticket Route **/
+        Route::prefix('ticket')->controller(TicketController::class)->group(function() {
+            Route::get('/list', 'index')->name('admin.customer.tickets.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.customer.tickets.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.customer.tickets.edit');
+            Route::post('/delete', 'delete')->name('admin.customer.tickets.delete');
+            Route::post('/store', 'store')->name('admin.customer.tickets.store');
+            Route::post('/update/{id}', 'update')->name('admin.customer.tickets.update');
         });
     });
     /** Supplier Route **/

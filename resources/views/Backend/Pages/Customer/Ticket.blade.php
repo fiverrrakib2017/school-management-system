@@ -11,14 +11,14 @@
                     Add New Ticket</button>
 
                 <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
+                    <table id="datatable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>No.</th>
                                 <th>Status</th>
                                 <th>Created</th>
                                 <th>Priority</th>
-                                <th>Student Name</th>
+                                <th>Customer Name</th>
                                 <th>Phone Number</th>
                                 <th>Issues</th>
                                 <th>Assigned To</th>
@@ -37,7 +37,7 @@
 
     </div>
 </div>
-@include('Backend.Modal.Tickets.ticket_modal')
+@include('Backend.Modal.Customer.ticket_modal')
 @include('Backend.Modal.delete_modal')
 
 
@@ -57,7 +57,7 @@
     "serverSide":true,
     beforeSend: function () {},
     complete: function(){},
-    ajax: "{{ route('admin.tickets.get_all_data') }}",
+    ajax: "{{ route('admin.customer.tickets.get_all_data') }}",
     language: {
         searchPlaceholder: 'Search...',
         sSearch: '',
@@ -117,10 +117,10 @@
 
           },
           {
-            "data":"student.name"
+            "data":"customer.fullname"
           },
           {
-            "data":"student.phone"
+            "data":"customer.phone_number"
           },
           {
             "data":"complain_type.name"
@@ -188,13 +188,13 @@
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
         $.ajax({
-            url: "{{ route('admin.tickets.edit', ':id') }}".replace(':id', id),
+            url: "{{ route('admin.customer.tickets.edit', ':id') }}".replace(':id', id),
             method: 'GET',
             success: function(response) {
                 if (response.success) {
-                    $('#ticketForm').attr('action', "{{ route('admin.tickets.update', ':id') }}".replace(':id', id));
+                    $('#ticketForm').attr('action', "{{ route('admin.customer.tickets.update', ':id') }}".replace(':id', id));
                     $('#ticketModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Ticket');
-                    $('#ticketForm select[name="student_id"]').val(response.data.student_id);
+                    $('#ticketForm select[name="customer_id"]').val(response.data.customer_id);
                     $('#ticketForm select[name="ticket_for"]').val(response.data.ticket_for);
                     $('#ticketForm select[name="ticket_assign_id"]').val(response.data.ticket_assign_id);
                     $('#ticketForm select[name="ticket_complain_id"]').val(response.data.ticket_complain_id);
@@ -220,7 +220,7 @@
     /** Handle Delete button click**/
     $('#datatable1 tbody').on('click', '.delete-btn', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('admin.tickets.delete', ':id') }}".replace(':id', id);
+        var deleteUrl = "{{ route('admin.customer.tickets.delete', ':id') }}".replace(':id', id);
 
         $('#deleteForm').attr('action', deleteUrl);
         $('#deleteModal').find('input[name="id"]').val(id);
