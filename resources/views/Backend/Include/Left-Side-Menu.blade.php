@@ -33,11 +33,15 @@
                          <a href="{{ route('admin.student.section.index') }}">Section</a>
                         </li>
                         <li>
+                            <a href="{{ route('admin.student.exam.index') }}">Examination</a>
+                        </li>
+                        <li>
                          <a href="{{ route('admin.student.shift.index') }}">Shift</a>
                         </li>
                         <li>
                          <a href="{{ route('admin.student.leave.index') }}">Leave</a>
                         </li>
+
                         <li>
                            <a href="{{ route('admin.student.attendence.index') }}">Attendance</a>
                         </li>
