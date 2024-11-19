@@ -6,13 +6,41 @@
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
+        <div class="card-header">
+          <div class="row" id="search_box">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="">Class</label>
+                        <select name="find_class_id"  class="form-select">
+                            <option value="">---Select---</option>
+                            @php
+                                $classes = \App\Models\Student_class::latest()->get();
+                            @endphp
+                            @if($classes->isNotEmpty())
+                                @foreach($classes as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mt-2">
+                    <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Examination Routine</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mt-2">
+                    <button data-bs-toggle="modal" data-bs-target="#routineModal" type="button" class="btn btn-primary mt-1">Create Examination Routine</button>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="card-body">
-                <button data-bs-toggle="modal" data-bs-target="#routineModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Create Examination Route</button>
-
-                <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
-                        <thead>
+                <div class="table-responsive responsive-table">
+                    <table id="datatable1" class="table table-bordered dt-responsive nowrap"
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead >
                             <tr>
                                 <th>No.</th>
                                 <th>Examination Name</th>
@@ -27,7 +55,11 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="routine_data">
+                        <tr id="no-data">
+                            <td colspan="10" class="text-center">No data available</td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -47,9 +79,11 @@
 <script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
+    $("select[name='find_class_id']").select2();
     custom_select2('#routineModal');
     handleSubmit('#routineForm','#routineModal');
-    var table=$("#datatable1").DataTable({
+    $("#datatable1").DataTable();
+    var table=$("#datatable12").DataTable({
     "processing":true,
     "responsive": true,
     "serverSide":true,
@@ -246,6 +280,45 @@
             error: function() {
                 toastr.error('An error occurred. Please try again.');
             }
+        });
+    });
+
+    $("button[name='submit_btn']").on('click',function(e){
+        e.preventDefault();
+        var class_id = $("select[name='find_class_id']").val();
+        var submitBtn =  $('#search_box').find('button[name="submit_btn"]');
+        submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
+        submitBtn.prop('disabled', true);
+        $.ajax({
+            type: 'GET',
+            url: "{{ route('admin.transaction.show') }}",
+            cache: true,
+            success: function(response) {
+            var _number = 1;
+            var html = '';
+
+            /*Check if the response data is an array*/
+            if (Array.isArray(response.data) && response.data.length > 0) {
+                response.data.forEach(function(transaction) {
+                    html += '<tr>';
+                    html += '<td>' + (_number++) + '</td>';
+                    html += '<td>' +
+                            (transaction.sub_ledger ? transaction.sub_ledger.sub_ledger_name : '') +
+                            '<br><i>' + (transaction.note ? transaction.note : '') + '</i></td>';
+                    html += '<td>' + transaction.qty + '</td>';
+                    html += '<td>' + transaction.value + '</td>';
+                    html += '<td>' + transaction.total + '</td>';
+                    html += '</tr>';
+                });
+            } else {
+                html += '<tr>';
+                html += '<td colspan="5" style="text-align: center;">No Data Available</td>';
+                html += '</tr>';
+            }
+
+            $("#routine_data").html(html);
+        }
+
         });
     });
 
