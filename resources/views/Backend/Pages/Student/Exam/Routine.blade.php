@@ -8,7 +8,7 @@
         <div class="card">
         <div class="card-header">
           <div class="row" id="search_box">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="">Class</label>
                         <select name="find_class_id"  class="form-select">
@@ -24,12 +24,28 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Examination Name</label>
+                        <select name="find_exam_id"  class="form-select">
+                            <option value="">---Select---</option>
+                            @php
+                                $exams = \App\Models\Student_exam::latest()->get();
+                            @endphp
+                            @if($exams->isNotEmpty())
+                                @foreach($exams as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="form-group mt-2">
                     <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Examination Routine</button>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group mt-2">
                     <button data-bs-toggle="modal" data-bs-target="#routineModal" type="button" class="btn btn-primary mt-1">Create Examination Routine</button>
                     </div>
@@ -43,8 +59,7 @@
                         <thead >
                             <tr>
                                 <th>No.</th>
-                                <th>Examination Name</th>
-                                <th>Class Name</th>
+
                                 <th>Subject Name</th>
                                 <th>Exam Date</th>
 
@@ -217,7 +232,7 @@
 
 
     /** Handle Edit button click **/
-    $('#datatable1 tbody').on('click', '.edit-btn', function () {
+    $('#routine_data').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
         $.ajax({
             url: "{{ route('admin.tickets.edit', ':id') }}".replace(':id', id),
@@ -286,37 +301,56 @@
     $("button[name='submit_btn']").on('click',function(e){
         e.preventDefault();
         var class_id = $("select[name='find_class_id']").val();
+        var exam_id = $("select[name='find_exam_id']").val();
         var submitBtn =  $('#search_box').find('button[name="submit_btn"]');
         submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
         submitBtn.prop('disabled', true);
         $.ajax({
-            type: 'GET',
-            url: "{{ route('admin.transaction.show') }}",
+            type: 'POST',
+            url: "{{ route('admin.student.exam.routine.get_exam_routine') }}",
             cache: true,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                class_id: class_id,
+                exam_id: exam_id,
+            },
             success: function(response) {
             var _number = 1;
             var html = '';
 
             /*Check if the response data is an array*/
             if (Array.isArray(response.data) && response.data.length > 0) {
-                response.data.forEach(function(transaction) {
+                response.data.forEach(function(data) {
                     html += '<tr>';
                     html += '<td>' + (_number++) + '</td>';
-                    html += '<td>' +
-                            (transaction.sub_ledger ? transaction.sub_ledger.sub_ledger_name : '') +
-                            '<br><i>' + (transaction.note ? transaction.note : '') + '</i></td>';
-                    html += '<td>' + transaction.qty + '</td>';
-                    html += '<td>' + transaction.value + '</td>';
-                    html += '<td>' + transaction.total + '</td>';
+                    html += '<td>' + (data.subject ? data.subject.name : 'N/A') + '</td>';
+                    html += '<td>' + data.exam_date + '</td>';
+                    html += '<td>' + data.start_time + '</td>';
+                    html += '<td>' + data.end_time + '</td>';
+                    html += '<td>' + data.room_number + '</td>';
+                    html += '<td>' + data.invigilator + '</td>';
+                    html += '<td>';
+                    html += '<button class="btn btn-primary btn-sm me-2 edit-btn" data-id="' + data.id + '"><i class="fa fa-edit"></i></button>';
+                    html += '<button class="btn btn-danger btn-sm delete-btn" data-id="' + data.id + '"><i class="fa fa-trash"></i></button>';
+                    html += '</td>';
                     html += '</tr>';
                 });
             } else {
                 html += '<tr>';
-                html += '<td colspan="5" style="text-align: center;">No Data Available</td>';
+                html += '<td colspan="10" style="text-align: center;">No Data Available</td>';
                 html += '</tr>';
             }
 
             $("#routine_data").html(html);
+        },
+        error: function() {
+            toastr.error('An error occurred. Please try again.');
+        },
+        complete:function(){
+            submitBtn.html('<i class="mdi mdi-magnify"></i> Find Examination Routine');
+            submitBtn.prop('disabled', false);
         }
 
         });

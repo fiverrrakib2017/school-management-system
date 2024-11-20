@@ -18,4 +18,13 @@ class Student_exam_routine extends Model
         'room_number',
         'invigilator'
     ];
+    public function exam(){
+        return $this->belongsTo(Student_exam::class);
+    }
+    public function class(){
+        return $this->belongsTo(Student_class::class);
+    }
+    public function subject(){
+        return $this->belongsTo(Student_subject::class);
+    }
 }

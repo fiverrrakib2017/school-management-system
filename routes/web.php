@@ -123,6 +123,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update/{id}','update')->name('admin.student.exam.routine.update');
                 Route::post('/store','store')->name('admin.student.exam.routine.store');
                 Route::post('/delete','delete')->name('admin.student.exam.routine.delete');
+                Route::post('/get_exam_routine','get_exam_routine')->name('admin.student.exam.routine.get_exam_routine');
             });
         });
         /** Student  Route **/
