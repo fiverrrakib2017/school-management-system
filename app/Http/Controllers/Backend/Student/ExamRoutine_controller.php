@@ -48,8 +48,8 @@ class ExamRoutine_controller extends Controller
     }
     public function store(Request $request)
     {
-        $start_time = Carbon::createFromFormat('H:i', $request->start_time)->format('h:i A');
-        $end_time = Carbon::createFromFormat('H:i', $request->end_time)->format('h:i A');
+        $start_time = Carbon::createFromFormat('H:i', $request->start_time)->format('H:i:s');
+        $end_time = Carbon::createFromFormat('H:i', $request->end_time)->format('H:i:s');
         /*Validate the form data*/
         $this->validateForm($request);
         $object = new Student_exam_routine();
@@ -83,7 +83,7 @@ class ExamRoutine_controller extends Controller
         /* Delete it From Database Table */
         $object->delete();
 
-        return response()->json(['success' =>true, 'message'=> 'Deleted successfully.']);
+        return response()->json(['success' =>true, 'data'=>$object, 'message'=> 'Deleted successfully.']);
     }
     public function edit($id)
     {
@@ -99,7 +99,6 @@ class ExamRoutine_controller extends Controller
 
     public function update(Request $request, $id)
     {
-
         $this->validateForm($request);
 
         $object = Student_exam_routine::findOrFail($id);
@@ -110,7 +109,7 @@ class ExamRoutine_controller extends Controller
         $object->start_time = $request->start_time;
         $object->end_time = $request->end_time;
         $object->room_number = $request->room_number;
-        $object->invigilator = $request->invigilator;
+        $object->invigilator = $request->invigilator_name;
         $object->update();
 
         return response()->json([

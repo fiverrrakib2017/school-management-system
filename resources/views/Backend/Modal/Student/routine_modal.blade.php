@@ -48,14 +48,14 @@
                             <label>Subject Name</label>
                             <select name="subject_id" class="form-select" type="text" style="width: 100%;" required>
                                 <option value="">---Select---</option>
-                                {{-- @php
+                                @php
                                     $subjects = \App\Models\Student_subject::latest()->get();
                                 @endphp
                                 @if($subjects->isNotEmpty())
                                     @foreach($subjects as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
-                                @endif --}}
+                                @endif
                             </select>
 
                             </select>

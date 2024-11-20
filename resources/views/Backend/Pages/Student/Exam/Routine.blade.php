@@ -89,173 +89,41 @@
 @endsection
 
 @section('script')
-<script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
-<script  src="{{ asset('Backend/assets/js/delete_data.js') }}"></script>
 <script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-    $("select[name='find_class_id']").select2();
-    custom_select2('#routineModal');
-    handleSubmit('#routineForm','#routineModal');
-    $("#datatable1").DataTable();
-    var table=$("#datatable12").DataTable({
-    "processing":true,
-    "responsive": true,
-    "serverSide":true,
-    beforeSend: function () {},
-    complete: function(){},
-    ajax: "{{ route('admin.tickets.get_all_data') }}",
-    language: {
-        searchPlaceholder: 'Search...',
-        sSearch: '',
-        lengthMenu: '_MENU_ items/page',
-    },
-    "columns":[
-          {
-            "data":"id"
-          },
-          {
-            "data":"status",
-            render:function(data,type,row){
-                if(row.status == 0){
-                    return '<span class="badge bg-danger">Active</span>';
-                }else if(row.status == 2){
-                    return '<span class="badge bg-warning">Pending</span>';
-                }else if(row.status==1){
-                    return '<span class="badge bg-success">Completed</span>';
-                }
-            }
-          },
-          {
-            "data":"created_at",
-            render: function (data, type, row) {
-                return moment(row.created_at).format('D MMMM YYYY');
-            }
-          },
-          {
-            "data": "priority_id",
-            render: function (data, type, row) {
-                let priorityLabel = '';
-                switch (row.priority_id) {
-                    case 1:
-                        priorityLabel = 'Low';
-                        break;
-                    case 2:
-                        priorityLabel = 'Normal';
-                        break;
-                    case 3:
-                        priorityLabel = 'Standard';
-                        break;
-                    case 4:
-                        priorityLabel = 'Medium';
-                        break;
-                    case 5:
-                        priorityLabel = 'High';
-                        break;
-                    case 6:
-                        priorityLabel = 'Very High';
-                        break;
-                    default:
-                        priorityLabel = 'Unknown';
-                        break;
-                }
-                return priorityLabel;
-            }
-
-          },
-          {
-            "data":"student.name"
-          },
-          {
-            "data":"student.phone"
-          },
-          {
-            "data":"complain_type.name"
-          },
-          {
-            "data":"assign.name"
-          },
-          {
-            "data":"ticket_for",
-            render: function (data, type, row) {
-                if (row.ticket_for == 1) {
-                    return `Default`;
-                }
-            }
-          },
-          {
-            "data":null,
-            render: function (data, type, row) {
-                if(row.updated_at == row.created_at){
-                    return 'N/A';
-                }
-                if (row.updated_at && row.created_at) {
-                    let start = moment(row.created_at);
-                    let end = moment(row.updated_at);
-
-                    return end.from(start);
-                } else {
-                    return 'N/A';
-                }
-            }
-          },
-          {
-            "data":"percentage"
-          },
-          {
-            "data":"note"
-          },
-
-          {
-            data:null,
-            render: function (data, type, row) {
-              return `<button  class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-
-                <button class="btn btn-danger btn-sm mr-3 delete-btn"  data-id="${row.id}"><i class="fa fa-trash"></i></button>`;
-            }
-
-          },
-        ],
-    order:[
-        [0, "desc"]
-    ],
-
+        $("select[name='find_class_id']").select2();
+        $("select[name='find_exam_id']").select2();
+        custom_select2('#routineModal');
+        _handleSubmit('#routineForm','#routineModal');
+        $("#datatable1").DataTable();
     });
-
-    });
-
-
-
-
-
-
-
 
     /** Handle Edit button click **/
-    $('#routine_data').on('click', '.edit-btn', function () {
+    $("#datatable1 tbody").on('click', '.edit-btn', function () {
         var id = $(this).data('id');
+        $('#routineForm')[0].reset();
         $.ajax({
-            url: "{{ route('admin.tickets.edit', ':id') }}".replace(':id', id),
+            url: "{{ route('admin.student.exam.routine.edit', ':id') }}".replace(':id', id),
             method: 'GET',
             success: function(response) {
                 if (response.success) {
-                    $('#ticketForm').attr('action', "{{ route('admin.tickets.update', ':id') }}".replace(':id', id));
-                    $('#ticketModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Ticket');
-                    $('#ticketForm select[name="student_id"]').val(response.data.student_id);
-                    $('#ticketForm select[name="ticket_for"]').val(response.data.ticket_for);
-                    $('#ticketForm select[name="ticket_assign_id"]').val(response.data.ticket_assign_id);
-                    $('#ticketForm select[name="ticket_complain_id"]').val(response.data.ticket_complain_id);
-                    $('#ticketForm select[name="priority_id"]').val(response.data.priority_id);
-                    $('#ticketForm input[name="subject"]').val(response.data.subject);
-                    $('#ticketForm textarea[name="description"]').val(response.data.description);
-                    $('#ticketForm input[name="note"]').val(response.data.note);
-                    $('#ticketForm select[name="status_id"]').val(response.data.status);
-                    $('#ticketForm select[name="percentage"]').val(response.data.percentage);
+                    $('#routineForm').attr('action', "{{ route('admin.student.exam.routine.update', ':id') }}".replace(':id', id));
+                    $('#routineModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Examination Routine');
+
+                    $('#routineForm select[name="class_id"]').val(data.class_id);
+                    $('#routineForm select[name="exam_id"]').val(data.exam_id);
+                    $('#routineForm select[name="subject_id"]').val(data.subject_id);
+                    $('#routineForm input[name="exam_date"]').val(data.exam_date);
+                    $('#routineForm input[name="start_time"]').val(data.start_time);
+                    $('#routineForm input[name="end_time"]').val(data.end_time);
+                    $('#routineForm input[name="room_number"]').val(data.room_number);
+                    $('#routineForm input[name="invigilator_name"]').val(data.invigilator);
 
                     // Show the modal
-                    $('#ticketModal').modal('show');
+                    $('#routineModal').modal('show');
                 } else {
-                    toastr.error('Failed to fetch Supplier data.');
+                    toastr.error('Failed to fetch  data.');
                 }
             },
             error: function() {
@@ -267,7 +135,7 @@
     /** Handle Delete button click**/
     $('#datatable1 tbody').on('click', '.delete-btn', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('admin.tickets.delete', ':id') }}".replace(':id', id);
+        var deleteUrl = "{{ route('admin.student.exam.routine.delete', ':id') }}".replace(':id', id);
 
         $('#deleteForm').attr('action', deleteUrl);
         $('#deleteModal').find('input[name="id"]').val(id);
@@ -302,10 +170,116 @@
         e.preventDefault();
         var class_id = $("select[name='find_class_id']").val();
         var exam_id = $("select[name='find_exam_id']").val();
-        var submitBtn =  $('#search_box').find('button[name="submit_btn"]');
+        fetch_exam_routine_data(class_id,exam_id)
+    });
+    function _time_formate(time) {
+        let [hour, minute, second] = time.split(':');
+        hour = parseInt(hour);
+        let ampm = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12 || 12; // 12-hour format
+        return `${hour}:${minute} ${ampm}`;
+    }
+
+    function _handleSubmit(formSelector, modalSelector) {
+        $(formSelector).submit(function(e) {
+            e.preventDefault();
+
+            /* Get the submit button */
+            var submitBtn = $(this).find('button[type="submit"]');
+            var originalBtnText = submitBtn.html();
+
+            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden"></span>');
+            submitBtn.prop('disabled', true);
+
+            var form = $(this);
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success==true) {
+                        toastr.success(response.message);
+                    /* Hide the modal */
+                    $(modalSelector).modal('hide');
+
+                    /* Reload the Page */
+                        setTimeout(() => {
+                            location.reload();
+                        }, 500);
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        /* Validation error*/
+                        var errors = xhr.responseJSON.errors;
+
+                        /* Loop through the errors and show them using toastr*/
+                        $.each(errors, function(field, messages) {
+                            $.each(messages, function(index, message) {
+                                /* Display each error message*/
+                                toastr.error(message);
+                            });
+                        });
+                    } else {
+                        /*General error message*/
+                        toastr.error('An error occurred. Please try again.');
+                    }
+                },
+                complete: function() {
+                    submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                }
+            });
+        });
+    }
+
+     /** Handle form submission for delete **/
+   $('#deleteModal form').submit(function(e){
+    e.preventDefault();
+    /*Get the submit button*/
+    var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
+
+    /* Save the original button text*/
+    var originalBtnText = submitBtn.html();
+
+    /*Change button text to loading state*/
+    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
+
+    var form = $(this);
+    var url = form.attr('action');
+    var formData = form.serialize();
+    /** Use Ajax to send the delete request **/
+    $.ajax({
+      type:'POST',
+      'url':url,
+      data: formData,
+      success: function (response) {
+        $('#deleteModal').modal('hide');
+        if (response.success) {
+          toastr.success(response.message);
+          var rowId = response.data.id;
+          $(`#datatable1 tr[data-id="${rowId}"]`).remove();
+        }
+      },
+
+      error: function (xhr, status, error) {
+         /** Handle  errors **/
+         toastr.error(xhr.responseText);
+      },
+      complete: function () {
+        submitBtn.html(originalBtnText);
+        }
+    });
+  });
+  function fetch_exam_routine_data(class_id,exam_id){
+    var submitBtn =  $('#search_box').find('button[name="submit_btn"]');
         submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
         submitBtn.prop('disabled', true);
-        $.ajax({
+    $.ajax({
             type: 'POST',
             url: "{{ route('admin.student.exam.routine.get_exam_routine') }}",
             cache: true,
@@ -323,12 +297,12 @@
             /*Check if the response data is an array*/
             if (Array.isArray(response.data) && response.data.length > 0) {
                 response.data.forEach(function(data) {
-                    html += '<tr>';
+                    html += '<tr data-id='+data.id+'>';
                     html += '<td>' + (_number++) + '</td>';
                     html += '<td>' + (data.subject ? data.subject.name : 'N/A') + '</td>';
                     html += '<td>' + data.exam_date + '</td>';
-                    html += '<td>' + data.start_time + '</td>';
-                    html += '<td>' + data.end_time + '</td>';
+                    html += '<td>' + _time_formate(data.start_time) + '</td>';
+                    html += '<td>' +_time_formate( data.end_time) + '</td>';
                     html += '<td>' + data.room_number + '</td>';
                     html += '<td>' + data.invigilator + '</td>';
                     html += '<td>';
@@ -354,9 +328,7 @@
         }
 
         });
-    });
-
-
+  }
 
   </script>
 @endsection
