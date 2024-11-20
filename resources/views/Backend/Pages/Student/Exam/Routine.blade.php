@@ -97,31 +97,58 @@
         custom_select2('#routineModal');
         _handleSubmit('#routineForm','#routineModal');
         $("#datatable1").DataTable();
+
     });
 
     /** Handle Edit button click **/
     $("#datatable1 tbody").on('click', '.edit-btn', function () {
         var id = $(this).data('id');
-        $('#routineForm')[0].reset();
         $.ajax({
             url: "{{ route('admin.student.exam.routine.edit', ':id') }}".replace(':id', id),
             method: 'GET',
             success: function(response) {
                 if (response.success) {
+
                     $('#routineForm').attr('action', "{{ route('admin.student.exam.routine.update', ':id') }}".replace(':id', id));
                     $('#routineModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Examination Routine');
+                    if (!$('#routineForm select[name="class_id"]').hasClass("select2-hidden-accessible")) {
+                        $('#routineForm select[name="class_id"]').select2({
+                            dropdownParent: $('#routineModal'),
+                            placeholder: "---Select---",
+                            allowClear: false
+                        });
+                    }
+                    $('#routineForm select[name="class_id"]').val(response.data.class_id);
 
-                    $('#routineForm select[name="class_id"]').val(data.class_id);
-                    $('#routineForm select[name="exam_id"]').val(data.exam_id);
-                    $('#routineForm select[name="subject_id"]').val(data.subject_id);
-                    $('#routineForm input[name="exam_date"]').val(data.exam_date);
-                    $('#routineForm input[name="start_time"]').val(data.start_time);
-                    $('#routineForm input[name="end_time"]').val(data.end_time);
-                    $('#routineForm input[name="room_number"]').val(data.room_number);
-                    $('#routineForm input[name="invigilator_name"]').val(data.invigilator);
+                    if (!$('#routineForm select[name="exam_id"]').hasClass("select2-hidden-accessible")) {
+                        $('#routineForm select[name="exam_id"]').select2({
+                            dropdownParent: $('#routineModal'),
+                            placeholder: "---Select---",
+                            allowClear: false
+                        });
+                    }
+                    $('#routineForm select[name="exam_id"]').val(response.data.exam_id);
 
-                    // Show the modal
+
+                    if (!$('#routineForm select[name="subject_id"]').hasClass("select2-hidden-accessible")) {
+                        $('#routineForm select[name="subject_id"]').select2({
+                            dropdownParent: $('#routineModal'),
+                            placeholder: "---Select---",
+                            allowClear: false
+                        });
+                    }
+                    $('#routineForm select[name="subject_id"]').val(response.data.subject_id);
+
+
+                    $('#routineForm input[name="exam_date"]').val(response.data.exam_date);
+                    $('#routineForm input[name="start_time"]').val(response.data.start_time);
+                    $('#routineForm input[name="end_time"]').val(response.data.end_time);
+                    $('#routineForm input[name="room_number"]').val(response.data.room_number);
+                    $('#routineForm input[name="invigilator_name"]').val(response.data.invigilator);
+
+                    /* Show the modal*/
                     $('#routineModal').modal('show');
+
                 } else {
                     toastr.error('Failed to fetch  data.');
                 }
@@ -203,13 +230,20 @@
                 success: function(response) {
                     if (response.success==true) {
                         toastr.success(response.message);
-                    /* Hide the modal */
-                    $(modalSelector).modal('hide');
+                        /* Hide the modal */
+                        $(modalSelector).modal('hide');
+                        /* Reload the Page */
+                        let class_id = $("select[name='find_class_id']").val();
+                        let exam_id = $("select[name='find_exam_id']").val();
 
-                    /* Reload the Page */
-                        setTimeout(() => {
-                            location.reload();
-                        }, 500);
+                        if (class_id && exam_id && class_id.trim() !== '' && exam_id.trim() !== '') {
+                            fetch_exam_routine_data(class_id, exam_id);
+                        } else {
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        }
+
                     }
                 },
                 error: function(xhr) {
@@ -297,7 +331,8 @@
             /*Check if the response data is an array*/
             if (Array.isArray(response.data) && response.data.length > 0) {
                 response.data.forEach(function(data) {
-                    html += '<tr data-id='+data.id+'>';
+
+                    html += '<tr data-id="' + data.id + '">';
                     html += '<td>' + (_number++) + '</td>';
                     html += '<td>' + (data.subject ? data.subject.name : 'N/A') + '</td>';
                     html += '<td>' + data.exam_date + '</td>';
@@ -330,5 +365,8 @@
         });
   }
 
+    $('#routineModal').on('shown.bs.modal', function () {
+        $('#routineForm select').trigger('change.select2');
+    });
   </script>
 @endsection
