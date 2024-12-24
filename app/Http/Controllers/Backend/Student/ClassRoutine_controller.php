@@ -15,8 +15,8 @@ class ClassRoutine_controller extends Controller
 {
     public function index(){
        $classes = Student_class::latest()->get();
-       $subjects= Student_subject::latest()->get(); 
-       $teachers=Teacher::latest()->get(); 
+       $subjects= Student_subject::latest()->get();
+       $teachers=Teacher::latest()->get();
         return view('Backend.Pages.Student.Routine.index',compact('classes','subjects', 'teachers'));
     }
     public function all_data(Request $request)
@@ -29,7 +29,7 @@ class ClassRoutine_controller extends Controller
 
         $query =  Student_class_routine::with('class', 'subject', 'teacher');
 
-        /*Apply the search filter*/ 
+        /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
@@ -50,7 +50,7 @@ class ClassRoutine_controller extends Controller
 
         // Get the count of filtered records
         $filteredRecords = $query->count();
-        
+
         if ($request->has('class_id') && !empty($request->class_id)) {
             $query->where('class_id', $request->class_id);
         }
@@ -59,8 +59,8 @@ class ClassRoutine_controller extends Controller
                     ->skip($request->start)
                     ->take($request->length)
                     ->get();
-    
-        
+
+
         /* Format the data for DataTables*/
         // $formattedData = $items->map(function ($item) {
         //     return [
@@ -99,6 +99,9 @@ class ClassRoutine_controller extends Controller
         $object->class_id = $request->class_id;
         $object->subject_id = $request->subject_id;
         $object->teacher_id = $request->teacher_id;
+        $object->day = $request->day;
+        $object->start_time = $request->start_time;
+        $object->end_time = $request->start_time;
 
         /* Save the class record to the database*/
         $object->save();
@@ -126,9 +129,9 @@ class ClassRoutine_controller extends Controller
         ], 404);
     }
 
-    public function get_routine_data(Request $request){   
+    public function get_routine_data(Request $request){
         $class_id = $request->input('class_id');
-    
+
         $routines = Student_class_routine::with('class', 'subject', 'teacher')->where('class_id', $class_id)->get();
 
         if ($routines) {
@@ -198,11 +201,11 @@ class ClassRoutine_controller extends Controller
     }
     public function print(Request $request){
         $class_id = $request->input('class_id');
-    
+
         $routines = Student_class_routine::where('class_id', $class_id)->get();
-        
+
         $view = view('Backend.Pages.Student.Routine.print_routine', compact('routines'))->render();
-        
+
         return response()->json($view);
     }
 }

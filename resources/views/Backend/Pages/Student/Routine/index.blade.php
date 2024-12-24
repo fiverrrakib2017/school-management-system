@@ -66,7 +66,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        {{-- <div class="form-group mb-2">
+                        <div class="form-group mb-2">
                             <label for="sectionName">Day Of Week</label>
                             <select type="text" name="day"  class="form-select" style="width: 100%;">
                                 <option value="">---Select---</option>
@@ -78,7 +78,7 @@
                                 <option value="Thursday">Thursday</option>
                                 <option value="Friday">Friday</option>
                             </select>
-                        </div> --}}
+                        </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Teacher Name</label>
                             <select type="text" name="teacher_id"  class="form-select" style="width: 100%;">
@@ -88,14 +88,14 @@
                                 @endforeach
                             </select>
                         </div>
-                        {{-- <div class="form-group mb-2">
+                        <div class="form-group mb-2">
                             <label for="">Start Time</label>
                             <input type="time" name="start_time"  class="form-control">
                         </div>
                         <div class="form-group mb-2">
                             <label for="">End Time</label>
                             <input type="time" name="end_time"  class="form-control">
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
