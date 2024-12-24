@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: composer install --no-dev --optimize-autoloader
 
-    
+
 
       # Deploy to server via SSH
       - name: Deploy to Production
@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd www/
+            cd www/admin.futureictbd.com/
             git pull origin master
             composer install --no-dev --optimize-autoloader
             php artisan migrate --force
