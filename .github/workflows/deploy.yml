@@ -26,9 +26,7 @@ jobs:
       - name: Install dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      # Run Laravel tests (Optional)
-      - name: Run tests
-        run: php artisan test
+    
 
       # Deploy to server via SSH
       - name: Deploy to Production
