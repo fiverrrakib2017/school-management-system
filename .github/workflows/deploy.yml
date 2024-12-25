@@ -1,42 +1,41 @@
-
 name: Deploy School Management System
 on:
   push:
     branches:
       - master
+
 jobs:
   web-deploy:
     name: Deploy
     runs-on: ubuntu-latest
+
     steps:
+      # GET Project Code
       - name: Get the latest code
         uses: actions/checkout@v2.3.2
-      - uses: actions/setup-node@master
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      - name: Install Dependencies
-        run: composer update --ignore-platform-reqs
-      - name: Generate key
-        run: php artisan key:generate
-      - name: Generate storage link
-        run: php artisan storage:link
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
+
+      # File Upload By FTP
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public.html/admin.futureictbd.com/
+          exclude: .git*
+
+      # SSH দিয়ে স্ক্রিপ্ট রান
+      - name: Run commands on server
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          # private_ssh_key
+          key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            git pull origin master
             composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan cache:clear
             php artisan config:cache
             php artisan route:cache
-
-
-
-
+            php artisan storage:link
+            php artisan key:generate
