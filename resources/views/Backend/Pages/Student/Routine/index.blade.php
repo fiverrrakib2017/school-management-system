@@ -151,6 +151,14 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group mb-2">
+                            <label for="">Start Time</label>
+                            <input type="time" name="start_time"  class="form-control">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">End Time</label>
+                            <input type="time" name="end_time"  class="form-control">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

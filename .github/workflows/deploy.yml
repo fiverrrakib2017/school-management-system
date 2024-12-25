@@ -1,6 +1,4 @@
 name: School Management System
-
-
 on:
   push:
     branches:
