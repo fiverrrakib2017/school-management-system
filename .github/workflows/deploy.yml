@@ -22,20 +22,6 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           exclude: .git*
+          sync-only: true
 
-      # SSH দিয়ে স্ক্রিপ্ট রান
-      - name: Run commands on server
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          # private_ssh_key
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            composer install --no-dev --optimize-autoloader
-            php artisan migrate --force
-            php artisan cache:clear
-            php artisan config:cache
-            php artisan route:cache
-            php artisan storage:link
-            php artisan key:generate
+   
