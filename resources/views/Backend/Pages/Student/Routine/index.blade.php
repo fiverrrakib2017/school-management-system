@@ -19,6 +19,9 @@
                                 <th class="">No.</th>
                                 <th class="">Subject Name</th>
                                 <th class="">Subject Teacher</th>
+                                <th class="">Day </th>
+                                <th class="">Start Time</th>
+                                <th class="">End Time</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -271,14 +274,6 @@
         }, 100);
 
         var table=$("#datatable1").DataTable();
-        // var table=$('#datatable1').DataTable({
-        //     "paging": false,
-        //     "ordering": false,
-        //     "info": false,     // Information বার্তা (Showing 1 to 10 of 50 entries) দেখাতে চাইলে true রাখুন
-        //     "searching": false, // সার্চ ফিল্ড রাখার জন্য true রাখুন
-        //     "lengthMenu": false, // Show entries অপশন সরাতে false করে দিন
-        //     "dom": 'tip' // "Show entries" অপশন সরানোর জন্য l সরিয়ে দিন। শুধু 'tip' রাখুন
-        // });
         $(document).on('change','#search_class_id',function(){
             var dataId=$(this).val();
             $.ajax({
@@ -297,6 +292,9 @@
                             html += '<td>' + i++ + '</td>';
                             html += '<td>' + routine.subject.name + '</td>';
                             html += '<td>' + routine.teacher.name + '</td>';
+                            html += '<td>' + routine.day + '</td>';
+                            html += '<td>' + routine.start_time + '</td>';
+                            html += '<td>' + routine.end_time + '</td>';
                             html += '<td>';
                             html += '<button class="btn btn-primary btn-sm mr-2 edit-btn" data-id="' + routine.id + '" style="margin-right: 5px"><i class="fa fa-edit"></i></button>';
                             html += '<button class="btn btn-danger btn-sm mr-2 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + routine.id + '"><i class="fa fa-trash"></i></button>';
