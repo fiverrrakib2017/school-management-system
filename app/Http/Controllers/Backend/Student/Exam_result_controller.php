@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Customer_ticket;
+use App\Models\Section;
 use App\Models\Student;
 use App\Models\Student_class;
 use App\Models\Student_exam;
@@ -20,6 +21,7 @@ class Exam_result_controller extends Controller
         Student_exam::all();
         Student_class::all();
         Student::all();
+        
         return view('Backend.Pages.Student.Exam.Create_result');
     }
     public function result_report()
@@ -61,7 +63,7 @@ class Exam_result_controller extends Controller
     }
     public function result_store(Request $request)
     {
-        
+
         // $start_time = Carbon::createFromFormat('H:i', $request->start_time)->format('H:i:s');
         // $end_time = Carbon::createFromFormat('H:i', $request->end_time)->format('H:i:s');
         /*Validate the form data*/

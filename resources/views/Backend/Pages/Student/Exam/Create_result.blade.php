@@ -2,87 +2,107 @@
 @section('title','Dashboard | Admin Panel')
 @section('style')
 @endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-lg-6">
             <div class="card shadow-lg">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 text-white" >Create Exam Result</h5>
-                    <button type="button" onclick="history.back();" class="btn btn-danger btn-sm"><i class="fa fa-arrow-left"></i> Back</button>
+                    <h5 class="mb-0 text-white">Create Exam Result</h5>
+                    <button type="button" onclick="history.back();" class="btn btn-danger btn-sm">
+                        <i class="fa fa-arrow-left"></i> Back
+                    </button>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.student.exam.result.store') }}" method="POST" id="examResultForm">
                         @csrf
 
-                        <!-- Exam -->
-                        <div class="mb-3">
-                            <label for="exam_id" class="form-label"> Exam <span class="text-danger">*</span></label>
-                            <select name="exam_id" id="exam_id" class="form-select" required>
-                                <option value="" selected disabled>Select an Exam</option>
-                                @php
-                                    $exams = \App\Models\Student_exam::latest()->get();
-                                @endphp
-                                @foreach($exams as $exam)
-                                    <option value="{{ $exam->id }}">{{ $exam->name }}</option>
-                                @endforeach
-                            </select>
+                        <ul class="nav nav-tabs mb-3" id="formTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="exam-tab" data-bs-toggle="tab" data-bs-target="#exam" type="button" role="tab" aria-controls="exam" aria-selected="true">Exam Details</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button" role="tab" aria-controls="student" aria-selected="false">Student Details</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="marks-tab" data-bs-toggle="tab" data-bs-target="#marks" type="button" role="tab" aria-controls="marks" aria-selected="false">Marks & Remarks</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="formTabsContent">
+                            <!-- Exam Details -->
+                            <div class="tab-pane fade show active" id="exam" role="tabpanel" aria-labelledby="exam-tab">
+                                <div class="mb-3">
+                                    <label for="exam_id" class="form-label">Exam <span class="text-danger">*</span></label>
+                                    <select name="exam_id" id="exam_id" class="form-select select2" required>
+                                        <option value="" selected disabled>Select an Exam</option>
+                                        @foreach(\App\Models\Student_exam::latest()->get() as $exam)
+                                            <option value="{{ $exam->id }}">{{ $exam->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
+                                    <select name="class_id" id="class_id" class="form-select select2" required>
+                                        <option value="">---Select---</option>
+                                        @foreach(\App\Models\Student_class::latest()->get() as $class)
+                                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="section_id" class="form-label">Section <span class="text-danger">*</span></label>
+                                    <select name="section_id" id="section_id" class="form-select select2" required>
+                                        <option value="">---Select---</option>
+                                        @foreach(\App\Models\Section::latest()->get() as $section)
+                                            <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Student Details -->
+                            <div class="tab-pane fade" id="student" role="tabpanel" aria-labelledby="student-tab">
+                                <div class="mb-3">
+                                    <label for="student_id" class="form-label">Student <span class="text-danger">*</span></label>
+                                    <select name="student_id" id="student_id" class="form-select select2" style="width: 100%" required>
+                                        <option value="">---Select---</option>
+                                        @foreach(\App\Models\Student::latest()->get() as $student)
+                                            <option value="{{ $student->id }}">{{ $student->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject_id" class="form-label">Subject <span class="text-danger">*</span></label>
+                                    <select name="subject_id" id="subject_id" class="form-select select2" style="width: 100%" required>
+                                        <option value="">---Select---</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Marks & Remarks -->
+                            <div class="tab-pane fade" id="marks" role="tabpanel" aria-labelledby="marks-tab">
+                                <div class="mb-3">
+                                    <label for="marks_obtained" class="form-label">Marks Obtained <span class="text-danger">*</span></label>
+                                    <input type="number" name="marks_obtained" id="marks_obtained" class="form-control" placeholder="Enter Marks Obtained" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="total_marks" class="form-label">Total Marks <span class="text-danger">*</span></label>
+                                    <input type="number" name="total_marks" id="total_marks" class="form-control" placeholder="Enter Total Marks" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="grade" class="form-label">Grade</label>
+                                    <input type="text" name="grade" id="grade" class="form-control" placeholder="Enter Grade (Optional)">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="remarks" class="form-label">Remarks</label>
+                                    <textarea name="remarks" id="remarks" rows="3" class="form-control" placeholder="Enter Remarks (Optional)"></textarea>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Student -->
-                        <div class="mb-3">
-                            <label for="student_id" class="form-label"> Student <span class="text-danger">*</span></label>
-                            <select name="student_id" id="student_id" class="form-select" required>
-                                <option value="" selected disabled>Select a Student</option>
-                                @php
-                                    $students = \App\Models\Student::latest()->get();
-                                @endphp
-                                @foreach($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Subject -->
-                        <div class="mb-3">
-                            <label for="subject_id" class="form-label"> Subject <span class="text-danger">*</span></label>
-                            <select name="subject_id" id="subject_id" class="form-select" required>
-                                <option value="" selected disabled>Select a Subject</option>
-                                @php
-                                    $subjects = \App\Models\Student_subject::latest()->get();
-                                @endphp
-                                @foreach($subjects as $subject)
-                                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Marks Obtained -->
-                        <div class="mb-3">
-                            <label for="marks_obtained" class="form-label">Marks Obtained <span class="text-danger">*</span></label>
-                            <input type="number" name="marks_obtained" id="marks_obtained" class="form-control" placeholder="Enter Marks Obtained" required>
-                        </div>
-
-                        <!-- Total Marks -->
-                        <div class="mb-3">
-                            <label for="total_marks" class="form-label">Total Marks <span class="text-danger">*</span></label>
-                            <input type="number" name="total_marks" id="total_marks" class="form-control" placeholder="Enter Total Marks" required>
-                        </div>
-
-                        <!-- Grade -->
-                        <div class="mb-3">
-                            <label for="grade" class="form-label">Grade</label>
-                            <input type="text" name="grade" id="grade" class="form-control" placeholder="Enter Grade (Optional)">
-                        </div>
-
-                        <!-- Remarks -->
-                        <div class="mb-3">
-                            <label for="remarks" class="form-label">Remarks</label>
-                            <textarea name="remarks" id="remarks" rows="3" class="form-control" placeholder="Enter Remarks (Optional)"></textarea>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="text-end">
+                        <div class="text-end mt-4">
                             <button type="reset" class="btn btn-danger me-2">Reset</button>
                             <button type="submit" class="btn btn-primary">Save Result</button>
                         </div>
@@ -93,6 +113,7 @@
     </div>
 </div>
 @endsection
+
 
 @section('script')
 <script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
