@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\ClassRoutine_controller;
 use App\Http\Controllers\Backend\Student\Exam_Controller;
+use App\Http\Controllers\Backend\Student\Exam_result_controller;
 use App\Http\Controllers\Backend\Student\Fees_type_controller;
 use App\Http\Controllers\Backend\Student\Leave_controller;
 use App\Http\Controllers\Backend\Student\SectionController;
@@ -124,6 +125,18 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store','store')->name('admin.student.exam.routine.store');
                 Route::post('/delete','delete')->name('admin.student.exam.routine.delete');
                 Route::post('/get_exam_routine','get_exam_routine')->name('admin.student.exam.routine.get_exam_routine');
+            });
+        });
+        /** Examination Result  Route **/
+        Route::prefix('examination/result')->group(function(){
+            Route::controller(Exam_result_controller::class)->group(function(){
+                Route::get('/create','create_result')->name('admin.student.exam.result.create');
+                Route::get('/report','result_report')->name('admin.student.exam.result.report');
+                // Route::get('/all_data','get_all_data')->name('admin.student.exam.result.get_all_data');
+                // Route::get('/edit/{id}','edit')->name('admin.student.exam.result.edit');
+                // Route::post('/update/{id}','update')->name('admin.student.exam.result.update');
+                 Route::post('/store','result_store')->name('admin.student.exam.result.store');
+                // Route::post('/delete','delete')->name('admin.student.exam.result.delete');
             });
         });
         /** Student  Route **/

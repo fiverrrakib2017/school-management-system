@@ -36,10 +36,13 @@
                             <a href="{{ route('admin.student.exam.index') }}">Examination</a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.student.exam.routine.index') }}">Examination Routine</a>
+                            <a href="{{ route('admin.student.exam.routine.index') }}">Exam Routine</a>
                         </li>
                         <li>
-                            <a href="#">Examination Result</a>
+                            <a href="{{ route('admin.student.exam.result.create') }}">Create Exam Result</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.student.exam.result.report') }}">Exam Result Report</a>
                         </li>
                         <li>
                          <a href="{{ route('admin.student.shift.index') }}">Shift</a>
