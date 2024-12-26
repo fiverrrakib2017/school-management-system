@@ -9,6 +9,7 @@ use App\Models\Student_class;
 use App\Models\Student_exam;
 use App\Models\Student_exam_result;
 use App\Models\Student_exam_routine;
+use App\Models\Student_subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -18,58 +19,29 @@ class Exam_result_controller extends Controller
 
     public function create_result()
     {
-        Student_exam::all();
-        Student_class::all();
-        Student::all();
-        
-        return view('Backend.Pages.Student.Exam.Create_result');
+        $sections= Section::latest()->get();
+        $subjects=Student_subject::latest()->get();
+        $students=Student::latest()->get();
+
+        return view('Backend.Pages.Student.Exam.Create_result',compact('sections','subjects','students'));
     }
     public function result_report()
     {
-        return view('Backend.Pages.Student.Exam.Result');
+        $sections= Section::latest()->get();
+        $subjects=Student_subject::latest()->get();
+        $students=Student::latest()->get();
+        return view('Backend.Pages.Student.Exam.Result',compact('sections','subjects','students'));
     }
 
-    public function get_all_data(Request $request){
-        $search = $request->search['value'];
-        $columnsForOrderBy = ['id'];
-        $orderByColumn = $request->order[0]['column'];
-        $orderDirection = $request->order[0]['dir'];
 
-        $query = Student_exam_result::with(['exam','student','subject'])->when($search, function ($query) use ($search) {
-            $query->where('total_marks', 'like', "%$search%")
-                //   ->orWhereHas('exam', function ($query) use ($search) {
-                //       $query->where('fullname', 'like', "%$search%")
-                //             ->orWhere('phone_number', 'like', "%$search%");
-                //   })
-                  ->orWhereHas('student', function ($query) use ($search) {
-                      $query->where('name', 'like', "%$search%");
-                  })
-                  ->orWhereHas('exam', function ($query) use ($search) {
-                      $query->where('name', 'like', "%$search%");
-                  })
-                  ->orWhereHas('subject', function ($query) use ($search) {
-                      $query->where('name', 'like', "%$search%");
-                  });
-        }) ->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection)
-        ->paginate($request->length);
-
-
-        return response()->json([
-            'draw' => $request->draw,
-            'recordsTotal' => $query->total(),
-            'recordsFiltered' => $query->total(),
-            'data' => $query->items(),
-        ]);
-    }
     public function result_store(Request $request)
     {
-
-        // $start_time = Carbon::createFromFormat('H:i', $request->start_time)->format('H:i:s');
-        // $end_time = Carbon::createFromFormat('H:i', $request->end_time)->format('H:i:s');
         /*Validate the form data*/
         $this->validateForm($request);
         $object = new Student_exam_result();
-        $object->exam_id  = $request->exam_id ;
+        $object->exam_id  = $request->exam_id;
+        $object->class_id  = $request->class_id;
+        $object->section_id  = $request->section_id ;
         $object->student_id = $request->student_id;
         $object->subject_id = $request->subject_id;
         $object->marks_obtained = $request->marks_obtained;
@@ -103,21 +75,21 @@ class Exam_result_controller extends Controller
     public function edit($id)
     {
         $data = Student_exam_result::find($id);
-        if ($data) {
-            return response()->json(['success' => true, 'data' => $data]);
-            exit;
-        } else {
-            return response()->json(['success' => false, 'message' => 'Not found.']);
-        }
+        $sections= Section::latest()->get();
+        $subjects=Student_subject::latest()->get();
+        $students=Student::latest()->get();
+        return view('Backend.Pages.Student.Exam.Result_update',compact('data','sections','subjects','students'));
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $this->validateForm($request);
 
-        $object = Student_exam_result::findOrFail($id);
-        $object->exam_id  = $request->exam_id ;
+        $object = Student_exam_result::findOrFail($request->id);
+        $object->exam_id  = $request->exam_id;
+        $object->class_id  = $request->class_id;
+        $object->section_id  = $request->section_id ;
         $object->student_id = $request->student_id;
         $object->subject_id = $request->subject_id;
         $object->marks_obtained = $request->marks_obtained;
@@ -131,18 +103,38 @@ class Exam_result_controller extends Controller
             'message' => 'Update successfully!'
         ]);
     }
-    public function get_exam_result(Request $request){
-
-        $class_id = $request->class_id;
-        $exam_id = $request->exam_id;
-        $data = Student_exam_result::with(['exam','student','subject'])->where(['exam_id'=>$exam_id, 'class_id'=>$class_id])->get();
-        if ($data) {
-            return response()->json(['success' => true, 'data' => $data]);
-            exit;
-        } else {
-            return response()->json(['success' => false, 'message' => 'Not found.']);
-        }
+    public function get_exam_result(Request $request)
+{
+    $query = Student_exam_result::query();
+    if ($request->class_id) {
+        $query->where('class_id', $request->class_id);
     }
+
+    if ($request->exam_id) {
+        $query->where('exam_id', $request->exam_id);
+    }
+
+    if ($request->student_id) {
+        $query->where('student_id', $request->student_id);
+    }
+
+    /* Load related models*/
+    $data = $query->with(['exam', 'student', 'subject', 'class', 'section'])->get();
+
+    /*Check if data exists*/
+    if ($data->isNotEmpty()) {
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ]);
+    }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'No results found.',
+    ]);
+}
+
     private function validateForm($request)
     {
         /*Validate the form data*/

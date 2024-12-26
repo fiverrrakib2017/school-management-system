@@ -132,11 +132,11 @@ Route::group(['middleware'=>'admin'],function(){
             Route::controller(Exam_result_controller::class)->group(function(){
                 Route::get('/create','create_result')->name('admin.student.exam.result.create');
                 Route::get('/report','result_report')->name('admin.student.exam.result.report');
-                // Route::get('/all_data','get_all_data')->name('admin.student.exam.result.get_all_data');
-                // Route::get('/edit/{id}','edit')->name('admin.student.exam.result.edit');
-                // Route::post('/update/{id}','update')->name('admin.student.exam.result.update');
-                 Route::post('/store','result_store')->name('admin.student.exam.result.store');
-                // Route::post('/delete','delete')->name('admin.student.exam.result.delete');
+                Route::get('/edit/{id}','edit')->name('admin.student.exam.result.edit');
+                Route::post('/update','update')->name('admin.student.exam.result.update');
+                Route::post('/store','result_store')->name('admin.student.exam.result.store');
+                Route::post('/get_exam_result','get_exam_result')->name('admin.student.exam.result.get_result');
+                Route::post('/delete','delete')->name('admin.student.exam.result.delete');
             });
         });
         /** Student  Route **/

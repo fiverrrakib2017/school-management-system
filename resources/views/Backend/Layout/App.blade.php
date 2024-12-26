@@ -16,7 +16,7 @@
 
     <!-- icons -->
     <link href="{{ asset('Backend/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    
+
     <!-- third party css -->
     <link href="{{ asset('Backend/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('Backend/assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css') }}" rel="stylesheet" type="text/css">
@@ -25,7 +25,7 @@
     <link href="{{ asset('Backend/assets/css/deleteModal.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('Backend/assets/css/toastr.min.css') }}" rel="stylesheet" type="text/css">
     <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />  -->
-    
+
     @yield('style')
 </head>
 
@@ -76,7 +76,14 @@
     <!-- /Right-bar -->
     <!-- Right bar overlay-->
     <div class="rightbar-overlay"></div>
+
     @include('Backend.Include.Script')
+    <script type="text/javascript">
+        $('select').select2({
+            placeholder: "---Select---",
+            allowClear: false
+        });
+    </script>
 
 </body>
 
