@@ -105,6 +105,10 @@
 @section('script')
 <script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
   <script type="text/javascript">
+        $('select').select2({
+            placeholder: "---Select---",
+            allowClear: false
+        });
    $(document).on('change','select[name="class_id"]',function(){
         var sections = @json($sections);
         var subjects = @json($subjects);

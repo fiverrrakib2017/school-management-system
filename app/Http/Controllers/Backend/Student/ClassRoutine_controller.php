@@ -17,7 +17,8 @@ class ClassRoutine_controller extends Controller
        $classes = Student_class::latest()->get();
        $subjects= Student_subject::latest()->get();
        $teachers=Teacher::latest()->get();
-        return view('Backend.Pages.Student.Routine.index',compact('classes','subjects', 'teachers'));
+       $sections= Section::latest()->get();
+        return view('Backend.Pages.Student.Routine.index',compact('classes','subjects', 'teachers', 'sections'));
     }
     public function all_data(Request $request)
     {
@@ -97,6 +98,7 @@ class ClassRoutine_controller extends Controller
         /*Create a new  record*/
         $object = new Student_class_routine();
         $object->class_id = $request->class_id;
+        $object->section_id = $request->section_id;
         $object->subject_id = $request->subject_id;
         $object->teacher_id = $request->teacher_id;
         $object->day = $request->day;
@@ -130,15 +132,25 @@ class ClassRoutine_controller extends Controller
     }
 
     public function get_routine_data(Request $request){
-        $class_id = $request->input('class_id');
 
-        $routines = Student_class_routine::with('class', 'subject', 'teacher')->where('class_id', $class_id)->get();
+        $query = Student_class_routine::query();
+        if ($request->class_id) {
+            $query->where('class_id', $request->class_id);
+        }
 
-        if ($routines) {
+        if ($request->section_id) {
+            $query->where('section_id', $request->section_id);
+        }
+
+        /* Load related models*/
+        $data = $query->with(['class', 'subject', 'teacher'])->get();
+
+        /*Check if data exists*/
+        if ($data->isNotEmpty()) {
             return response()->json([
                 'success' => true,
                 'code'=>200,
-                'data' => $routines
+                'data' => $data
             ]);
         }
     }
@@ -169,9 +181,13 @@ class ClassRoutine_controller extends Controller
 
         /* Update the  record */
         $object->class_id = $request->class_id;
+        $object->section_id = $request->section_id;
         $object->subject_id = $request->subject_id;
         $object->teacher_id = $request->teacher_id;
-        $object->save();
+        $object->day = $request->day;
+        $object->start_time = $request->start_time;
+        $object->end_time = $request->start_time;
+        $object->update();
 
         /* Return success response*/
         return response()->json([

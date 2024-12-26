@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('student_class_routines', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('class_id');
+            $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('subject_id');
             $table->unsignedBigInteger('teacher_id');
-            $table->enum('day', ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']);
+            $table->enum('day', ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']);
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();
             $table->foreign('class_id')->references('id')->on('student_classes')->onDelete('cascade');
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
             $table->foreign('subject_id')->references('id')->on('student_subjects')->onDelete('cascade');
             $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
         });

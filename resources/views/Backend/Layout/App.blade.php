@@ -79,10 +79,10 @@
 
     @include('Backend.Include.Script')
     <script type="text/javascript">
-        $('select').select2({
-            placeholder: "---Select---",
-            allowClear: false
-        });
+        // $('select').select2({
+        //     placeholder: "---Select---",
+        //     allowClear: false
+        // });
     </script>
 
 </body>

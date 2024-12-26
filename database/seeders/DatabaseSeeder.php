@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         // ]);
         \App\Models\Admin::create([
             'name' => 'Rakib Mahmud',
-            'email' => 'rakibas375@gmail.com',
+            'email' => 'admin@futureictbd.com',
             'username' => 'rakibas375',
-            'password' => Hash::make('12345678'),
+            'password' => Hash::make('futureictbd'),
         ]);
         $master_ledger_name = ['Income', 'Expense', 'Asset', 'Liabilities'];
 
