@@ -7,7 +7,7 @@ use App\Models\Student_exam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class Exam_Controller extends Controller
+class Exam_controller extends Controller
 {
     public function index()
     {
