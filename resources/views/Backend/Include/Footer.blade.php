@@ -1,14 +1,7 @@
-<footer class="footer">
-    <div class="container-fluid">
-       <div class="row">
-          <div class="col-md-6">
-             <script>
-                document.write(new Date().getFullYear())
-             </script> &copy; Design And Develop <a target="__blank" href="https://www.facebook.com/Rakib56789">Rakib Mahmud</a>
-          </div>
-          <div class="col-md-6">
-             
-          </div>
-       </div>
+<footer class="main-footer">
+    <strong>Copyright &copy; <a href="https://facebook.com/rakib56789">Rakib Mahmud</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 2.0
     </div>
- </footer>
+  </footer>

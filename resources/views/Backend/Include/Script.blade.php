@@ -1,40 +1,53 @@
-<!-- Vendor -->
-<script src="{{ asset('Backend/assets/libs/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/simplebar/simplebar.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/node-waves/waves.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/waypoints/lib/jquery.waypoints.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/jquery.counterup/jquery.counterup.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/feather-icons/feather.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!-- jQuery -->
+<script src="{{ asset('Backend/plugins/jquery/jquery.min.js') }}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{ asset('Backend/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Select2 -->
+<script src="{{ asset('Backend/plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ asset('Backend/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- ChartJS -->
+<script src="{{ asset('Backend/plugins/chart.js/Chart.min.js') }}"></script>
+<!-- Sparkline -->
+<script src="{{ asset('Backend/plugins/sparklines/sparkline.js') }}"></script>
+<!-- JQVMap -->
+<script src="{{ asset('Backend/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+<!-- jQuery Knob Chart -->
+<script src="{{ asset('Backend/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+<!-- daterangepicker -->
+<script src="{{ asset('Backend/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/daterangepicker/daterangepicker.js') }}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{ asset('Backend/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+<!-- Summernote -->
+<script src="{{ asset('Backend/plugins/summernote/summernote-bs4.min.js') }}"></script>
+<!-- overlayScrollbars -->
+<script src="{{ asset('Backend/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('Backend/dist/js/adminlte.js') }}"></script>
+<!-- AdminLTE for demo purposes -->
+<!-- <script src="{{ asset('Backend/dist/js/demo.js') }}"></script> -->
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{ asset('Backend/dist/js/pages/dashboard.js') }}"></script>
+<!-- DataTables  & Plugins -->
+<script src="{{ asset('Backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('Backend/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-<!-- third party js -->
-<script src="{{ asset('Backend/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/datatables.net-select/js/dataTables.select.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/pdfmake/build/pdfmake.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/pdfmake/build/vfs_fonts.js') }}"></script>
-<!-- third party js ends -->
-
-<!-- Datatables init -->
-<script src="{{ asset('Backend/assets/js/pages/datatables.init.js') }}"></script>
-
-<!-- Dashboard init js -->
-<script src="{{ asset('Backend/assets/js/pages/dashboard.init.js') }}"></script>
-<script src="{{ asset('Backend/assets/js/toastr.min.js') }}"></script>
-<!-- App js -->
-<script src="{{ asset('Backend/assets/js/app.min.js') }}"></script>
-<script src="{{ asset('Backend/assets/libs/select2/js/select2.min.js') }}"></script>
-<!-- Include Morris.js and its dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-
+<!-- Toast Message -->
+ <script src="{{asset('Backend/dist/js/toastr.min.js')}}"></script>
 @yield('script')
