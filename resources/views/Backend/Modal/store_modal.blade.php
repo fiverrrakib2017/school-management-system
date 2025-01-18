@@ -5,7 +5,9 @@
                            <div class="modal-header">
                               <h5 class="modal-title" id="storeModalLabel"><span
                                  class="mdi mdi-account-check mdi-18px"></span> &nbsp;Create Store</h5>
-                              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
                            </div>
 						   <div class="modal-body">
 							  <form action="{{ route('admin.store.store') }}" id="storeForm" method="POST" enctype="multipart/form-data">

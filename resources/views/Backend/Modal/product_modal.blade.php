@@ -5,7 +5,9 @@
                 <h5 class="modal-title" id="productModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Create Product
                 </h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('admin.product.store') }}" method="POST"  id="productForm">

@@ -7,9 +7,9 @@
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
-          
+
             <div class="card-body">
-                <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                <button data-toggle="modal" data-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Class</button>
 
                 <div class="table-responsive" id="tableStyle">
@@ -39,89 +39,55 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Class
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start  Form ------->
             <form id="addForm" action="{{ route('admin.student.class.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start  Form input ------->
-                    <div class="row">
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Class Name: </label>
-                            <input type="text" name="name" class="form-control" placeholder="Enter Class Name" required>
-                        </div>
-                        <!-- <div class="form-group mb-2">
-                            <label for="status">Section</label>
-                            <select type="text" name="section" class="form-control" required>
-                                <option value="">---Select---</option>
-                                    @foreach ($data as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                            </select>
-                        </div> -->
-                        <!-- <div class="form-group mb-2">
-                            <label for="status">Status</label>
-                            <select type="text" name="status" class="form-control" required>
-                                <option value="">---Select---</option>
-                                <option value="1">Active</option>
-                                <option value="0">InActive</option>
-                              </select>
-                        </div> -->
+                    <div class="form-group mb-2">
+                        <label for="sectionName">Class Name: </label>
+                        <input type="text" name="name" class="form-control" placeholder="Enter Class Name" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End  Form ------->
         </div>
     </div>
 </div>
-<!-- Edit Section Modal -->
+<!-- Edit Class Modal -->
 <div class="modal fade bs-example-modal-lg" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Section
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Class
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Update Form ------->
             <form id="" action="{{ route('admin.student.class.update') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start  Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="">Class Name: </label>
                             <input type="text" name="id" class="d-none" required>
                             <input type="text" name="name" class="form-control" placeholder="Enter Class Name" required>
                         </div>
-                        <!-- <div class="form-group mb-2">
-                            <label for="status">Section</label>
-                            <select type="text" name="section" class="form-control" required>
-                                <option value="">---Select---</option>
-                                    @foreach ($data as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                            </select>
-                        </div> -->
-                        <!-- <div class="form-group mb-2">
-                            <label for="status">Status</label>
-                            <select type="text" name="status" class="form-control" required>
-                                <option value="">---Select---</option>
-                                <option value="1">Active</option>
-                                <option value="0">InActive</option>
-                              </select>
-                        </div> -->
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Update Form ------->
@@ -139,13 +105,15 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
@@ -163,7 +131,7 @@
         "processing":true,
         "responsive": true,
         "serverSide":true,
-        
+
         ajax: "{{ route('admin.student.class.all_data') }}",
         language: {
           searchPlaceholder: 'Search...',
@@ -279,6 +247,14 @@
   /** Store The data from the database table **/
   $('#addModal form').submit(function(e){
     e.preventDefault();
+    /*Get the submit button*/
+    var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
+
+    /* Save the original button text*/
+    var originalBtnText = submitBtn.html();
+
+    /*Change button text to loading state*/
+    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
     var form = $(this);
     var url = form.attr('action');
     var formData = form.serialize();
@@ -286,6 +262,9 @@
     $.ajax({
       type:'POST',
       'url':url,
+      beforeSend: function () {
+        form.find(':input').prop('disabled', true);
+      },
       data: formData,
       success: function (response) {
         $('#addModal').modal('hide');
@@ -306,6 +285,10 @@
          /** Handle  errors **/
         console.error(xhr.responseText);
       },
+      complete: function () {
+        submitBtn.html(originalBtnText);
+          form.find(':input').prop('disabled', false);
+        }
     });
   });
 
@@ -368,16 +351,5 @@
     });
   });
   </script>
-
-
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
 
 @endsection
