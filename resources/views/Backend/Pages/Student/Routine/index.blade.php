@@ -10,7 +10,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="">Class</label>
-                            <select name="class_id"  class="form-select">
+                            <select name="class_id"  class="form-control">
                                 <option value="">---Select---</option>
                                 @php
                                     $classes = \App\Models\Student_class::latest()->get();
@@ -26,20 +26,20 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="">Section</label>
-                            <select name="section_id"  class="form-select">
+                            <select name="section_id"  class="form-control">
                                 <option value="">---Select---</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group mt-2">
-                        <button type="submit" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Class Routine</button>
+                        <div class="form-group ">
+                        <button type="submit" name="submit_btn" class="btn btn-success" style="margin-top: 30px;"><i class="mdi mdi-magnify"></i> Find Class Routine</button>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="form-group mt-2" style="float: left;">
-                        <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn btn-primary mt-1">Create Class Routine</button>
+                        <div class="form-group " style="float: left;">
+                        <button data-toggle="modal" data-target="#addModal" type="button" class="btn btn-primary " style="margin-top: 30px;">Create Class Routine</button>
                         </div>
                     </div>
                 </div>
@@ -78,14 +78,15 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Class Routine
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Add Form ------->
             <form id="addSectionForm" action="{{ route('admin.student.class.routine.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="sectionName">Class Name</label>
                             <select type="text" name="class_id"  class="form-select" style="width: 100%;">
@@ -97,20 +98,20 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Section Name</label>
-                            <select type="text" name="section_id"  class="form-select" style="width: 100%;">
+                            <select type="text" name="section_id"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
 
                             </select>
                         </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Subject Name</label>
-                            <select type="text" name="subject_id"  class="form-select select2" style="width: 100%;">
+                            <select type="text" name="subject_id"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                             </select>
                         </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Day Of Week</label>
-                            <select type="text" name="day"  class="form-select " style="width: 100%;">
+                            <select type="text" name="day"  class="form-control " style="width: 100%;">
                                 <option value="">---Select---</option>
                                 <option value="Saturday">Saturday</option>
                                 <option value="Sunday">Sunday</option>
@@ -123,7 +124,7 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Teacher Name</label>
-                            <select type="text" name="teacher_id"  class="form-select" style="width: 100%;">
+                            <select type="text" name="teacher_id"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 @foreach ($teachers as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -138,11 +139,10 @@
                             <label for="">End Time</label>
                             <input type="time" name="end_time"  class="form-control">
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Add Form ------->
@@ -157,18 +157,19 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Class Routine
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Update Form ------->
             <form id="addSectionForm" action="{{ route('admin.student.class.routine.update') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Update Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="">Class Name</label>
                             <input type="text" name="id" class="d-none">
-                            <select type="text" name="class_id"  class="form-select" style="width: 100%;">
+                            <select type="text" name="class_id"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -177,13 +178,13 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="">Section Name</label>
-                            <select type="text" name="section_id"  class="form-select" style="width: 100%;">
+                            <select type="text" name="section_id"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                             </select>
                         </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Subject Name</label>
-                            <select type="text" name="subject_id"  class="form-select" style="width: 100%;">
+                            <select type="text" name="subject_id"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 @foreach ($subjects as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -192,7 +193,7 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Day Of Week</label>
-                            <select type="text" name="day"  class="form-select" style="width: 100%;">
+                            <select type="text" name="day"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 <option value="Saturday">Saturday</option>
                                 <option value="Sunday">Sunday</option>
@@ -205,7 +206,7 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="sectionName">Teacher Name</label>
-                            <select type="text" name="teacher_id"  class="form-select" style="width: 100%;">
+                            <select type="text" name="teacher_id"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 @foreach ($teachers as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -220,11 +221,10 @@
                             <label for="">End Time</label>
                             <input type="time" name="end_time"  class="form-control">
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Update Form ------->
@@ -242,13 +242,15 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
@@ -260,6 +262,7 @@
 @section('script')
 
   <script type="text/javascript">
+   $("select").select2();
     $(document).on('change','select[name="class_id"]',function(){
         var sections = @json($sections);
         var subjects = @json($subjects);
@@ -342,6 +345,10 @@
             error: function(xhr) {
                 console.log(xhr.responseText);
                 alert('Failed to load data. Please try again.');
+            },
+            complete:function (){
+                submitBtn.html(originalBtnText);
+                submitBtn.prop('disabled', false);
             }
         })
     }
@@ -366,7 +373,8 @@
             error: function(xhr) {
                 console.log(xhr.responseText);
                 alert('Failed to load print data. Please try again.');
-            }
+            },
+
         });
 
     });
@@ -501,7 +509,11 @@
       error: function (xhr, status, error) {
          /** Handle  errors **/
         console.error(xhr.responseText);
-      }
+      },
+      complete:function (){
+            submitBtn.html(originalBtnText);
+            submitBtn.prop('disabled', false);
+        }
     });
   });
 
