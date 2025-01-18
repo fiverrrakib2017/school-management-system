@@ -5,11 +5,11 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
-                  <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                  <button data-toggle="modal" data-target="#addModal" type="button" class="btn btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Section</button>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -40,17 +40,18 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Section
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Add Form ------->
             <form id="addSectionForm" action="{{ route('admin.student.section.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="sectionName">Class</label>
-                            <select type="text" name="class_name" id="class_name" class="form-select">
+                            <select type="text" name="class_name" id="class_name" class="form-control">
                                 <option value="">---Select---</option>
                                 @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -61,11 +62,10 @@
                             <label for="sectionName">Section Name</label>
                             <input type="text" name="name" id="sectionName" placeholder="Enter Section Name" class="form-control">
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Add Form ------->
@@ -80,17 +80,18 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Section
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Update Form ------->
             <form id="addSectionForm" action="{{ route('admin.student.section.update') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Update Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="sectionName">Class</label>
-                            <select type="text" name="class_name" id="class_name" class="form-select">
+                            <select type="text" name="class_name" id="class_name" class="form-control">
                                 <option value="">---Select---</option>
                                 @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -102,11 +103,10 @@
                             <input type="text" name="id" class="d-none" required>
                             <input type="text" name="name"  placeholder="Enter Section Name" class="form-control">
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Update Form ------->
@@ -124,13 +124,15 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
@@ -148,7 +150,7 @@
         "processing":true,
         "responsive": true,
         "serverSide":true,
-        
+
         ajax: "{{ route('admin.student.class.all_data') }}",
         language: {
             searchPlaceholder: 'Search...',
@@ -242,6 +244,7 @@
       type:'POST',
       'url':url,
       data: formData,
+
       success: function (response) {
         $('#deleteModal').modal('hide');
         if (response.success) {
@@ -266,7 +269,14 @@
   /** Store The data from the database table **/
   $('#addModal form').submit(function(e){
     e.preventDefault();
+    /*Get the submit button*/
+    var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
 
+    /* Save the original button text*/
+    var originalBtnText = submitBtn.html();
+
+    /*Change button text to loading state*/
+    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
     var form = $(this);
     var url = form.attr('action');
     var formData = form.serialize();
@@ -275,6 +285,9 @@
       type:'POST',
       'url':url,
       data: formData,
+      beforeSend: function () {
+        form.find(':input').prop('disabled', true);
+      },
       success: function (response) {
 
         if (response.success) {
@@ -288,7 +301,11 @@
       error: function (xhr, status, error) {
          /** Handle  errors **/
         console.error(xhr.responseText);
-      }
+      },
+      complete: function () {
+        submitBtn.html(originalBtnText);
+          form.find(':input').prop('disabled', false);
+        }
     });
   });
 
