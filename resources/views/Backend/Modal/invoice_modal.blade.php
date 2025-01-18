@@ -38,7 +38,7 @@
               </select>
              </div>
              <div class="modal-footer ">
-                <button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+                <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
                 <button type="button" id="save_invoice_btn" class="btn btn-success">
                     @if(isset($invoice_data->id))
                         Update

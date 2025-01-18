@@ -40,7 +40,7 @@
                                     </div>
 
 									<div class="modal-footer ">
-										<button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+										<button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
 										<button type="submit" class="btn btn-success">Save Changes</button>
 									</div>
 								</form>

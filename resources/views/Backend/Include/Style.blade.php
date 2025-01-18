@@ -25,9 +25,18 @@
   <link rel="stylesheet" href="{{asset('Backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{asset('Backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{asset('Backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
-  
+
   <!-- Toast Message -->
   <link rel="stylesheet" href="{{asset('Backend/dist/css/toastr.min.css')}}">
   <!-- Delete Modal css -->
   <link rel="stylesheet" href="{{asset('Backend/dist/css/deleteModal.css')}}">
+  <style>
+    label:not(.form-check-label):not(.custom-file-label) {
+        /* font-weight: 700; */
+        font-weight: 500 !important;
+    }
+    .table-bordered {
+        border: 2px dotted #dee2e6 !important;
+    }
+  </style>
   @yield('style')

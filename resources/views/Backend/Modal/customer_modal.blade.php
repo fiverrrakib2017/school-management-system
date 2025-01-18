@@ -5,7 +5,7 @@
                            <div class="modal-header">
                               <h5 class="modal-title" id="customerModalLabel"><span
                                  class="mdi mdi-account-check mdi-18px"></span> &nbsp;New Customer</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                            </div>
 						   <div class="modal-body">
 							  <form action="{{ route('admin.customer.store') }}" id="CustomerForm" method="POST" enctype="multipart/form-data">
@@ -40,7 +40,7 @@
                                     </div>
 
 									<div class="modal-footer ">
-										<button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+										<button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
 										<button type="submit" class="btn btn-success">Save Changes</button>
 									</div>
 								</form>
