@@ -6,7 +6,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{asset('Backend/dist/img/avatar.png')}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{asset('Backend/images/avatar.png')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="{{route('admin.dashboard')}}" class="d-block">{{Auth::guard('admin')->user()->name}}</a>
@@ -194,7 +194,7 @@
               <li class="nav-item">
                 <a href="{{ route('admin.transaction.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Transaction</p></a>
               </li>
-            
+
             </ul>
           </li>
 
