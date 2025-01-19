@@ -88,6 +88,12 @@
 </body>
 
 </html> --}}
+@php
+
+    $prefix= Request::route()->getPrefix();
+     $route=Route::current()->getname();
+    $currentRoute = Route::currentRouteName();
+@endphp
 
 
 
@@ -102,6 +108,11 @@
   <title>  @yield('title')</title>
 
   @include('Backend.Include.Style')
+    <style>
+        .menu-open {
+        display: block;
+    }
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -158,5 +169,10 @@
 <!-- ./wrapper -->
 
 @include('Backend.Include.Script')
+<script>
+   var activeurl = window.location;
+   console.log(activeurl.href);
+   $('a[href="'+activeurl+'"]').parent('li').addClass('active');
+</script>
 </body>
 </html>

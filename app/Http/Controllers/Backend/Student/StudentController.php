@@ -45,10 +45,6 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         /*Validate the incoming request data*/
-
-        // return $request->all(); exit;
-
-
         $validator = StudentService::validate($request);
 
         if ($validator->fails()) {

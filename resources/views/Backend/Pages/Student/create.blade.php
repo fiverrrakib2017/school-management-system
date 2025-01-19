@@ -163,7 +163,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Current Class</label><small class="req"> *</small>
-                                            <select type="text" class="form-select" name="current_class" required style="width: 100%;">
+                                            <select type="text" class="form-control" name="current_class"  style="width: 100%;" required>
                                                 <option value="">---Select---</option>
                                                 @foreach($data as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -175,7 +175,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Section Name</label><small class="req"> *</small>
-                                            <select type="text" class="form-select" name="section_id" required style="width: 100%;">
+                                            <select type="text" class="form-control" name="section_id"  style="width: 100%;" required>
                                                 <option value="">---Select---</option>
                                             </select>
                                         </div>
@@ -345,7 +345,8 @@
                 beforeSend: function() {
                     /* Disable the Form input */
                     form.find(':input').prop('disabled', true);
-                }
+                    submitBtn.prop('disabled', true);
+                },
                 success: function(response) {
                     if (response.success) {
                         toastr.success(response.message);
@@ -356,7 +357,7 @@
                 error: function(xhr, status, error) {
                     /* Handle errors */
                     console.error(xhr.responseText);
-                    if (xhr.status === 422) { // Laravel validation error
+                    if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         for (var error in errors) {
                             toastr.error(errors[error][0]);
@@ -377,14 +378,5 @@
     });
   </script>
 
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
 
 @endsection

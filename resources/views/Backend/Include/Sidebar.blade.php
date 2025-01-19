@@ -1,6 +1,5 @@
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-
-
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
@@ -17,67 +16,68 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item ">
-            <a href="{{route('admin.dashboard')}}" class="nav-link ">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p> Dashboard  </p>
+          <!-- Dashboard -->
+        <li class="nav-item ">
+            <a href="{{ route('admin.dashboard') }}" class="nav-link ">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>Dashboard</p>
             </a>
-          </li>
+        </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link ">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p> Students <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('admin.student.index') }}" class="nav-link">
+                <a href="{{ route('admin.student.index') }}" class="nav-link  {{($route=='admin.student.index') ?  'active':''}}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Student</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                 <a href="{{ route('admin.student.class.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Class</p></a>
+                 <a href="{{ route('admin.student.class.index') }}" class="nav-link "><i class="far fa-circle nav-icon"></i><p>Class</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.subject.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Subject</p></a>
+                 <a href="{{ route('admin.student.subject.index') }}" class="nav-link "><i class="far fa-circle nav-icon"></i><p>Subject</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
+                 <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link "><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.section.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Section</p></a>
+                 <a href="{{ route('admin.student.section.index') }}" class="nav-link {{($route=='admin.student.section.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Section</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Examination</p></a>
+                 <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Examination</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.routine.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Exam Routine</p></a>
+                 <a href="{{ route('admin.student.exam.routine.index') }}" class="nav-link {{($route=='admin.student.exam.routine.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Routine</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.result.create') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Create Exam Result</p></a>
+                 <a href="{{ route('admin.student.exam.result.create') }}" class="nav-link  {{($route=='admin.student.exam.result.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Create Exam Result</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.result.report') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Exam Result Report</p></a>
+                 <a href="{{ route('admin.student.exam.result.report') }}" class="nav-link {{($route=='admin.student.exam.result.report') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Result Report</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.shift.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Shift</p></a>
+                 <a href="{{ route('admin.student.shift.index') }}" class="nav-link {{($route=='admin.student.shift.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Shift</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.leave.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Leave</p></a>
+                 <a href="{{ route('admin.student.leave.index') }}" class="nav-link {{($route=='admin.student.leave.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Leave</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.attendence.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Attendance</p></a>
+                 <a href="{{ route('admin.student.attendence.index') }}" class="nav-link  {{($route=='admin.student.attendence.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.attendence.log') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Attendance Report</p></a>
+                 <a href="{{ route('admin.student.attendence.log') }}" class="nav-link {{($route=='admin.student.attendence.log') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance Report</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.fees_type.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Fees Type</p></a>
+                 <a href="{{ route('admin.student.fees_type.index') }}" class="nav-link  {{($route=='admin.student.fees_type.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Fees Type</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.bill_collection.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
+                 <a href="{{ route('admin.student.bill_collection.index') }}" class="nav-link  {{($route=='admin.student.bill_collection.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
               </li>
 
             </ul>
