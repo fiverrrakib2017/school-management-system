@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->date('birth_date');
+            $table->integer('roll_no')->nullable();
             $table->string('gender');
             $table->string('father_name');
             $table->string('mother_name');
@@ -37,7 +38,7 @@ return new class extends Migration
             $table->text('remarks')->nullable();
             $table->timestamps();
 
-           
+
 
             $table->foreign('current_class')
             ->on('student_classes')

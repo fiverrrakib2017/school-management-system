@@ -206,6 +206,67 @@
 
                                     </div>
                                 </div>
+                            </div><br>
+                            <div id="upload_documents_hide_show">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="tshadow bozero">
+                                            <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Upload Documents</h4>
+                                            <div class="row around10">
+                                                <div class="col-md-6">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <th style="width: 10px">#</th>
+                                                                <th>Title</th>
+                                                                <th>Documents</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>1.</td>
+                                                                <td>Birth Certificate</td>
+                                                                <td>
+                                                                    <input class="form-control" type="file" name="documents[]" id="doc1" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>3.</td>
+                                                                <td>Registration Paper</td>
+                                                                <td>
+                                                                    <input class="form-control" type="file" name="documents[]" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <th style="width: 10px">#</th>
+                                                                <th>Title</th>
+                                                                <th>Documents</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2.</td>
+                                                                <td>T. Certificate</td>
+                                                                <td>
+                                                                    <input class="filestyle form-control" type="file" name="documents[]" id="doc2" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>4.</td>
+                                                                <td>Others Documents</td>
+                                                                <td>
+                                                                    <input class="filestyle form-control" type="file" name="documents[]" id="doc2" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -281,6 +342,10 @@
                 data: formData,
                 contentType: false,
                 processData: false,
+                beforeSend: function() {
+                    /* Disable the Form input */
+                    form.find(':input').prop('disabled', true);
+                }
                 success: function(response) {
                     if (response.success) {
                         toastr.success(response.message);

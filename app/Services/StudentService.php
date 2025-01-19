@@ -1,5 +1,5 @@
 <?php
-namespace App\Services; 
+namespace App\Services;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Student;
 use App\Models\Student_class;
@@ -9,6 +9,7 @@ class StudentService{
         $rules = [
             'name' => 'required|string|max:255',
             'birth_date' => 'required|date',
+            'roll_no' => 'nullable|integer',
             'gender' => 'required|string|max:10',
             'father_name' => 'required|string|max:255',
             'mother_name' => 'required|string|max:255',
@@ -55,6 +56,7 @@ class StudentService{
     public static function setData(Student $student, Request $request, $filename) {
         $student->name = $request->name;
         $student->birth_date = $request->birth_date;
+        $student->roll_no = $request->roll_no;
         $student->gender = $request->gender;
         $student->father_name = $request->father_name;
         $student->mother_name = $request->mother_name;
@@ -79,9 +81,9 @@ class StudentService{
     // public function get_data(Request $request)
     // {
     //     $search = $request->search['value'];
-        
+
     //     $columnsForOrderBy = ['id', 'name', 'current_class'];
-        
+
     //     $orderByColumn = $request->order[0]['column'];
     //     $orderDirection = $request->order[0]['dir'];
 
@@ -116,7 +118,7 @@ class StudentService{
         $columnsForOrderBy = ['id', 'name', 'current_class'];
         $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
-    
+
         $query = Student::with(['currentClass'])->when($search, function ($query) use ($search) {
 
             $query->where('name', 'like', "%$search%")
@@ -130,24 +132,24 @@ class StudentService{
                       $query->where('name', 'like', "%$search%");
                   });
         });
-    
+
         if ($request->has('class_id') && !empty($request->class_id)) {
             $query->where('current_class', $request->class_id);
         }
-    
+
         $total = $query->count();
         $items = $query->orderBy($orderByColumn, $orderDirection)
                        ->skip($request->start)
                        ->take($request->length)
                        ->get();
-    
+
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
             'recordsFiltered' => $total,
             'data' => $items,
         ]);
-    }  
+    }
     public function view($id){
         $student = Student::find($id);
         if ($student) {

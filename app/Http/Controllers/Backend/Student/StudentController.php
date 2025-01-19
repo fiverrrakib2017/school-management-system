@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\Student_class;
 use App\Models\Section;
+use App\Models\Student_docs;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -45,6 +46,9 @@ class StudentController extends Controller
     {
         /*Validate the incoming request data*/
 
+        // return $request->all(); exit;
+
+
         $validator = StudentService::validate($request);
 
         if ($validator->fails()) {
@@ -59,6 +63,17 @@ class StudentController extends Controller
         $student = new Student();
         StudentService::setData($student, $request, $filename);
         $student->save();
+        foreach($request->file('documents') as $index => $file){
+            $filename = time() . '_' . $index . '.' . $file->getClientOriginalExtension();
+            $filePath = 'uploads/documents/';
+            $file->move(public_path($filePath), $filename);
+              /* Save the document details for database*/
+            $docs=new Student_docs();
+            $docs->student_id=$student->id;
+            $docs->docs_name=$filename;
+            $docs->file_path=$filePath . $filename;
+            $docs->save();
+        }
 
         /* Return success response*/
         return response()->json([
