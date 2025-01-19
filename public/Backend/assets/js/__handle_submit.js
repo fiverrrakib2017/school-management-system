@@ -18,6 +18,9 @@ function handleSubmit(formSelector, modalSelector) {
             data: formData,
             processData: false,
             contentType: false,
+            beforeSend: function () {
+                form.find(':input').prop('disabled', true);
+            },
             success: function(response) {
                 if (response.success==true) {
                     toastr.success(response.message);
@@ -70,6 +73,9 @@ function handle_submit_form(formSelector){
             type: form.attr('method'),
             url: form.attr('action'),
             data: formData,
+            beforeSend: function () {
+                form.find(':input').prop('disabled', true);
+            },
             processData: false,
             contentType: false,
             success: function(response) {

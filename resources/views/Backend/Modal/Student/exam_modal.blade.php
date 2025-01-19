@@ -5,7 +5,9 @@
                            <div class="modal-header">
                               <h5 class="modal-title" id="examModalLabel"><span
                                  class="mdi mdi-account-check mdi-18px"></span> &nbsp;Create Examination</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
                            </div>
 						   <div class="modal-body">
 							  <form action="{{ route('admin.student.exam.store') }}" id="examForm" method="POST" enctype="multipart/form-data">
@@ -34,7 +36,7 @@
                                     </div>
 
 									<div class="modal-footer ">
-										<button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+										<button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
 										<button type="submit" class="btn btn-success">Save Changes</button>
 									</div>
 								</form>
