@@ -8,7 +8,7 @@
         <div class="card-header">
           <a href="{{ route('admin.student.create') }}" class="btn btn-success "><i class="mdi mdi-account-plus"></i>
           Add New Student</a>
-            
+
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
@@ -43,8 +43,8 @@
 <script type="text/javascript">
   $(document).ready(function(){
     var classes = @json($classes);
-    var class_filter = '<label style="margin-left: 10px;">';
-    class_filter += '<select id="search_class_id" class="form-select select2">';
+    var class_filter = '<label style="margin-left: 20px;">';
+    class_filter += '<select id="search_class_id" class="form-control">';
     class_filter += '<option value="">--Select Class--</option>';
     classes.forEach(function(item) {
         class_filter += '<option value="' + item.id + '">' + item.name + '</option>';
@@ -52,8 +52,8 @@
     class_filter += '</select></label>';
     setTimeout(() => {
         $('.dataTables_length').append(class_filter);
-        $('.select2').select2(); 
-    }, 100);
+       // $('#search_class_id').select2();
+    }, 1000);
 
 
     var table=$("#datatable1").DataTable({
@@ -118,26 +118,5 @@
           table.ajax.reload(null, false);
       });
   });
-
-
-
-  
-
-
-
-
   </script>
-
-
-
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
-
 @endsection
