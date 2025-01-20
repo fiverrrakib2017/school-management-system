@@ -151,7 +151,7 @@ class StudentService{
         ]);
     }
     public function view($id){
-        $student = Student::find($id);
+         $student = Student::with('currentClass')->find($id);
         if ($student) {
             return view('Backend.Pages.Student.view',compact('student'));
         }

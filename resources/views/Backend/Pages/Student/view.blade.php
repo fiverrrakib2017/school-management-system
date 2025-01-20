@@ -2,323 +2,372 @@
 @section('title', 'Dashboard | Admin Panel')
 @section('style')
     <style>
-        #student_info  > li {
-            border-bottom: 1px dashed;
-        }
-        .section-header {
-        background-color: #007bff; /* Blue background color */
-        color: white; /* Text color */
-        padding: 5px 10px; /* Padding around text */
-        margin-bottom: 5px; /* Bottom margin */
-        border-radius: 5px; /* Rounded corners */
-    }
-    .profile-card {
-            max-width: 400px;
-            margin: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .profile-card img {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-        .profile-card .card-body {
-            padding: 20px;
-        }
-        .profile-card h5 {
-            margin: 0;
-        }
-        .profile-card .text-secondary {
-            margin-top: 10px;
-        }
+<style>
+/* ফাইল কন্টেইনার স্টাইল */
+.file-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.file-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ডাউনলোড বাটনের জন্য স্টাইল */
+.download-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    z-index: 10;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* হভার করলে ডাউনলোড বাটন দেখানো */
+.file-container:hover .download-btn {
+    display: inline-block;
+}
+
+/* হোভার এ ইমেজে কালার শেড */
+.file-container:hover img {
+    filter: brightness(0.8);
+}
+</style>
+
     </style>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="row">
-        <div class="">
-            <div class="row">
-                <div class="col-md-6"></div>
-                <div class="col-md-6">
-                    <div class="d-flex py-2" style="float:right;">
-                        <abbr title="Complain">
-                            <button type="button" data-bs-target="#ComplainModalCenter" data-bs-toggle="modal"
-                                class="btn-sm btn btn-warning">
-                                <i class="mdi mdi-alert-outline"></i>
-                            </button>
-                        </abbr>
-                        &nbsp;
-                        <abbr title="Payment received">
-                            <button type="button" data-bs-target="#paymentModal" data-bs-toggle="modal"
-                                class="btn-sm btn btn-info">
-                                <i class="mdi mdi mdi-cash-multiple"></i>
-                            </button>
-                        </abbr>
-                        &nbsp;
-                        
-                        <abbr title="Delete Student">
-                            <button type="button" data-id="{{$student->id ?? ''}}" class="btn-sm btn btn-danger delete-btn">
-                                <i class="mdi mdi-delete"></i>
-                            </button>
-                        </abbr>
-                        &nbsp;
-                        <abbr title="Edit Student">
-                            <a href="{{ route('admin.student.edit', $student->id) }}">
-                                <button type="button" class="btn-sm btn btn-info">
-                                    <i class="mdi mdi-pencil"></i>
-                                </button>
-                            </a>
-                        </abbr>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+
+          <!-- Profile Image -->
+          <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+              <div class="text-center">
+                    @if($student->photo && file_exists(public_path('Backend/uploads/photos/' . $student->photo)))
+                    <img src="{{ asset('Backend/uploads/photos/'.$student->photo) }}" alt='Profile Picture' class="profile-user-img img-fluid img-circle"/>
+                 @else
+                    <img src="{{ asset('Backend/images/default.jpg') }}" alt='Default Profile Picture' class="profile-user-img img-fluid img-circle" />
+                 @endif
+              </div>
+
+              <h3 class="profile-username text-center">{{ $student->name ?? '' }}</h3>
+
+              <p class="text-muted text-center">Roll No.{{ $student->roll_no ?? 0 }}</p>
+
+              <ul class="list-group list-group-unbordered mb-3">
+                <li class="list-group-item">
+                  <b>Name</b> <a class="float-right">{{ $student->name ?? '' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Class</b> <a class="float-right"> {{ $student->currentClass->name ?? ''  }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Birth Date</b> <a class="float-right">{{ $student->birth_date ?? '' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Gender</b> <a class="float-right"> {{ $student->gender ?? '' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Father's Name</b> <a class="float-right">{{ $student->father_name ?? '' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Mother's Name</b> <a class="float-right">{{ $student->mother_name ?? '' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>C. Address</b> <a class="float-right">{{ $student->current_address ?? '' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>P. Address:</b> <a class="float-right">{{ $student->permanent_address  ?? '' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Phone</b> <a class="float-right">{{ $student->phone }}</a>
+                </li>
+
+                <li class="list-group-item">
+                  <b>Academic Results:</b> <a class="float-right"> {{ $student->academic_results  ?: 'N/A' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Blood Group:</b> <a class="float-right">{{ $student->blood_group  ? : 'N/A' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Health Conditions</b> <a class="float-right"> {{ $student->health_conditions ?: 'N/A' }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Emergency Phone:</b> <a class="float-right"> {{ $student->emergency_contact_phone }}</a>
+                </li>
+              </ul>
+
+
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+
+
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="card">
+            <div class="card-header p-2">
+              <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
+                <li class="nav-item"><a class="nav-link" href="#invoice" data-toggle="tab">Invoice</a></li>
+                <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
+                <li class="nav-item"><a class="nav-link" href="#documents" data-toggle="tab">Documents</a></li>
+                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+              </ul>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+              <div class="tab-content">
+                <!-- Activity -->
+                <div class="active tab-pane" id="activity">
+                    <div class="table-responsive">
+                        <table id="activities_datatable"
+                            class="table table-bordered dt-responsive nowrap"
+                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Date</th>
+                                    <th>In Time</th>
+                                    <th>Out Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="container">
-            <div class="main-body">
-                <div class="row gutters-sm">
-                    <div class="col-md-4 mb-3">
-                    <div class="card profile-card">
-                        <div class="card-header p-0">
-                            
-                            @if($student->photo && file_exists(public_path('Backend/uploads/photos/' . $student->photo)))
-                                <img src="{{ asset('Backend/uploads/photos/'.$student->photo) }}" alt='Profile Picture' class="img-fluid" />
-                            @else
-                                <img src="{{ asset('Backend/images/default.jpg') }}" alt='Default Profile Picture' class="img-fluid" />
-                            @endif
-                        </div>
-                        <div class="card-body text-center">
-                            <h5>{{$student->name}}</h5>
-                            <p class="text-secondary mb-1">ID: {{ $student->id }}</p>
-                            <p class="text-secondary">{{ $student->phone }}</p>
-                        </div>
+                <!-- Invoice -->
+                <div class="tab-pane" id="invoice">
+                    <div class="table-responsive">
+                        <table id="invoice_datatable"
+                            class="table table-bordered dt-responsive nowrap"
+                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Invoice id</th>
+                                    <th>Sub Total</th>
+                                    <th>Discount</th>
+                                    <th>Grand Total</th>
+                                    <th>Create Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id=""> </tbody>
+                        </table>
                     </div>
-
+                </div>
+                  <!-- Timeline -->
+                <div class="tab-pane" id="timeline">
+                  <!-- The timeline -->
+                  <div class="timeline timeline-inverse">
+                    <!-- timeline time label -->
+                    <div class="time-label">
+                      <span class="bg-danger">
+                        10 Feb. 2014
+                      </span>
                     </div>
-                    <div class="col-md-8">
-                        <div class="container">
-                            <div class="row">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <!-- Nav tabs -->
-                                        <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" data-bs-toggle="tab" href="#basic_information"
-                                                    role="tab">
-                                                    <span class="d-none d-md-block">Basic Information
-                                                    </span><span class="d-block d-md-none"><i
-                                                            class="mdi mdi-home-variant h5"></i></span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link " data-bs-toggle="tab" href="#educations"
-                                                    role="tab">
-                                                    <span class="d-none d-md-block">Educations
-                                                    </span><span class="d-block d-md-none"><i
-                                                            class="mdi mdi-home-variant h5"></i></span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link " data-bs-toggle="tab" href="#activities"
-                                                    role="tab">
-                                                    <span class="d-none d-md-block">Activities
-                                                    </span><span class="d-block d-md-none"><i
-                                                            class="mdi mdi-home-variant h5"></i></span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link " data-bs-toggle="tab" href="#transaction"
-                                                    role="tab">
-                                                    <span class="d-none d-md-block">Transaction
-                                                    </span><span class="d-block d-md-none"><i
-                                                            class="mdi mdi-home-variant h5"></i></span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <!-- Tab panes -->
-                                        <div class="tab-content">
-                                            <div class="tab-pane active" id="basic_information" role="tabpanel">
-                                                <div class="card">
-                                                    <div class="card-body" style="padding: 0 !important;">
-                                                    <ul class="list-group" id="student_info">
+                    <!-- /.timeline-label -->
+                    <!-- timeline item -->
+                    <div>
+                      <i class="fas fa-envelope bg-primary"></i>
 
-<li class="section-header">
-    <strong>Personal Information</strong>
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Name:</strong> {{ $student->name }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Birth Date:</strong> {{ $student->birth_date }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Gender:</strong> {{ $student->gender }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Father's Name:</strong> {{ $student->father_name }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Mother's Name:</strong> {{ $student->mother_name }}
-</li>
-<li class="section-header">
-    <strong>Contact Information</strong>
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Current Address:</strong> {{ $student->current_address }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Permanent Address:</strong> {{ $student->permanent_address }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Phone:</strong> {{ $student->phone }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Email:</strong> {{ $student->email ?: 'N/A' }}
-</li>
-<li class="section-header">
-    <strong>Academic Information</strong>
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Current Class:</strong> {{ $student->current_class }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Previous School:</strong> {{ $student->previous_school ?: 'N/A' }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Previous Class:</strong> {{ $student->previous_class ?: 'N/A' }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Academic Results:</strong> {{ $student->academic_results ?: 'N/A' }}
-</li>
-<li class="section-header">
-    <strong>Health Information</strong>
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Blood Group:</strong> {{ $student->blood_group ?: 'N/A' }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Health Conditions:</strong> {{ $student->health_conditions ?: 'N/A' }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Emergency Contact Information</strong>
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Emergency Contact Name:</strong> {{ $student->emergency_contact_name }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Emergency Contact Phone:</strong> {{ $student->emergency_contact_phone }}
-</li>
-<li class="section-header">
-    <strong>Additional Information</strong>
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Religion:</strong> {{ $student->religion ?: 'N/A' }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Nationality:</strong> {{ $student->nationality ?: 'N/A' }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Remarks:</strong> {{ $student->remarks ?: 'N/A' }}
-</li>
-<li class="list-group-item list-group-item-action list-group-item-primary">
-    <strong>Status:</strong> {{ $student->status == 1 ? 'Active' : 'Inactive' }}
-</li>
-</ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane" id="transaction" role="tabpanel">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="table-responsive">
-                                                                <table id="transaction_datatable"
-                                                                    class="table table-bordered dt-responsive nowrap"
-                                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>ID</th>
-                                                                            <th>Amount</th>
-                                                                            <th>Date</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <!--  -->
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane " id="invoice" role="tabpanel">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="table-responsive">
-                                                                <table id="invoice_datatable"
-                                                                    class="table table-bordered dt-responsive nowrap"
-                                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Invoice id</th>
-                                                                            <th>Sub Total</th>
-                                                                            <th>Discount</th>
-                                                                            <th>Grand Total</th>
-                                                                            <th>Create Date</th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="ticket-list">
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="tab-pane " id="activities" role="tabpanel">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="table-responsive">
-                                                                <table id="activities_datatable"
-                                                                    class="table table-bordered dt-responsive nowrap"
-                                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Id</th>
-                                                                            <th>Date</th>
-                                                                            <th>In Time</th>
-                                                                            <th>Out Time</th>
-                                                                            <th>Action</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="">
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                      <div class="timeline-item">
+                        <span class="time"><i class="far fa-clock"></i> 12:05</span>
+
+                        <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+
+                        <div class="timeline-body">
+                          Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                          weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                          jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                          quora plaxo ideeli hulu weebly balihoo...
+                        </div>
+                        <div class="timeline-footer">
+                          <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                          <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END timeline item -->
+                    <!-- timeline item -->
+                    <div>
+                      <i class="fas fa-user bg-info"></i>
+
+                      <div class="timeline-item">
+                        <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
+
+                        <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend request
+                        </h3>
+                      </div>
+                    </div>
+                    <!-- END timeline item -->
+                    <!-- timeline item -->
+                    <div>
+                      <i class="fas fa-comments bg-warning"></i>
+
+                      <div class="timeline-item">
+                        <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
+
+                        <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+
+                        <div class="timeline-body">
+                          Take me to your leader!
+                          Switzerland is small and neutral!
+                          We are more like Germany, ambitious and misunderstood!
+                        </div>
+                        <div class="timeline-footer">
+                          <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END timeline item -->
+                    <!-- timeline time label -->
+                    <div class="time-label">
+                      <span class="bg-success">
+                        3 Jan. 2014
+                      </span>
+                    </div>
+                    <!-- /.timeline-label -->
+                    <!-- timeline item -->
+                    <div>
+                      <i class="fas fa-camera bg-purple"></i>
+
+                      <div class="timeline-item">
+                        <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+
+                        <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+
+                        <div class="timeline-body">
+                          <img src="http://placehold.it/150x100" alt="...">
+                          <img src="http://placehold.it/150x100" alt="...">
+                          <img src="http://placehold.it/150x100" alt="...">
+                          <img src="http://placehold.it/150x100" alt="...">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END timeline item -->
+                    <div>
+                      <i class="far fa-clock bg-gray"></i>
+                    </div>
+                  </div>
+                </div>
+                <!-- Documents -->
+                <div class="tab-pane" id="documents">
+                    <div class="row">
+                        <!-- File 1 -->
+                        <div class="col-sm-4">
+                            <div class="position-relative file-container" style="min-height: 180px;">
+                                <img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png" alt="Photo 3" class="img-fluid">
+                                <div class="ribbon-wrapper ribbon-xl">
+                                    <div class="ribbon bg-danger text-xl">Ribbon</div>
                                 </div>
+                                <a href="{{ asset('Backend/files/document1.pdf') }}" download class="download-btn btn btn-primary">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- File 2 -->
+                        <div class="col-sm-4">
+                            <div class="position-relative file-container" style="min-height: 180px;">
+                                <img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png" alt="Photo 2" class="img-fluid">
+                                <div class="ribbon-wrapper ribbon-xl">
+                                    <div class="ribbon bg-danger text-xl">Ribbon</div>
+                                </div>
+                                <a href="{{ asset('Backend/files/document2.xlsx') }}" download class="download-btn btn btn-primary">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- File 3 -->
+                        <div class="col-sm-4">
+                            <div class="position-relative file-container" style="min-height: 180px;">
+                                <img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png" alt="Photo 1" class="img-fluid">
+                                <div class="ribbon-wrapper ribbon-xl">
+                                    <div class="ribbon bg-danger text-xl">Ribbon</div>
+                                </div>
+                                <a href="{{ asset('Backend/files/document3.pdf') }}" download class="download-btn btn btn-primary">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <!--Settings -->
+                <div class="tab-pane" id="settings">
+                  <form class="form-horizontal">
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                      <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputName" placeholder="Name">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                      <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+                      <div class="col-sm-10">
+                        <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="offset-sm-2 col-sm-10">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="offset-sm-2 col-sm-10">
+                        <button type="submit" class="btn btn-danger">Submit</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!-- /.tab-content -->
+            </div><!-- /.card-body -->
+          </div>
+          <!-- /.nav-tabs-custom -->
         </div>
-    </div>
-</div>
-
-
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
 
 
 
@@ -354,8 +403,9 @@
     $(document).ready(function(){
         $("#transaction_datatable").DataTable();
         $("#activities_datatable").DataTable();
+        $("#invoice_datatable").DataTable();
 
-        
+
         /** Handle Delete button click**/
         $(document).on('click', '.delete-btn', function () {
             var id = $(this).data('id');
@@ -405,7 +455,7 @@
 
     });
 
-    
+
 </script>
-    
+
 @endsection
