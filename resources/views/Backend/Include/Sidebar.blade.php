@@ -18,7 +18,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Dashboard -->
         <li class="nav-item ">
-            <a href="{{ route('admin.dashboard') }}" class="nav-link ">
+            <a href="{{ route('admin.dashboard') }}" class="nav-link  {{ $route == 'admin.dashboard' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>Dashboard</p>
             </a>
@@ -31,7 +31,7 @@
             </a>
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, 'admin.student') ? 'display: block;' : 'display: none;' }}">
               <li class="nav-item">
-                <a href="{{ route('admin.student.index') }}" class="nav-link  {{ $route == 'admin.student.index' ? 'active' : '' }}">
+                <a href="{{ route('admin.student.index') }}" class="nav-link  {{ $route == 'admin.student.index' ||$route == 'admin.student.create' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Student</p>
                 </a>
