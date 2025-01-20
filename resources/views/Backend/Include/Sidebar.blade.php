@@ -24,27 +24,27 @@
             </a>
         </li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
+          <li class="nav-item ">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.student') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
               <p> Students <i class="right fas fa-angle-left"></i> </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, 'admin.student') ? 'display: block;' : 'display: none;' }}">
               <li class="nav-item">
-                <a href="{{ route('admin.student.index') }}" class="nav-link  {{($route=='admin.student.index') ?  'active':''}}">
+                <a href="{{ route('admin.student.index') }}" class="nav-link  {{ $route == 'admin.student.index' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Student</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                 <a href="{{ route('admin.student.class.index') }}" class="nav-link "><i class="far fa-circle nav-icon"></i><p>Class</p></a>
+                 <a href="{{ route('admin.student.class.index') }}" class="nav-link {{ $route == 'admin.student.class.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Class</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.subject.index') }}" class="nav-link "><i class="far fa-circle nav-icon"></i><p>Subject</p></a>
+                 <a href="{{ route('admin.student.subject.index') }}" class="nav-link {{ $route == 'admin.student.subject.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Subject</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link "><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
+                 <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link {{ $route == 'admin.student.class.routine.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
               </li>
               <li class="nav-item">
                  <a href="{{ route('admin.student.section.index') }}" class="nav-link {{($route=='admin.student.section.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Section</p></a>
@@ -84,115 +84,121 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link ">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.teacher') ? 'active' : '' }}">
                 <i class='nav-icon fas fa-chalkboard-teacher'></i>
               <p>&nbsp; Teachers <i class="right fas fa-angle-left"></i> </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, 'admin.teacher') ? 'display: block;' : 'display: none;' }}">
 
               <li class="nav-item">
-                 <a href="{{ route('admin.teacher.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Teacher</p></a>
+                 <a href="{{ route('admin.teacher.index') }}" class="nav-link {{($route=='admin.teacher.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Teacher</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.teacher.transaction.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Transaction</p></a>
+                 <a href="{{ route('admin.teacher.transaction.index') }}" class="nav-link {{($route=='admin.teacher.transaction.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Transaction</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.teacher.transaction.report') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Report</p></a>
+                 <a href="{{ route('admin.teacher.transaction.report') }}" class="nav-link  {{($route=='admin.teacher.transaction.report') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Report</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.teacher.attendence.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Attendance</p></a>
+                 <a href="{{ route('admin.teacher.attendence.index') }}" class="nav-link {{($route=='admin.teacher.attendence.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.teacher.attendence.log') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Attendance Report</p></a>
+                 <a href="{{ route('admin.teacher.attendence.log') }}" class="nav-link {{($route=='admin.teacher.attendence.log') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance Report</p></a>
               </li>
             </ul>
           </li>
 
 
           <li class="nav-item">
-            <a href="#" class="nav-link ">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.tickets') ? 'active' : '' }}">
                 <i class='nav-icon fas fa-ticket-alt'></i>
               <p>&nbsp; Tickets <i class="right fas fa-angle-left"></i> </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, 'admin.tickets') ? 'display: block;' : 'display: none;' }}">
 
               <li class="nav-item">
-                 <a href="{{ route('admin.tickets.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Ticket List</p></a>
+                 <a href="{{ route('admin.tickets.index') }}" class="nav-link {{($route=='admin.tickets.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Ticket List</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.tickets.complain_type.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Complain Type</p></a>
+                 <a href="{{ route('admin.tickets.complain_type.index') }}" class="nav-link  {{($route=='admin.tickets.complain_type.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Complain Type</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.tickets.assign.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Ticket Assign</p></a>
+                 <a href="{{ route('admin.tickets.assign.index') }}" class="nav-link  {{($route=='admin.tickets.assign.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Ticket Assign</p></a>
               </li>
             </ul>
           </li>
 
+          @php
+              $active_prefix=['admin.customer','admin.supplier','admin.product','admin.brand','admin.category','admin.unit','admin.store'];
+          @endphp
           <li class="nav-item">
-            <a href="#" class="nav-link ">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-warehouse"></i>
               <p>&nbsp; Inventory <i class="right fas fa-angle-left"></i> </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview" style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
               <li class="nav-item">
-                 <a href="{{ route('admin.customer.invoice.create_invoice') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Sale</p></a>
+                 <a href="{{ route('admin.customer.invoice.create_invoice') }}" class="nav-link  {{($route=='admin.customer.invoice.create_invoice') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Sale</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.customer.invoice.show_invoice') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Sale Invoice</p></a>
+                 <a href="{{ route('admin.customer.invoice.show_invoice') }}" class="nav-link {{($route=='admin.customer.invoice.show_invoice') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Sale Invoice</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.supplier.invoice.create_invoice') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Purchase</p></a>
+                 <a href="{{ route('admin.supplier.invoice.create_invoice') }}" class="nav-link {{($route=='admin.supplier.invoice.create_invoice') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Purchase</p></a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('admin.supplier.invoice.show_invoice') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Purchase Invoice</p></a>
+                <a href="{{ route('admin.supplier.invoice.show_invoice') }}" class="nav-link {{($route=='admin.supplier.invoice.show_invoice') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Purchase Invoice</p></a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('admin.brand.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Brand</p></a>
+                <a href="{{ route('admin.brand.index') }}" class="nav-link {{($route=='admin.brand.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Brand</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.category.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Category</p></a>
+                 <a href="{{ route('admin.category.index') }}" class="nav-link {{($route=='admin.category.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Category</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.unit.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Units</p></a>
+                 <a href="{{ route('admin.unit.index') }}" class="nav-link {{($route=='admin.unit.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Units</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.store.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Store</p></a>
+                 <a href="{{ route('admin.store.index') }}" class="nav-link {{($route=='admin.store.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Store</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.product.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Products</p></a>
+                 <a href="{{ route('admin.product.index') }}" class="nav-link  {{($route=='admin.product.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Products</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.supplier.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Supplier</p></a>
+                 <a href="{{ route('admin.supplier.index') }}" class="nav-link {{($route=='admin.supplier.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Supplier</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.customer.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Customer</p></a>
+                 <a href="{{ route('admin.customer.index') }}" class="nav-link {{($route=='admin.customer.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Customer</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.customer.tickets.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Customer Ticket</p></a>
+                 <a href="{{ route('admin.customer.tickets.index') }}" class="nav-link {{($route=='admin.customer.tickets.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Customer Ticket</p></a>
               </li>
             </ul>
           </li>
 
+          @php
+              $active_prefix=['admin.master_ledger','admin.ledger','admin.sub_ledger','admin.transaction'];
+          @endphp
 
           <li class="nav-item">
-            <a href="#" class="nav-link ">
+            <a href="#" class="nav-link  {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
               <p>&nbsp; Accounts <i class="right fas fa-angle-left"></i> </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
               <li class="nav-item">
-                 <a href="{{ route('admin.master_ledger.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Master Ledger</p></a>
+                 <a href="{{ route('admin.master_ledger.index') }}" class="nav-link {{($route=='admin.master_ledger.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Master Ledger</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.ledger.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Ledger</p></a>
+                 <a href="{{ route('admin.ledger.index') }}" class="nav-link  {{($route=='admin.ledger.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Ledger</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.sub_ledger.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Sub Ledger</p></a>
+                 <a href="{{ route('admin.sub_ledger.index') }}" class="nav-link {{($route=='admin.sub_ledger.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Sub Ledger</p></a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('admin.transaction.index') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Transaction</p></a>
+                <a href="{{ route('admin.transaction.index') }}" class="nav-link  {{($route=='admin.transaction.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Transaction</p></a>
               </li>
 
             </ul>

@@ -91,7 +91,7 @@
 @php
 
     $prefix= Request::route()->getPrefix();
-     $route=Route::current()->getname();
+    $route=Route::current()->getname();
     $currentRoute = Route::currentRouteName();
 @endphp
 
@@ -170,9 +170,9 @@
 
 @include('Backend.Include.Script')
 <script>
-   var activeurl = window.location;
-   console.log(activeurl.href);
-   $('a[href="'+activeurl+'"]').parent('li').addClass('active');
+  //  var activeurl = window.location;
+  //  console.log(activeurl.href);
+  //  $('a[href="'+activeurl+'"]').parent('li').addClass('active');
 </script>
 </body>
 </html>
