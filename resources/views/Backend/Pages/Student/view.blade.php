@@ -267,44 +267,22 @@
                 <!-- Documents -->
                 <div class="tab-pane" id="documents">
                     <div class="row">
-                        <!-- File 1 -->
-                        <div class="col-sm-4">
-                            <div class="position-relative file-container" style="min-height: 180px;">
-                                <img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png" alt="Photo 3" class="img-fluid">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-danger text-xl">Ribbon</div>
-                                </div>
-                                <a href="{{ asset('Backend/files/document1.pdf') }}" download class="download-btn btn btn-primary">
-                                    <i class="fas fa-download"></i> Download
-                                </a>
-                            </div>
-                        </div>
+                        @if(!empty($student_docs))
+                            @foreach ($student_docs as $item)
+                            <!-- File 1 -->
+                            <div class="col-sm-3">
+                                <div class="position-relative file-container">
+                                    <img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png" alt="{{ $item->file_name }}" class="img-fluid">
 
-                        <!-- File 2 -->
-                        <div class="col-sm-4">
-                            <div class="position-relative file-container" style="min-height: 180px;">
-                                <img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png" alt="Photo 2" class="img-fluid">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-danger text-xl">Ribbon</div>
+                                    <a href="{{ asset('/uploads/documents/' . $item->docs_name) }}" download class="download-btn btn btn-primary">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
                                 </div>
-                                <a href="{{ asset('Backend/files/document2.xlsx') }}" download class="download-btn btn btn-primary">
-                                    <i class="fas fa-download"></i> Download
-                                </a>
                             </div>
-                        </div>
-
-                        <!-- File 3 -->
-                        <div class="col-sm-4">
-                            <div class="position-relative file-container" style="min-height: 180px;">
-                                <img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png" alt="Photo 1" class="img-fluid">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-danger text-xl">Ribbon</div>
-                                </div>
-                                <a href="{{ asset('Backend/files/document3.pdf') }}" download class="download-btn btn btn-primary">
-                                    <i class="fas fa-download"></i> Download
-                                </a>
-                            </div>
-                        </div>
+                            @endforeach
+                        @else
+                            <h4 class="text-center text-danger">Documents Not Found</h4>
+                        @endif
                     </div>
                 </div>
                 <!--Settings -->

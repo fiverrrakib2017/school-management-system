@@ -3,6 +3,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Student;
 use App\Models\Student_class;
+use App\Models\Student_docs;
 use Illuminate\Http\Request;
 class StudentService{
     public static function validate(Request $request, $teacher = null) {
@@ -152,8 +153,9 @@ class StudentService{
     }
     public function view($id){
          $student = Student::with('currentClass')->find($id);
+         $student_docs=Student_docs::where(['student_id' => $student->id])->get();
         if ($student) {
-            return view('Backend.Pages.Student.view',compact('student'));
+            return view('Backend.Pages.Student.view',compact('student','student_docs'));
         }
     }
     public function edit($id){

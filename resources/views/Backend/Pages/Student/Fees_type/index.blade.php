@@ -5,11 +5,11 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
-                  <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                  <button data-toggle="modal" data-target="#addModal" type="button" class="btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Billing Type</button>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -42,17 +42,17 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Billing Type
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Add Form ------->
             <form id="addSectionForm" action="{{ route('admin.student.fees_type.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
-                    <!----- Start Add Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                         <label for="sectionName">Class Name</label>
-                            <select type="text" name="class_id" class="form-select" style="width: 100%;">
+                            <select type="text" name="class_id" class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -68,13 +68,16 @@
                             <input type="text" name="amount"  placeholder="Enter  Amount" class="form-control">
                         </div>
                         <div class="form-group mb-2">
-                            <input type="checkbox" name="is_monthly" value="2" class="form-check-input"> Monthly
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="is_monthly" value="2" class="custom-control-input" id="customCheckbox1">
+                                <label class="custom-control-label" for="customCheckbox1">Monthly</label>
+                            </div>
                         </div>
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Add Form ------->
@@ -89,18 +92,18 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Billing Type
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Update Form ------->
             <form id="addSectionForm" action="{{ route('admin.student.fees_type.update') }}" method="post">
                 @csrf
                 <div class="modal-body">
-                    <!----- Start Update Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="sectionName">Class Name</label>
                             <input type="text" name="id" class="d-none" required>
-                            <select type="text" name="class_id" class="form-select" style="width: 100%;">
+                            <select type="text" name="class_id" class="form-control" style="width: 100%;">
                                 @foreach ($classes as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
@@ -114,11 +117,10 @@
                             <label for="sectionName">Amount</label>
                             <input type="text" name="amount"  placeholder="Enter  Amount" class="form-control">
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Update Form ------->
@@ -153,6 +155,10 @@
 @section('script')
 <script type="text/javascript">
   $(document).ready(function(){
+    /* Handle Add and Edit Form */
+    handleFormSubmit("#addModal", $('#addModal form'));
+    handleFormSubmit("#editModal", $('#editModal form'));
+
     var table = $("#datatable1").DataTable({
       "processing":true,
       "responsive": true,
@@ -186,7 +192,7 @@
           "data":null,
           render:function(data,type,row){
               return `
-              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button> 
+              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button>
               <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
             `;
           }
@@ -200,21 +206,6 @@
         table.ajax.reload(null, false);
     });
 
-    /* Initialize select2 for modal dropdowns*/
-    function initializeSelect2(modalId) {
-      $(modalId).on('show.bs.modal', function (event) {
-        if (!$("select[name='class_id']").hasClass("select2-hidden-accessible")) {
-            $("select[name='class_id']").select2({
-                dropdownParent: $(modalId),
-                placeholder: "Select Class"
-            });
-        }
-      });
-    }
-    
-    /* Initialize select2 modals*/
-    initializeSelect2("#addModal");
-    initializeSelect2("#editModal");
 
     /* General form submission handler*/
     function handleFormSubmit(modalId, form) {
@@ -241,11 +232,11 @@
                     }
                 },
                 error: function(xhr) {
-                    if (xhr.status === 422) { 
+                    if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         $.each(errors, function(field, messages) {
                             $.each(messages, function(index, message) {
-                                toastr.error(message); 
+                                toastr.error(message);
                             });
                         });
                     } else {
@@ -260,9 +251,6 @@
         });
     }
 
-    /* Handle Add and Edit Form */
-    handleFormSubmit("#addModal", $('#addModal form'));
-    handleFormSubmit("#editModal", $('#editModal form'));
 
     /* Edit button click handler*/
     $(document).on("click", "button[name='edit_button']", function() {
@@ -275,9 +263,10 @@
           dataType: 'json',
           success: function(response) {
               if (response.success) {
-                //var data = response.data;
+                console.log(response);
                 $('#editModal').modal('show');
                 $('#editModal input[name="id"]').val(response.data.id);
+                $('#editModal select[name="class_id"]').val(response.data.class_id);
                 $('#editModal input[name="type_name"]').val(response.data.type_name);
                 $('#editModal input[name="amount"]').val(response.data.amount);
               } else {
@@ -324,6 +313,6 @@
     });
 });
 </script>
-  
+
 
 @endsection

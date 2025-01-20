@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Purchase Invoice</title>
+    <title>Student Billing Invoice</title>
     <!-- <link rel="stylesheet" href="{{asset('Backend/Pdf/assets/css/style.css')}}"> -->
     <style>
         body {
@@ -134,5 +134,5 @@
         </div>
     </div>
 </body>
-</html> 
+</html>
 

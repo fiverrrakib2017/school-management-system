@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('student_bill_collection_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('bill_collection_id');
-            $table->unsignedBigInteger('fees_type_id'); 
+            $table->unsignedBigInteger('fees_type_id');
             $table->decimal('amount', 10, 2);
             $table->integer('status');
             $table->timestamps();
