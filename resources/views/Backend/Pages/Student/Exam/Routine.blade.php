@@ -11,7 +11,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="">Class</label>
-                        <select name="find_class_id"  class="form-select">
+                        <select name="find_class_id"  class="form-control" style="width: 100%">
                             <option value="">---Select---</option>
                             @php
                                 $classes = \App\Models\Student_class::latest()->get();
@@ -27,7 +27,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="">Examination Name</label>
-                        <select name="find_exam_id"  class="form-select">
+                        <select name="find_exam_id"  class="form-control" style="width: 100%">
                             <option value="">---Select---</option>
                             @php
                                 $exams = \App\Models\Student_exam::latest()->get();
@@ -41,13 +41,14 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group mt-2">
+                    <div class="form-group mt-4">
                     <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Examination Routine</button>
-                    </div>
+
+                </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group mt-2">
-                    <button data-bs-toggle="modal" data-bs-target="#routineModal" type="button" class="btn btn-primary mt-1">Create Examination Routine</button>
+                    <div class="form-group mt-4">
+                    <button  type="button" data-toggle="modal" data-target="#routineModal" type="button" class="btn btn-primary ">Create Examination Routine</button>
                     </div>
                 </div>
             </div>
@@ -341,7 +342,7 @@
                     html += '<td>' + data.room_number + '</td>';
                     html += '<td>' + data.invigilator + '</td>';
                     html += '<td>';
-                    html += '<button class="btn btn-primary btn-sm me-2 edit-btn" data-id="' + data.id + '"><i class="fa fa-edit"></i></button>';
+                    html += '<button class="btn btn-primary btn-sm me-2 edit-btn" data-id="' + data.id + '" style="margin-right:5px"><i class="fa fa-edit"></i></button>';
                     html += '<button class="btn btn-danger btn-sm delete-btn" data-id="' + data.id + '"><i class="fa fa-trash"></i></button>';
                     html += '</td>';
                     html += '</tr>';
