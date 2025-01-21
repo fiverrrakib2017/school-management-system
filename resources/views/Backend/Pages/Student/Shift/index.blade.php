@@ -6,7 +6,7 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <button data-bs-toggle="modal" data-bs-target="#addModal"  class="btn btn-success "><i class="mdi mdi-account-plus"></i>
+          <button data-toggle="modal" data-target="#addModal"  class="btn btn-success "><i class="mdi mdi-account-plus"></i>
           Add New Shift</button>
           </div>
             <div class="card-body">
@@ -37,24 +37,26 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"><span
                         class="mdi mdi-account-check mdi-18px"></span> &nbsp;New Shift</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
                 </div>
                 <div class="modal-body">
                     <form action="{{route('admin.student.shift.store')}}" method="POST" enctype="multipart/form-data">@csrf
                         <div class="form-group mb-2">
                             <label>Shift Name</label>
                             <input name="shift_name" placeholder="Enter Shift Name" class="form-control" type="text" >
-                        </div>           
+                        </div>
                         <div class="form-group mb-2">
                             <label>Start TIme</label>
                             <input name="start_time" class="form-control" type="time" >
-                        </div>           
+                        </div>
                         <div class="form-group mb-2">
                             <label>End TIme</label>
                             <input name="end_time" class="form-control" type="time" >
-                        </div>           
+                        </div>
                         <div class="modal-footer ">
-                            <button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+                            <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
                             <button type="submit" class="btn btn-success">Save Changes</button>
                         </div>
                     </form>
@@ -72,25 +74,27 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"><span
                         class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Shift</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.student.shift.update') }}" method="POST" enctype="multipart/form-data">@csrf        
+                    <form action="{{ route('admin.student.shift.update') }}" method="POST" enctype="multipart/form-data">@csrf
                         <div class="form-group mb-2">
                             <label>Shift Name</label>
                             <input type="text" class="d-none" name="id">
                             <input name="shift_name" placeholder="Enter Shift Name" class="form-control" type="text" >
-                        </div>           
+                        </div>
                         <div class="form-group mb-2">
                             <label>Start TIme</label>
                             <input name="start_time" class="form-control" type="time" >
-                        </div>           
+                        </div>
                         <div class="form-group mb-2">
                             <label>End TIme</label>
                             <input name="end_time" class="form-control" type="time" >
-                        </div>           
+                        </div>
                         <div class="modal-footer ">
-                            <button data-bs-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+                            <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
                             <button type="submit" class="btn btn-success">Save Changes</button>
                         </div>
                     </form>
@@ -110,13 +114,15 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
@@ -155,19 +161,19 @@
         },
         {"data":"start_time",
         "render": function(data, type, row) {
-            return moment(data, 'HH:mm:ss').format('hh:mm A');  
+            return moment(data, 'HH:mm:ss').format('hh:mm A');
           }
         },
         {"data":"end_time",
         "render": function(data, type, row) {
-            return moment(data, 'HH:mm:ss').format('hh:mm A');  
+            return moment(data, 'HH:mm:ss').format('hh:mm A');
           }
         },
         {
           "data":null,
           render:function(data,type,row){
               return `
-              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button> 
+              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button>
               <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
             `;
           }
@@ -192,7 +198,7 @@
         }
       });
     }
-    
+
     /* Initialize select2 modals*/
     // initializeSelect2("#addModal");
     // initializeSelect2("#editModal");
@@ -222,11 +228,11 @@
                     }
                 },
                 error: function(xhr) {
-                    if (xhr.status === 422) { 
+                    if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         $.each(errors, function(field, messages) {
                             $.each(messages, function(index, message) {
-                                toastr.error(message); 
+                                toastr.error(message);
                             });
                         });
                     } else {
@@ -307,6 +313,6 @@
 });
 
   </script>
-  
+
 
 @endsection
