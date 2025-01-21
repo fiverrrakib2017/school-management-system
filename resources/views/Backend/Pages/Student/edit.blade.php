@@ -51,7 +51,7 @@
                                         <div class="form-group">
                                             <label>Photo</label><small class="req"> *</small><br />
                                             <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
-                                            <img id="preview" class="img-fluid" src="{{ asset('Backend/uploads/photos/' . $student->photo) }}" alt="Image Preview" style="display: ; max-width: 100px; max-height: 100px;" />
+                                            <img id="preview" class="img-fluid" src="{{ asset('uploads/photos/' . $student->photo) }}" alt="Image Preview" style="display: ; max-width: 100px; max-height: 100px;" />
 
                                         </div>
                                     </div>

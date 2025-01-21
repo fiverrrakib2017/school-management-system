@@ -39,20 +39,16 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-        {{-- <div class="col-md-4">
-            <button type="button" class="btn btn-primary"><i class="fas fa-edit"></i></button>
-            <button type="button" class="btn btn-danger"> <i class="fas fa-trash"> </i></button>
-        </div><br> --}}
       <div class="row">
         <div class="col-md-4">
           <!-- Profile Image -->
           <div class="card card-primary card-outline">
             <div class="card-body box-profile">
               <div class="text-center">
-                    @if($student->photo && file_exists(public_path('Backend/uploads/photos/' . $student->photo)))
-                    <img src="{{ asset('Backend/uploads/photos/'.$student->photo) }}" alt='Profile Picture' class="profile-user-img img-fluid img-circle"/>
+                    @if($student->photo && file_exists(public_path('uploads/photos/' . $student->photo)))
+                    <img src="{{ asset('uploads/photos/'.$student->photo) }}" alt='Profile Picture' class="profile-user-img img-fluid img-circle"/>
                  @else
-                    <img src="{{ asset('Backend/images/default.jpg') }}" alt='Default Profile Picture' class="profile-user-img img-fluid img-circle" />
+                    <img src="{{ asset('uploads/avatar.png') }}" alt='Default Profile Picture' class="profile-user-img img-fluid img-circle" />
                  @endif
               </div>
 

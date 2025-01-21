@@ -16,6 +16,7 @@
                         <thead>
                             <tr>
                                 <th class="">No.</th>
+                                <th class="">Images</th>
                                 <th class="">Student Name </th>
                                 <th class="">Class </th>
                                 <th class="">Father Name</th>
@@ -79,6 +80,20 @@
         {
           "data":"id"
         },
+        {
+        data: "photo",
+            render: function(data) {
+                var url;
+                if (data == null || data === '') {
+                    url = "{{ asset('uploads/photos') }}/avatar.png";
+                } else {
+                    url = "{{ asset('uploads/photos') }}/" + data;
+                }
+                return '<img src="' + url + '" style="width: 50px; height: 50px; border-radius: 50%;">';
+            }
+        },
+
+
         {
           "data": "name",
           render: function(data, type, row){

@@ -41,14 +41,14 @@ class StudentService{
     public static function handleFileUpload(Request $request, $student = null) {
         if ($request->hasFile('photo')) {
             if ($student && $student->photo) {
-                $photoPath = public_path('Backend/uploads/photos/' . $student->photo);
+                $photoPath = public_path('uploads/photos/' . $student->photo);
                 if (file_exists($photoPath)) {
                     unlink($photoPath);
                 }
             }
             $file = $request->file('photo');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('Backend/uploads/photos'), $filename);
+            $file->move(public_path('uploads/photos'), $filename);
             return $filename;
         }
         return $student ? $student->photo : null;
