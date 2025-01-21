@@ -11,7 +11,7 @@
                 <div class="col-md-3">
                     <div class="form-group mb-2">
                         <label for="exam_id" class="form-label">Examination Name <span class="text-danger">*</span></label>
-                        <select name="exam_id" id="exam_id" class="form-select select2" required>
+                        <select name="exam_id" id="exam_id" class="form-control" required>
                             <option value="">---Select---</option>
                             @foreach(\App\Models\Student_exam::latest()->get() as $exam)
                                 <option value="{{ $exam->id }}">{{ $exam->name }}</option>
@@ -22,7 +22,7 @@
                 <div class="col-md-3">
                     <div class="form-group mb-2">
                         <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
-                        <select name="class_id"  class="form-select" required>
+                        <select name="class_id"  class="form-control" required>
                             <option value="">---Select---</option>
                             @php
                                 $classes = \App\Models\Student_class::latest()->get();
@@ -38,7 +38,7 @@
                 <div class="col-md-3">
                     <div class="form-group mb-2">
                         <label for="section_id" class="form-label">Section <span class="text-danger">*</span></label>
-                        <select name="section_id" id="section_id" class="form-select select2" >
+                        <select name="section_id" id="section_id" class="form-control" >
                             <option value="">---Select---</option>
                         </select>
                     </div>
@@ -46,7 +46,7 @@
                 <div class="col-md-3 d-none">
                     <div class="form-group mb-2">
                         <label for="student_id" class="form-label">Student <span class="text-danger">*</span></label>
-                        <select name="student_id"  class="form-select" style="width:100%">
+                        <select name="student_id"  class="form-control" style="width:100%">
                             <option value="">---Select---</option>
                         </select>
                     </div>
@@ -54,13 +54,13 @@
                 <div class="col-md-3 d-none">
                     <div class="form-group mb-2">
                         <label for="subject_id" class="form-label">Subject <span class="text-danger">*</span></label>
-                        <select name="subject_id" id="subject_id" class="form-select select2" style="width: 100%" >
+                        <select name="subject_id" id="subject_id" class="form-control" style="width: 100%" >
                             <option value="">---Select---</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group mt-2">
+                    <div class="form-group mt-3">
                     <button type="button" name="submit_btn" class="btn btn-success" style="margin-top: 16px"><i class="mdi mdi-magnify"></i> Find Exam Result</button>
                     </div>
                 </div>
@@ -239,7 +239,7 @@
         let [hour, minute, second] = time.split(':');
         hour = parseInt(hour);
         let ampm = hour >= 12 ? 'PM' : 'AM';
-        hour = hour % 12 || 12; // 12-hour format
+        hour = hour % 12 || 12;
         return `${hour}:${minute} ${ampm}`;
     }
 
