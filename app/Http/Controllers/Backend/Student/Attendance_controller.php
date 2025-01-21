@@ -29,7 +29,7 @@ class Attendance_controller extends Controller
         $columnsForOrderBy = ['id', 'name', 'current_class','section','created_at'];
         $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
-    
+
         $query = Student::with(['currentClass', 'section'])->when($search, function ($query) use ($search) {
 
             $query->where('name', 'like', "%$search%")
@@ -41,20 +41,20 @@ class Attendance_controller extends Controller
                       $query->where('name', 'like', "%$search%");
                   });
         });
-    
+
         if ($request->has('class_id') && !empty($request->class_id)) {
             $query->where('current_class', $request->class_id);
         }
         if ($request->has('section_id') && !empty($request->section_id)) {
             $query->where('section_id', $request->section_id);
         }
-    
+
         $total = $query->count();
         $items = $query->orderBy($orderByColumn, $orderDirection)
                        ->skip($request->start)
                        ->take($request->length)
                        ->get();
-    
+
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
@@ -62,11 +62,11 @@ class Attendance_controller extends Controller
             'data' => $items,
         ]);
     }
-    
+
     public function store(Request $request){
         $studentIds = $request->input('student_ids');
         $students = Student::whereIn('id', $studentIds)->get();
-        
+
         $first_class_check=$students->first()->current_class;
         $first_section_check=$students->first()->section_id;
 
@@ -87,7 +87,7 @@ class Attendance_controller extends Controller
         $all_students = Student::where([
             'current_class' => $first_class_check,
             'section_id' => $first_section_check
-        ])->pluck('id')->toArray(); 
+        ])->pluck('id')->toArray();
 
         $absentStudents = array_diff($all_students, $studentIds);
         $today = now()->format('Y-m-d');
@@ -95,13 +95,13 @@ class Attendance_controller extends Controller
         if (!empty($studentIds)) {
             foreach ($studentIds as $studentId) {
 
-                /*To check whether the student has attended today*/ 
+                /*To check whether the student has attended today*/
                 $attendanceExists = Student_attendance::where([
                     ['student_id', '=', $studentId],
                     ['attendance_date', '=', $today]
                 ])->exists();
                 /*if not present*/
-                if (!$attendanceExists) { 
+                if (!$attendanceExists) {
                     $object = new Student_attendance();
                     $object->student_id = $studentId;
                     $object->attendance_date = $today;
@@ -109,7 +109,7 @@ class Attendance_controller extends Controller
                     $object->time_in = Carbon::now()->format('H:i:s');
                     $object->time_out = Carbon::now()->format('H:i:s');
                     $object->status = 'Present';
-                    $object->save(); 
+                    $object->save();
                 }
             }
         }
@@ -121,17 +121,18 @@ class Attendance_controller extends Controller
                     ['attendance_date', '=', $today]
                 ])->exists();
 
-                /*If Not Absent Record Exists*/ 
-                if (!$attendanceExists) { 
+                /*If Not Absent Record Exists*/
+                if (!$attendanceExists) {
                     $object = new Student_attendance();
                     $object->student_id = $absentStudentId;
                     $object->attendance_date = $today;
                     $object->shift_id = 1;
                     $object->status = 'Absent';
-                    $object->save(); 
+                    $object->save();
                 }
             }
         }
+
         return response()->json([
             'success'=>true,
             'message' => 'Attendance marked successfully'
@@ -144,7 +145,7 @@ class Attendance_controller extends Controller
             'data' => $data
         ]);
     }
-   
+
 
     public function attendance_log(){
         $sections=Section::latest()->get();
@@ -155,11 +156,11 @@ class Attendance_controller extends Controller
     }
     public function attendance_log_all_data(Request $request) {
         $search = $request->search['value'];
-        
+
         $columnsForOrderBy = ['id', 'student.name', 'student.currentClass.name', 'student.section.name', 'status', 'time_in', 'created_at'];
         $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
-    
+
         $query = Student_attendance::with(['student', 'student.currentClass', 'student.section'])
             ->when($search, function ($query) use ($search) {
                 $query->where('status', 'like', "%$search%")
@@ -174,13 +175,13 @@ class Attendance_controller extends Controller
                         $query->where('name', 'like', "%$search%");
                     });
             });
-    
+
         if ($request->has('class_id') && !empty($request->class_id)) {
             $query->whereHas('student.currentClass', function ($query) use ($request) {
                 $query->where('id', $request->class_id);
             });
         }
-    
+
         if ($request->has('section_id') && !empty($request->section_id)) {
             $query->whereHas('student.section', function ($query) use ($request) {
                 $query->where('id', $request->section_id);
@@ -197,7 +198,7 @@ class Attendance_controller extends Controller
                        ->skip($request->start)
                        ->take($request->length)
                        ->get();
-    
+
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
@@ -205,20 +206,20 @@ class Attendance_controller extends Controller
             'data' => $items,
         ]);
     }
-    
-    
-    
+
+
+
 
     public function delete(Request $request){
-        $object = Student_attendance::find($request->id); 
-        $object->delete(); 
+        $object = Student_attendance::find($request->id);
+        $object->delete();
         return response()->json([
             'success' => true,
             'message' => 'Delete Successfully'
         ]);
     }
     public function attendance_report(Request $request){
-        $filters = []; 
+        $filters = [];
 
         if (isset($request->class_id) && !empty($request->class_id)) {
             $filters['current_class'] = $request->class_id;
@@ -226,17 +227,20 @@ class Attendance_controller extends Controller
         if (isset($request->section_id) && !empty($request->section_id)) {
             $filters['section_id'] = $request->section_id;
         }
+        // if (isset($request->attendance_type) && !empty($request->attendance_type)) {
+        //     $filters['status'] = "$request->attendance_type";
+        // }
 
         $startDate = null;
         $endDate = null;
 
         if (isset($request->date_range) && !empty($request->date_range)) {
             $dateRange = explode(' - ', $request->date_range);
-            $startDate = $dateRange[0]; 
-            $endDate = $dateRange[1];   
+            $startDate = $dateRange[0];
+            $endDate = $dateRange[1];
         }
         $students = Student::where($filters)->get();
-        $students_data = []; 
+        $students_data = [];
 
         foreach ($students as $student) {
             $attendanceQuery = Student_attendance::with('student', 'student.currentClass', 'student.section')->where('student_id', $student->id);
@@ -244,10 +248,13 @@ class Attendance_controller extends Controller
             if ($startDate && $endDate) {
                 $attendanceQuery->whereBetween('attendance_date', [$startDate, $endDate]);
             }
+            if(isset($request->attendance_type) && !empty($request->attendance_type)){
+                $attendanceQuery->where('status', $request->attendance_type);
+            }
             $attendance = $attendanceQuery->get();
             $students_data[] = $attendance;
         }
-    
+
         if ($students->isEmpty()) {
             return response()->json([
                 'success' => false,
@@ -262,5 +269,5 @@ class Attendance_controller extends Controller
         ]);
     }
 
-    
+
 }

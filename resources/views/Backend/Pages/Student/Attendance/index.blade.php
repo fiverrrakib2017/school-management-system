@@ -100,7 +100,7 @@ $(document).ready(function(){
         var class_id = $("select[name='class_id']").val();
         var section_id = $("select[name='section_id']").val();
         var student_id = null;
-        if(class_id != '' && section_id != ''){
+        if(class_id != ''){
             $.ajax({
                 url:"{{ route('admin.student.student_filter') }}",
                 type:"POST",
@@ -162,6 +162,9 @@ $(document).ready(function(){
             selectedStudents.push($(this).val());
         });
         if(selectedStudents.length > 0) {
+            $('#submitAttendance').prop('disabled', true).html(
+                '<i class="fa fa-spinner fa-spin"></i> Submitting...'
+            );
             $.ajax({
                 url: "{{ route('admin.student.attendence.store') }}",
                 type: "POST",
@@ -179,6 +182,10 @@ $(document).ready(function(){
                 },
                 error: function(xhr, status, error) {
                     toastr.error('An error occurred. Please try again.');
+                },
+
+                complete: function() {
+                    $('#submitAttendance').prop('disabled', false).html('Submit Attendance');
                 }
             });
         } else {

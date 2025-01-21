@@ -9,10 +9,10 @@
         <div class="card">
         <div class="card-header">
           <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="">Class</label>
-                        <select name="class_id"  class="form-select">
+                        <select name="class_id"  class="form-control">
                             <option value="">---Select---</option>
                             @foreach ($classes as $class)
                                 <option value="{{ $class->id }}">{{ $class->name }}</option>
@@ -20,23 +20,33 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="">Section </label>
-                        <select name="section_id"  class="form-select">
+                        <select name="section_id"  class="form-control">
                             <option value="">---Select---</option>
-                        
+
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="">Type</label>
+                        <select name="attendance_type"  class="form-control">
+                            <option value="">---Select---</option>
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="">Date </label>
                         <input type="text" id="date_range" class="form-control" placeholder="Select Date Range" autocomplete="off" />
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group mt-2">
+                <div class="col-md-2">
+                    <div class="form-group mt-4">
                     <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Report Find</button>
                     </div>
                 </div>
@@ -86,7 +96,7 @@ $(document).ready(function(){
         var selectedClassId = $(this).val();
 
         var filteredSections = sections.filter(function(section) {
-            return section.class_id == selectedClassId; 
+            return section.class_id == selectedClassId;
         });
 
         var sectionOptions = '<option value="">--Select Section--</option>';
@@ -94,8 +104,8 @@ $(document).ready(function(){
             sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
         });
 
-        $('select[name="section_id"]').html(sectionOptions); 
-        $('select[name="section_id"]').select2(); 
+        $('select[name="section_id"]').html(sectionOptions);
+        $('select[name="section_id"]').select2();
     });
 
     $("button[name='submit_btn']").on('click', function(e) {
@@ -108,27 +118,28 @@ $(document).ready(function(){
 
         var class_id = $("select[name='class_id']").val();
         var section_id = $("select[name='section_id']").val();
+        var attendance_type = $("select[name='attendance_type']").val();
         var date_range = $('#date_range').val();
         var student_id = null;
 
-        if (class_id != '' && section_id != '') {
+        if (class_id != '') {
             $.ajax({
                 url: "{{ route('admin.student.attendence.report') }}",
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                data: { class_id: class_id, section_id: section_id, student_id: student_id, date_range: date_range },
+                data: { class_id: class_id, section_id: section_id, student_id: student_id, date_range: date_range, attendance_type:attendance_type },
                 success: function(data) {
                     if (data.code == 200 && data.data.length > 0 && data.data != null && data.data != undefined && data.data != '' && data.data != 'null' && data.data != 'undefined') {
-                       
+
                         var students = data.data;
-                        var html = ''; 
+                        var html = '';
 
                         $.each(students, function(index, attendanceArray) {
                             $.each(attendanceArray, function(index, attendance) {
                                 var student = attendance.student;
-                                var status; 
+                                var status;
                                 if (attendance.status == 'Present') {
                                     status ='<span class="badge bg-success">Present</span>';
                                 }else if(attendance.status == 'Absent'){
@@ -142,20 +153,20 @@ $(document).ready(function(){
                                     let minutes = date.getUTCMinutes();
 
                                     let ampm = hours >= 12 ? 'PM' : 'AM';
-                                    hours = hours % 12; 
-                                    hours = hours ? hours : 12; 
-                                    minutes = minutes < 10 ? '0' + minutes : minutes; 
-                                    timeIn = hours + ':' + minutes + ' ' + ampm; 
+                                    hours = hours % 12;
+                                    hours = hours ? hours : 12;
+                                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                                    timeIn = hours + ':' + minutes + ' ' + ampm;
                                 }
                                 html += '<tr>';
-                                html += '<td>' + attendance.id + '</td>'; 
-                                html += '<td>' + student.name + '</td>';   
+                                html += '<td>' + attendance.id + '</td>';
+                                html += '<td>' + student.name + '</td>';
                                 html += '<td>' + student.current_class.name + '</td>';
-                                html += '<td>' + student.section.name + '</td>'; 
-                                html += '<td>' + status + '</td>'; 
-                                html += '<td>' + attendance.attendance_date + '</td>'; 
-                                html += '<td>' + timeIn + '</td>'; 
-                                html += '</tr>'; 
+                                html += '<td>' + student.section.name + '</td>';
+                                html += '<td>' + status + '</td>';
+                                html += '<td>' + attendance.attendance_date + '</td>';
+                                html += '<td>' + timeIn + '</td>';
+                                html += '</tr>';
                             });
                         });
 
@@ -169,14 +180,14 @@ $(document).ready(function(){
                     toastr.error('An error occurred. Please try again.');
                     submitBtn.html(originalBtnText);
                     submitBtn.prop('disabled', false);
-                }, 
+                },
                 complete:function(){
                     submitBtn.html(originalBtnText);
                     submitBtn.prop('disabled', false);
                 }
             });
         } else {
-            toastr.error('Please select class and section.');
+            toastr.error('Please select class.');
             submitBtn.html(originalBtnText);
             submitBtn.prop('disabled', false);
         }
