@@ -26,13 +26,16 @@
         border-bottom: 2px solid #117a8b;
         box-shadow: none;
     } */
-    
+
     /* .table tfoot .form-control[readonly] {
         background-color: transparent;
     } */
 
     .table tfoot th {
         font-weight: normal;
+    }
+    .month_name {
+        height: auto;
     }
 </style>
 
@@ -46,45 +49,73 @@
       <div class="card-body">
          <form id="form-data" action="{{route('admin.student.bill_collection.store')}}" method="post">@csrf
             <div class="row">
-               <div class="col-md-4 col-sm-12 mb-3">
+                <div class="col-md-3 col-sm-12 mb-3">
+                    <label for="" class="form-label">Class Name</label>
+                    <select type="text" name="class_id" class="form-control" style="width:100%">
+                        <option value="">---Select---</option>
+                        @php
+                           use App\Models\Student_class;
+                           $classes=Student_class::all();
+                        @endphp
+                        @foreach ($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+               <div class="col-md-3 col-sm-12 mb-3">
                   <label class="form-label">Student Name</label>
                   <select name="student_id" class="form-select" style="width:100%">
                      <option>---Select---</option>
-                    @foreach ($student as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>
-                    @endforeach
                   </select>
                </div>
 
-                <div class="col-md-4 col-sm-12 mb-3">
-                  <label for="" class="form-label">Class Name</label>
-                  <select type="text" name="class_id" class="form-control" style="width:100%">
-                        <option>---Select---</option>
-                  </select>
-                </div>
-
-                <div class="col-md-4 col-sm-12 mb-3">
+                <div class="col-md-3 col-sm-12 mb-3">
                   <label for="date" class="form-label">Previous Due</label>
-                  <input type="text" class="form-control" value="00"/>
+                  <input readonly type="text" class="form-control" value="00"/>
                 </div>
-
-               <div class="col-md-4 col-sm-12 mb-3">
+                <div class="col-md-3 col-sm-12 mb-3">
+                  <label for="date" class="form-label">Collection Date:</label>
+                  <input readonly type="date" class="form-control" name="bill_date" value="@php
+                      echo date('Y-m-d');
+                  @endphp"/>
+                </div>
+            </div>
+            <div class="row">
+               <div class="col-md-3 col-sm-12 mb-3">
                   <label for="" class="form-label">Billing Item Name</label>
                   <select type="text" id="billing_item" class="form-control" style="width:100%">
                         <option>---Select---</option>
                   </select>
                </div>
-
-               
-
                <div class="col-md-4 col-sm-12 mb-3">
+                  <label for="" class="form-label">Month Name</label>
+                  <select type="text" id="month_name" class="form-control month_name" style="width:100%" multiple>
+                        <option>---Select---</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                  </select>
+               </div>
+
+
+
+               <div class="col-md-3 col-sm-12 mb-3">
                   <label for="" class="form-label">Amount</label>
                   <input type="text" class="form-control" name="amount" id="amount" placeholder="Enter Amount"/>
                </div>
 
                <div class="col-md-2 col-sm-12 d-flex align-items-end mb-3">
                   <button type="button" id="submitBtn" class="btn btn-primary w-100">Add Now</button>
-               </div> 
+               </div>
             </div>
 
             <div class="table-responsive">
@@ -92,6 +123,7 @@
                     <thead class="text-center">
                         <tr>
                             <th>Billing Item Name</th>
+                            <th>Month</th>
                             <th>Amount</th>
                             <th>Total</th>
                             <th>Action</th>
@@ -102,19 +134,19 @@
                         <tr>
                             <th class="text-right" colspan="2">Total Amount</th>
                             <th colspan="2">
-                                <input type="text" readonly  class="form-control total_amount text-right" name="total_amount" value="00">
+                                <input type="number" readonly  class="form-control total_amount text-right" name="total_amount" value="00">
                             </th>
                         </tr>
                         <tr>
                             <th class="text-right" colspan="2">Paid Amount</th>
                             <th colspan="2">
-                                <input type="text" class="form-control paid_amount text-right" name="paid_amount" placeholder="Enter paid amount">
+                                <input type="number" class="form-control paid_amount text-right" name="paid_amount" placeholder="Enter paid amount">
                             </th>
                         </tr>
                         <tr>
                             <th class="text-right" colspan="2">Due Amount</th>
                             <th colspan="2">
-                                <input type="text" readonly class="form-control due_amount text-right" name="due_amount" placeholder="Due amount will be calculated">
+                                <input type="number" readonly class="form-control due_amount text-right" name="due_amount" placeholder="Due amount will be calculated">
                             </th>
                         </tr>
                     </tfoot>
@@ -135,11 +167,35 @@
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    
+
     $("select[name='student_id']").select2();
     $("select[name='class_id']").select2();
+    $(".month_name").select2();
     $("#billing_item").select2();
 
+    $(document).on('change', 'select[name="class_id"]', function () {
+        var class_id = $(this).val();
+        if (class_id !== '---Select---' && class_id !== "") {
+            var url="{{ route('admin.student.student_filter') }}";
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+           $.ajax({
+               url: url,
+               type: 'POST',
+               data: {  _token: csrfToken,  class_id: class_id  },
+
+               success: function (response) {
+                $.each(response.data, function (index, item) {
+                    $('select[name="student_id"]').append('<option value="' + item.id + '">' + item.name + '</option>');
+                });
+               },
+               error: function (xhr, status, error) {
+                   console.error('Error:', error);
+               }
+           });
+        } else {
+            $('#student_id').html('<option>---Select---</option>');
+        }
+    });
      $(document).on('change', 'select[name="student_id"]', function () {
         var studentId = $(this).val();
         if (studentId !== '---Select---' && studentId !== "") {
@@ -150,8 +206,6 @@
                type: 'GET',
                data: { student_id: studentId  },
                success: function (response) {
-                    console.log(response.current_class.id);
-                    $("select[name='class_id']").html(`<option value="${response.current_class.id}">${response.current_class.name}</option>`);
                     getFeesType(response.current_class.id);
                },
                error: function (xhr, status, error) {
@@ -163,16 +217,15 @@
         }
     });
     function getFeesType(classId) {
-      
+
         var editUrl = '{{ route("admin.student.fees_type.get_fees_for_class", ":id") }}';
         var url = editUrl.replace(':id', classId);
         $.ajax({
-            url: url, 
+            url: url,
             type: 'GET',
             data: { class_id: classId },
             success: function (response) {
                 $('#billing_item').html('<option>---Select---</option>');
-                console.log(response.data);
                 $.each(response.data, function (index, item) {
                     $('#billing_item').append('<option value="' + item.id + '">' + item.type_name + '</option>');
                 });
@@ -187,12 +240,12 @@
         var editUrl = '{{ route("admin.student.fees_type.get_fees_type", ":id") }}';
         var url=editUrl.replace(':id', billing_item_id);
         $.ajax({
-            url:url, 
+            url:url,
             type: 'GET',
             data: { id: billing_item_id},
             success: function (response) {
                 $('#amount').val(response.data.amount);
-                
+
             },
             error: function (xhr, status, error) {
                 console.error('Error:', error);
@@ -204,32 +257,45 @@
         /*Collect form input value*/
         var billingItemName = $('#billing_item option:selected').text();
         var billingItemId = $('#billing_item').val();
+        var month = $('#month_name').val();
         var amount = $('#amount').val();
-
         /* Validation*/
         if (billingItemId === '---Select---' || billingItemId === "" || amount === "") {
             toastr.error("Please select a billing item and enter a valid amount.");
             return;
         }
 
-        /*Create New Row*/ 
+        /*Month Display*/
+        var month_display=month.join(', ');
+
+        /*calculation total price*/
+        if(month.length > 0){
+            var total_price = amount * month.length;
+        }else{
+            var total_price= amount * 1;
+        }
+        /*Create New Row*/
         var newRow = `<tr>
                         <td>
                             <input type="hidden" name="billing_item_id[]" value="${billingItemId}">
                             ${billingItemName}
                         </td>
+                       <td>
+                            <input type="hidden" name="month_name[]" value="${month}">
+                            ${month_display}
+                        </td>
                         <td>
                             <input type="hidden" name="amount[]" value="${amount}">${amount}
                         </td>
                         <td>
-                            <input type="hidden" name="total_price[]" value="${amount}">${amount}
+                            <input type="hidden" name="total_price[]" value="${total_price}">${total_price}
                         </td>
                         <td>
                             <button type="button" class="btn-sm btn-danger removeRow"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>`;
 
-       
+
         $('#tableRow').append(newRow);
         updateTotalAmount();
         $('#amount').val('');
@@ -241,10 +307,10 @@
         updateTotalAmount();
     });
 
-    
+
     function updateTotalAmount() {
         var totalAmount = 0;
-        $('input[name="amount[]"]').each(function() {
+        $('input[name="total_price[]"]').each(function() {
             totalAmount += parseFloat($(this).val()) || 0;
         });
         $('input[name="total_amount"]').val(totalAmount);
@@ -281,11 +347,11 @@
                 }
             },
             error: function(xhr) {
-                if (xhr.status === 422) { 
+                if (xhr.status === 422) {
                     var errors = xhr.responseJSON.errors;
                     $.each(errors, function(field, messages) {
                         $.each(messages, function(index, message) {
-                            toastr.error(message); 
+                            toastr.error(message);
                         });
                     });
                 } else {
@@ -299,10 +365,10 @@
         });
     });
 
-   
+
 });
 
   </script>
-  
+
 
 @endsection

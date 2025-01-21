@@ -31,10 +31,10 @@ class Bill_CollectionController extends Controller
         $orderByColumnIndex = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
-    
+
         /*Start building the query*/
         $query = Student_bill_collection::with('student', 'student.currentClass','student.section');
-    
+
         /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -53,13 +53,13 @@ class Bill_CollectionController extends Controller
                 ->orWhere('payment_status', 'like', "%$search%");
             });
         }
-    
+
         /* Get the total count of records*/
         $totalRecords = Student_bill_collection::count();
-    
+
         /* Get the count of filtered records*/
         $filteredRecords = $query->count();
-    
+
         if ($request->has('student_id') && !empty($request->student_id)) {
             $query->where('student_id', $request->student_id);
         }
@@ -68,7 +68,7 @@ class Bill_CollectionController extends Controller
                     ->skip($request->start)
                     ->take($request->length)
                     ->get();
-    
+
         /* Return the response in JSON format*/
         return response()->json([
             'draw' => $request->draw,
@@ -77,9 +77,9 @@ class Bill_CollectionController extends Controller
             'data' => $items,
         ]);
     }
-    
+
     public function store(Request $request){
-        //return $request->all();
+        //return $request->all(); exit;
         /* Validate the form data*/
         $rules=[
             'student_id' => 'required|exists:students,id',
@@ -108,9 +108,9 @@ class Bill_CollectionController extends Controller
         /* Create a new Instance*/
         $object = new Student_bill_collection();
         $object->student_id =$request->student_id;
-        $object->total_amount = $request->total_amount ?? $request->amount;
+        $object->total_amount = $request->total_amount ?? 00;
         $object->paid_amount= $request->paid_amount ?? 0;
-        $object->due_amount = $request->due_amount ?? ($request->amount - $request->paid_amount);
+        $object->due_amount = $request->due_amount ?? 0;
         $object->discount_amount = $request->discount_amount ?? 0;
         $object->payment_status = 'paid';
         $object->payment_method = 'cash';
@@ -122,6 +122,8 @@ class Bill_CollectionController extends Controller
             $item->bill_collection_id=$object->id;
             $item->fees_type_id=$feesTypeId;
             $item->amount=$request->amount[$key];
+            $item->month=$request->month_name[$key];
+            $item->year= date('Y');
             $item->status=1;
             $item->save();
         }
@@ -194,8 +196,8 @@ class Bill_CollectionController extends Controller
     return view('Backend.Pages.Student.Bill_Collection.Invoice.invoice_view',compact('data'));
    }
     public function delete(Request $request){
-        $object = Student_bill_collection::find($request->id); 
-        $object->delete(); 
+        $object = Student_bill_collection::find($request->id);
+        $object->delete();
         return response()->json([
             'success' => true,
             'message' => 'Delete Successfully'

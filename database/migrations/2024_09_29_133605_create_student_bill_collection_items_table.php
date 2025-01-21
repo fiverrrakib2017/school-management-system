@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('fees_type_id');
             $table->decimal('amount', 10, 2);
             $table->integer('status');
+            $table->text('month');
+            $table->integer('year');
             $table->timestamps();
 
             $table->foreign('bill_collection_id')->references('id')->on('student_bill_collections')->onDelete('cascade');
