@@ -10,7 +10,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Class</label>
-                            <select name="class_id"  class="form-select">
+                            <select name="class_id"  class="form-control">
                                 <option value="">---Select---</option>
                                 @foreach ($classes as $class)
                                     <option value="{{ $class->id }}">{{ $class->name }}</option>
@@ -21,14 +21,14 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Section </label>
-                            <select name="section_id"  class="form-select">
+                            <select name="section_id"  class="form-control">
                                 <option value="">---Select---</option>
-                            
+
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group mt-2">
+                        <div class="form-group mt-4">
                         <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Now</button>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" class="form-check-input" id="selectAll"> </th>
+                                <th><input type="checkbox" class="Custom Checkbox" id="selectAll"> </th>
                                 <th class="">Student Name </th>
                                 <th class="">Class </th>
                                 <th class="">Section</th>
@@ -78,8 +78,8 @@ $(document).ready(function(){
         var sections = @json($sections);
         var selectedClassId = $(this).val();
         var filteredSections = sections.filter(function(section) {
-            /*Filter sections by class_id*/ 
-            return section.class_id == selectedClassId; 
+            /*Filter sections by class_id*/
+            return section.class_id == selectedClassId;
         });
 
         /* Update Section dropdown*/
@@ -88,8 +88,8 @@ $(document).ready(function(){
             sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
         });
 
-        $('select[name="section_id"]').html(sectionOptions); 
-        $('select[name="section_id"]').select2(); 
+        $('select[name="section_id"]').html(sectionOptions);
+        $('select[name="section_id"]').select2();
     });
     $("button[name='submit_btn']").on('click', function(e) {
         e.preventDefault();
@@ -112,12 +112,12 @@ $(document).ready(function(){
                     if(data.code == 200 && data.data.length > 0 && data.data != null && data.data != undefined && data.data != '' && data.data != 'null' && data.data != 'undefined'){
                         $('.card-footer').removeClass('d-none');
                         var students = data.data;
-                        var html=''; 
-                       
+                        var html='';
+
                         $.each(students, function (index, student) {
                             var viewUrl = "{{ route('admin.student.view', ':id') }}".replace(':id', student.id);
                             html += '<tr>';
-                            html += '<td><input type="checkbox"  value="' + student.id + '" name="student_ids[]" class="form-check-input student-checkbox"></td>';
+                            html += '<td><input type="checkbox"  value="' + student.id + '" name="student_ids[]" class="Custom Checkbox student-checkbox"></td>';
                             html += '<td>' + student.name + '</td>';
                             html += '<td>' + student.current_class.name + '</td>';
                             html += '<td>' + student.section.name + '</td>';
@@ -130,12 +130,12 @@ $(document).ready(function(){
                     }else{
                         $('#datatable1 tbody').html('<tr id="no-data"><td colspan="7" class="text-center">No data available</td></tr>');
                     }
-                }, 
+                },
                 error: function(xhr, status, error) {
                     toastr.error('An error occurred. Please try again.');
                     submitBtn.html(originalBtnText);
                     submitBtn.prop('disabled', false);
-                }, 
+                },
                 complete:function(){
                     submitBtn.html(originalBtnText);
                     submitBtn.prop('disabled', false);
