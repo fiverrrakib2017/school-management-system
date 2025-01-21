@@ -20,13 +20,13 @@
 
                         <ul class="nav nav-tabs mb-3" id="formTabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="exam-tab" data-bs-toggle="tab" data-bs-target="#exam" type="button" role="tab" aria-controls="exam" aria-selected="true">Exam Details</button>
+                                <button class="nav-link active" id="exam-tab" data-toggle="tab" data-target="#exam" type="button" role="tab" aria-controls="exam" aria-selected="true">Exam Details</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button" role="tab" aria-controls="student" aria-selected="false">Student Details</button>
+                                <button class="nav-link" id="student-tab" data-toggle="tab" data-target="#student" type="button" role="tab" aria-controls="student" aria-selected="false">Student Details</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="marks-tab" data-bs-toggle="tab" data-bs-target="#marks" type="button" role="tab" aria-controls="marks" aria-selected="false">Marks & Remarks</button>
+                                <button class="nav-link" id="marks-tab" data-toggle="tab" data-target="#marks" type="button" role="tab" aria-controls="marks" aria-selected="false">Marks & Remarks</button>
                             </li>
                         </ul>
 
@@ -35,7 +35,7 @@
                             <div class="tab-pane fade show active" id="exam" role="tabpanel" aria-labelledby="exam-tab">
                                 <div class="mb-3">
                                     <label for="exam_id" class="form-label">Exam <span class="text-danger">*</span></label>
-                                    <select name="exam_id" id="exam_id" class="form-select select2" required>
+                                    <select name="exam_id" id="exam_id" class="form-control" required>
                                         <option value="" selected disabled>Select an Exam</option>
                                         @foreach(\App\Models\Student_exam::latest()->get() as $exam)
                                             <option value="{{ $exam->id }}">{{ $exam->name }}</option>
@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
-                                    <select name="class_id" id="class_id" class="form-select select2" required>
+                                    <select name="class_id" id="class_id" class="form-control" required>
                                         <option value="">---Select---</option>
                                         @foreach(\App\Models\Student_class::latest()->get() as $class)
                                             <option value="{{ $class->id }}">{{ $class->name }}</option>
@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="section_id" class="form-label">Section <span class="text-danger">*</span></label>
-                                    <select name="section_id" id="section_id" class="form-select select2" required>
+                                    <select name="section_id" id="section_id" class="form-control" required>
                                         <option value="">---Select---</option>
                                     </select>
                                 </div>
@@ -63,12 +63,12 @@
                             <div class="tab-pane fade" id="student" role="tabpanel" aria-labelledby="student-tab">
                                 <div class="mb-3">
                                     <label for="student_id" class="form-label">Student <span class="text-danger">*</span></label>
-                                    <select name="student_id" id="student_id" class="form-select select2" style="width: 100%" required>
+                                    <select name="student_id" id="student_id" class="form-control" style="width: 100%" required>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="subject_id" class="form-label">Subject <span class="text-danger">*</span></label>
-                                    <select name="subject_id" id="subject_id" class="form-select select2" style="width: 100%" required>
+                                    <select name="subject_id" id="subject_id" class="form-control" style="width: 100%" required>
                                         <option value="">---Select---</option>
                                     </select>
                                 </div>
