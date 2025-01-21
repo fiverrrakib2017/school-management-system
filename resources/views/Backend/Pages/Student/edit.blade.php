@@ -1,178 +1,292 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-
+@section('style')
+<style>
+.small, small {
+    color: red !important;
+}
+</style>
+@endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12 ">
-        <div class="card">
-            <div class="card-header">
-                <h4>Update Student </h4>
+    <div class="card card-primary m-auto">
+        <form action="{{ route('admin.student.update', $student->id) }}" method="post" id="addStudentForm" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="update_id" value=""/>
+            <div class="card-body" >
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Personal Information </h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Full Name</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="name" placeholder="Enter Fullname" value="{{ $student->name ??'' }}" required>
 
-            </div>
-            <div class="card-body">
-                <form action="{{ route('admin.student.update', $student->id) }}" method="post" id="updateStudentForm" enctype="multipart/form-data">
-                    @csrf
-                    <!-- Student Personal Information -->
-                    <div class="section">
-                        <h6  style="color:#777878 ">Student Personal Information</h6>
-                        <hr style="border-top: 1px dashed #d3c6c6;">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" name="name" placeholder="Enter full name" value="{{ $student->name }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="birth_date">Birth Date</label>
-                                <input type="date" class="form-control" name="birth_date" value="{{ $student->birth_date }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="gender">Gender</label>
-                                <select class="form-select" name="gender" required>
-                                    <option value="Male" {{ $student->gender == 'Male' ? 'selected' : '' }}>Male</option>
-                                    <option value="Female" {{ $student->gender == 'Female' ? 'selected' : '' }}>Female</option>
-                                    <option value="Other" {{ $student->gender == 'Other' ? 'selected' : '' }}>Other</option>
-                                </select>
+                                        </div>
+                                    </div>
 
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="birth_date">Birth Date</label><small class="req"> *</small>
+                                            <input type="date" class="form-control" name="birth_date" value="{{ $student->birth_date ??'' }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Gender</label><small class="req"> *</small>
+                                            <select class="form-control " name="gender" required>
+                                                <option value="Male" {{ $student->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                                                <option value="Female" {{ $student->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                                                <option value="Other" {{ $student->gender == 'Other' ? 'selected' : '' }}>Other</option>
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Photo</label><small class="req"> *</small><br />
+                                            <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
+                                            <img id="preview" class="img-fluid" src="{{ asset('Backend/uploads/photos/' . $student->photo) }}" alt="Image Preview" style="display: ; max-width: 100px; max-height: 100px;" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label> Blood Group</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group" value="{{ $student->blood_group ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Health Conditions</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions" value="{{ $student->health_conditions ?? '' }}">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Emergency Contact Name</label>
+                                            <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" value="{{ $student->emergency_contact_name ?? '' }}"required>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="emergency_contact_phone">Emergency Contact Phone</label>
+                                            <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" value="{{ $student->emergency_contact_phone ?? '' }}" required>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Religion</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="religion" placeholder="Enter religion" value="{{ $student->religion ?? '' }}" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Nationality</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="nationality" placeholder="Enter nationality" value="{{ $student->nationality ?? '' }}" >
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="photo">Photo</label>
-                                <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
-                                <img id="preview" class="img-fluid" src="{{ asset('Backend/uploads/photos/' . $student->photo) }}" alt="Image Preview" style="max-width: 100px; max-height: 100px;" />
+                            <div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Guardian Information</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Father's Name</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="father_name" placeholder="Enter father's name" value="{{ $student->father_name ?? '' }}" required>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Mother's Name</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="mother_name" placeholder="Enter mother's name" value="{{ $student->mother_name ?? '' }}"  required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="guardian_name">Guardian's Name (if different)</label>
+                                            <input type="text" class="form-control" name="guardian_name" placeholder="Enter guardian's name"  value="{{ $student->guardian_name ?? '' }}" >
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="blood_group">Blood Group</label>
-                                <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group" value="{{ $student->blood_group }}">
+                            <div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Contact Information</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Current Address</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="current_address" placeholder="Current Address"  value="{{ $student->current_address ?? '' }}"  required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Permanent Address</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="permanent_address" placeholder="Permanent Address"  value="{{ $student->permanent_address ?? '' }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Phone Number-1</label>
+                                            <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" value="{{ $student->phone ?? '' }}" required>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="phone">Phone Number-2</label>
+                                            <input type="tel" class="form-control" name="phone_2" placeholder="Enter phone number"  value="{{ $student->phone_2 ?? '' }}"  required>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="health_conditions">Health Conditions</label>
-                                <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions" value="{{ $student->health_conditions }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="emergency_contact_name">Emergency Contact Name</label>
-                                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name"  value="{{ $student->emergency_contact_name }}"  required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="emergency_contact_phone">Emergency Contact Phone</label>
-                                <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" value="{{ $student->emergency_contact_phone }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="religion">Religion</label>
-                                <input type="text" class="form-control" name="religion" placeholder="Enter religion" value="{{ $student->religion }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="nationality">Nationality</label>
-                                <input type="text" class="form-control" name="nationality" placeholder="Enter nationality" value="{{ $student->nationality }}">
+                            <div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Education Information</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Current Class</label><small class="req"> *</small>
+                                            <select type="text" class="form-control" name="current_class"  style="width: 100%;" required>
+                                                <option value="">---Select---</option>
+                                                @foreach($data as $item)
+                                                    <option value="{{ $item->id }}" {{ $student->current_class == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                                @endforeach
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Section Name</label><small class="req"> *</small>
+                                            <select type="text" class="form-control" name="section_id"  style="width: 100%;" required>
+                                                <option value="">---Select---</option>
+
+                                                @foreach($section as $item)
+                                                <option value="{{ $item->id }}" {{ $student->section_id == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Previous School</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school"  value="{{ $student->previous_school }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="academic_results">Academic Results</label>
+                                            <input type="text" class="form-control" name="academic_results" placeholder="Enter academic results"  value="{{ $student->academic_results }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="remarks">Class Roll No.</label>
+                                        <input class="form-control" name="roll_no" rows="1" placeholder="Enter Roll No" value="{{ $student->roll_no ?? '' }}">
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="remarks">Remarks</label>
+                                        <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks">{{ $student->remarks ?? '' }}</textarea>
+
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div id="upload_documents_hide_show">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="tshadow bozero">
+                                            <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Upload Documents</h4>
+                                            <div class="row around10">
+                                                <div class="col-md-6">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <th style="width: 10px">#</th>
+                                                                <th>Title</th>
+                                                                <th>Documents</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>1.</td>
+                                                                <td>Birth Certificate</td>
+                                                                <td>
+                                                                    <input class="form-control" type="file" name="documents[]" id="doc1" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>3.</td>
+                                                                <td>Registration Paper</td>
+                                                                <td>
+                                                                    <input class="form-control" type="file" name="documents[]" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <th style="width: 10px">#</th>
+                                                                <th>Title</th>
+                                                                <th>Documents</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2.</td>
+                                                                <td>T. Certificate</td>
+                                                                <td>
+                                                                    <input class="filestyle form-control" type="file" name="documents[]" id="doc2" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>4.</td>
+                                                                <td>Others Documents</td>
+                                                                <td>
+                                                                    <input class="filestyle form-control" type="file" name="documents[]" id="doc2" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-
-                    <!-- Guardian Information -->
-                    <div class="section">
-                        <h6  style="color:#777878 ">Guardian Information</h6>
-                        <hr style="border-top: 1px dashed #d3c6c6;">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="father_name">Father's Name</label>
-                                <input type="text" class="form-control" name="father_name" placeholder="Enter father's name" value="{{ $student->father_name }}" required >
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="mother_name">Mother's Name</label>
-                                <input type="text" class="form-control" name="mother_name" placeholder="Enter mother's name" value="{{ $student->mother_name }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="guardian_name">Guardian's Name (if different)</label>
-                                <input type="text" class="form-control" name="guardian_name" placeholder="Enter guardian's name" value="{{ $student->guardian_name }}">
-                            </div>
-                        </div>
+                    <div class="card-footer">
+                        <button type="button" onclick="history.back();" class="btn btn-danger">Back</button>
+                        <button type="submit" class="btn btn-success">Student Update</button>
                     </div>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-
-                    <!-- Contact Information -->
-                    <div class="section">
-                        <h5></h5>
-                        <h6  style="color:#777878 ">Contact Information</h6>
-                        <hr style="border-top: 1px dashed #d3c6c6;">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="current_address">Current Address</label>
-                                <input type="text" class="form-control" name="current_address" placeholder="Enter current address" value="{{ $student->current_address }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="permanent_address">Permanent Address</label>
-                                <input type="text" class="form-control" name="permanent_address" placeholder="Enter permanent address" value="{{ $student->permanent_address }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="phone">Phone Number-1</label>
-                                <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" value="{{ $student->phone }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="phone">Phone Number-2</label>
-                                <input type="tel" class="form-control" name="phone_2" placeholder="Enter phone number" value="{{ $student->phone_2 }}" required>
-                            </div>
-
-                        </div>
-                    </div>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-
-                    <!-- Education Information -->
-                    <div class="section">
-                        <h6  style="color:#777878 ">Education Information</h6>
-                        <hr style="border-top: 1px dashed #d3c6c6;">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="current_class">Current Class</label>
-                                <select type="text" class="form-select" name="current_class" required>
-                                    <option value="">---Select---</option>
-                                    @foreach($data as $item)
-                                        <option value="{{ $item->id }}" {{ $student->current_class == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                                    @endforeach
-                                    {{-- @foreach($class_data as $item)
-                                    <option value="{{ $item->id }}" {{ $student->current_class == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                                @endforeach --}}
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="current_class">Section Name</label>
-                                <select type="text" class="form-select" name="section_id" required>
-                                    <option value="">---Select---</option>
-                                    @foreach($section as $item)
-                                    <option value="{{ $item->id }}" {{ $student->section_id == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                                @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="previous_school">Previous School</label>
-                                <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school" value="{{ $student->previous_school }}">
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="academic_results">Academic Results</label>
-                                <input type="text" class="form-control" name="academic_results" placeholder="Enter academic results" value="{{ $student->academic_results }}">
-                            </div>
-                        </div>
-                    </div>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-
-                    <!-- Additional Information -->
-                    <div class="section">
-                        <h6  style="color:#777878 ">Additional Information</h6>
-                        <hr style="border-top: 1px dashed #d3c6c6;">
-                        <div class="row">
-
-
-                            <div class="col-md-6 mb-3">
-                                <label for="remarks">Remarks</label>
-                                <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks" >{{ $student->remarks }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 @endsection
 
@@ -213,7 +327,7 @@
             reader.readAsDataURL(this.files[0]);
         });
 
-        $('#updateStudentForm').submit(function(e) {
+        $('#addStudentForm').submit(function(e) {
             e.preventDefault();
 
             /* Get the submit button */
@@ -235,17 +349,25 @@
                 data: formData,
                 contentType: false,
                 processData: false,
+                beforeSend: function() {
+                    /* Disable the Form input */
+                    form.find(':input').prop('disabled', true);
+                    submitBtn.prop('disabled', true);
+                },
                 success: function(response) {
                     if (response.success) {
                         toastr.success(response.message);
-                        form[0].reset();
-                        $('#preview').hide();
+                        // form[0].reset();
+                        // $('#preview').hide();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     }
                 },
                 error: function(xhr, status, error) {
                     /* Handle errors */
                     console.error(xhr.responseText);
-                    if (xhr.status === 422) { // Laravel validation error
+                    if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         for (var error in errors) {
                             toastr.error(errors[error][0]);
@@ -266,14 +388,5 @@
     });
   </script>
 
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
 
 @endsection

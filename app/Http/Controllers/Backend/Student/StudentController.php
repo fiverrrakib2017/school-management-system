@@ -93,6 +93,23 @@ class StudentController extends Controller
         $student->update();
 
 
+        /* Check if documents are uploaded */
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $index => $file) {
+                $filename = time() . '_' . $index . '.' . $file->getClientOriginalExtension();
+                $filePath = 'uploads/documents/';
+                $file->move(public_path($filePath), $filename);
+
+                /* Save the document details in the database */
+                $docs = new Student_docs();
+                $docs->student_id = $student->id;
+                $docs->docs_name = $filename;
+                $docs->file_path = $filePath . $filename;
+                $docs->save();
+            }
+        }
+
+
         /* Return success response*/
         return response()->json([
             'success' => true,

@@ -1,9 +1,7 @@
 @extends('Backend.Layout.App')
 @section('title', 'Dashboard | Admin Panel')
 @section('style')
-    <style>
 <style>
-/* ফাইল কন্টেইনার স্টাইল */
 .file-container {
     position: relative;
     overflow: hidden;
@@ -15,7 +13,6 @@
     height: auto;
 }
 
-/* ডাউনলোড বাটনের জন্য স্টাইল */
 .download-btn {
     position: absolute;
     bottom: 10px;
@@ -27,18 +24,14 @@
     font-size: 14px;
 }
 
-/* হভার করলে ডাউনলোড বাটন দেখানো */
 .file-container:hover .download-btn {
     display: inline-block;
 }
 
-/* হোভার এ ইমেজে কালার শেড */
 .file-container:hover img {
     filter: brightness(0.8);
 }
 </style>
-
-    </style>
 @endsection
 
 @section('content')
@@ -46,9 +39,12 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
+        {{-- <div class="col-md-4">
+            <button type="button" class="btn btn-primary"><i class="fas fa-edit"></i></button>
+            <button type="button" class="btn btn-danger"> <i class="fas fa-trash"> </i></button>
+        </div><br> --}}
       <div class="row">
-        <div class="col-md-3">
-
+        <div class="col-md-4">
           <!-- Profile Image -->
           <div class="card card-primary card-outline">
             <div class="card-body box-profile">
@@ -63,6 +59,7 @@
               <h3 class="profile-username text-center">{{ $student->name ?? '' }}</h3>
 
               <p class="text-muted text-center">Roll No.{{ $student->roll_no ?? 0 }}</p>
+              <a href="{{ route('admin.student.edit', $student->id) }}" class="btn-sm btn btn-primary"><i class="fas fa-edit"></i></a>
 
               <ul class="list-group list-group-unbordered mb-3">
                 <li class="list-group-item">
@@ -112,11 +109,9 @@
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
-
-
         </div>
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-8">
           <div class="card">
             <div class="card-header p-2">
               <ul class="nav nav-pills">
