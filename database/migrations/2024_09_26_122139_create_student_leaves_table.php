@@ -17,8 +17,8 @@ return new class extends Migration
             $table->enum('leave_type', ['full_day','Sick', 'half_day']);
             $table->string('leave_reason');
             $table->enum('leave_status', ['pending', 'approved', 'rejected']);
-            $table->time('start_date');
-            $table->time('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
