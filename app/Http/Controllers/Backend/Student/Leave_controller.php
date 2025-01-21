@@ -115,7 +115,7 @@ class Leave_controller extends Controller
             'leave_reason' => 'required|string',
             'leave_status' => 'required|string',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_date' => 'required|date',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -152,8 +152,8 @@ class Leave_controller extends Controller
     }
 
     public function delete(Request $request){
-        $object = Student_leave::find($request->id); 
-        $object->delete(); 
+        $object = Student_leave::find($request->id);
+        $object->delete();
         return response()->json([
             'success' => true,
             'message' => 'Delete Successfully'

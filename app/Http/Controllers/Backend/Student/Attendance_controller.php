@@ -7,6 +7,7 @@ use App\Models\Student_class;
 use App\Models\Section;
 use App\Models\Student_attendance;
 use App\Models\Student_bill_collection;
+use App\Models\Student_leave;
 use App\Models\Student_shift;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
@@ -95,7 +96,7 @@ class Attendance_controller extends Controller
         if (!empty($studentIds)) {
             foreach ($studentIds as $studentId) {
 
-                /*To check whether the student has attended today*/
+                /*To check student has attended today*/
                 $attendanceExists = Student_attendance::where([
                     ['student_id', '=', $studentId],
                     ['attendance_date', '=', $today]
@@ -123,12 +124,28 @@ class Attendance_controller extends Controller
 
                 /*If Not Absent Record Exists*/
                 if (!$attendanceExists) {
-                    $object = new Student_attendance();
-                    $object->student_id = $absentStudentId;
-                    $object->attendance_date = $today;
-                    $object->shift_id = 1;
-                    $object->status = 'Absent';
-                    $object->save();
+                    $is_student_leave= Student_leave::where([
+                        ['student_id', '=', $absentStudentId],
+                        ['start_date', '<=', $today],
+                        ['end_date', '>=', $today],
+                        ['leave_status', '=', 'approved']
+                    ])->exists();
+
+                    if ($is_student_leave) {
+                        $object = new Student_attendance();
+                        $object->student_id = $absentStudentId;
+                        $object->attendance_date = $today;
+                        $object->shift_id = 1;
+                        $object->status = 'Leave';
+                        $object->save();
+                    } else {
+                        $object = new Student_attendance();
+                        $object->student_id = $absentStudentId;
+                        $object->attendance_date = $today;
+                        $object->shift_id = 1;
+                        $object->status = 'Absent';
+                        $object->save();
+                    }
                 }
             }
         }

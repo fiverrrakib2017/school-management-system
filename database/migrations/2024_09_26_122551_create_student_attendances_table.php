@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('shift_id');
             $table->time('time_in')->nullable();
             $table->time('time_out')->nullable();
-            $table->enum('status', ['Present', 'Absent','Late'])->default('Present');
+            $table->enum('status', ['Present', 'Absent','Late','Leave'])->default('Present');
 
             $table->timestamps();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');

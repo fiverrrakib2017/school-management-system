@@ -51,14 +51,14 @@
                             <select name="student_id" class="form-select" type="text" style="width: 100%;" required>
                                 <option >---Select---</option>
                                 @foreach ($student as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                    <option value="{{$item->id}}">{{$item->name}} || {{ $item->currentClass->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group mb-2">
                             <label>Leave Type</label>
                             <select name="leave_type" class="form-control" type="text" required>
-                                <option >---Select---</option>
+                                <option value="">---Select---</option>
                                 <option value="full_day">Full Day</option>
                                 <option value="Sick">Sick</option>
                                 <option value="half_day">Half Day</option>
@@ -112,19 +112,18 @@
                         <div class="form-group mb-2">
                             <label>Student Name</label>
                             <input type="text" class="d-none" name="id">
-                            <select name="student_id" class="form-select" type="text" style="width: 100%;" required>
+                            <select name="student_id" class="form-control" type="text" style="width: 100%;" required>
                                 @foreach ($student as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                    <option value="{{$item->id}}">{{$item->name}} || {{ $item->currentClass->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group mb-2">
                             <label>Leave Type</label>
-                            <select name="leave_type" class="form-select" type="text" required>
-                                <option >---Select---</option>
+                            <select name="leave_type" class="form-control" type="text" required>
+                                <option value="full_day">Full Day</option>
                                 <option value="Sick">Sick</option>
-                                <option value="Casual">Casual</option>
-                                <option value="Paid">Paid</option>
+                                <option value="half_day">Half Day</option>
                                 <option value="Unpaid">Unpaid</option>
                             </select>
                         </div>
@@ -134,7 +133,7 @@
                         </div>
                         <div class="form-group mb-2">
                             <label>Leave Status</label>
-                            <select name="leave_status" class="form-select" type="text" required>
+                            <select name="leave_status" class="form-control" type="text" required>
                                 <option >---Select---</option>
                                 <option value="pending">Pending</option>
                                 <option value="approved">Approved</option>
@@ -360,7 +359,7 @@
                 //var data = response.data;
                 $('#editModal').modal('show');
                 $('#editModal input[name="id"]').val(response.data.id);
-                $('#editModal select[name="employee_id"]').val(response.data.student_id);
+                $('#editModal select[name="student_id"]').val(response.data.student_id);
                 $('#editModal select[name="leave_type"]').val(response.data.leave_type);
                 $('#editModal textarea[name="leave_reason"]').val(response.data.leave_reason);
                 $('#editModal select[name="leave_status"]').val(response.data.leave_status);

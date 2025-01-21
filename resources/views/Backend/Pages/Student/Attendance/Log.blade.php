@@ -144,6 +144,8 @@ $(document).ready(function(){
                                     status ='<span class="badge bg-success">Present</span>';
                                 }else if(attendance.status == 'Absent'){
                                     status ='<span class="badge bg-danger">Absent</span>';
+                                }else if(attendance.status == 'Leave'){
+                                    status ='<span class="badge bg-warning">Leave</span>';
                                 }
                                 /*Attendance Time Formate*/
                                 var timeIn = 'N/A';

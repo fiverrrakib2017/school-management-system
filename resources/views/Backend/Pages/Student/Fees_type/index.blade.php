@@ -185,7 +185,7 @@
         {"data":"amount"},
         {"data":"is_monthly"
         ,"render": function(data, type, row) {
-            return data == 1 ? 'One Time' : 'Monthly';
+            return data == 1 ? '<span class="badge bg-warning">One Time</span>' : '<span class="badge bg-success">Monthly</span>';
           }
         },
         {
