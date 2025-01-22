@@ -5,11 +5,11 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
-                  <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                  <button data-toggle="modal" data-target="#addModal" type="button" class="btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Transaction</button>
             </div>
             <div class="card-body">
-              
+
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -40,7 +40,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Transaction 
+                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Transaction
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -49,10 +49,9 @@
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                         <label for="sectionName">Teacher Name</label>
-                            <select type="text" name="teacher_id" class="form-select select2" style="width: 100%;">
+                            <select type="text" name="teacher_id" class="form-control" style="width: 100%;">
                                 <option >---Select---</option>
                                 @foreach ($teachers as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -61,7 +60,7 @@
                         </div>
                         <div class="form-group mb-2">
                         <label for="sectionName">Transaction Type</label>
-                            <select type="text" name="type_name"  class="form-select" style="width: 100%;">
+                            <select type="text" name="type_name"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 <option value="1">Advance</option>
                                 <option value="2">Loan</option>
@@ -76,11 +75,10 @@
                             <label for="sectionName">Transaction Date</label>
                             <input type="date" name="transaction_date" class="form-control">
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Add Form ------->
@@ -102,11 +100,10 @@
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                         <label for="sectionName">Teacher Name</label>
                             <input type="text" name="id" class="d-none">
-                            <select type="text" name="teacher_id" class="form-select select2" style="width: 100%;">
+                            <select type="text" name="teacher_id" class="form-control" style="width: 100%;">
                                 <option>---Select Teacher---</option>
                                 @foreach ($teachers as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -115,7 +112,7 @@
                         </div>
                         <div class="form-group mb-2">
                         <label for="sectionName">Transaction Type</label>
-                            <select type="text" name="type_name"  class="form-select" style="width: 100%;">
+                            <select type="text" name="type_name"  class="form-control" style="width: 100%;">
                                 <option value="">---Select---</option>
                                 <option value="1">Advance</option>
                                 <option value="2">Loan</option>
@@ -130,11 +127,10 @@
                             <label for="sectionName">Transaction Date</label>
                             <input type="date" name="transaction_date" class="form-control">
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Update Form ------->
@@ -152,13 +148,13 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <a class="close" data-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
@@ -213,7 +209,7 @@
           "data":null,
           render:function(data,type,row){
               return `
-              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button> 
+              <button type="button" class="btn btn-primary btn-sm" name="edit_button" data-id="${row.id}"><i class="fa fa-edit"></i></button>
               <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>
             `;
           }
@@ -238,7 +234,7 @@
     //     }
     //   });
     // }
-    
+
     /* Initialize select2 modals*/
     // initializeSelect2("#addModal");
     // initializeSelect2("#editModal");
@@ -268,11 +264,11 @@
                     }
                 },
                 error: function(xhr) {
-                    if (xhr.status === 422) { 
+                    if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         $.each(errors, function(field, messages) {
                             $.each(messages, function(index, message) {
-                                toastr.error(message); 
+                                toastr.error(message);
                             });
                         });
                     } else {
@@ -351,6 +347,6 @@
     });
 });
 </script>
-  
+
 
 @endsection
