@@ -1,5 +1,5 @@
 <?php
-namespace App\Services; 
+namespace App\Services;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class TeacherService{
             'subject' => 'required|string|max:255',
             'hire_date' => 'required|date',
             'address' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'file|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'father_name' => 'required|string|max:255',
             'mother_name' => 'required|string|max:255',
             'gender' => 'required|string',
@@ -28,7 +28,7 @@ class TeacherService{
             'emergency_contact_name' => 'required|string|max:255',
             'emergency_contact_phone' => 'required|string|max:15',
             'remarks' => 'nullable|string|max:500',
-            'status'=>'required|integer'
+            'status'=>'nullable|integer'
         ];
 
         return Validator::make($request->all(), $rules);
@@ -37,14 +37,14 @@ class TeacherService{
     public static function handleFileUpload(Request $request, $teacher = null) {
         if ($request->hasFile('photo')) {
             if ($teacher && $teacher->photo) {
-                $photoPath = public_path('Backend/uploads/photos/' . $teacher->photo);
+                $photoPath = public_path('uploads/photos/' . $teacher->photo);
                 if (file_exists($photoPath)) {
                     unlink($photoPath);
                 }
             }
             $file = $request->file('photo');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('Backend/uploads/photos'), $filename);
+            $file->move(public_path('uploads/photos'), $filename);
             return $filename;
         }
         return $teacher ? $teacher->photo : null;
@@ -73,6 +73,6 @@ class TeacherService{
         $teacher->emergency_contact_name = $request->emergency_contact_name;
         $teacher->emergency_contact_phone = $request->emergency_contact_phone;
         $teacher->remarks = $request->remarks;
-        $teacher->status = $request->status;
+        $teacher->status = $request->status ?? 1;
     }
 }

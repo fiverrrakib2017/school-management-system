@@ -18,6 +18,7 @@
                         <thead>
                             <tr>
                                 <th class="">No.</th>
+                                <th class="">Images</th>
                                 <th class="">Teacher Name </th>
                                 <th class="">Subject</th>
                                 <th class="">Email Address </th>
@@ -89,6 +90,18 @@
         "columns":[
           {
             "data":"id"
+          },
+          {
+            "data":"photo",
+            render: function(data) {
+                var url;
+                if (data == null || data === '') {
+                    url = "{{ asset('uploads/photos') }}/avatar.png";
+                } else {
+                    url = "{{ asset('uploads/photos') }}/" + data;
+                }
+                return '<img src="' + url + '" style="width: 50px; height: 50px; border-radius: 50%;">';
+            }
           },
           {
             "data":"name",

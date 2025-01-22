@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Backend\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
+use App\Models\Teacher_docs;
 use App\Services\TeacherService;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
-    protected $teacherService=Null; 
+    protected $teacherService=Null;
     public function __construct(TeacherService $teacherService)
     {
         $this->teacherService=$teacherService;
@@ -22,9 +23,9 @@ class TeacherController extends Controller
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        
+
         $columnsForOrderBy = ['id', 'name', 'gender'];
-        
+
         $orderByColumn = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
 
@@ -69,6 +70,21 @@ class TeacherController extends Controller
         $teacher = new Teacher();
         TeacherService::setTeacherData($teacher, $request, $filename);
         $teacher->save();
+        /* Check if documents are uploaded */
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $index => $file) {
+                $filename = time() . '_' . $index . '.' . $file->getClientOriginalExtension();
+                $filePath = 'uploads/documents/';
+                $file->move(public_path($filePath), $filename);
+
+                /* Save the document details in the database */
+                $docs = new Teacher_docs();
+                $docs->teacher_id = $teacher->id;
+                $docs->docs_name = $filename;
+                $docs->file_path = $filePath . $filename;
+                $docs->save();
+            }
+        }
 
         /* Return success response*/
         return response()->json([
@@ -103,6 +119,20 @@ class TeacherController extends Controller
         $filename = TeacherService::handleFileUpload($request, $teacher);
         TeacherService::setTeacherData($teacher, $request, $filename);
         $teacher->update();
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $index => $file) {
+                $filename = time() . '_' . $index . '.' . $file->getClientOriginalExtension();
+                $filePath = 'uploads/documents/';
+                $file->move(public_path($filePath), $filename);
+
+                /* Save the document details in the database */
+                $docs = new Teacher_docs();
+                $docs->teacher_id = $teacher->id;
+                $docs->docs_name = $filename;
+                $docs->file_path = $filePath . $filename;
+                $docs->save();
+            }
+        }
 
         return response()->json([
             'success' => true,
@@ -123,7 +153,7 @@ class TeacherController extends Controller
         /*Check if the Teacher has a photo*/
         if ($teacher->photo) {
             /* Delete the Teacher's photo file*/
-            $photoPath = public_path('Backend/uploads/photos/' . $teacher->photo);
+            $photoPath = public_path('uploads/photos/' . $teacher->photo);
             if (file_exists($photoPath)) {
                 unlink($photoPath);
             }
