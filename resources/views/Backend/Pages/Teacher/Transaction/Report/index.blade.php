@@ -10,21 +10,29 @@
             <div class="card-body">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
-                        <form action="{{ route('admin.teacher.transaction.report_generate') }}" method="POST" id="" class="form-inline">
+                        <form action="{{ route('admin.teacher.transaction.report_generate') }}" method="POST" id="" class="form">
                             @csrf
-                            <div class="row mb-3">
+                            <div class="row">
                                 <div class="col-md-6">
-                                    <label for="from_date" class="form-label">From Date</label>
-                                    <input type="date" name="from_date" id="from_date" class="form-control shadow-sm" required>
+                                    <div class="form-group">
+                                        <label for="from_date">From Date</label>
+                                        <input type="date" name="from_date" id="from_date" class="form-control" required>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="to_date" class="form-label">To Date</label>
-                                    <input type="date" name="to_date" id="to_date" class="form-control shadow-sm" value="{{ date('Y-m-d') }}" required>
+                                    <div class="form-group">
+                                        <label for="to_date">To Date</label>
+                                        <input type="date" name="to_date" id="to_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button type="submit" class="btn btn-success me-md-2">Submit</button>
-                                <button type="reset" class="btn btn-danger">Reset</button>
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check-circle"></i> Submit
+                                </button>
+                                <button type="reset" class="btn btn-danger">
+                                    <i class="fas fa-times-circle"></i> Reset
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -121,7 +129,7 @@
                 // }
             },
             error: function(xhr) {
-                if (xhr.status === 422) { 
+                if (xhr.status === 422) {
                      /* Validation error*/
                     var errors = xhr.responseJSON.errors;
 
@@ -129,11 +137,11 @@
                     $.each(errors, function(field, messages) {
                         $.each(messages, function(index, message) {
                             /* Display each error message*/
-                            toastr.error(message); 
+                            toastr.error(message);
                         });
                     });
                 } else {
-                    /*General error message*/ 
+                    /*General error message*/
                     toastr.error('An error occurred. Please try again.');
                 }
             },
@@ -179,6 +187,6 @@
         };
     }
 </script>
-  
+
 
 @endsection
