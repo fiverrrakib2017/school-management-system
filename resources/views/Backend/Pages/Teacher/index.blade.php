@@ -11,16 +11,19 @@
                       Add New Teacher</a>
             </div>
             <div class="card-body">
-                
+
 
                 <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
+                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Teacher Name </th>
-                                <th class="">Phone Number</th>
                                 <th class="">Subject</th>
+                                <th class="">Email Address </th>
+                                <th class="">Phone Number</th>
+                                <th class="">Gender</th>
+                                <th class="">Joining Date</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -45,13 +48,15 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
@@ -92,10 +97,19 @@
             }
           },
           {
+            "data":"subject"
+          },
+          {
+            "data":"email"
+          },
+          {
             "data":"phone"
           },
           {
-            "data":"subject"
+            "data":"gender"
+          },
+          {
+            "data":"hire_date"
           },
           {
             "data":null,

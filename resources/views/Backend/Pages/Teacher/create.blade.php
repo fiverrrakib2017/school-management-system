@@ -9,138 +9,244 @@
         max-width: 200px;
         max-height: 200px;
     }
+    .small, small {
+    color: red !important;
+}
     </style>
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12 ">
-        <div class="card">
-            <div class="card-header">
-                <h4>Add New Teacher</h4>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('admin.teacher.store') }}" method="post" enctype="multipart/form-data" id="addForm">
-                    @csrf
-                    <!-- Teacher Information -->
-                    <h6  style="color:#777878 ">Personal Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" name="name" placeholder="Enter full name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="Enter email" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="phone">Phone Number-1</label>
-                            <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="phone">Phone Number-2</label>
-                            <input type="tel" class="form-control" name="phone_2" placeholder="Enter phone number" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="subject">Subject</label>
-                            <input type="text" class="form-control" name="subject" placeholder="Enter subject" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="hire_date">Hire Date</label>
-                            <input type="date" class="form-control" name="hire_date" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="address">Address</label>
-                            <input type="text" class="form-control" name="address" placeholder="Enter address" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="photo">Photo</label>
-                            <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
-                            <img id="preview" src="#" alt="Image Preview" style="max-width: 100px; max-height: 100px;" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="father_name">Father's Name</label>
-                            <input type="text" class="form-control" name="father_name" placeholder="Enter father's name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="mother_name">Mother's Name</label>
-                            <input type="text" class="form-control" name="mother_name" placeholder="Enter mother's name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="gender">Gender</label>
-                            <select class="form-control" name="gender" required>
-                                <option value="">Select gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="birth_date">Birth Date</label>
-                            <input type="date" class="form-control" name="birth_date" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="national_id">National ID</label>
-                            <input type="text" class="form-control" name="national_id" placeholder="Enter national ID" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="religion">Religion</label>
-                            <input type="text" class="form-control" name="religion" placeholder="Enter religion" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="blood_group">Blood Group</label>
-                            <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="highest_education">Highest Education</label>
-                            <input type="text" class="form-control" name="highest_education" placeholder="Enter highest education" required>
+    <div class="card card-primary m-auto">
+        <form action="{{ route('admin.teacher.store') }}" method="post" id="addForm" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="update_id" value=""/>
+            <div class="card-body" >
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Personal Information </h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Full Name</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="name" placeholder="Enter Fullname"  required>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Email Address</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="email" placeholder="Enter Email"  required>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Phone Number-1</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="phone"  placeholder="Enter Phone Number 1" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Phone Number-2</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" placeholder="Enter Phone Number 2" name="phone_2" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Subject</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" placeholder="Enter Subject" name="subject" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Hire Date</label><small class="req"> *</small>
+                                            <input type="date" class="form-control"name="hire_date" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Address</label><small class="req"> *</small>
+                                            <input type="text"  placeholder="Enter Address" class="form-control"name="address" required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Photo</label><small class="req"> *</small><br />
+                                            <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
+                                            <img id="preview" class="img-fluid" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Father's Name</label><small class="req"> *</small>
+                                            <input type="text"  placeholder="Enter Father's Name" class="form-control" name="father_name" placeholder="Enter Father's Name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Mother's Name</label><small class="req"> *</small>
+                                            <input type="text"  placeholder="Enter Mother's Name" class="form-control" name="mother_name" placeholder="Enter Mother's Name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Gender</label><small class="req"> *</small>
+                                            <select type="text"  class="form-control" name="gender" required>
+                                                <option value="">Select gender</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Birth Date</label><small class="req"> *</small>
+                                            <input type="date" class="form-control" name="birth_date" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">National ID</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="national_id" placeholder="Enter national ID" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Religion</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="religion" placeholder="Enter Religion" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Blood Group</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="blood_group" placeholder="Enter Blood Group" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Blood Group</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="blood_group" placeholder="Enter Blood Group" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label> Highest Education</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="highest_education" placeholder="Enter Highest Education">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Professional Information</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Previous School</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="previous_school" placeholder="Enter Previous School" required>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Designation</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="designation" placeholder="Enter Designation" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="guardian_name">Salary</label>
+                                            <input type="text" class="form-control" name="salary" placeholder="Enter salary" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Emergency Contact Information</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Emergency Contact Name</label><small class="req"> *</small>
+                                            <input type="text" class="form-control"  name="emergency_contact_name" placeholder="Enter Emergency Contact Name" required>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Emergency Contact Phone</label><small class="req"> *</small>
+                                            <input type="text" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="guardian_name">Remarks</label>
+                                            <textarea type="text" class="form-control" name="remarks"  placeholder="Enter any remarks" ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="upload_documents_hide_show">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="tshadow bozero">
+                                            <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Upload Documents</h4>
+                                            <div class="row around10">
+                                                <div class="col-md-6">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <th style="width: 10px">#</th>
+                                                                <th>Title</th>
+                                                                <th>Documents</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>1.</td>
+                                                                <td>Birth Certificate</td>
+                                                                <td>
+                                                                    <input class="form-control" type="file" name="documents[]" id="doc1" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <th style="width: 10px">#</th>
+                                                                <th>Title</th>
+                                                                <th>Documents</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2.</td>
+                                                                <td>CV Or Resume</td>
+                                                                <td>
+                                                                    <input class="filestyle form-control" type="file" name="documents[]" id="doc2" style="padding-top:3px;">
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <!-- Professional Information -->
-                    <h6  style="color:#777878 ">Professional Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="previous_school">Previous School</label>
-                            <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="designation">Designation</label>
-                            <input type="text" class="form-control" name="designation" placeholder="Enter designation" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="salary">Salary</label>
-                            <input type="number" class="form-control" name="salary" placeholder="Enter salary" required>
-                        </div>
+                    <div class="card-footer">
+                        <button type="button" onclick="history.back();" class="btn btn-danger">Back</button>
+                        <button type="submit" class="btn btn-success">Add Teacher</button>
                     </div>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <!-- Emergency Contact Information -->
-                    <h6  style="color:#777878 ">Emergency Contact Information</h6>
-                    <hr style="border-top: 1px dashed #d3c6c6;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="emergency_contact_name">Emergency Contact Name</label>
-                            <input type="text" class="form-control" name="emergency_contact_name" placeholder="Enter emergency contact name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="emergency_contact_phone">Emergency Contact Phone</label>
-                            <input type="tel" class="form-control" name="emergency_contact_phone" placeholder="Enter emergency contact phone" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="remarks">Remarks</label>
-                            <textarea class="form-control" name="remarks" rows="1" placeholder="Enter any remarks"></textarea>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="">Status</label>
-                            <select class="form-select" name="status">
-                                <option value="">---Select---</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit Now</button>
                 </form>
             </div>
         </div>
@@ -153,7 +259,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        // $("select[name='gender']").select2();
+         $("select[name='gender']").select2();
         // $("select[name='status']").select2();
 
         $('#photo').change(function() {
@@ -196,13 +302,13 @@
                 error: function(xhr, status, error) {
                     /* Handle errors */
                     console.error(xhr.responseText);
-                    if (xhr.status === 422) { // Laravel validation error
+                    if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         for (var error in errors) {
                             toastr.error(errors[error][0]);
                         }
                     } else {
-                        toastr.error('An error occurred while processing the request.');
+                        toastr.error('Error Request');
                     }
                 },
                 complete: function() {
@@ -216,15 +322,4 @@
 
     });
   </script>
-
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
-
 @endsection
