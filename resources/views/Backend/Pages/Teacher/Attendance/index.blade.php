@@ -5,7 +5,7 @@
    @media (min-width: 768px) {
     .col-md-6{
         width: 100% !important;
-    }    
+    }
    }
 </style>
 
@@ -21,7 +21,7 @@
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" class="form-check-input" id="selectAll"> </th>
+                                <th><input type="checkbox" class="Custom Checkbox" id="selectAll"> </th>
                                 <th class="">Teacher Name </th>
                                 <th class="">Phone Number</th>
                                 <th class="">Subject</th>
@@ -49,7 +49,7 @@
 @section('script')
 <script type="text/javascript">
 $(document).ready(function(){
-    
+
 
     // Initialize DataTable
     var table = $("#datatable1").DataTable({
@@ -76,7 +76,7 @@ $(document).ready(function(){
             {
                 "data": "id",
                 render: function(data, type, row) {
-                    return '<input type="checkbox" name="teacher_ids[]" value="' + row.id + '" class="student-checkbox form-check-input" ' + (row.attendance_status === 'Present' ? 'checked' : '') + '>';
+                    return '<input type="checkbox" name="teacher_ids[]" value="' + row.id + '" class="student-checkbox Custom Checkbox" ' + (row.attendance_status === 'Present' ? 'checked' : '') + '>';
                 }
             },
             {
@@ -103,7 +103,7 @@ $(document).ready(function(){
         ],
     });
 
-    /*** Class filter changes */ 
+    /*** Class filter changes */
     $(document).on('change', '#search_class_id', function() {
         table.ajax.reload(null, false);
     });
@@ -130,6 +130,9 @@ $(document).ready(function(){
         }
     });
     $(document).on('click', '#submitAttendance', function() {
+        $('#submitAttendance').prop('disabled', true).html(
+            '<i class="fa fa-spinner fa-spin"></i> Submitting...'
+        );
         var selectedStudents = [];
         $('.student-checkbox:checked').each(function() {
             selectedStudents.push($(this).val());
@@ -148,6 +151,9 @@ $(document).ready(function(){
                 },
                 error: function(xhr, status, error) {
                     toastr.error('An error occurred. Please try again.');
+                },
+                complete: function() {
+                    $('#submitAttendance').prop('disabled', false).html('Submit Attendance');
                 }
             });
         } else {

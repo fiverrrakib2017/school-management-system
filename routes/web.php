@@ -228,7 +228,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::post('/delete','delete')->name('admin.teacher.delete');
             Route::get('/view/{id}','view')->name('admin.teacher.view');
         });
-        /*Student Fees Type */
+        /*Teacher Transaction  */
         Route::prefix('Transaction')->group(function(){
             Route::controller(TeacherTransaction_controller::class)->group(function(){
                 Route::get('/index','index')->name('admin.teacher.transaction.index');
@@ -241,6 +241,19 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/report_generate','report_generate')->name('admin.teacher.transaction.report_generate');
             });
         });
+        /*Teacher Leave  */
+        Route::prefix('leave')->group(function(){
+            Route::controller(Leave_controller::class)->group(function(){
+                Route::get('/list','index')->name('admin.teacher.leave.index');
+                Route::get('/all_data','all_data')->name('admin.teacher.leave.all_data');
+                // Route::post('/store','store')->name('admin.teacher.leave.store');
+                // Route::get('/edit/{id}','edit')->name('admin.teacher.leave.edit');
+                // Route::post('/update/{id}','update')->name('admin.teacher.leave.update');
+                // Route::post('/delete','delete')->name('admin.teacher.leave.delete');
+                // Route::get('/view/{id}','view')->name('admin.teacher.leave.view');
+            });
+        });
+        /*Teacher Attendance  */
         Route::prefix('attendence')->group(function(){
             Route::controller(TeacherAttendance_controller::class)->group(function(){
                 Route::get('/index','index')->name('admin.teacher.attendence.index');

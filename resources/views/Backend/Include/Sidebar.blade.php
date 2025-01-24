@@ -103,6 +103,9 @@
                  <a href="{{ route('admin.teacher.attendence.index') }}" class="nav-link {{($route=='admin.teacher.attendence.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance</p></a>
               </li>
               <li class="nav-item">
+                 <a href="{{ route('admin.teacher.leave.index') }}" class="nav-link {{($route=='admin.teacher.leave.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Leave</p></a>
+              </li>
+              <li class="nav-item">
                  <a href="{{ route('admin.teacher.attendence.log') }}" class="nav-link {{($route=='admin.teacher.attendence.log') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance Report</p></a>
               </li>
             </ul>
