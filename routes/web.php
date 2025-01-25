@@ -30,6 +30,7 @@ use App\Http\Controllers\Backend\Student\Exam_controller;
 use App\Http\Controllers\Backend\Student\Exam_result_controller;
 use App\Http\Controllers\Backend\Student\Fees_type_controller;
 use App\Http\Controllers\Backend\Student\Leave_controller;
+use App\Http\Controllers\Backend\Teacher\Leave\Leave_controller as teacher_leave_controller;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\Shift_controller;
 use App\Http\Controllers\Backend\Student\StudentController;
@@ -243,14 +244,13 @@ Route::group(['middleware'=>'admin'],function(){
         });
         /*Teacher Leave  */
         Route::prefix('leave')->group(function(){
-            Route::controller(Leave_controller::class)->group(function(){
-                Route::get('/list','index')->name('admin.teacher.leave.index');
+            Route::controller(teacher_leave_controller::class)->group(function(){
+                Route::get('/index','index')->name('admin.teacher.leave.index');
                 Route::get('/all_data','all_data')->name('admin.teacher.leave.all_data');
-                // Route::post('/store','store')->name('admin.teacher.leave.store');
-                // Route::get('/edit/{id}','edit')->name('admin.teacher.leave.edit');
-                // Route::post('/update/{id}','update')->name('admin.teacher.leave.update');
-                // Route::post('/delete','delete')->name('admin.teacher.leave.delete');
-                // Route::get('/view/{id}','view')->name('admin.teacher.leave.view');
+                Route::post('/store','store')->name('admin.teacher.leave.store');
+                Route::post('/update','update')->name('admin.teacher.leave.update');
+                Route::post('/delete','delete')->name('admin.teacher.leave.delete');
+                Route::get('/get_leave/{id}','get_leave')->name('admin.teacher.leave.get_leave');
             });
         });
         /*Teacher Attendance  */

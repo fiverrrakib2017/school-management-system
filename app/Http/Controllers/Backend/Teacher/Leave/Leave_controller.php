@@ -2,11 +2,12 @@
 namespace App\Http\Controllers\Backend\Teacher\Leave;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student;
+use App\Models\Student_leave;
 use App\Models\Teacher;
-use App\Models\Teacher_transaction;
-use App\Services\StudentService;
+use App\Models\Teacher_leave;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class Leave_controller extends Controller
@@ -14,24 +15,26 @@ class Leave_controller extends Controller
 
     public function index()
     {
-       $teachers=Teacher::get();
-       return view('Backend.Pages.Teacher.Leave.index',compact('teachers'));
+        $teacher=Teacher::latest()->get();
+       return view('Backend.Pages.Teacher.Leave.index',compact('teacher'));
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'type_name', 'amount'];
+        $columnsForOrderBy = ['id', 'name', 'leave_type','leave_reason','status','start_date', 'end_date'];
         $orderByColumnIndex = $request->order[0]['column'];
         $orderDirection = $request->order[0]['dir'];
         $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
 
         /*Start building the query*/
-        $query = Teacher_transaction::with('teacher');
+        $query = Teacher_leave::with('teacher');
 
         /*Apply the search filter*/
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('type', 'like', "%$search%")
-                  ->orWhere('amount', 'like', "%$search%")
+                $q->where('leave_type', 'like', "%$search%")
+                ->where('leave_reason', 'like', "%$search%")
+                  ->orWhere('start_date', 'like', "%$search%")
+                  ->orWhere('end_date', 'like', "%$search%")
                   ->orWhereHas('teacher', function($q) use ($search) {
                       $q->where('name', 'like', "%$search%");
                   });
@@ -39,7 +42,7 @@ class Leave_controller extends Controller
         }
 
         /* Get the total count of records*/
-        $totalRecords = Teacher_transaction::count();
+        $totalRecords = Teacher_leave::count();
 
         /* Get the count of filtered records*/
         $filteredRecords = $query->count();
@@ -60,11 +63,13 @@ class Leave_controller extends Controller
     }
     public function store(Request $request){
         /* Validate the form data*/
-        $rules=[
+        $rules = [
             'teacher_id' => 'required|integer',
-            'type_name' => 'required|integer',
-            'amount' => 'required|numeric|min:0',
-            'transaction_date' => 'required|date',
+            'leave_type' => 'required|string',
+            'leave_reason' => 'required|string',
+            'leave_status' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -76,13 +81,15 @@ class Leave_controller extends Controller
         }
 
 
-        /* Create a new instance*/
-
-        $object = new Teacher_transaction();
+        /* Create a new Instance*/
+        $object = new Teacher_leave();
         $object->teacher_id = $request->teacher_id;
-        $object->type = $request->type_name;
-        $object->amount = $request->amount;
-        $object->transaction_date = $request->transaction_date;
+        $object->leave_type = $request->leave_type;
+        $object->leave_reason = $request->leave_reason;
+        $object->leave_status = $request->leave_status;
+        $object->start_date = $request->start_date;
+        $object->end_date = $request->end_date;
+
         /*Save to the database table*/
         $object->save();
         return response()->json([
@@ -90,71 +97,63 @@ class Leave_controller extends Controller
             'message' => 'Added Successfully'
         ]);
     }
-    public function get_transaction($id,){
-        $data = Teacher_transaction::find($id);
+    public function get_leave($id){
+        $data = Teacher_leave::find($id);
         return response()->json([
             'success' => true,
             'data' => $data
         ]);
     }
-
     public function update(Request $request){
-        /*Validate the incoming request data*/
-        $validator = Validator::make($request->all(), [
-            'teacher_id' => 'required|integer',
-            'type_name' => 'required|integer',
-            'amount' => 'required|numeric|min:0',
-            'transaction_date' => 'required|date',
-        ]);
+        /* Validate the form data */
+        $rules = [
+            'teacher_id' => 'required|exists:teachers,id',
+            'leave_type' => 'required|string',
+            'leave_reason' => 'required|string',
+            'leave_status' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
-        $object =Teacher_transaction::find($request->id);
-        $object->teacher_id = $request->teacher_id;
-        $object->type = $request->type_name;
-        $object->amount = $request->amount;
-        $object->transaction_date = $request->transaction_date;
-        /*Update to the database table*/
+
+        /* Find the existing instance */
+        $object = Teacher_leave::find($request->id);
+        if (!$object) {
+            return response()->json([
+                'success' => false,
+                'message' => 'not found'
+            ], 404);
+        }
+
+        /* Update the Instance */
+        $object->leave_type = $request->leave_type;
+        $object->leave_reason = $request->leave_reason;
+        $object->leave_status = $request->leave_status;
+        $object->start_date = $request->start_date;
+        $object->end_date = $request->end_date;
+
+        /* Save the changes to the database table */
         $object->update();
+
         return response()->json([
             'success' => true,
-            'message' => 'Update Successfully'
+            'message' => 'Updated Successfully'
         ]);
     }
+
     public function delete(Request $request){
-        $object = Teacher_transaction::find($request->id);
+        $object = Teacher_leave::find($request->id);
         $object->delete();
         return response()->json([
             'success' => true,
             'message' => 'Delete Successfully'
         ]);
-    }
-    public function report(){
-        $teachers=Teacher::get();
-        return view('Backend.Pages.Teacher.Transaction.Report.index',compact('teachers'));
-    }
-    public function report_generate(Request $request){
-        /* Validate date inputs*/
-        $request->validate([
-            'from_date' => 'required|date',
-            'to_date' => 'required|date|after_or_equal:from_date',
-        ]);
-
-        /* Get data based on selected date range*/
-        $from_date = $request->from_date;
-        $to_date = $request->to_date;
-
-    /*Retrieve transactions within the specified date range*/
-        $transactions = DB::table('teacher_transactions')
-        ->join('teachers', 'teacher_transactions.teacher_id', '=', 'teachers.id')
-        ->select('teachers.name as teacher_name', 'teacher_transactions.type', 'teacher_transactions.amount', 'teacher_transactions.transaction_date')
-        ->whereBetween('transaction_date', [$from_date, $to_date])
-        ->orderBy('teacher_transactions.transaction_date', 'asc')
-        ->get()
-        ->groupBy('teacher_name');
-        return view('Backend.Pages.Teacher.Transaction.Report.index', compact('transactions', 'from_date', 'to_date'));
     }
 }
