@@ -71,7 +71,7 @@
 
                 <div class="col-md-3 col-sm-12 mb-3">
                   <label for="date" class="form-label">Previous Due</label>
-                  <input readonly type="text" class="form-control" value="00"/>
+                  <input readonly type="text" name="previous_due_amount" class="form-control" value="00"/>
                 </div>
                 <div class="col-md-3 col-sm-12 mb-3">
                   <label for="date" class="form-label">Collection Date:</label>
@@ -165,6 +165,7 @@
 
 @section('script')
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
+<script  src="{{ asset('Backend/assets/js/custom_function.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
 
@@ -207,6 +208,7 @@
                data: { student_id: studentId  },
                success: function (response) {
                     getFeesType(response.current_class.id);
+                    get_due_amount(studentId);
                },
                error: function (xhr, status, error) {
                    console.error('Error:', error);
@@ -229,6 +231,20 @@
                 $.each(response.data, function (index, item) {
                     $('#billing_item').append('<option value="' + item.id + '">' + item.type_name + '</option>');
                 });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+    function get_due_amount(student_id){
+        var editUrl = '{{ route("admin.student.get_student_due_amount", ":id") }}';
+        var url = editUrl.replace(':id', student_id);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                $("input[name='previous_due_amount']").val(response.data);
             },
             error: function (xhr, status, error) {
                 console.error('Error:', error);

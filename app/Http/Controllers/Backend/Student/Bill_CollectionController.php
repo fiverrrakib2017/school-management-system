@@ -17,8 +17,8 @@ class Bill_CollectionController extends Controller
 
     public function index()
     {
-       $student=Student::get();
-       return view('Backend.Pages.Student.Bill_Collection.index',compact('student'));
+       $class=Student_class::get();
+       return view('Backend.Pages.Student.Bill_Collection.index',compact('class'));
     }
     public function create_bill(){
         $student=Student::latest()->get();
@@ -60,8 +60,11 @@ class Bill_CollectionController extends Controller
         /* Get the count of filtered records*/
         $filteredRecords = $query->count();
 
-        if ($request->has('student_id') && !empty($request->student_id)) {
-            $query->where('student_id', $request->student_id);
+        /* Filter by class_id */
+        if ($request->has('class_id') && !empty($request->class_id)) {
+            $query->whereHas('student.currentClass', function ($q) use ($request) {
+                $q->where('id', $request->class_id);
+            });
         }
         /* Apply ordering, pagination and get the data*/
         $items = $query->orderBy($orderByColumn, $orderDirection)
@@ -202,5 +205,20 @@ class Bill_CollectionController extends Controller
             'success' => true,
             'message' => 'Delete Successfully'
         ]);
+    }
+    public function get_student_due_amount($student_id){
+        if(!empty($student_id)){
+           $due_amount= Student_bill_collection::where('student_id',$student_id)->sum('due_amount');
+           $formattedAmount = round($due_amount);
+           return response()->json([
+               'success' => true,
+               'data' => $formattedAmount
+           ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => 'No data found'
+            ]);
+        }
     }
 }

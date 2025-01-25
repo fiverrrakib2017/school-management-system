@@ -6,12 +6,13 @@
     <div class="col-md-12 ">
         <div class="card">
         <div class="card-header">
-          <a href="{{route('admin.student.bill_collection.create')}}" class="btn btn-success "><i class="mdi mdi-account-plus"></i>
+          <a href="{{route('admin.student.bill_collection.create')}}" class="btn btn-success ">  <i class="	fas fa-donate" aria-hidden="true"></i>
           Add Bill Collection</a>
           </div>
             <div class="card-body">
                 <div class="table table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <table id="datatable1" class="table table-bordered dt-responsive nowrap"
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th class="">No.</th>
@@ -67,17 +68,16 @@
 <script  src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    var classes = @json($student);
-    var student_filter = '<label style="margin-left: 10px;">';
-    student_filter += '<select id="search_student_id" class="form-select select2">';
-    student_filter += '<option value="">--Select Student--</option>';
+    var classes = @json($class);
+    var class_filter = '<label style="margin-left: 10px;">';
+    class_filter += '<select id="search_class_id" class="form-control">';
+    class_filter += '<option value="">--Select Class--</option>';
     classes.forEach(function(item) {
-        student_filter += '<option value="' + item.id + '">' + item.name + '</option>';
+        class_filter += '<option value="' + item.id + '">' + item.name + '</option>';
     });
-    student_filter += '</select></label>';
+    class_filter += '</select></label>';
     setTimeout(() => {
-        $('.dataTables_length').append(student_filter);
-        $('.select2').select2(); 
+        $('.dataTables_length').append(class_filter);
     }, 100);
     var table = $("#datatable1").DataTable({
       "processing":true,
@@ -87,7 +87,7 @@
         url: "{{ route('admin.student.bill_collection.all_data') }}",
         type: 'GET',
         data: function(d) {
-          d.student_id = $('#search_student_id').val();
+          d.class_id = $('#search_class_id').val();
         },
         beforeSend: function(request) {
           request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
@@ -112,7 +112,7 @@
         {"data":"paid_amount"},
         {"data":"due_amount"},
         {
-          "data":"due_amount", 
+          "data":"due_amount",
           render:function(data,type,row){
             if(data > 0){
               return '<span class="badge bg-danger">Due</span>';
@@ -142,7 +142,7 @@
     });
 
     /* Search filter reload*/
-    $(document).on('change', '#search_student_id', function() {
+    $(document).on('change', '#search_class_id', function() {
       table.ajax.reload(null, false);
     })
 
@@ -181,6 +181,6 @@
 });
 
   </script>
-  
+
 
 @endsection
