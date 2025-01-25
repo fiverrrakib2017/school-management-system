@@ -7,11 +7,12 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-body">
-                <button data-bs-toggle="modal" data-bs-target="#assignModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                <button data-toggle="modal" data-target="#assignModal" type="button" class=" btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Assign To</button>
 
                 <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
+                    <table id="datatable1"  class="table table-bordered dt-responsive nowrap"
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th>ID</th>
