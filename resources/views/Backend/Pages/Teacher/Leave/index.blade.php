@@ -267,9 +267,9 @@
     });
 
     /* Search filter reload*/
-    $('#search_class_id').change(function() {
-        table.ajax.reload(null, false);
-    });
+    // $('#search_class_id').change(function() {
+    //     table.ajax.reload(null, false);
+    // });
     function formatDate(dateString) {
         if (dateString) {
             const dateObj = new Date(dateString);
@@ -281,22 +281,7 @@
         }
         return '';
     }
-    /* Initialize select2 for modal dropdowns*/
-    function initializeSelect2(modalId) {
-      $(modalId).on('show.bs.modal', function (event) {
-        if (!$("select[name='teacher_id']").hasClass("select2-hidden-accessible")) {
-            $("select[name='teacher_id']").select2({
-                dropdownParent: $(modalId),
-                placeholder: "Select Teacher"
-            });
-        }
-      });
-    }
-
-    /* Initialize select2 modals*/
-     initializeSelect2("#addModal");
-     initializeSelect2("#editModal");
-
+   
     /* General form submission handler*/
     function handleFormSubmit(modalId, form) {
         $(modalId + ' form').submit(function(e){

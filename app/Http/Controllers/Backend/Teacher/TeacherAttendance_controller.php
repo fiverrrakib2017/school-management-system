@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use App\Models\Teacher_attendance;
+use App\Models\Teacher_leave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -12,7 +13,7 @@ class TeacherAttendance_controller extends Controller
 {
     public function index()
     {
-      
+
        return view('Backend.Pages.Teacher.Attendance.index');
     }
     public function all_data(Request $request){
@@ -20,7 +21,7 @@ class TeacherAttendance_controller extends Controller
         $columnsForOrderBy = ['id', 'name', 'phone','subject','designation','created_at'];
         $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
-    
+
         $query = Teacher::when($search, function ($query) use ($search) {
 
             $query->where('name', 'like', "%$search%")
@@ -34,15 +35,15 @@ class TeacherAttendance_controller extends Controller
                 //       $query->where('name', 'like', "%$search%");
                 //   });
         });
-    
-        
-    
+
+
+
         $total = $query->count();
         $items = $query->orderBy($orderByColumn, $orderDirection)
                        ->skip($request->start)
                        ->take($request->length)
                        ->get();
-    
+
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
@@ -51,49 +52,62 @@ class TeacherAttendance_controller extends Controller
         ]);
     }
     public function store(Request $request){
-        $teacherIds = $request->input('student_ids');
+        $teacherIds = $request->input('teacher_ids', []);
         $today = now()->format('Y-m-d');
-        if (!empty($teacherIds)) {
-            foreach ($teacherIds as $teacherId) {
-                $attendanceExists = Teacher_attendance::where([
-                    ['teacher_id', '=', $teacherId],
+        $allTeachers = Teacher::pluck('id')->toArray();
+        if(!empty($allTeachers)){
+            foreach($allTeachers as $teacher_id){
+                $attendance_exists=Teacher_attendance::where([
+                    ['teacher_id', '=', $teacher_id],
                     ['attendance_date', '=', $today]
                 ])->exists();
-                if (!$attendanceExists) {
+                $is_teacher_leave=Teacher_leave::where([
+                    ['teacher_id', '=', $teacher_id],
+                    ['start_date', '<=', $today],
+                    ['end_date', '>=', $today],
+                    ['leave_status', '=', 'approved']
+                ])->exists();
+                if(!$attendance_exists){
                     $object = new Teacher_attendance();
-                    $object->teacher_id = $teacherId;
-                    $object->attendance_date =now();
-                    $object->shift_id = NULL;
-                    $object->time_in = Carbon::now()->format('H:i:s'); 
-                    $object->time_out = Carbon::now()->format('H:i:s'); 
-                    $object->status ='Present';
-                    /*Save to the database table*/
+                    $object->teacher_id = $teacher_id;
+                    $object->attendance_date = now();
+                    $object->shift_id = null;
+                    $object->time_in = null;
+                    $object->time_out = null;
+
+                    if (in_array($teacher_id, $teacherIds)) {
+                        $object->status = 'Present';
+                        $object->time_in = Carbon::now()->format('H:i:s');
+                    } elseif ($is_teacher_leave) {
+                        $object->status = 'Leave';
+                    } else {
+                        $object->status = 'Absent';
+                    }
                     $object->save();
                 }
             }
             return response()->json([
                 'success' => true,
-                'message' => 'Attendance marked successfully'
+                'message' => 'Attendance marked successfully',
             ]);
         }
         return response()->json([
-            'success'=>false,
-            'message' => 'No Teacher selected.'
+            'success' => false,
+            'message' => 'No teachers found in the system.',
         ], 400);
+
     }
-    
-   
 
     public function attendance_log(){
         return view('Backend.Pages.Teacher.Attendance.Log');
     }
     public function attendance_log_all_data(Request $request) {
         $search = $request->search['value'];
-        
+
         $columnsForOrderBy = ['id', 'teacher.name', 'teacher.phone','teacher.subject', 'teacher.designation', 'status','attendance_date', 'time_in', 'created_at'];
         $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
-    
+
         $query = Teacher_attendance::with('teacher')
             ->when($search, function ($query) use ($search) {
                 $query->where('status', 'like', "%$search%")
@@ -112,7 +126,7 @@ class TeacherAttendance_controller extends Controller
                         $query->where('phone', 'like', "%$search%");
                     });
             });
-    
+
         if ($request->has('date_range') && !empty($request->date_range)) {
             $dateRange = explode(' - ', $request->date_range);
             $startDate = trim($dateRange[0]);
@@ -126,7 +140,7 @@ class TeacherAttendance_controller extends Controller
                        ->skip($request->start)
                        ->take($request->length)
                        ->get();
-    
+
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,

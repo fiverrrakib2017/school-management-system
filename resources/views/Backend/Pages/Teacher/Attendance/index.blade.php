@@ -60,8 +60,8 @@ $(document).ready(function(){
             url: "{{ route('admin.teacher.attendence.all_data') }}",
             type: 'GET',
             data: function(d) {
-                d.class_id = $('#search_class_id').val();
-                d.section_id = $('#search_section_id').val();
+                // d.class_id = $('#search_class_id').val();
+                // d.section_id = $('#search_section_id').val();
             },
             beforeSend: function(request) {
                 request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
@@ -76,7 +76,7 @@ $(document).ready(function(){
             {
                 "data": "id",
                 render: function(data, type, row) {
-                    return '<input type="checkbox" name="teacher_ids[]" value="' + row.id + '" class="student-checkbox Custom Checkbox" ' + (row.attendance_status === 'Present' ? 'checked' : '') + '>';
+                    return '<input type="checkbox" name="teacher_ids[]" value="' + row.id + '" class="teacher-checkbox Custom Checkbox" ' + (row.attendance_status === 'Present' ? 'checked' : '') + '>';
                 }
             },
             {
@@ -103,46 +103,46 @@ $(document).ready(function(){
         ],
     });
 
-    /*** Class filter changes */
-    $(document).on('change', '#search_class_id', function() {
-        table.ajax.reload(null, false);
-    });
-    /*section filter changes*/
-    $(document).on('change', '#search_section_id', function() {
-        table.ajax.reload(null, false);
-    });
+    // /*** Class filter changes */
+    // $(document).on('change', '#search_class_id', function() {
+    //     table.ajax.reload(null, false);
+    // });
+    // /*section filter changes*/
+    // $(document).on('change', '#search_section_id', function() {
+    //     table.ajax.reload(null, false);
+    // });
 
     /* Select or Deselect All Checkboxes*/
     $(document).on('click', '#selectAll', function() {
         if ($(this).is(':checked')) {
-            $('.student-checkbox').prop('checked', true);
+            $('.teacher-checkbox').prop('checked', true);
         } else {
-            $('.student-checkbox').prop('checked', false);
+            $('.teacher-checkbox').prop('checked', false);
         }
     });
 
     /*** Select or Deselect Individual Checkboxes ***/
     table.on('draw.dt', function() {
         if ($('#selectAll').is(':checked')) {
-            $('.student-checkbox').prop('checked', true);
+            $('.teacher-checkbox').prop('checked', true);
         } else {
-            $('.student-checkbox').prop('checked', false);
+            $('.teacher-checkbox').prop('checked', false);
         }
     });
     $(document).on('click', '#submitAttendance', function() {
         $('#submitAttendance').prop('disabled', true).html(
             '<i class="fa fa-spinner fa-spin"></i> Submitting...'
         );
-        var selectedStudents = [];
-        $('.student-checkbox:checked').each(function() {
-            selectedStudents.push($(this).val());
+        var selectedTeachers = [];
+        $('.teacher-checkbox:checked').each(function() {
+            selectedTeachers.push($(this).val());
         });
-        if(selectedStudents.length > 0) {
+        if(selectedTeachers.length > 0) {
             $.ajax({
                 url: "{{ route('admin.teacher.attendence.store') }}",
                 type: "POST",
                 data: {
-                    student_ids: selectedStudents,
+                    teacher_ids: selectedTeachers,
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
