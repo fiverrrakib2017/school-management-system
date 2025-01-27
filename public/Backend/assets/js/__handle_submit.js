@@ -28,6 +28,9 @@ function handleSubmit(formSelector, modalSelector) {
                    /* Hide the modal */
                    $(modalSelector).modal('hide');
                    $('#datatable1').DataTable().ajax.reload( null , false);
+                   submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                    form.find(':input').prop('disabled', false);
                 }
             },
             error: function(xhr) {
@@ -50,6 +53,7 @@ function handleSubmit(formSelector, modalSelector) {
             complete: function() {
                 submitBtn.html(originalBtnText);
                 submitBtn.prop('disabled', false);
+                form.find(':input').prop('disabled', false);
             }
         });
     });

@@ -31,9 +31,8 @@
              </div>
              <div class="form-group mb-2">
                 <label>Type</label>
-                <select type="text" class="form-select table_status" style="width: 100%;" name="table_status">
+                <select type="text" class="form-control table_status" style="width: 100%;" name="table_status">
                     <option value="">---Select---</option>
-                       <!-- Check for the status and select the corresponding option -->
                         <option value="0" {{ isset($invoice_data->status) && $invoice_data->status == 0 ? 'selected' : '' }}>Draft</option>
                         <option value="1" {{ isset($invoice_data->status) && $invoice_data->status == 1 ? 'selected' : '' }}>Completed</option>
                         <option value="2" {{ isset($invoice_data->status) && $invoice_data->status == 2 ? 'selected' : '' }}>Print Invoice</option>

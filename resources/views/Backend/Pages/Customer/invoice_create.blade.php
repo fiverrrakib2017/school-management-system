@@ -3,7 +3,7 @@
 @section('style')
 <style>
 button#submitButton {
-    margin-top: 26px;
+    margin-top: 29px;
 }
 
 </style>
@@ -27,10 +27,10 @@ button#submitButton {
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group mt-2">
+                                    <div class="form-group">
                                         <label>Client Name</label>
                                         <div class="d-flex">
-                                        <select type="text" id="client_name" name="client_id" class="form-select select2">
+                                        <select type="text" id="client_name" name="client_id" class="form-control">
                                             <option value="">---Select---</option>
                                             @php
                                             $customers = \App\Models\Customer::latest()->get();
@@ -41,7 +41,7 @@ button#submitButton {
                                                 @endforeach
                                             @endif
                                         </select>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CustomerModal"><span>+</span>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#CustomerModal"><span>+</span>
                                             </button>
                                         </div>
                                     </div>
@@ -67,7 +67,7 @@ button#submitButton {
                                     <div class="form-group">
                                         <label for="product_item" class="form-label">Product</label>
                                         <div class="d-flex">
-                                            <select id="product_name" class="form-select select2" aria-label="Product Name">
+                                            <select id="product_name" class="form-control" aria-label="Product Name">
                                                 <option value="">---Select---</option>
                                                 @php
                                                 $products = \App\Models\Product::latest()->get();
@@ -78,7 +78,7 @@ button#submitButton {
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <button type="button" class="btn btn-primary add-product-btn" data-bs-toggle="modal" data-bs-target="#productModal">
+                                            <button type="button" class="btn btn-primary add-product-btn" data-toggle="modal" data-target="#productModal">
                                                 <span>+</span>
                                             </button>
                                         </div>

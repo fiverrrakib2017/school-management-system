@@ -3,7 +3,7 @@
 @section('style')
 <style>
 button#submitButton {
-    margin-top: 26px;
+    margin-top: 29px;
 }
 
 </style>

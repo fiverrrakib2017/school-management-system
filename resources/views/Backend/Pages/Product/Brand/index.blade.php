@@ -7,7 +7,7 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-body">
-                <button data-bs-toggle="modal" data-bs-target="#brandModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                <button data-toggle="modal" data-target="#brandModal" type="button" class="btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Brand</button>
 
                 <div class="table-responsive" id="tableStyle">
@@ -93,7 +93,6 @@
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
 
-        // AJAX call to fetch brand data
         $.ajax({
             url: "{{ route('admin.brand.edit', ':id') }}".replace(':id', id),
             method: 'GET',
@@ -103,10 +102,9 @@
                     $('#brandModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Brand');
                     $('#brandForm input[name="name"]').val(response.data.brand_name);
 
-                    // Show the modal
                     $('#brandModal').modal('show');
                 } else {
-                    toastr.error('Failed to fetch Supplier data.');
+                    toastr.error('Failed to fetch data.');
                 }
             },
             error: function() {
