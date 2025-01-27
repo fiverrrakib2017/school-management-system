@@ -12,7 +12,8 @@
           </div>
             <div class="card-body">
                 <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
+                    <table id="datatable1"  class="table table-bordered dt-responsive nowrap"
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th class="">No.</th>
