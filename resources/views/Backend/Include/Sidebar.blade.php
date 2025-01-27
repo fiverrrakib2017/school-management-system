@@ -1,16 +1,20 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="{{route('admin.dashboard')}}" class="brand-link">
+        <img src="http://103.146.16.154/assets/images/it-fast.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="">
+
+      </a>
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      {{-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <img src="{{asset('Backend/images/avatar.png')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="{{route('admin.dashboard')}}" class="d-block">{{Auth::guard('admin')->user()->name}}</a>
         </div>
-      </div>
+      </div> --}}
 
 
       <!-- Sidebar Menu -->

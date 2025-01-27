@@ -3,18 +3,19 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="card shadow-sm rounded-3 border-0">
+        <div class="card card-primary shadow-sm rounded-3">
             <div class="card-header">
-                <h4 class="mb-0">Accounts Transaction</h4>
+                <h3 class="card-title">Accounts Transaction</h3>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body">
                 <form id="transaction_form" action="{{ route('admin.transaction.store') }}" method="post">
                     @csrf
-                    <div class="row g-3">
+                    <!-- First Row -->
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="refer_no" class="form-label">Refer Number</label>
-                                <input name="refer_no" class="form-control" placeholder="Enter Refer No.">
+                                <input type="text" name="refer_no" class="form-control" placeholder="Enter Refer No.">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -30,31 +31,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row g-3 mt-3">
-
+                    <!-- Second Row -->
+                    <div class="row mt-3">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="sub_ledger_id" class="form-label">Sub Ledger</label>
                                 <div class="input-group">
-                                    <select name="sub_ledger_id" id="sub_ledger_id" class="form-select" required>
-                                        <option value="">---Select---</option>
+                                    <select name="sub_ledger_id" id="sub_ledger_id" class="form-control select2" required>
+                                        <option value="">--- Select ---</option>
                                         @foreach ($ledger as $item)
                                             <optgroup label="{{ $item->ledger_name }}">
                                                 @php
-                                                $sub_ledger = \App\Models\Sub_ledger::where('ledger_id', $item->id)->get();
+                                                    $sub_ledger = \App\Models\Sub_ledger::where('ledger_id', $item->id)->get();
                                                 @endphp
                                                 @foreach ($sub_ledger as $sub_ledger_item)
                                                     <option value="{{ $sub_ledger_item->id }}">{{ $sub_ledger_item->sub_ledger_name }}</option>
                                                 @endforeach
-
                                             </optgroup>
                                         @endforeach
                                     </select>
-                                    <button type="button" class="btn-sm btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fas fa-user-plus"></i></button>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
+                                            <i class="fas fa-user-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="qty" class="form-label">Quantity</label>
                                 <input type="number" name="qty" class="form-control" placeholder="Enter Quantity" value="1" min="1" required>
@@ -63,30 +67,36 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="amount" class="form-label">Amount</label>
-                                <input name="amount" class="form-control" placeholder="Enter Amount" value="0" required>
+                                <input type="number" name="amount" class="form-control" placeholder="Enter Amount" value="0" min="1" required>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="total" class="form-label">Total</label>
-                                <input readonly name="total" class="form-control bg-light" value="0" required>
+                                <input type="number" readonly name="total" class="form-control bg-light" value="0" required>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="note" class="form-label">Note</label>
-                                <input name="note" class="form-control" placeholder="Enter Note">
+                                <input type="text" name="note" class="form-control" placeholder="Enter Note">
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-success w-100 mt-2">Add</button>
+
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-plus-circle"></i> Add Transaction
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-
     </div>
+
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -128,14 +138,15 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add New Sub Ledger
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Add Form ------->
             <form id="addForm" action="{{ route('admin.sub_ledger.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="sectionName">Ledger:</label>
                             <select type="text" name="ledger_id" id="modal_ledger_id" class="form-control" style="width: 100%;"  required>
@@ -157,11 +168,10 @@
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Add Form ------->

@@ -7,7 +7,7 @@
         <div class="card">
         <div class="card-header">
           <a href="{{route('admin.student.bill_collection.create')}}" class="btn btn-success ">  <i class="	fas fa-donate" aria-hidden="true"></i>
-          Add Bill Collection</a>
+           Bill Collection</a>
           </div>
             <div class="card-body">
                 <div class="table table-responsive" id="tableStyle">
@@ -48,13 +48,15 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
