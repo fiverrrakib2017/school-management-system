@@ -5,7 +5,7 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
-                  <button data-bs-toggle="modal" data-bs-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                  <button data-toggle="modal" data-target="#addModal" type="button" class="btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                   Add New </button>
             </div>
             <div class="card-body">
@@ -42,14 +42,15 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add New Sub Ledger
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Add Form ------->
             <form id="addSectionForm" action="{{ route('admin.sub_ledger.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="">Ledger:</label>
                             <select type="text" name="ledger_id" class="form-control"  required>
@@ -66,16 +67,15 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="status">Status</label>
-                            <select name="status" id="" class="form-select">
+                            <select name="status" id="" class="form-control">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Add Form ------->
@@ -90,14 +90,15 @@
                 <h6 class="modal-title" id="exampleModalLabel">
                     <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Master Ledger
                 </h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <!----- Start Update Form ------->
             <form id="addSectionForm" action="{{ route('admin.sub_ledger.update') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <!----- Start Update Form input ------->
-                    <div class="row">
                         <div class="form-group mb-2">
                             <label for="">Ledger:</label>
                             <input type="text" name="id" class="d-none" required>
@@ -115,16 +116,15 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="status">Status</label>
-                            <select name="status" id="" class="form-select">
+                            <select name="status" id="" class="form-control">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
                 </div>
             </form>
             <!----- End Update Form ------->
@@ -142,13 +142,15 @@
                 </div>
                 <h4 class="modal-title w-100">Are you sure?</h4>
                 <input type="hidden" name="id" value="">
-                <a class="close" data-bs-dismiss="modal" aria-hidden="true"><i class="mdi mdi-close"></i></a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
             <div class="modal-body">
                 <p>Do you really want to delete these records? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
             </div>
             </div>
@@ -397,14 +399,5 @@
   });
   </script>
 
-  @if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-    @elseif(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-    @endif
 
 @endsection
