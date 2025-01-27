@@ -7,8 +7,7 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-body">
-                <button data-bs-toggle="modal" data-bs-target="#storeModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Add New Store</button>
+                <button data-toggle="modal" data-target="#storeModal" type="button" class="btn btn-success mb-2"><i class="mdi mdi-account-plus"></i> Add New Store</button>
 
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-striped table-bordered    " cellspacing="0" width="100%">
@@ -105,7 +104,6 @@
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
 
-        // AJAX call to fetch store data
         $.ajax({
             url: "{{ route('admin.store.edit', ':id') }}".replace(':id', id),
             method: 'GET',

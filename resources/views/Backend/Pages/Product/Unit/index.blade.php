@@ -7,7 +7,7 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-body">
-                <button data-bs-toggle="modal" data-bs-target="#unitModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                <button data-toggle="modal" data-target="#unitModal" type="button" class="btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Unit</button>
 
                 <div class="table-responsive" id="tableStyle">
@@ -93,7 +93,6 @@
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
 
-        // AJAX call to fetch unit data
         $.ajax({
             url: "{{ route('admin.unit.edit', ':id') }}".replace(':id', id),
             method: 'GET',
@@ -106,7 +105,7 @@
                     // Show the modal
                     $('#unitModal').modal('show');
                 } else {
-                    toastr.error('Failed to fetch Supplier data.');
+                    toastr.error('Failed to fetch  data.');
                 }
             },
             error: function() {

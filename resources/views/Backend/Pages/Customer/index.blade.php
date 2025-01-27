@@ -7,9 +7,7 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-body">
-                {{-- <button href="{{ route('admin.customer.create') }}" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
-                    Add New Customer</button> --}}
-                <button data-bs-toggle="modal" data-bs-target="#CustomerModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                <button data-toggle="modal" data-target="#CustomerModal" type="button" class=" btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Customer</button>
 
                 <div class="table-responsive" id="tableStyle">
@@ -89,7 +87,7 @@
 
               <button class="btn btn-danger btn-sm mr-3 delete-btn"  data-id="${row.id}"><i class="fa fa-trash"></i></button>
 
-              <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 edit-btn"><i class="fa fa-eye"></i></a>
+              <a href="${viewUrl}" class="btn btn-success btn-sm mr-3 "><i class="fa fa-eye"></i></a>
 
 
               `;
@@ -116,7 +114,6 @@
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
 
-        // AJAX call to fetch customer data
         $.ajax({
             url: "{{ route('admin.customer.edit', ':id') }}".replace(':id', id),
             method: 'GET',

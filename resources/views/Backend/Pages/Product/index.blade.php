@@ -7,7 +7,7 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-body">
-                <button data-bs-toggle="modal" data-bs-target="#productModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                <button data-toggle="modal" data-target="#productModal" type="button" class="btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Product</button>
 
                 <div class="table-responsive" id="tableStyle">
@@ -116,7 +116,6 @@
     $('#datatable1 tbody').on('click', '.edit-btn', function () {
         var id = $(this).data('id');
 
-        // AJAX call to fetch unit data
         $.ajax({
             url: "{{ route('admin.product.edit', ':id') }}".replace(':id', id),
             method: 'GET',
