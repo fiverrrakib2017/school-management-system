@@ -61,7 +61,7 @@
             @endif
             <div class="card-body register-card-body">
                 <div class="register-logo">
-                    <img width="90px" src="http://103.146.16.154/profileImages/avatar.png">
+                    <img width="90px" src="{{asset('Backend/images/it-fast.png')}}">
                 </div>
                 <p class="login-box-msg">Welcome Back</p>
 
