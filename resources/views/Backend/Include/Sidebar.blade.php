@@ -1,7 +1,7 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="{{route('admin.dashboard')}}" class="brand-link">
-        <img src="http://103.146.16.154/assets/images/it-fast.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="">
+        <img src="{{asset('Backend/images/it-fast.png')}}" alt="AdminLTE Logo" class="brand-image elevation-3" style="">
 
       </a>
     <!-- Sidebar -->
