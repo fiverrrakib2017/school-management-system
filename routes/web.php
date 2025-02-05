@@ -288,6 +288,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/delete', 'delete')->name('admin.tickets.assign.delete');
                 Route::post('/store', 'store')->name('admin.tickets.assign.store');
                 Route::post('/update/{id}', 'update')->name('admin.tickets.assign.update');
+                
             });
         });
          /*Ticket Route To */
