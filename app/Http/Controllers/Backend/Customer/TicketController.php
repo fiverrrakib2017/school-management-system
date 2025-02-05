@@ -11,7 +11,7 @@ class TicketController extends Controller
 
     public function index()
     {
-        return view('Backend.Pages.Customer.ticket');
+        return view('Backend.Pages.Customer.Ticket');
     }
 
     public function get_all_data(Request $request){

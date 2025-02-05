@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Backend\Accounts\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account_transaction;
-use App\Models\Master_ledger;
+use App\Models\Master_Ledger;
 use App\Models\Ledger;
+use App\Models\Sub_ledger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -13,42 +14,60 @@ use Illuminate\Support\Facades\DB;
 class TransactionController extends Controller
 {
     public function index(){
-        $master_ledger=Master_ledger::where('status',1)->latest()->get();
+        $master_ledger=Master_Ledger::where('status',1)->latest()->get();
         $ledger=Ledger::where('status',1)->latest()->get();
         return view('Backend.Pages.Accounts.Transaction.index',compact('ledger','master_ledger'));
     }
-    public function store(Request $request){
-            $request->validate([
-                'sub_ledger_id'=>'required|integer|max:255',
-                'qty'=>'required|integer',
-                'amount'=>'required|integer',
-                'total'=>'required|integer',
+    public function store(Request $request)
+    {
+        $request->validate([
+            'sub_ledger_id' => 'required|integer|max:255',
+            'qty' => 'required|integer',
+            'amount' => 'required|integer',
+            'total' => 'required|integer',
+        ]);
 
-           ]);
-           if (!empty($request->sub_ledger_id) && isset($request->sub_ledger_id)) {
-               $ledger= Ledger::find($request->sub_ledger_id);
-               $ledger_id= $ledger->id;
-               $master_ledger_id= $ledger->master_ledger_id;
-           }
-           if (!empty($ledger_id) && isset($ledger_id) && !empty($master_ledger_id) && isset($master_ledger_id) ) {
-                $object=new Account_transaction();
-                $object->refer_no=$request->refer_no ?? strtoupper(uniqid());
-                $object->transaction_number = "TRANSID-".strtoupper(uniqid());
-                $object->description=$request->description ?? strtoupper(uniqid());
-                $object->master_ledger_id=$master_ledger_id;
-                $object->ledger_id=$ledger_id;
-                $object->sub_ledger_id=$request->sub_ledger_id;
-                $object->qty=$request->qty;
-                $object->value=$request->amount;
-                $object->total=$request->total;
-                $object->date=$request->create_date;
-                $object->status=0;
-                $object->note=$request->note ?? '';
-                $object->save();
-                return response()->json(['success' =>true, 'message'=>'Added Successfully']);
-           }
+        if (!empty($request->sub_ledger_id)) {
+            $sub_ledger = Sub_ledger::find($request->sub_ledger_id);
 
+            /***Check if Ledger exists or not***/
+            if (!$sub_ledger) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sub Ledger not found!'
+                ], 404);
+            }
+
+            $ledger_id = $sub_ledger->ledger_id;
+            $master_ledger_id = Ledger::find($ledger_id)->master_ledger_id;
+        }
+
+        /*Check Ledger id And Master ledger id*/
+        if (!empty($ledger_id) && !empty($master_ledger_id)) {
+            $object = new Account_transaction();
+            $object->refer_no = $request->refer_no ?? strtoupper(uniqid());
+            $object->transaction_number = "TRANSID-" . strtoupper(uniqid());
+            $object->description = $request->description ?? strtoupper(uniqid());
+            $object->master_ledger_id = $master_ledger_id;
+            $object->ledger_id = $ledger_id;
+            $object->sub_ledger_id = $request->sub_ledger_id;
+            $object->qty = $request->qty;
+            $object->value = $request->amount;
+            $object->total = $request->total;
+            $object->date = $request->create_date;
+            $object->status = 0;
+            $object->note = $request->note ?? '';
+            $object->save();
+
+            return response()->json(['success' => true, 'message' => 'Added Successfully']);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ledger ID or Master Ledger ID is missing!'
+            ], 400);
+        }
     }
+
 
     public function show_account_transaction(){
        $data= Account_transaction::with('ledger','sub_ledger','master_ledger')->where('status',0)->get();
@@ -64,7 +83,7 @@ class TransactionController extends Controller
     }
 
     public function transaction_report(){
-        $master_ledger=Master_ledger::where('status',1)->latest()->get();
+        $master_ledger=Master_Ledger::where('status',1)->latest()->get();
         return view('Backend.Pages.Accounts.Transaction.Report.index',compact('master_ledger'));
     }
     public function report_generate(Request $request)
@@ -97,7 +116,7 @@ class TransactionController extends Controller
         ->get()
         ->groupBy('ledger.ledger_name');
 
-        $master_ledger = Master_ledger::where('status', 1)->latest()->get();
+        $master_ledger = Master_Ledger::where('status', 1)->latest()->get();
         $ledger = Ledger::where('status', 1)->latest()->get();
         return view('Backend.Pages.Accounts.Transaction.Report.index', compact('transactions', 'master_ledger', 'ledger','same_date_flag'));
     }

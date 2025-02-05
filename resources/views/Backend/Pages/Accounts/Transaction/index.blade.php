@@ -271,6 +271,8 @@
                     $('#addModal').modal('hide');
                     toastr.success(response.message);
                     form[0].reset();
+                }else if(response.success==false){
+                    toastr.error(response.message);
                 }
             },
             error: function(xhr, status, error) {
