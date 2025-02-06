@@ -59,16 +59,19 @@ class StudentController extends Controller
         $student = new Student();
         StudentService::setData($student, $request, $filename);
         $student->save();
-        foreach($request->file('documents') as $index => $file){
-            $filename = time() . '_' . $index . '.' . $file->getClientOriginalExtension();
-            $filePath = 'uploads/documents/';
-            $file->move(public_path($filePath), $filename);
-              /* Save the document details for database*/
-            $docs=new Student_docs();
-            $docs->student_id=$student->id;
-            $docs->docs_name=$filename;
-            $docs->file_path=$filePath . $filename;
-            $docs->save();
+
+        /* Check if documents are uploaded */
+        if ($request->hasFile('documents')) {
+            foreach($request->file('documents') as $index => $file){
+                $filename = time() . '_' . $index . '.' . $file->getClientOriginalExtension();
+                $filePath = 'uploads/documents/';
+                $file->move(public_path($filePath), $filename);
+                $docs = new Student_docs();
+                $docs->student_id = $student->id;
+                $docs->docs_name = $filename;
+                $docs->file_path = $filePath . $filename;
+                $docs->save();
+            }
         }
 
         /* Return success response*/
