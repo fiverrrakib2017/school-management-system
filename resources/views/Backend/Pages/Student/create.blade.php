@@ -339,6 +339,7 @@
             $.ajax({
                 type: 'POST',
                 url: url,
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 data: formData,
                 contentType: false,
                 processData: false,

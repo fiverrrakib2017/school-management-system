@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('fees_type_id');
             $table->decimal('amount', 10, 2);
             $table->integer('status');
-            $table->text('month');
+            $table->text('month')->nullable();
             $table->integer('year');
             $table->timestamps();
 
