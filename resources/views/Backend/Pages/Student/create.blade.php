@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Photo</label><small class="req"> *</small><br />
+                                            <label>Photo</label><br />
                                             <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
                                             <img id="preview" class="img-fluid" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
 
@@ -59,13 +59,13 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label> Blood Group</label><small class="req"> *</small>
+                                            <label> Blood Group</label>
                                             <input type="text" class="form-control" name="blood_group" placeholder="Enter blood group">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Health Conditions</label><small class="req"> *</small>
+                                            <label>Health Conditions</label>
                                             <input type="text" class="form-control" name="health_conditions" placeholder="Enter health conditions">
 
                                         </div>
@@ -182,7 +182,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Previous School</label><small class="req"> *</small>
+                                            <label>Previous School</label>
                                             <input type="text" class="form-control" name="previous_school" placeholder="Enter previous school">
                                         </div>
                                     </div>
