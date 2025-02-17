@@ -250,10 +250,71 @@
         </ul>
     </div>
 </div>
+<!-- শিক্ষকমণ্ডলী সেকশন -->
+<section class="container py-5">
+    <h2 class="text-center text-primary border-bottom pb-3">শিক্ষকমণ্ডলী</h2>
+    <div class="row">
+        <!-- শিক্ষক ১ -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow-sm">
+                <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ১">
+                <div class="card-body text-center">
+                    <h5 class="card-title">জনাব মোঃ রহিম</h5>
+                    <p class="card-text">গণিত শিক্ষক</p>
+                    <a href="teacher_profile.php?id=1" class="btn btn-success">প্রোফাইল দেখুন</a>
+                </div>
+            </div>
+        </div>
+        <!-- শিক্ষক ২ -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow-sm">
+                <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ২">
+                <div class="card-body text-center">
+                    <h5 class="card-title">জনাবা রাশেদা পারভীন</h5>
+                    <p class="card-text">ইংরেজি শিক্ষক</p>
+                    <a href="teacher_profile.php?id=2" class="btn btn-success">প্রোফাইল দেখুন</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow-sm">
+                <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ২">
+                <div class="card-body text-center">
+                    <h5 class="card-title">জনাবা রাশেদা পারভীন</h5>
+                    <p class="card-text">ইংরেজি শিক্ষক</p>
+                    <a href="teacher_profile.php?id=2" class="btn btn-success">প্রোফাইল দেখুন</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow-sm">
+                <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ২">
+                <div class="card-body text-center">
+                    <h5 class="card-title">জনাবা রাশেদা পারভীন</h5>
+                    <p class="card-text">ইংরেজি শিক্ষক</p>
+                    <a href="teacher_profile.php?id=2" class="btn btn-success">প্রোফাইল দেখুন</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container py-5">
+    <h2 class="text-center text-primary pb-2 border-bottom">গ্যালারি</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" data-lightbox="gallery">
+                <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" alt="Gallery Image 1" class="img-fluid rounded shadow-sm">
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" data-lightbox="gallery">
+                <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" alt="Gallery Image 2" class="img-fluid rounded shadow-sm">
+            </a>
+        </div>
+    </div>
+</section>
 
 
-<style>
-
-</style>
 
 @endsection
