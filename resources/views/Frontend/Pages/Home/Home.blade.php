@@ -250,12 +250,12 @@
         </ul>
     </div>
 </div>
-<!-- শিক্ষকমণ্ডলী সেকশন -->
+
 <section class="container py-5">
-    <h2 class="text-center text-primary border-bottom pb-3">শিক্ষকমণ্ডলী</h2>
+    <h2 class="text-center text-primary border-bottom pb-3" style="margin-top:15px;">শিক্ষকমণ্ডলী</h2><hr>
     <div class="row">
         <!-- শিক্ষক ১ -->
-        <div class="col-md-3 col-sm-6 mb-4">
+        <div class="col-md-3 col-sm-6 mb-4  wow fadeInUp" data-wow-delay="0.2s">
             <div class="card shadow-sm">
                 <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ১">
                 <div class="card-body text-center">
@@ -266,7 +266,7 @@
             </div>
         </div>
         <!-- শিক্ষক ২ -->
-        <div class="col-md-3 col-sm-6 mb-4">
+        <div class="col-md-3 col-sm-6 mb-4 wow fadeInUp" data-wow-delay="0.2s">
             <div class="card shadow-sm">
                 <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ২">
                 <div class="card-body text-center">
@@ -276,7 +276,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-sm-6 mb-4">
+        <div class="col-md-3 col-sm-6 mb-4 wow fadeInUp" data-wow-delay="0.2s">
             <div class="card shadow-sm">
                 <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ২">
                 <div class="card-body text-center">
@@ -286,7 +286,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-sm-6 mb-4">
+        <div class="col-md-3 col-sm-6 mb-4 wow fadeInUp" data-wow-delay="0.2s">
             <div class="card shadow-sm">
                 <img src="https://rzasc.com/uploads/frontend/home_page/featured-parallax116773259770225.jpeg" class="card-img-top" alt="শিক্ষক ২">
                 <div class="card-body text-center">
@@ -300,20 +300,37 @@
 </section>
 
 <section class="container py-5">
-    <h2 class="text-center text-primary pb-2 border-bottom">গ্যালারি</h2>
-    <div class="row">
-        <div class="col-md-4">
-            <a href="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" data-lightbox="gallery">
-                <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" alt="Gallery Image 1" class="img-fluid rounded shadow-sm">
+    <h2 class="text-center text-primary pb-3 border-bottom" style="margin-top: 20px; font-size: 2.5rem; font-weight: bold;">গ্যালারি</h2>
+    <hr class="mb-4">
+    <div class="row g-4" style="padding: 15px;">
+        <div class="col-md-4 col-sm-6 mb-4 wow fadeInUp" data-wow-delay="0.2s">
+            <a href="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" data-lightbox="gallery" data-title="Gallery Image 1">
+                <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" alt="Gallery Image 1" class="img-fluid rounded shadow-sm hover-zoom">
             </a>
         </div>
-        <div class="col-md-4">
-            <a href="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" data-lightbox="gallery">
-                <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" alt="Gallery Image 2" class="img-fluid rounded shadow-sm">
+        <div class="col-md-4 col-sm-6 mb-4 wow fadeInUp" data-wow-delay="0.2s">
+            <a href="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" data-lightbox="gallery" data-title="Gallery Image 2">
+                <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSpt5zwCE8NvhXkgVxVORLHYkSyL5qg7NlkKF0Ra7RTEKwXJoy3FkSqNmiMfE8HJ8dGAEFh67BJR2cQeXTMgE6u2A" alt="Gallery Image 2" class="img-fluid rounded shadow-sm hover-zoom">
             </a>
         </div>
+        <!-- Add more images as needed -->
     </div>
 </section>
+
+<style>
+    /*.hover-zoom {
+        transition: transform 0.3s ease;
+    }
+    .hover-zoom:hover {
+        transform: scale(1.05);
+    }
+    .shadow-sm {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .rounded {
+        border-radius: 10px;
+    }*/
+</style>
 
 
 

@@ -59,15 +59,16 @@
                 <!-- === BEGIN CONTENT === -->
                 <div id="content">
 
-                    <!-- Marque notice start -->
-                    <div class="container no-padding">
-                        <marquee scrollamount="3" onmouseover="this.setAttribute('scrollamount', 0, 0);"
-                            onmouseout="this.setAttribute('scrollamount', 2, 0);">
+                  <!-- Marque notice start -->
+                  <div class="container no-padding">
+                    <marquee scrollamount="3" onmouseover="this.setAttribute('scrollamount', 0, 0);"
+                        onmouseout="this.setAttribute('scrollamount', 2, 0);">
 
-                            <a href="full_impnotice.php?id=2">খুব শিঘ্রই এই অংশটি আপডেট করা হবে। খুব শিঘ্রই এই অংশটি আপডেট করা হবে। খুব শিঘ্রই এই অংশটি আপডেট করা হবে। খুব শিঘ্রই এই অংশটি আপডেট করা হবে। &nbsp; ** &nbsp; </a>
-                        </marquee>
-                    </div>
-                    <!-- Marque notice end -->
+                        <a href="full_impnotice.php?id=2">খুব শিঘ্রই এই অংশটি আপডেট করা হবে। খুব শিঘ্রই এই অংশটি আপডেট করা হবে। খুব শিঘ্রই এই অংশটি আপডেট করা হবে। খুব শিঘ্রই এই অংশটি আপডেট করা হবে। &nbsp; ** &nbsp; </a>
+                    </marquee>
+                </div>
+                <!-- Marque notice end --> 
+
 
 
                     @yield('content')
