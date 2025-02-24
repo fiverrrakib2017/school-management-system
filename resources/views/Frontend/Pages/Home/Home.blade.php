@@ -318,13 +318,13 @@
 </section>
 
 <style>
-    /*.hover-zoom {
+    .hover-zoom {
         transition: transform 0.3s ease;
     }
     .hover-zoom:hover {
         transform: scale(1.05);
     }
-    .shadow-sm {
+    /*.shadow-sm {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     .rounded {

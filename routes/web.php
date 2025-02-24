@@ -22,6 +22,7 @@ use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
+use App\Http\Controllers\Backend\Settings\Website\BannerController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
@@ -514,8 +515,19 @@ Route::group(['middleware'=>'admin'],function(){
         Route::get('/stock', [StockController::class, 'index'])->name('admin.product.stock.index');
     });
 
-    Route::get('/profile',function(){
-        return view('Backend.Pages.Profile');
+    /** Settings Management  Route **/
+    Route::prefix('admin/settings/website/')->group(function(){
+        /** Banner Route **/
+        Route::prefix('banner')->group(function(){
+            Route::controller(BannerController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.banner.index');
+                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.banner.get_all_data');
+                Route::get('/edit/{id}','edit')->name('admin.settings.website.banner.edit');
+                Route::post('/update','update')->name('admin.settings.website.banner.update');
+                Route::post('/store','store')->name('admin.settings.website.banner.store');
+                Route::post('/delete','delete')->name('admin.settings.website.banner.delete');
+            });
+        });
     });
     Route::get('/optimize',function(){
         Artisan::call('optimize:clear');
