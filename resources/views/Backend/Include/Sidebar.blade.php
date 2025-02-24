@@ -217,7 +217,7 @@
 
           <!-----------------Website Settings--------------------->
             @php
-                $active_prefix=['admin.settings.website.banner','admin.settings.website.slider','admin.settings.website.speech'];
+                $active_prefix=['admin.settings.website.banner','admin.settings.website.slider','admin.settings.website.speech','admin.settings.website.gallery'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link  {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -234,6 +234,9 @@
               </li>
               <li class="nav-item">
                  <a href="{{ route('admin.settings.website.speech.index') }}" class="nav-link {{($route=='admin.settings.website.speech.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Speech</p></a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ route('admin.settings.website.gallery.index') }}" class="nav-link {{($route=='admin.settings.website.gallery.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Gallery</p></a>
               </li>
 
             </ul>

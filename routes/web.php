@@ -23,6 +23,7 @@ use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
 use App\Http\Controllers\Backend\Settings\Website\BannerController;
+use App\Http\Controllers\Backend\Settings\Website\GalleryController;
 use App\Http\Controllers\Backend\Settings\Website\SliderController;
 use App\Http\Controllers\Backend\Settings\Website\SpeechController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
@@ -550,6 +551,14 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.settings.website.speech.update');
                 Route::post('/store','store')->name('admin.settings.website.speech.store');
                 Route::post('/delete','delete')->name('admin.settings.website.speech.delete');
+            });
+        });
+        /** Gallery Route **/
+        Route::prefix('gallery')->group(function(){
+            Route::controller(GalleryController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.gallery.index');
+                Route::post('/store','store')->name('admin.settings.website.gallery.store');
+                Route::post('/delete/{id}','delete')->name('admin.settings.website.gallery.delete');
             });
         });
     });
