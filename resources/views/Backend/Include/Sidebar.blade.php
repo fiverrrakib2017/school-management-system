@@ -230,7 +230,7 @@
                  <a href="{{ route('admin.settings.website.banner.index') }}" class="nav-link {{($route=='admin.settings.website.banner.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Banner</p></a>
               </li>
               <li class="nav-item">
-                 <a href="{{ route('admin.master_ledger.index') }}" class="nav-link {{($route=='admin.master_ledger.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Slider</p></a>
+                 <a href="{{ route('admin.settings.website.slider.index') }}" class="nav-link {{($route=='admin.settings.website.slider.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Slider</p></a>
               </li>
               <li class="nav-item">
                  <a href="{{ route('admin.master_ledger.index') }}" class="nav-link {{($route=='admin.master_ledger.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Speech</p></a>

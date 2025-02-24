@@ -23,6 +23,7 @@ use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
 use App\Http\Controllers\Backend\Settings\Website\BannerController;
+use App\Http\Controllers\Backend\Settings\Website\SliderController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
@@ -526,6 +527,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.settings.website.banner.update');
                 Route::post('/store','store')->name('admin.settings.website.banner.store');
                 Route::post('/delete','delete')->name('admin.settings.website.banner.delete');
+            });
+        });
+        /** Slider Route **/
+        Route::prefix('slider')->group(function(){
+            Route::controller(SliderController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.slider.index');
+                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.slider.get_all_data');
+                Route::get('/edit/{id}','edit')->name('admin.settings.website.slider.edit');
+                Route::post('/update','update')->name('admin.settings.website.slider.update');
+                Route::post('/store','store')->name('admin.settings.website.slider.store');
+                Route::post('/delete','delete')->name('admin.settings.website.slider.delete');
             });
         });
     });
