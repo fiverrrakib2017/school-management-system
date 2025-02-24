@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class BannerController extends Controller
 {
     public function index(){
-        return view('Backend.Pages.Settings.Banner.index');
+        return view('Backend.Pages.Settings.Website.Banner.index');
     }
     public function get_all_data(Request $request)
     {

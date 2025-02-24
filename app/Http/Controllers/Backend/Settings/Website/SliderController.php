@@ -11,7 +11,7 @@ class SliderController extends Controller
 {
     
     public function index(){
-        return view('Backend.Pages.Settings.Slider.index');
+        return view('Backend.Pages.Settings.Website.Slider.index');
     }
     public function get_all_data(Request $request)
     {
@@ -120,8 +120,6 @@ class SliderController extends Controller
 
         /*Validate the form data*/
         $rules=[
-            'title' => 'required',
-            'description' => 'required',
             'images' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
         $validator = Validator::make($request->all(), $rules);
