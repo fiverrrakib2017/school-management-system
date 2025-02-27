@@ -24,6 +24,7 @@ use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
 use App\Http\Controllers\Backend\Settings\Website\BannerController;
 use App\Http\Controllers\Backend\Settings\Website\GalleryController;
+use App\Http\Controllers\Backend\Settings\Website\NoticeController;
 use App\Http\Controllers\Backend\Settings\Website\SliderController;
 use App\Http\Controllers\Backend\Settings\Website\SpeechController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
@@ -548,7 +549,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/list','index')->name('admin.settings.website.speech.index');
                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.speech.get_all_data');
                 Route::get('/edit/{id}','edit')->name('admin.settings.website.speech.edit');
-                Route::post('/update','update')->name('admin.settings.website.speech.update');
+                Route::post('/update/{id}','update')->name('admin.settings.website.speech.update');
                 Route::post('/store','store')->name('admin.settings.website.speech.store');
                 Route::post('/delete','delete')->name('admin.settings.website.speech.delete');
             });
@@ -559,6 +560,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/list','index')->name('admin.settings.website.gallery.index');
                 Route::post('/store','store')->name('admin.settings.website.gallery.store');
                 Route::post('/delete/{id}','delete')->name('admin.settings.website.gallery.delete');
+            });
+        });
+        /** Notice Route **/
+        Route::prefix('notice')->group(function(){
+            Route::controller(NoticeController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.notice.index');
+                Route::get('/get_all_data','get_all_data')->name('admin.settings.website.notice.get_all_data');
+                Route::get('/edit/{id}','edit')->name('admin.settings.website.notice.edit');
+                Route::post('/update','update')->name('admin.settings.website.notice.update');
+                Route::post('/store','store')->name('admin.settings.website.notice.store');
+                Route::post('/delete','delete')->name('admin.settings.website.notice.delete');
             });
         });
     });

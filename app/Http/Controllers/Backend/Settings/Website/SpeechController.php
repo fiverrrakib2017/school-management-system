@@ -50,7 +50,7 @@ class SpeechController extends Controller
         if($request->hasFile('images')){
             $image = $request->file('images');
             $imageName = time().'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('uploads/photos/'),$imageName);
+            $image->move(public_path('Backend/uploads/photos/'),$imageName);
             $object->image = $imageName;
         }
         /* Save to the database table*/
@@ -106,14 +106,14 @@ class SpeechController extends Controller
         $object->description=$request->description;
         if($request->hasFile('images')){
             /*Delete Previous Images*/
-            $imagePath = public_path('uploads/photos/' . $object->image);
+            $imagePath = public_path('Backend/uploads/photos/' . $object->image);
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
             /*Upload New Images*/
             $image = $request->file('images');
             $imageName = time().'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('uploads/photos/'),$imageName);
+            $image->move(public_path('Backend/uploads/photos/'),$imageName);
             $object->image = $imageName;
         }
         $object->update();

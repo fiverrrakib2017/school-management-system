@@ -5,12 +5,10 @@
 
 <head>
     <!-- Title -->
-    <title>”প্রতিষ্ঠানের নাম “ সবাইকে স্বাগতম</title>
+    <title> সবাইকে স্বাগতম</title>
     <!-- Meta -->
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description"
-        content="খুব শিঘ্রই এই অংশটি আপডেট করা হবে। ">
-    <meta name="author" content="”প্রতিষ্ঠানের নাম “">
+    <meta name="description" content="খুব শিঘ্রই এই অংশটি আপডেট করা হবে। ">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     @include('Frontend.Include.Style')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -37,12 +35,14 @@
                 </div><!-- col-md-6 end -->
 
                 <div class="col-md-6 text-right"><!-- col-md-6 text-right start -->
-                    <p>
+                    <p style="display: inline-block; margin-right: 20px;">
                         <strong>Email :</strong>&nbsp; info@yourwebsite.com
                     </p>
+                    <a href="{{ route('admin.login') }}" class="btn btn-primary btn-sm">Login</a>
                 </div><!-- col-md-6 text-right end -->
             </div><!-- row margin-top-10 visible-lg end -->
         </div><!-- pre_header end -->
+
         <div class="primary-container-group">
             <!-- Background -->
             <div class="primary-container-background">
@@ -73,7 +73,7 @@
 					</div>
 					<!-- Marquee Notice End -->
 
-                <!-- Marque notice end --> 
+                <!-- Marque notice end -->
 
 
 
