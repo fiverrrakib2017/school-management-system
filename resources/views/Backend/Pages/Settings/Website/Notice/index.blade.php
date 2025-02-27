@@ -67,7 +67,12 @@
                     {
                         "data": "description",
                         render: function(data, type, row) {
-                            return data.substr(0, 50) + '...';
+                            if (data == null) {
+                                return 'No Description';
+                            }else{
+                                 return data.substr(0, 50) + '...';
+                            }
+
                         }
                     },
                     {
