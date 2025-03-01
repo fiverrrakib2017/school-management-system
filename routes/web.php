@@ -24,6 +24,7 @@ use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
 use App\Http\Controllers\Backend\Settings\Website\AchivementController;
 use App\Http\Controllers\Backend\Settings\Website\BannerController;
+use App\Http\Controllers\Backend\Settings\Website\ContractController;
 use App\Http\Controllers\Backend\Settings\Website\GalleryController;
 use App\Http\Controllers\Backend\Settings\Website\NoticeController;
 use App\Http\Controllers\Backend\Settings\Website\SliderController;
@@ -608,6 +609,15 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update/{id}','update')->name('admin.settings.website.facilities.update');
                 Route::post('/store','store')->name('admin.settings.website.facilities.store');
                 Route::post('/delete','delete')->name('admin.settings.website.facilities.delete');
+            });
+        });
+        /** Contract Route **/
+        Route::prefix('contract')->group(function(){
+            Route::controller(ContractController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.contract.index');
+                Route::get('/get_all_data','get_all_data')->name('admin.settings.website.contract.get_all_data');
+                Route::post('/store','store')->name('admin.settings.website.contract.store');
+                Route::post('/delete','delete')->name('admin.settings.website.contract.delete');
             });
         });
     });
