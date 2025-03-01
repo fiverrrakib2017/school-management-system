@@ -31,7 +31,7 @@ use App\Http\Controllers\Backend\Settings\Website\SliderController;
 use App\Http\Controllers\Backend\Settings\Website\SpeechController;
 use App\Http\Controllers\Backend\Settings\Website\Exam_cornerController;
 use App\Http\Controllers\Backend\Settings\Website\FacilitiesController;
-use App\Http\Controllers\Backend\Settings\Website\Teacher_cornerController;
+use App\Http\Controllers\Backend\Settings\Website\TeacherCornerController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
@@ -623,7 +623,7 @@ Route::group(['middleware'=>'admin'],function(){
         });
         /** Teacher Cornner Route **/
         Route::prefix('teacher_cornner')->group(function(){
-            Route::controller(Teacher_cornerController::class)->group(function(){
+            Route::controller(TeacherCornerController::class)->group(function(){
                 Route::get('/list','index')->name('admin.settings.website.teacher_corner.index');
                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.teacher_corner.get_all_data');
                Route::get('/edit/{id}','edit')->name('admin.settings.website.teacher_corner.edit');

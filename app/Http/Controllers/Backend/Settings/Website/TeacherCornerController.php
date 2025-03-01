@@ -11,7 +11,7 @@ use App\Models\Teacher_corner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class Teacher_cornerController extends Controller
+class TeacherCornerController extends Controller
 {
     public function index()
     {
