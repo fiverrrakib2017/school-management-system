@@ -217,7 +217,7 @@
 
           <!-----------------Website Settings--------------------->
             @php
-                $active_prefix=['admin.settings.website.banner','admin.settings.website.slider','admin.settings.website.speech','admin.settings.website.gallery','admin.settings.website.notice','admin.settings.website.achivement'];
+                $active_prefix=['admin.settings.website.banner','admin.settings.website.slider','admin.settings.website.speech','admin.settings.website.gallery','admin.settings.website.notice','admin.settings.website.achivement','admin.settings.website.exam_corner'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link  {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -243,6 +243,9 @@
               </li>
               <li class="nav-item">
                  <a href="{{ route('admin.settings.website.achivement.index') }}" class="nav-link {{($route=='admin.settings.website.achivement.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Achivement</p></a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ route('admin.settings.website.exam_corner.index') }}" class="nav-link {{($route=='admin.settings.website.exam_corner.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Conrner</p></a>
               </li>
 
             </ul>

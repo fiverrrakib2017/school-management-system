@@ -28,6 +28,7 @@ use App\Http\Controllers\Backend\Settings\Website\GalleryController;
 use App\Http\Controllers\Backend\Settings\Website\NoticeController;
 use App\Http\Controllers\Backend\Settings\Website\SliderController;
 use App\Http\Controllers\Backend\Settings\Website\SpeechController;
+use App\Http\Controllers\Backend\Settings\Website\Exam_cornerController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
@@ -48,6 +49,7 @@ use App\Http\Controllers\Backend\Teacher\Transaction\TeacherTransaction_controll
 use App\Http\Controllers\Backend\Tickets\Assign_Controller;
 use App\Http\Controllers\Backend\Tickets\Complain_typeController;
 use App\Http\Controllers\Backend\Tickets\Ticket_controller;
+use App\Models\Exam_cornar;
 use App\Models\Product_Category;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -583,6 +585,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update/{id}','update')->name('admin.settings.website.achivement.update');
                 Route::post('/store','store')->name('admin.settings.website.achivement.store');
                 Route::post('/delete','delete')->name('admin.settings.website.achivement.delete');
+            });
+        });
+        /** Exam Corner Route **/
+        Route::prefix('exam_corner')->group(function(){
+            Route::controller(Exam_cornerController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.exam_corner.index');
+                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.exam_corner.get_all_data');
+                Route::get('/edit/{id}','edit')->name('admin.settings.website.exam_corner.edit');
+                Route::post('/update/{id}','update')->name('admin.settings.website.exam_corner.update');
+                Route::post('/store','store')->name('admin.settings.website.exam_corner.store');
+                Route::post('/delete','delete')->name('admin.settings.website.exam_corner.delete');
             });
         });
     });
