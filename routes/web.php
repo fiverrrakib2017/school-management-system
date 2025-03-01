@@ -29,6 +29,7 @@ use App\Http\Controllers\Backend\Settings\Website\NoticeController;
 use App\Http\Controllers\Backend\Settings\Website\SliderController;
 use App\Http\Controllers\Backend\Settings\Website\SpeechController;
 use App\Http\Controllers\Backend\Settings\Website\Exam_cornerController;
+use App\Http\Controllers\Backend\Settings\Website\FacilitiesController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\classController;
@@ -596,6 +597,17 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update/{id}','update')->name('admin.settings.website.exam_corner.update');
                 Route::post('/store','store')->name('admin.settings.website.exam_corner.store');
                 Route::post('/delete','delete')->name('admin.settings.website.exam_corner.delete');
+            });
+        });
+        /** Facilites Route **/
+        Route::prefix('facilities')->group(function(){
+            Route::controller(FacilitiesController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.facilities.index');
+                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.facilities.get_all_data');
+                Route::get('/edit/{id}','edit')->name('admin.settings.website.facilities.edit');
+                Route::post('/update/{id}','update')->name('admin.settings.website.facilities.update');
+                Route::post('/store','store')->name('admin.settings.website.facilities.store');
+                Route::post('/delete','delete')->name('admin.settings.website.facilities.delete');
             });
         });
     });
