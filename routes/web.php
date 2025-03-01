@@ -22,6 +22,7 @@ use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
+use App\Http\Controllers\Backend\Settings\Website\AchivementController;
 use App\Http\Controllers\Backend\Settings\Website\BannerController;
 use App\Http\Controllers\Backend\Settings\Website\GalleryController;
 use App\Http\Controllers\Backend\Settings\Website\NoticeController;
@@ -568,9 +569,20 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/list','index')->name('admin.settings.website.notice.index');
                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.notice.get_all_data');
                 Route::get('/edit/{id}','edit')->name('admin.settings.website.notice.edit');
-                Route::post('/update','update')->name('admin.settings.website.notice.update');
+                Route::post('/update/{id}','update')->name('admin.settings.website.notice.update');
                 Route::post('/store','store')->name('admin.settings.website.notice.store');
                 Route::post('/delete','delete')->name('admin.settings.website.notice.delete');
+            });
+        });
+        /** Achivement Route **/
+        Route::prefix('achivement')->group(function(){
+            Route::controller(AchivementController::class)->group(function(){
+                Route::get('/list','index')->name('admin.settings.website.achivement.index');
+                 Route::get('/get_all_data','get_all_data')->name('admin.settings.website.achivement.get_all_data');
+                Route::get('/edit/{id}','edit')->name('admin.settings.website.achivement.edit');
+                Route::post('/update/{id}','update')->name('admin.settings.website.achivement.update');
+                Route::post('/store','store')->name('admin.settings.website.achivement.store');
+                Route::post('/delete','delete')->name('admin.settings.website.achivement.delete');
             });
         });
     });
