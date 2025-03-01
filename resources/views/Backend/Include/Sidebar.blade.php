@@ -217,7 +217,7 @@
 
           <!-----------------Website Settings--------------------->
             @php
-                $active_prefix=['admin.settings.website.banner','admin.settings.website.slider','admin.settings.website.speech','admin.settings.website.gallery','admin.settings.website.notice','admin.settings.website.achivement','admin.settings.website.exam_corner','admin.settings.website.facilities','admin.settings.website.contract'];
+                $active_prefix=['admin.settings.website.banner','admin.settings.website.slider','admin.settings.website.speech','admin.settings.website.gallery','admin.settings.website.notice','admin.settings.website.achivement','admin.settings.website.exam_corner','admin.settings.website.facilities','admin.settings.website.contract','admin.settings.website.teacher_corner'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link  {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -252,6 +252,9 @@
               </li>
               <li class="nav-item">
                  <a href="{{ route('admin.settings.website.contract.index') }}" class="nav-link {{($route=='admin.settings.website.contract.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Contract</p></a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ route('admin.settings.website.teacher_corner.index') }}" class="nav-link {{($route=='admin.settings.website.teacher_corner.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Teacher Cornner</p></a>
               </li>
 
             </ul>

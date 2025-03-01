@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teacher_cornars', function (Blueprint $table) {
+        Schema::create('teacher_corners', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('class_id');
+            $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('teacher_id');
             $table->unsignedBigInteger('subject_id');
+            $table->text('image')->nullable()->nullable();
             $table->text('lession');
             $table->timestamps();
 
 
             $table->foreign('class_id')->references('id')->on('student_classes')->onDelete('cascade');
-
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
             $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
 
             $table->foreign('subject_id')->references('id')->on('student_subjects')->onDelete('cascade');
