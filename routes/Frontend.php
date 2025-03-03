@@ -22,9 +22,11 @@ Route::get('/news/fullview/{id}',function(){
 });
 
 /************** Teacher Frontend Route *********************/
-Route::get('/teacher/fullview/{id}',function(){
-    return 'okkkk';
-    // return view('Frontend.Pages.Teacher.FullView');
+Route::get('/teacher/list',function(){
+    return view('Frontend.Pages.Teacher.List');
+})->name('teacher.list');
+Route::get('/teacher/fullview/{id}',function($id){
+    return view('Frontend.Pages.Teacher.FullView');
 })->name('teacher.fullview');
 
 
@@ -35,5 +37,6 @@ Route::get('/student/fullview/{id}',function($id){
 })->name('student.fullview');
 
 Route::get('/student/list',function(){
-    return view('Frontend.Pages.Student.List');
+    $students=App\Models\Student::with('currentClass','section')->get();
+    return view('Frontend.Pages.Student.List',compact('students'));
 })->name('student.list');

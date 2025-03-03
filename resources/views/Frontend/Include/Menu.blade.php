@@ -25,10 +25,11 @@
                     <li>
                         <span class="">Authority</span>
                         <ul>
-                            <li><a href="stafflist.php?stfid=1">শিক্ষক-শিক্ষিকা</a></li>
-                            <li><a href="stafflist.php?stfid=2">কর্মচারি</a></li>
+                            <li><a href="{{ route('teacher.list') }}">শিক্ষক-শিক্ষিকা</a></li>
+                            <li><a href="{{ route('student.list') }}">ছাত্র-ছাত্রী</a></li>
+                            {{-- <li><a href="stafflist.php?stfid=2">কর্মচারি</a></li>
                             <li><a href="stafflist.php?stfid=3">ম্যানেজমেন্ট</a></li>
-                            <li><a href="stafflist.php?stfid=4">ভোকেশনাল</a></li>
+                            <li><a href="stafflist.php?stfid=4">ভোকেশনাল</a></li> --}}
                         </ul>
                     </li>
 
