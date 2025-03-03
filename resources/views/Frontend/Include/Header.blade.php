@@ -2,10 +2,6 @@
     <div class="row">
         <!-- Logo -->
         <div class="logo">
-
-            {{-- <a href="{{ url('/') }}" title="">
-                <img src="{{ asset('Frontend/Images/logo.png') }}" alt="website logo"
-                    width="300" height="75" /></a> --}}
             <a href="{{ url('/') }}" title="">
                 <img class="img-fluid" src="https://rzasc.com/uploads/frontend/images/logo117108410850319.png" alt="website logo"
                     width="300" height="75" /></a>
