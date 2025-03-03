@@ -11,10 +11,10 @@ Route::get('/speech/fullview/{id}',function($id){
      return view('Frontend.Pages.Speech.FullView',compact('speech'));
 })->name('speech.fullview');
 
-Route::get('/banner/fullview/{id}',function(){
-    return 'okkkk';
-    // return view('Frontend.Pages.Banner.FullView');
-});
+Route::get('/banner/fullview/{id}',function($id){
+    $banner=App\Models\Banner::find($id);
+    return view('Frontend.Pages.Banner.FullView',compact('banner'));
+})->name('banner.fullview');
 
 Route::get('/news/fullview/{id}',function(){
     return 'okkkk';

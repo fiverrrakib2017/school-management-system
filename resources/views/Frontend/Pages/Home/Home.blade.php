@@ -142,11 +142,11 @@
         <div class="col-md-9">
             <div class="welcome-section wow fadeInLeft" data-wow-duration="1.5s">
                 <h2 class="welcome-title text-primary">
-                    {{ $banner->title }}
+                   <a href="{{ route('banner.fullview', $banner->id) }}"> {{ $banner->title }}</a>
                 </h2>
                 <p class="text-justify">
                     @if($banner->description)
-                        {{ \Illuminate\Support\Str::limit($banner->description, 100) }}
+                        {{ \Illuminate\Support\Str::limit($banner->description, 300) }}
                     @else
                         স্বাগতম আমাদের ওয়েবসাইটে। এখানে আপনি প্রতিদিনের সকল তথ্য পেতে পারবেন। আমাদের সাথে থাকার জন্য ধন্যবাদ।
                     @endif
