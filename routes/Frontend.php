@@ -23,7 +23,8 @@ Route::get('/news/fullview/{id}',function(){
 
 /************** Teacher Frontend Route *********************/
 Route::get('/teacher/list',function(){
-    return view('Frontend.Pages.Teacher.List');
+    $teachers=App\Models\Teacher::all();
+    return view('Frontend.Pages.Teacher.List',compact('teachers'));
 })->name('teacher.list');
 Route::get('/teacher/fullview/{id}',function($id){
     return view('Frontend.Pages.Teacher.FullView');

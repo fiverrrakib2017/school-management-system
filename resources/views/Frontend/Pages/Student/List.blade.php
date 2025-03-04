@@ -121,6 +121,7 @@
                                 <th>Section</th>
                                 <th>Phone No.</th>
                                 <th>Image</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -138,6 +139,9 @@
                                     @else
                                         <img src="{{ asset('uploads/photos/avatar.png') }}" class="student-photo">
                                     @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('student.fullview',$student->id) }}" class="btn-sm btn-success"><i class="fas fa-eye"></i></a>
                                 </td>
                             </tr>
                             @endforeach
