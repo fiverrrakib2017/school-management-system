@@ -75,6 +75,42 @@
                 <input type="hidden" id="mediam" name="mediam" value="1001" />
 
                 <div style="height: 550px; overflow-y: auto;">
+                    <div class="d-flex justify-content-between mb-3">
+                        <form action="{{ route('student.list') }}" method="GET" class="w-100">
+                            <div class="row " style="margin-bottom: 12px;">
+                                <div class="col-md-3">
+                                    <select name="class_id" class="form-control">
+                                        <option value="">Select Class</option>
+                                        @foreach($classes as $class)
+                                            <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>
+                                                {{ $class->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="section_id" class="form-control">
+                                        <option value="">Select Section</option>
+                                        {{-- @foreach($sections as $section)
+                                            <option value="{{ $section->id }}" {{ request('section_id') == $section->id ? 'selected' : '' }}>
+                                                {{ $section->name }}
+                                            </option>
+                                        @endforeach --}}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="name" class="form-control" placeholder="Search by Name" value="{{ request('name') }}">
+                                </div>
+                                <div class="col-md-3 d-flex">
+                                    <button type="submit" class="btn btn-success">Filter</button>
+                                    <a href="{{ route('student.list') }}" class="btn btn-danger ms-2">Clear</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <!-- Student Table -->
                     <table class="student-table table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -91,9 +127,9 @@
                             @foreach($students as $student)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $student->name }}</td>
+                                <td><a href="{{ route('student.fullview',$student->id) }}" style="color: black">{{ $student->name }}</a></td>
                                 <td>{{ $student->roll_no ?? '' }}</td>
-                                <td>{{ $student->current_class->name ?? '' }}</td>
+                                <td>{{ $student->currentClass->name ?? '' }}</td>
                                 <td>{{ $student->section->name ?? '' }}</td>
                                 <td>{{ $student->phone ?? '' }}</td>
                                 <td>
@@ -107,6 +143,10 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- Pagination Links -->
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $students->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -114,3 +154,34 @@
     </div>
 </div>
 @endsection
+@section('script')
+<script type="text/javascript">
+    $(document).on('change','select[name="class_id"]',function(){
+        /*Get Sections*/
+        var sections = @json($sections);
+        /*Get Class ID*/
+        var selectedClassId = $(this).val();
+
+
+        var filteredSections = sections.filter(function(section) {
+            /*Filter sections by class_id*/
+            return section.class_id == selectedClassId;
+        });
+
+
+        /* Update Section dropdown*/
+        var sectionOptions = '<option value="">--Select--</option>';
+        filteredSections.forEach(function(section) {
+            sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+        });
+
+
+
+        $('select[name="section_id"]').html(sectionOptions);
+        $('select[name="section_id"]').select2();
+
+    });
+
+</script>
+@endsection
+

@@ -36,7 +36,29 @@ Route::get('/student/fullview/{id}',function($id){
     // return view('Frontend.Pages.Student.FullView');
 })->name('student.fullview');
 
-Route::get('/student/list',function(){
-    $students=App\Models\Student::with('currentClass','section')->get();
-    return view('Frontend.Pages.Student.List',compact('students'));
+Route::get('/student/list', function (Illuminate\Http\Request $request) {
+    $query = \App\Models\Student::with(['currentClass', 'section']);
+
+    /*Class Filter*/
+    if ($request->has('class_id') && $request->class_id != '') {
+        $query->where('current_class', $request->class_id);
+    }
+
+    /* Section Filter*/
+    if ($request->has('section_id') && $request->section_id != '') {
+        $query->where('section_id', $request->section_id);
+    }
+
+    /* Name Filter*/
+    if ($request->has('name') && $request->name != '') {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    $students = $query->paginate(10);
+    $classes = \App\Models\Student_class::all();
+    $sections = \App\Models\Section::all();
+
+    return view('Frontend.Pages.Student.List', compact('students', 'classes', 'sections'));
 })->name('student.list');
+
+

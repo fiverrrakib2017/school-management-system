@@ -60,7 +60,7 @@
                 <div id="content">
 
                   <!-- Marquee Notice Start -->
-					
+
 					<!-- Marquee Notice End -->
 
                 <!-- Marque notice end -->
@@ -139,6 +139,7 @@
         @include('Frontend.Include.Footer')
         <!-- JS -->
        @include('Frontend.Include.Script')
+       @yield('script')
     </div> <!-- End JS -->
 </body>
 

@@ -166,6 +166,9 @@
                     <li>
                         <a href="contact.php" class="">Contact</a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.login') }}" class="">Login</a>
+                    </li>
                 </ul>
 
             </div>
