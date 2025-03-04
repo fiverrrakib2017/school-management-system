@@ -277,7 +277,7 @@
                         <tr>
                             <td><b>Nationality:</b> {{ $student->nationality ?? 'N/A' }}</td>
                             <td><b>Date of Birth:</b> {{ $student->birth_date ?? 'N/A' }}</td>
-                            <td><b>Class:</b> Play</td>
+                            <td><b>Class:</b> {{ $student->currentClass->name ?? 'N/A' }}</td>
                         </tr>
                     </table>
                 </div>
