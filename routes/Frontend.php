@@ -32,9 +32,9 @@ Route::get('/teacher/fullview/{id}',function($id){
 
 
 /************** Student Frontend Route *********************/
-Route::get('/student/fullview/{id}',function($id){
-    return $id; // This will return the id of the student
-    // return view('Frontend.Pages.Student.FullView');
+Route::get('/student/profile/{id}',function($id){
+    $student = \App\Models\Student::with(['currentClass', 'section'])->findOrFail($id);
+    return view('Frontend.Pages.Student.Profile', compact('student'));
 })->name('student.fullview');
 
 Route::get('/student/list', function (Illuminate\Http\Request $request) {

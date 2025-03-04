@@ -19,4 +19,7 @@ class Student extends Model
     {
         return $this->belongsTo(Student_class::class, 'previous_class');
     }
+    public function subject(){
+        return $this->belongsTo(Student_subject::class, 'class_id');
+    }
 }
