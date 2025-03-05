@@ -56,8 +56,10 @@
 
         <!-- Main Content Section -->
         <div class="col-md-9">
+            @if($news)
+
             <div class="speech-wrapper">
-                <h2 class="speech-title">{{ $news->title }}</h2>
+                <h2 class="speech-title">{{ $news->title ?? '' }}</h2>
 
                 <div class="speech-content">
 
@@ -71,6 +73,16 @@
                     </div>
                 </div>
             </div>
+            @else
+            <div class="speech-wrapper">
+
+
+                <div class="speech-content">
+
+                  <h2 class="text-center" style="color:red;">No Data Found.</h2>
+                </div>
+            </div>
+            @endif;
         </div>
 
         <!-- Notice Section -->
