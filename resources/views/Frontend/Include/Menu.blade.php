@@ -42,7 +42,7 @@
                             @endphp
                             @foreach ($facilities as $item)
                                 <li>
-                                    <a href="{{ url('fullview/'.$item->id) }}">{{ $item->title }}</a>
+                                    <a href="{{ route('facilities.fullview',$item->id) }}">{{ $item->title }}</a>
                                 </li>
                             @endforeach
 

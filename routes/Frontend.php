@@ -26,8 +26,9 @@ Route::get('/teacher/list',function(){
     $teachers=App\Models\Teacher::all();
     return view('Frontend.Pages.Teacher.List',compact('teachers'));
 })->name('teacher.list');
-Route::get('/teacher/fullview/{id}',function($id){
-    return view('Frontend.Pages.Teacher.FullView');
+Route::get('/teacher/profile/{id}',function($id){
+    $teacher = \App\Models\Teacher::findOrFail($id);
+    return view('Frontend.Pages.Teacher.Profile',compact('teacher'));
 })->name('teacher.fullview');
 
 
@@ -63,3 +64,9 @@ Route::get('/student/list', function (Illuminate\Http\Request $request) {
 })->name('student.list');
 
 
+/************** Facilities Frontend Route *********************/
+
+Route::get('/facilities/fullview/{id}',function($id){
+    $facilities = \App\Models\Facilities::findOrFail($id);
+    return view('Frontend.Pages.Facilities.Fullview', compact('facilities'));
+})->name('facilities.fullview');
