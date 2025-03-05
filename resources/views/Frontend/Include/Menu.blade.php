@@ -52,7 +52,7 @@
                         <span class="">Campus</span>
                         <ul>
                             <li>
-                                <a href="recent_news.php">Recent news</a>
+                                <a href="{{ route('recent.news.all') }}">Recent news</a>
                             </li>
                             <li>
                                 <a href="gallery.php">Photo gallery</a>

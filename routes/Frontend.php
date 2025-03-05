@@ -70,3 +70,14 @@ Route::get('/facilities/fullview/{id}',function($id){
     $facilities = \App\Models\Facilities::findOrFail($id);
     return view('Frontend.Pages.Facilities.Fullview', compact('facilities'));
 })->name('facilities.fullview');
+
+/************** Recent News Frontend Route *********************/
+Route::get('/recent/news/list', function() {
+    $news = \App\Models\Notice::where('post_type', '2')->latest()->paginate(5);
+    return view('Frontend.Pages.News.Recent', compact('news'));
+})->name('recent.news.all');
+
+Route::get('/recent/news/view/{id}',function($id){
+     $news = \App\Models\Notice::find($id);
+    return view('Frontend.Pages.News.View', compact('news'));
+})->name('recent.news.view');
