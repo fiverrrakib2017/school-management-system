@@ -55,11 +55,11 @@
                                 <a href="{{ route('recent.news.all') }}">Recent news</a>
                             </li>
                             <li>
-                                <a href="gallery.php">Photo gallery</a>
+                                <a href="{{ route('photo.gallery.all') }}">Photo gallery</a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="news_archive.php">Video gallery</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                     </li>

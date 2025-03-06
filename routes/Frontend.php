@@ -81,3 +81,7 @@ Route::get('/recent/news/view/{id}',function($id){
      $news = \App\Models\Notice::find($id);
     return view('Frontend.Pages.News.View', compact('news'));
 })->name('recent.news.view');
+/************** Photo Gallery Frontend Route *********************/
+Route::get('/photo/gallery',function(){
+   return view('Frontend.Pages.Gallery.Show');
+})->name('photo.gallery.all');
