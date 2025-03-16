@@ -26,6 +26,12 @@ Route::get('/teacher/list',function(){
     $teachers=App\Models\Teacher::all();
     return view('Frontend.Pages.Teacher.List',compact('teachers'));
 })->name('teacher.list');
+
+Route::get('/teacher/corners',function(){
+    $data=App\Models\Teacher_corner::with(['class', 'section', 'subject', 'teacher'])->latest()->paginate(5);
+    return view('Frontend.Pages.Teacher.Corners',compact('data'));
+})->name('teacher.corners');
+
 Route::get('/teacher/profile/{id}',function($id){
     $teacher = \App\Models\Teacher::findOrFail($id);
     return view('Frontend.Pages.Teacher.Profile',compact('teacher'));
@@ -85,3 +91,25 @@ Route::get('/recent/news/view/{id}',function($id){
 Route::get('/photo/gallery',function(){
    return view('Frontend.Pages.Gallery.Show');
 })->name('photo.gallery.all');
+
+/************** General Notice Frontend Route *********************/
+Route::get('/notice/general',function(){
+    $data = \App\Models\Notice::where('post_type', '1')->where('notice_type','1')->latest()->paginate(5);
+    return view('Frontend.Pages.Notice.General.index', compact('data'));
+ })->name('notice.general.all');
+
+ Route::get('/notice/general/view/{id}',function($id){
+    $news = \App\Models\Notice::find($id);
+   return view('Frontend.Pages.Notice.General.view', compact('news'));
+})->name('notice.general.view');
+
+/************** Important Notice Frontend Route *********************/
+Route::get('/notice/important',function(){
+    $data = \App\Models\Notice::where('post_type', '1')->where('notice_type','2')->latest()->paginate(5);
+    return view('Frontend.Pages.Notice.Important.index', compact('data'));
+ })->name('notice.important.all');
+
+ Route::get('/notice/important/view/{id}',function($id){
+    $news = \App\Models\Notice::find($id);
+   return view('Frontend.Pages.Notice.Important.view', compact('news'));
+})->name('notice.important.view');

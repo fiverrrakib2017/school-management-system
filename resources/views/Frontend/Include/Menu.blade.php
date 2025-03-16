@@ -63,7 +63,7 @@
 
                         </ul>
                     </li>
-                    <li>
+                    {{-- <li>
                         <span class="">Article</span>
                         <ul>
                             <li>
@@ -73,7 +73,7 @@
                                 <a href="article_st.php">Student</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     <li>
                         <span class="">Admission</span>
@@ -120,9 +120,12 @@
                         <span class="">Corner</span>
                         <ul>
                             <li>
-                                <a href="student_corner.php">Student corner</a>
+                                <a href="{{ route('student.list') }}">Student corner</a>
                             </li>
-                            <li class="parent">
+                            <li>
+                                <a href="{{ route('teacher.corners') }}">Teacher corner</a>
+                            </li>
+                            {{-- <li class="parent">
                                 <span>Institute corner</span>
                                 <ul>
                                     <li>
@@ -135,7 +138,7 @@
                                         <a href="created_post.php">Created post</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="guardian_corner.php">Guardian corner</a>
                             </li>
@@ -156,10 +159,10 @@
                         <span class="">Notice</span>
                         <ul>
                             <li>
-                                <a href="imp_notice.php">Importent notice</a>
+                                <a href="{{ route('notice.important.all') }}">Importent notice</a>
                             </li>
                             <li>
-                                <a href="general_notice.php">General notice</a>
+                                <a href="{{ route('notice.general.all') }}">General notice</a>
                             </li>
                         </ul>
                     </li>
