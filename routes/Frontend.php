@@ -121,3 +121,8 @@ Route::get('/exam/routine',function(){
     $data=App\Models\Teacher_corner::with(['class', 'section', 'subject', 'teacher'])->latest()->paginate(5);
     return view('Frontend.Pages.Corner.Teacher',compact('data'));
 })->name('teacher.corners');
+/************** Contract Frontend Route *********************/
+ Route::get('/contract',function(){
+    $data=App\Models\Contract::latest()->paginate(5);
+    return view('Frontend.Pages.Contract.index',compact('data'));
+})->name('contract');

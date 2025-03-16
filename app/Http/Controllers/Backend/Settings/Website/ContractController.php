@@ -45,13 +45,10 @@ class ContractController extends Controller
         $object->name = $request->name;
         $object->email = $request->email;
         $object->message = $request->message;
-        
+
         /* Save to the database table*/
         $object->save();
-        return response()->json([
-            'success' => true,
-            'message' => 'Added Successfully!'
-        ]);
+        return redirect()->back()->with('success', 'Your message has been sent successfully.');
     }
 
 
@@ -69,15 +66,15 @@ class ContractController extends Controller
 
         return response()->json(['success' =>true, 'message'=> 'Deleted successfully.']);
     }
-   
+
     private function validateForm($request)
     {
 
         /*Validate the form data*/
         $rules=[
-            'name' => 'required',
-            'email' => 'required',
-            'message' => 'required',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string|min:10',
         ];
         $validator = Validator::make($request->all(), $rules);
 

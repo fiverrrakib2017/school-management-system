@@ -140,7 +140,7 @@
                                 </ul>
                             </li> --}}
                             <li>
-                                <a href="guardian_corner.php">Guardian corner</a>
+                                <a href="{{ route('contract') }}">Guardian corner</a>
                             </li>
                         </ul>
                     </li>
@@ -167,7 +167,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="contact.php" class="">Contact</a>
+                        <a href="{{ route('contract') }}" class="">Contact</a>
                     </li>
                     <li>
                         <a href="{{ route('admin.login') }}" class="">Login</a>
