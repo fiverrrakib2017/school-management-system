@@ -27,10 +27,7 @@ Route::get('/teacher/list',function(){
     return view('Frontend.Pages.Teacher.List',compact('teachers'));
 })->name('teacher.list');
 
-Route::get('/teacher/corners',function(){
-    $data=App\Models\Teacher_corner::with(['class', 'section', 'subject', 'teacher'])->latest()->paginate(5);
-    return view('Frontend.Pages.Teacher.Corners',compact('data'));
-})->name('teacher.corners');
+
 
 Route::get('/teacher/profile/{id}',function($id){
     $teacher = \App\Models\Teacher::findOrFail($id);
@@ -113,3 +110,14 @@ Route::get('/notice/important',function(){
     $news = \App\Models\Notice::find($id);
    return view('Frontend.Pages.Notice.Important.view', compact('news'));
 })->name('notice.important.view');
+
+/************** Exam Corners Frontend Route *********************/
+Route::get('/exam/routine',function(){
+    $data = \App\Models\Exam_cornar::latest()->paginate(5);
+    return view('Frontend.Pages.Corner.Exam', compact('data'));
+ })->name('exam.routine');
+/************** Teacher Corners Frontend Route *********************/
+ Route::get('/teacher/corners',function(){
+    $data=App\Models\Teacher_corner::with(['class', 'section', 'subject', 'teacher'])->latest()->paginate(5);
+    return view('Frontend.Pages.Corner.Teacher',compact('data'));
+})->name('teacher.corners');

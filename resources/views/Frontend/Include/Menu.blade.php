@@ -111,7 +111,7 @@
                             <li><a href="result_query_by_roll.php">Search result</a></li>
 
                             <li>
-                                <a href="exam_routine.php">Exam routine</a>
+                                <a href="{{ route('exam.routine') }}">Exam routine</a>
                             </li>
                         </ul>
                     </li>
