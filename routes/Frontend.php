@@ -126,3 +126,12 @@ Route::get('/exam/routine',function(){
     $data=App\Models\Contract::latest()->paginate(5);
     return view('Frontend.Pages.Contract.index',compact('data'));
 })->name('contract');
+/************** Search Result Frontend Route *********************/
+ Route::get('/result/search',function(){
+    //$data=App\Models\Contract::latest()->paginate(5);
+    return view('Frontend.Pages.Result.Search');
+})->name('result.search');
+ Route::get('/result/print',function(){
+    //$data=App\Models\Contract::latest()->paginate(5);
+    return view('Frontend.Pages.Result.Print');
+})->name('result.print');

@@ -108,7 +108,7 @@
                         <span class="">Exam corner</span>
                         <ul>
 
-                            <li><a href="result_query_by_roll.php">Search result</a></li>
+                            <li><a href="{{ route('result.search') }}">Search result</a></li>
 
                             <li>
                                 <a href="{{ route('exam.routine') }}">Exam routine</a>

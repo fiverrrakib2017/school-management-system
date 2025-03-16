@@ -151,7 +151,7 @@
                         স্বাগতম আমাদের ওয়েবসাইটে। এখানে আপনি প্রতিদিনের সকল তথ্য পেতে পারবেন। আমাদের সাথে থাকার জন্য ধন্যবাদ।
                     @endif
                     <br>
-                    <a href="fullview.php?msg=5" class="btn btn-primary btn-sm wow bounceIn">আরও পড়ুন</a>
+                    <a href="{{ route('banner.fullview', $banner->id) }}" class="btn btn-primary btn-sm wow bounceIn">আরও পড়ুন</a>
                 </p>
                 @if($banner->image)
                     <img class="img-responsive img-thumbnail animate fadeInUp" src="{{ asset('Backend/uploads/photos/' . $banner->image) }}" alt="Welcome Image">
