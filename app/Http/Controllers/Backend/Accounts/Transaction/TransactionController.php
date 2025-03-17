@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Backend\Accounts\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account_transaction;
-use App\Models\Master_Ledger;
+use App\Models\Master_ledger;
 use App\Models\Ledger;
 use App\Models\Sub_ledger;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class TransactionController extends Controller
 {
     public function index(){
-        $master_ledger=Master_Ledger::where('status',1)->latest()->get();
+        $master_ledger=Master_ledger::where('status',1)->latest()->get();
         $ledger=Ledger::where('status',1)->latest()->get();
         return view('Backend.Pages.Accounts.Transaction.index',compact('ledger','master_ledger'));
     }
@@ -83,7 +83,7 @@ class TransactionController extends Controller
     }
 
     public function transaction_report(){
-        $master_ledger=Master_Ledger::where('status',1)->latest()->get();
+        $master_ledger=Master_ledger::where('status',1)->latest()->get();
         return view('Backend.Pages.Accounts.Transaction.Report.index',compact('master_ledger'));
     }
     public function report_generate(Request $request)
@@ -116,7 +116,7 @@ class TransactionController extends Controller
         ->get()
         ->groupBy('ledger.ledger_name');
 
-        $master_ledger = Master_Ledger::where('status', 1)->latest()->get();
+        $master_ledger = Master_ledger::where('status', 1)->latest()->get();
         $ledger = Ledger::where('status', 1)->latest()->get();
         return view('Backend.Pages.Accounts.Transaction.Report.index', compact('transactions', 'master_ledger', 'ledger','same_date_flag'));
     }
