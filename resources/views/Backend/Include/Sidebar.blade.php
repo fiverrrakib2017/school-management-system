@@ -29,11 +29,11 @@
         </li>
 
           <li class="nav-item ">
-            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.student') ? 'active' : '' }}">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.student.index') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
               <p> Students <i class="right fas fa-angle-left"></i> </p>
             </a>
-            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, 'admin.student') ? 'display: block;' : 'display: none;' }}">
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, 'admin.student.index') ? 'display: block;' : 'display: none;' }}">
               <li class="nav-item">
                 <a href="{{ route('admin.student.index') }}" class="nav-link  {{ $route == 'admin.student.index' ||$route == 'admin.student.create' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
@@ -53,37 +53,77 @@
               <li class="nav-item">
                  <a href="{{ route('admin.student.section.index') }}" class="nav-link {{($route=='admin.student.section.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Section</p></a>
               </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Examination</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.routine.index') }}" class="nav-link {{($route=='admin.student.exam.routine.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Routine</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.result.create') }}" class="nav-link  {{($route=='admin.student.exam.result.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Create Exam Result</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.exam.result.report') }}" class="nav-link {{($route=='admin.student.exam.result.report') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Result Report</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.shift.index') }}" class="nav-link {{($route=='admin.student.shift.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Shift</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.leave.index') }}" class="nav-link {{($route=='admin.student.leave.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Leave</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.attendence.index') }}" class="nav-link  {{($route=='admin.student.attendence.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.attendence.log') }}" class="nav-link {{($route=='admin.student.attendence.log') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance Report</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.fees_type.index') }}" class="nav-link  {{($route=='admin.student.fees_type.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Fees Type</p></a>
-              </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.bill_collection.index') }}" class="nav-link  {{($route=='admin.student.bill_collection.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
-              </li>
 
+
+
+
+
+            </ul>
+          </li>
+            @php
+                $active_prefix=['admin.student.exam.index','admin.student.exam.routine.index','admin.student.exam.result.index','admin.student.exam.result.create','admin.student.exam.result.report'];
+            @endphp
+          <li class="nav-item">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
+                <i class='nav-icon fas fa-book-open'></i>
+                <p>&nbsp; Examination <i class="right fas fa-angle-left"></i> </p>
+            </a>
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Examination</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.exam.routine.index') }}" class="nav-link {{($route=='admin.student.exam.routine.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Routine</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.exam.result.create') }}" class="nav-link  {{($route=='admin.student.exam.result.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Create Exam Result</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.exam.result.report') }}" class="nav-link {{($route=='admin.student.exam.result.report') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Result Report</p></a>
+                 </li>
+
+            </ul>
+          </li>
+            @php
+                $active_prefix=['admin.student.leave.index','admin.student.attendence.index','admin.student.attendence.log','admin.student.shift.index'];
+            @endphp
+          <li class="nav-item">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
+                <i class='nav-icon fas fa-calendar-check'></i>
+                <p>&nbsp; Attendance <i class="right fas fa-angle-left"></i> </p>
+            </a>
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.leave.index') }}" class="nav-link {{($route=='admin.student.leave.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Leave</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.attendence.index') }}" class="nav-link  {{($route=='admin.student.attendence.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.attendence.log') }}" class="nav-link {{($route=='admin.student.attendence.log') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Attendance Report</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.shift.index') }}" class="nav-link {{($route=='admin.student.shift.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Shift</p></a>
+                 </li>
+
+            </ul>
+          </li>
+            @php
+                $active_prefix=['admin.fees_type.student.index','admin.bill_collection.student.create','admin.bill_collection.student.index'];
+            @endphp
+          <li class="nav-item">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
+                <i class='nav-icon fas fa-money-bill-wave'></i>
+                <p>&nbsp; Bill Collection <i class="right fas fa-angle-left"></i> </p>
+            </a>
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
+
+                 <li class="nav-item">
+                    <a href="{{ route('admin.bill_collection.student.index') }}" class="nav-link  {{($route=='admin.bill_collection.student.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.fees_type.student.index') }}" class="nav-link  {{($route=='admin.fees_type.student.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Fees Type</p></a>
+                 </li>
             </ul>
           </li>
 

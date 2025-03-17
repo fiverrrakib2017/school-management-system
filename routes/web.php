@@ -198,10 +198,15 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/report','attendance_report')->name('admin.student.attendence.report');
             });
         });
+
+
+    });
+      /** Bill Collection Management  Route **/
+      Route::prefix('admin/bill-collection')->group(function(){
         /*Student Fees Type */
         Route::prefix('Fees_type')->group(function(){
             Route::controller(Fees_type_controller::class)->group(function(){
-                Route::get('/index','index')->name('admin.student.fees_type.index');
+                Route::get('/index','index')->name('admin.fees_type.student.index');
                 Route::get('/all_data','all_data')->name('admin.student.fees_type.all_data');
                 Route::post('/store','store')->name('admin.student.fees_type.store');
                 Route::post('/update','update')->name('admin.student.fees_type.update');
@@ -212,9 +217,9 @@ Route::group(['middleware'=>'admin'],function(){
         });
 
         /*Student Bill Collection */
-        Route::prefix('Bill_collection')->group(function(){
+        Route::prefix('')->group(function(){
             Route::controller(Bill_CollectionController::class)->group(function(){
-                Route::get('/index','index')->name('admin.student.bill_collection.index');
+                Route::get('/index','index')->name('admin.bill_collection.student.index');
                 Route::get('/all_data','all_data')->name('admin.student.bill_collection.all_data');
                 Route::get('/create','create_bill')->name('admin.student.bill_collection.create');
                 Route::post('/store','store')->name('admin.student.bill_collection.store');
@@ -226,8 +231,7 @@ Route::group(['middleware'=>'admin'],function(){
             });
 
         });
-
-    });
+      });
      /** Teacher Management  Route **/
     Route::prefix('admin/teacher')->group(function(){
         Route::controller(TeacherController::class)->group(function(){

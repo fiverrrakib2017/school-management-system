@@ -46,10 +46,10 @@
    </div>
     <!-- End Marquee above the buttons -->
     <div class="col-md-12 d-flex flex-wrap gap-2">
-        <button class="btn btn-primary m-1"><i class="fas fa-user-plus"></i> Add Student</button>
-        <button class="btn btn-success m-1"><i class="fas fa-chalkboard-teacher"></i> Add Teacher</button>
-        <button  class="btn btn-warning m-1"><i class="fas fa-calendar-alt"></i> View Attendance</button>
-        <button class="btn btn-info m-1"><i class="fas fa-file-invoice-dollar"></i> Manage Fees</button>
+        <a href="{{ route('admin.student.create') }}" class="btn btn-primary m-1"><i class="fas fa-user-plus"></i> Add Student</a>
+        <a href="{{ route('admin.teacher.create') }}" class="btn btn-success m-1"><i class="fas fa-chalkboard-teacher"></i> Add Teacher</a>
+        <a href="{{ route('admin.student.attendence.index') }}"  class="btn btn-warning m-1"><i class="fas fa-calendar-alt"></i> View Attendance</a>
+        <a href="{{ route('admin.student.bill_collection.create') }}" class="btn btn-info m-1"><i class="fas fa-file-invoice-dollar"></i> Manage Fees</a>
     </div>
 </div>
 

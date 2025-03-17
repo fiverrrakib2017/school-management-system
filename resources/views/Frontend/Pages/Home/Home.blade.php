@@ -189,7 +189,7 @@
                         <figcaption class="figcaption position-absolute bottom-0 start-0 w-100 text-white p-3 bg-dark bg-opacity-50">
                             {{ \Illuminate\Support\Str::limit($item->description, 100) }}
 
-                            <a href="fullview.php?msg=3" class="text-warning text-decoration-none">More..</a>
+                            <a href="{{ route('speech.fullview', $item->id) }}" class="text-warning text-decoration-none">More..</a>
                         </figcaption>
                     </figure>
                 </li>

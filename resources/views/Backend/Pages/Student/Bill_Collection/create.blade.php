@@ -358,7 +358,7 @@
                 if (response.success) {
                     toastr.success(response.message);
                     setTimeout(() => {
-                        window.location.href = "{{ route('admin.student.bill_collection.index') }}";
+                        window.location.href = "{{ route('admin.bill_collection.student.index') }}";
                     }, 500);
                 }
             },
