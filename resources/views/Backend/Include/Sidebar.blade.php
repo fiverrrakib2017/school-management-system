@@ -261,14 +261,31 @@
             </ul>
           </li>
 
-          <!-----------------Website Settings--------------------->
+          <!-----------------Website--------------------->
+            @php
+                $active_prefix=[];
+            @endphp
+          <li class="nav-item">
+            <a href="#" class="nav-link  {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
+                <i class="fa fa-cog mr-2 "></i>
+              <p>&nbsp; Settings <i class="right fas fa-angle-left"></i> </p>
+            </a>
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
+
+              <li class="nav-item">
+                 <a href="{{ route('admin.settings.website.banner.index') }}" class="nav-link {{($route=='admin.settings.website.banner.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>School Information</p></a>
+              </li>
+
+            </ul>
+          </li>
+          <!-----------------Website--------------------->
             @php
                 $active_prefix=['admin.settings.website.banner','admin.settings.website.slider','admin.settings.website.speech','admin.settings.website.gallery','admin.settings.website.notice','admin.settings.website.achivement','admin.settings.website.exam_corner','admin.settings.website.facilities','admin.settings.website.contract','admin.settings.website.teacher_corner'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link  {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
-                <i class="fa fa-cog mr-2 "></i>
-              <p>&nbsp; Website Settings <i class="right fas fa-angle-left"></i> </p>
+                <i class="fa fa-globe mr-2 "></i>
+              <p>&nbsp; Website <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
