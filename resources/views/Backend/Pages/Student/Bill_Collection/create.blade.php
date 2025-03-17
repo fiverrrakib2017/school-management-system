@@ -87,9 +87,9 @@
                         <option>---Select---</option>
                   </select>
                </div>
-               <div class="col-md-4 col-sm-12 mb-3">
+               <div class="col-md-4 col-sm-12 mb-3 custom-group ">
                   <label for="" class="form-label">Month Name</label>
-                  <select type="text" id="month_name" class="form-control month_name" style="width:100%" multiple>
+                  <select type="text"  id="month_name" class="form-control month_name " style="width:100%" multiple>
                         <option>---Select---</option>
                         <option value="January">January</option>
                         <option value="February">February</option>
@@ -119,8 +119,8 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered  table-sm">
-                    <thead class="text-center">
+                <table class="table table-bordered table-striped table-hover table-sm">
+                    <thead class="text-center bg-primary text-white">
                         <tr>
                             <th>Billing Item Name</th>
                             <th>Month</th>
@@ -130,28 +130,29 @@
                         </tr>
                     </thead>
                     <tbody id="tableRow" class="text-center"></tbody>
-                    <tfoot>
+                    <tfoot class="bg-light">
                         <tr>
                             <th class="text-right" colspan="2">Total Amount</th>
                             <th colspan="2">
-                                <input type="number" readonly  class="form-control total_amount text-right" name="total_amount" value="00">
+                                <input type="number" readonly class="form-control total_amount text-right fw-bold" name="total_amount" value="00">
                             </th>
                         </tr>
                         <tr>
                             <th class="text-right" colspan="2">Paid Amount</th>
                             <th colspan="2">
-                                <input type="number" class="form-control paid_amount text-right" name="paid_amount" placeholder="Enter paid amount">
+                                <input type="number" class="form-control paid_amount text-right fw-bold" name="paid_amount" placeholder="Enter paid amount">
                             </th>
                         </tr>
                         <tr>
                             <th class="text-right" colspan="2">Due Amount</th>
                             <th colspan="2">
-                                <input type="number" readonly class="form-control due_amount text-right" name="due_amount" placeholder="Due amount will be calculated">
+                                <input type="number" readonly class="form-control due_amount text-right fw-bold" name="due_amount" placeholder="Due amount will be calculated">
                             </th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
+
             <div class="text-end">
                <button type="button" onclick="history.back();" class="btn btn-danger ">Back</button>
                <button type="submit" class="btn btn-success "><i class="fas fa-dollar-sign"></i> Create Now</button>
@@ -171,7 +172,9 @@
 
     $("select[name='student_id']").select2();
     $("select[name='class_id']").select2();
-    $(".month_name").select2();
+    $('.month_name').select2({
+                            placeholder: "Select"
+                        });
     $("#billing_item").select2();
 
     $(document).on('change', 'select[name="class_id"]', function () {
@@ -261,6 +264,13 @@
             data: { id: billing_item_id},
             success: function (response) {
                 $('#amount').val(response.data.amount);
+                if (response.data.is_monthly == '1') {
+                    $('.month_name').val('').trigger('change');
+                    $('.month_name').closest('.custom-group').hide();
+                } else {
+                    $('.month_name').closest('.custom-group').show();
+                    $('.month_name').select2({ placeholder: "Select"});
+                }
 
             },
             error: function (xhr, status, error) {

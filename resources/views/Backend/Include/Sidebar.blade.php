@@ -27,13 +27,16 @@
                 <p>Dashboard</p>
             </a>
         </li>
-
+            <!-----------Examination Menu------------------->
+            @php
+                $active_prefix=['admin.student.index','admin.student.class.index','admin.student.subject.index','admin.student.class.routine.index','admin.student.section.index'];
+            @endphp
           <li class="nav-item ">
-            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.student.index') ? 'active' : '' }}">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
               <p> Students <i class="right fas fa-angle-left"></i> </p>
             </a>
-            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, 'admin.student.index') ? 'display: block;' : 'display: none;' }}">
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
               <li class="nav-item">
                 <a href="{{ route('admin.student.index') }}" class="nav-link  {{ $route == 'admin.student.index' ||$route == 'admin.student.create' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
@@ -60,6 +63,7 @@
 
             </ul>
           </li>
+          <!-----------Examination Menu------------------->
             @php
                 $active_prefix=['admin.student.exam.index','admin.student.exam.routine.index','admin.student.exam.result.index','admin.student.exam.result.create','admin.student.exam.result.report'];
             @endphp
@@ -84,13 +88,14 @@
 
             </ul>
           </li>
+           <!-----------Attendence Menu------------------->
             @php
                 $active_prefix=['admin.student.leave.index','admin.student.attendence.index','admin.student.attendence.log','admin.student.shift.index'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
                 <i class='nav-icon fas fa-calendar-check'></i>
-                <p>&nbsp; Attendance <i class="right fas fa-angle-left"></i> </p>
+                <p>&nbsp; Student Attendance <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
                 <li class="nav-item">
@@ -108,6 +113,7 @@
 
             </ul>
           </li>
+          <!-----------Bill Collection Menu------------------->
             @php
                 $active_prefix=['admin.fees_type.student.index','admin.bill_collection.student.create','admin.bill_collection.student.index'];
             @endphp
@@ -126,7 +132,7 @@
                  </li>
             </ul>
           </li>
-
+            <!-----------Teacher Menu------------------->
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.teacher') ? 'active' : '' }}">
                 <i class='nav-icon fas fa-chalkboard-teacher'></i>
@@ -156,7 +162,7 @@
             </ul>
           </li>
 
-
+            <!-----------Tickets Menu------------------->
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.tickets') ? 'active' : '' }}">
                 <i class='nav-icon fas fa-ticket-alt'></i>
@@ -175,7 +181,7 @@
               </li>
             </ul>
           </li>
-
+            <!-----------Invenotry Menu------------------->
           @php
               $active_prefix=['admin.customer','admin.supplier','admin.product','admin.brand','admin.category','admin.unit','admin.store'];
           @endphp
