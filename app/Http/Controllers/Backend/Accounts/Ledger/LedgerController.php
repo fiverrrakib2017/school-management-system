@@ -11,7 +11,7 @@ class LedgerController extends Controller
 {
     public function index(){
         $ledger=Ledger::with('master_ledger')->get();
-        $master_ledger=Master_Ledger::where('status',1)->latest()->get();
+        $master_ledger=Master_ledger::where('status',1)->latest()->get();
         return view('Backend.Pages.Accounts.Ledger.index',compact('master_ledger'));
     }
     public function get_all_data(Request $request){
