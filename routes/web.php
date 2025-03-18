@@ -22,6 +22,7 @@ use App\Http\Controllers\Backend\Product\SizeController;
 use App\Http\Controllers\Backend\Product\StockController;
 use App\Http\Controllers\Backend\Product\StoreController;
 use App\Http\Controllers\Backend\Product\UnitController;
+use App\Http\Controllers\Backend\Settings\Others\SettingsController;
 use App\Http\Controllers\Backend\Settings\Website\AchivementController;
 use App\Http\Controllers\Backend\Settings\Website\BannerController;
 use App\Http\Controllers\Backend\Settings\Website\ContractController;
@@ -530,6 +531,13 @@ Route::group(['middleware'=>'admin'],function(){
     });
 
     /** Settings Management  Route **/
+    Route::prefix('admin/settings/')->group(function(){
+        Route::controller(SettingsController::class)->group(function(){
+            Route::get('/information','index')->name('admin.settings.information.index');
+            Route::post('/store', 'store')->name('admin.settings.information.store');
+        });
+    });
+    /** Website Management  Route **/
     Route::prefix('admin/settings/website/')->group(function(){
         /** Banner Route **/
         Route::prefix('banner')->group(function(){

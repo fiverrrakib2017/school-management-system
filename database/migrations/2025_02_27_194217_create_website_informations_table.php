@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('website_informations', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
-            $table->text('value')->nullable();
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('email')->nullable();
+            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }

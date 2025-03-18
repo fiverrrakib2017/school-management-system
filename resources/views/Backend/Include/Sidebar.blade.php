@@ -261,9 +261,9 @@
             </ul>
           </li>
 
-          <!-----------------Website--------------------->
+          <!-----------------Settings--------------------->
             @php
-                $active_prefix=[];
+                $active_prefix=['admin.settings.information.index'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link  {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -273,7 +273,7 @@
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
               <li class="nav-item">
-                 <a href="{{ route('admin.settings.website.banner.index') }}" class="nav-link {{($route=='admin.settings.website.banner.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>School Information</p></a>
+                 <a href="{{ route('admin.settings.information.index') }}" class="nav-link {{($route=='admin.settings.information.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>School Information</p></a>
               </li>
 
             </ul>
