@@ -4,11 +4,8 @@
         <!-- Logo -->
         <div class="logo">
             <a href="{{ url('/') }}" title="">
-                @if($website_info->logo)
-                    <img class="img-fluid" src="{{ asset('Backend/uploads/photos/' . $website_info->logo) }}" alt="website logo" height="90px" width="90px">
-                @else
-                    <img src="https://www.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-600nw-2470054311.jpg" alt="default avatar">
-                @endif
+                <img class="img-fluid" src="{{ asset('Backend/uploads/photos/' . ($website_info->logo ?? 'default-logo.jpg')) }}" alt="website logo" height="90px" width="90px">
+
             </a>
         </div>
 
