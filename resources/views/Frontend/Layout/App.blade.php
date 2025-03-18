@@ -1,3 +1,8 @@
+@php
+
+    $website_info=App\Models\Website_information::first();
+@endphp
+
 <!-- === BEGIN HEADER === -->
 <!DOCTYPE html>
 <html lang="en">
@@ -26,17 +31,17 @@
 <body>
     <div id="body_bg">
 
-        <div id="pre_header" class="container"><!-- pre_header start -->
-            <div class="row margin-top-10 visible-lg"><!-- row margin-top-10 visible-lg start -->
-                <div class="col-md-6"><!-- col-md-6 start -->
+        <div id="pre_header" class="container">
+            <div class="row margin-top-10 visible-lg">
+                <div class="col-md-6">
                     <p>
-                        <strong>Phone :</strong>&nbsp; +88 01XXX XXXXX
+                        <strong>Phone :</strong>&nbsp; {{ $website_info->phone_number ?? '+88 01XXX XXXXX' }}
                     </p>
                 </div><!-- col-md-6 end -->
 
                 <div class="col-md-6 text-right"><!-- col-md-6 text-right start -->
                     <p style="display: inline-block; margin-right: 20px;">
-                        <strong>Email :</strong>&nbsp; info@yourwebsite.com
+                        <strong>Email :</strong>&nbsp;  {{ $website_info->email ?? 'info@yourwebsite.com' }}
                     </p>
                     <a href="{{ route('admin.login') }}" class="btn btn-primary btn-sm">Login</a>
                 </div><!-- col-md-6 text-right end -->
@@ -118,10 +123,11 @@
                     <!-- Contact Info -->
                     <div class="col-md-3 margin-bottom-20">
                         <h3 class="margin-bottom-15 text-primary">Contact Us</h3>
-                        <p><strong>“Institution Name”</strong><br> Address: প্রতিষ্ঠানের ঠিকানা</p>
+                        <p><strong>{{ $website_info->name ?? 'Your Website' }}</strong><br> Address: {{ $website_info->address ?? 'Your Address' }}</p>
                         <p>
-                            <span class="fa-phone">:</span> <a href="http://it-fast.com/education_management.html">+88 01XXX XXXXX</a><br>
-                            <span class="fa-envelope">:</span> <a href="mailto:info@yourwebsite.com">info@yourwebsite.com</a>
+                            <span class="fa-phone">:</span> <a href="http://it-fast.com/education_management.html">{{ $website_info->phone_number ?? '+88 01XXX XXXXX' }}</a><br>
+                            <span class="fa-envelope">:</span> <a href="mailto:info@yourwebsite.com">{{
+                                $website_info->email ?? 'info@yourwebsite.com' }}</a>
                         </p>
 
                         <br />

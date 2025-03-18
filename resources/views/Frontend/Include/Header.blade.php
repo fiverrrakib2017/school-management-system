@@ -1,11 +1,17 @@
+
 <div id="header" class="container">
     <div class="row">
         <!-- Logo -->
         <div class="logo">
             <a href="{{ url('/') }}" title="">
-                <img class="img-fluid" src="https://rzasc.com/uploads/frontend/images/logo117108410850319.png" alt="website logo"
-                    width="300" height="75" /></a>
+                @if($website_info->logo)
+                    <img class="img-fluid" src="{{ asset('Backend/uploads/photos/' . $website_info->logo) }}" alt="website logo" height="90px" width="90px">
+                @else
+                    <img src="https://www.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-600nw-2470054311.jpg" alt="default avatar">
+                @endif
+            </a>
         </div>
+
         <!-- End Logo -->
         <!-- Start Social link -->
         <ul class="social-icons pull-right hidden-xs">
