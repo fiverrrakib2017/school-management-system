@@ -35,6 +35,7 @@ use App\Http\Controllers\Backend\Settings\Website\FacilitiesController;
 use App\Http\Controllers\Backend\Settings\Website\TeacherCornerController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
+use App\Http\Controllers\Backend\Student\CardController;
 use App\Http\Controllers\Backend\Student\classController;
 use App\Http\Controllers\Backend\Student\ClassRoutine_controller;
 use App\Http\Controllers\Backend\Student\Exam_controller;
@@ -202,8 +203,24 @@ Route::group(['middleware'=>'admin'],function(){
 
 
     });
-      /** Bill Collection Management  Route **/
-      Route::prefix('admin/bill-collection')->group(function(){
+    /** Card Management  Route **/
+    Route::prefix('admin/card/management')->group(function(){
+        /*Student ID Card */
+        Route::prefix('id-card')->group(function(){
+            Route::controller(CardController::class)->group(function(){
+                Route::get('template/index','index')->name('admin.student.card.template');
+            });
+        });
+        /*Student ID Card */
+        Route::prefix('admit-card')->group(function(){
+            Route::controller(CardController::class)->group(function(){
+                Route::get('template/index','admid_card_template')->name('admin.student.admid.card.template');
+                Route::get('generate','admid_card_generate')->name('admin.student.admid.card.generate');
+            });
+        });
+    });
+    /** Bill Collection Management  Route **/
+    Route::prefix('admin/bill-collection')->group(function(){
         /*Student Fees Type */
         Route::prefix('Fees_type')->group(function(){
             Route::controller(Fees_type_controller::class)->group(function(){
@@ -230,9 +247,8 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('Invoice/view/{id}','invoice_show')->name('admin.student.bill_collection.invoice_show');
                 Route::get('student/due_amount/{student_id}','get_student_due_amount')->name('admin.student.get_student_due_amount');
             });
-
         });
-      });
+    });
      /** Teacher Management  Route **/
     Route::prefix('admin/teacher')->group(function(){
         Route::controller(TeacherController::class)->group(function(){
