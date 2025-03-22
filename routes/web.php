@@ -667,5 +667,9 @@ Route::group(['middleware'=>'admin'],function(){
         Artisan::call('optimize:clear');
         return 'Optimize Clear Completed';
     });
+    Route::get('/migrate', function () {
+        Artisan::call('migrate');
+        return 'Database Migration Completed';
+    });
 
 });

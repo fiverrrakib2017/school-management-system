@@ -409,7 +409,7 @@
             margin-top: 10px;
         }
         .info h2 {
-            font-size: 20px;
+            font-size: 13px;
             font-weight: bold;
             color: #06b9b9;
             margin: 10px 0 5px;
