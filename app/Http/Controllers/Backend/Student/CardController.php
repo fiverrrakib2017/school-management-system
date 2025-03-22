@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\Student_class;
 use App\Models\Student_subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -27,4 +28,25 @@ class CardController extends Controller
         $students=Student::latest()->get();
         return view('Backend.Pages.Student.Card.Admit.Card_generate',compact('students','sections','subjects'));
     }
+    public function admid_card_print($student_id,$exam_id){
+        $student = Student::find($student_id);
+        return view('Backend.Pages.Student.Card.Admit.Print',compact('student'));
+    }
+    public function id_card_generate(){
+        $sections= Section::latest()->get();
+        $students=Student::latest()->get();
+        return view('Backend.Pages.Student.Card.id_card',compact('students','sections'));
+    }
+    public function id_card_print($class_id, $section_id = null) {
+        $query = Student::with(['currentClass', 'section'])->where('current_class', '=', $class_id);
+
+        if (!is_null($section_id)) {
+            $query->where('section_id', '=', $section_id);
+        }
+
+        $classes = $query->get();
+
+        return view('Backend.Pages.Student.Card.id_card_print', compact('classes'));
+    }
+
 }

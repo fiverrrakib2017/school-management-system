@@ -90,7 +90,7 @@
           </li>
           <!-----------Card Management Menu------------------->
             @php
-                $active_prefix=['admin.student.card.template','admin.student.admid.card.template','admin.student.admid.card.generate'];
+                $active_prefix=['admin.student.card.template','admin.student.admid.card.template','admin.student.admid.card.generate','admin.student.id_card.generate'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -100,29 +100,22 @@
 
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
                 <li class="nav-item">
-                    <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Student ID Card</p></a>
+                    <a href="{{ route('admin.student.id_card.generate') }}" class="nav-link {{($route=='admin.student.id_card.generate') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Student ID Card</p></a>
                  </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.student.card.template') }}" class="nav-link {{($route=='admin.student.card.template') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>ID Card Template</p></a>
-                 </li>
-                <li class="nav-item">
+
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Certificate</p></a>
-                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Certificate Template</p></a>
-                 </li>
+                 </li> --}}
+
                 <li class="nav-item">
                     <a href="{{ route('admin.student.admid.card.generate') }}" class="nav-link {{($route=='admin.student.admid.card.generate') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Generate Admit Card</p></a>
                  </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.student.admid.card.template') }}" class="nav-link {{($route=='admin.student.admid.card.template') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Admit Card Template</p></a>
-                 </li>
-                <li class="nav-item">
+                 </li> --}}
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Seat Plan</p></a>
-                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Seat Plan Template</p></a>
-                 </li>
+                 </li> --}}
 
             </ul>
           </li>

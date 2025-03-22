@@ -208,14 +208,16 @@ Route::group(['middleware'=>'admin'],function(){
         /*Student ID Card */
         Route::prefix('id-card')->group(function(){
             Route::controller(CardController::class)->group(function(){
-                Route::get('template/index','index')->name('admin.student.card.template');
+                Route::get('generate','id_card_generate')->name('admin.student.id_card.generate');
+                Route::get('print/{class_id}/{section_id?}','id_card_print')->name('admin.student.id.card.print');
             });
         });
-        /*Student ID Card */
+        /*Student Admit ID Card */
         Route::prefix('admit-card')->group(function(){
             Route::controller(CardController::class)->group(function(){
                 Route::get('template/index','admid_card_template')->name('admin.student.admid.card.template');
                 Route::get('generate','admid_card_generate')->name('admin.student.admid.card.generate');
+                Route::get('print/{exam_id}/{student_id}','admid_card_print')->name('admin.student.admid.card.print');
             });
         });
     });

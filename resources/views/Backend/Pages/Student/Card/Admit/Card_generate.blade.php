@@ -65,7 +65,8 @@
                             style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" class="Custom Checkbox" id="selectAll"> </th>
+
+                                    <th class=""></th>
                                     <th class="">No.</th>
                                     <th class="">Images</th>
                                     <th class="">Student Name </th>
@@ -164,7 +165,7 @@
             get_student(exam_id, class_id, section_id, student_id);
         });
 
-        function get_student(exam_id, class_id, section_id, student_id) {
+        function get_student(exam_id, class_id, section_id) {
             var submitBtn = $('#search_box').find('button[name="submit_btn"]');
             submitBtn.html(
                 `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`
@@ -209,10 +210,6 @@
                             html += '<td>' + data.roll_no + '</td>';
                             html += '<td>' + data.phone + '</td>';
                             html += '<td>' + data.current_address + '</td>';
-
-
-
-
                             html += '</tr>';
                         });
                     } else {
@@ -233,64 +230,34 @@
 
             });
         }
-         /* Select or Deselect All Checkboxes*/
-    $(document).on('click', '#selectAll', function() {
-    if ($(this).is(':checked')) {
-        $('.student-checkbox').prop('checked', true);
-    } else {
-        $('.student-checkbox').prop('checked', false);
-    }
-    });
 
-    $('#printBtn').on('click', function() {
-    var selectedStudents = [];
 
-    // Loop through each checkbox and get the selected ones
-    $('.student-checkbox:checked').each(function() {
-        var studentId = $(this).val();
+    /* Submit */
+    $(document).on('click', '#printBtn', function() {
+        var exam_id = $("select[name='exam_id']").val();
+        var student_id = $('.student-checkbox:checked').val();
 
-        // Find the student by ID
-        var selectedStudent = students.find(function(student) {
-            return student.id == studentId;
-        });
+        if(student_id) {
+            // $('#printBtn').prop('disabled', true).html(
+            //     '<i class="fa fa-spinner fa-spin"></i> Submitting...'
+            // );
+            var url = "{{ route('admin.student.admid.card.print', ['exam_id' => ':exam_id', 'student_id' => ':student_id']) }}";
 
-        // Add the student to the selectedStudents array
-        if (selectedStudent) {
-            selectedStudents.push(selectedStudent);
+            url = url.replace(':exam_id', exam_id)
+                    .replace(':student_id', student_id);
+
+            window.open(url, '_blank');
+        } else {
+            toastr.error('Please select a student');
         }
     });
 
-    // If there are selected students, print them
-    if (selectedStudents.length > 0) {
-        // Print each selected student
-        selectedStudents.forEach(function(student) {
-            window.printStudent(student);
-        });
-    } else {
-        alert('Please select at least one student.');
-    }
-});
-
-
-
-
-window.printStudent = function(student) {
-    var printContent = `
-        <div>
-            <h3>Student Details</h3>
-            <p><strong>Name:</strong> ${student.name}</p>
-            <p><strong>Class:</strong> ${student.class}</p>
-            <p><strong>Roll No:</strong> ${student.roll_no}</p>
-            <p><strong>Phone:</strong> ${student.phone}</p>
-        </div>
-    `;
-
-    var printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>Print Student</title></head><body>');
-    printWindow.document.write(printContent);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-};
+    $(document).on('change', '.student-checkbox', function() {
+        if ($(this).prop('checked')) {
+            $('.student-checkbox').not(this).prop('disabled', true);
+        } else {
+            $('.student-checkbox').prop('disabled', false);
+        }
+    });
     </script>
 @endsection
