@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\Student_class;
+use App\Models\Student_exam;
+use App\Models\Student_exam_routine;
 use App\Models\Student_subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -30,8 +32,11 @@ class CardController extends Controller
     }
     public function admid_card_print($student_id,$exam_id){
         $student = Student::find($student_id);
-        return view('Backend.Pages.Student.Card.Admit.Print',compact('student'));
+        $exam=Student_exam::find($exam_id);
+        return view('Backend.Pages.Student.Card.Admit.Print', compact('student', 'exam_id','exam'));
     }
+
+    /**************************ID CARD MANAGEMENT**************************************************/
     public function id_card_generate(){
         $sections= Section::latest()->get();
         $students=Student::latest()->get();
