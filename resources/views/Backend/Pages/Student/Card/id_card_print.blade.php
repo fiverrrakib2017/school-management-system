@@ -379,12 +379,12 @@
             text-align: center;
         }
         .school-header h1 {
-            font-size: 18px;
+            font-size: 12px;
             color: #ffffff;
             margin: 0;
         }
         .school-header p {
-            font-size: 12px;
+            font-size: 10px;
             margin: 5px 0;
             color: #ffffff;
         }
@@ -396,7 +396,7 @@
             margin: 15px auto;
             border: 3px solid #fff;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            margin-top: 22px;
+            margin-top: 32px;
         }
         .photo img {
             width: 100%;
