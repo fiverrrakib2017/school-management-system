@@ -30,7 +30,7 @@ class CardController extends Controller
         $students=Student::latest()->get();
         return view('Backend.Pages.Student.Card.Admit.Card_generate',compact('students','sections','subjects'));
     }
-    public function admid_card_print($student_id,$exam_id){
+    public function admid_card_print($exam_id,$student_id){
         $student = Student::find($student_id);
         $exam=Student_exam::find($exam_id);
         return view('Backend.Pages.Student.Card.Admit.Print', compact('student', 'exam_id','exam'));

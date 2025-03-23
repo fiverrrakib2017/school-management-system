@@ -166,17 +166,22 @@ class StudentController extends Controller
            $filters['id']=$request->student_id;
         }
 
-        $students =  Student::with('currentClass','section')->where($filters)->get();
+        $students = Student::with('currentClass', 'section')
+        ->where($filters)
+        ->orderBy('roll_no', 'asc')
+        ->get();
+        
         if ($students->isEmpty()) {
             return response()->json([
                 'success' => false,
-                'code'=>200,
+                'code' => 200,
                 'data' => []
             ]);
         }
+
         return response()->json([
             'success' => true,
-            'code'=>200,
+            'code' => 200,
             'data' => $students
         ]);
     }
