@@ -90,7 +90,7 @@
           </li>
           <!-----------Card Management Menu------------------->
             @php
-                $active_prefix=['admin.student.card.template','admin.student.admid.card.template','admin.student.admid.card.generate','admin.student.id_card.generate'];
+                $active_prefix=['admin.student.card.template','admin.student.admid.card.template','admin.student.admid.card.generate','admin.student.id_card.generate','admin.student.seat_plan_generate'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -113,9 +113,9 @@
                 {{-- <li class="nav-item">
                     <a href="{{ route('admin.student.admid.card.template') }}" class="nav-link {{($route=='admin.student.admid.card.template') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Admit Card Template</p></a>
                  </li> --}}
-                {{-- <li class="nav-item">
-                    <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Seat Plan</p></a>
-                 </li> --}}
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.seat_plan_generate') }}" class="nav-link {{($route=='admin.student.seat_plan_generate') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Seat Plan</p></a>
+                 </li>
 
             </ul>
           </li>

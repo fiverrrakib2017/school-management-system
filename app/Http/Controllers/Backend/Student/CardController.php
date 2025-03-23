@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class CardController extends Controller
 {
+
+    /**************************Admit CARD MANAGEMENT**************************************************/
     public function index()
     {
         $student=Student::first();
@@ -53,5 +55,28 @@ class CardController extends Controller
 
         return view('Backend.Pages.Student.Card.id_card_print', compact('classes'));
     }
+    /************************** Seat Plan MANAGEMENT**************************************************/
+    public function seat_plan_generate(){
+        $sections= Section::latest()->get();
+        $students=Student::latest()->get();
+        return view('Backend.Pages.Student.Card.Seat.index',compact('students','sections'));
+    }
+    public function seat_plan_print($exam_id, $class_id, $section_id = null) {
+
+        $exam = Student_exam::find($exam_id);
+
+
+        $query = Student::with(['currentClass', 'section'])
+                        ->where('current_class', '=', $class_id);
+
+        if (!is_null($section_id)) {
+            $query->where('section_id', '=', $section_id);
+        }
+
+        $students = $query->get();
+
+        return view('Backend.Pages.Student.Card.Seat.print', compact('exam', 'students'));
+    }
+
 
 }
