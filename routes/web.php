@@ -145,6 +145,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::controller(Exam_result_controller::class)->group(function(){
                 Route::get('/create','create_result')->name('admin.student.exam.result.create');
                 Route::get('/report','result_report')->name('admin.student.exam.result.report');
+                Route::get('print/{exam_id}/{student_id}','result_print')->name('admin.student.result.print');
                 Route::get('/edit/{id}','edit')->name('admin.student.exam.result.edit');
                 Route::post('/update','update')->name('admin.student.exam.result.update');
                 /* Student Result Store Route **/

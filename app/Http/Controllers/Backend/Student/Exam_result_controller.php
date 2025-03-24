@@ -30,7 +30,13 @@ class Exam_result_controller extends Controller
         $sections= Section::latest()->get();
         $subjects=Student_subject::latest()->get();
         $students=Student::latest()->get();
-        return view('Backend.Pages.Student.Exam.Result',compact('sections','subjects','students'));
+        return view('Backend.Pages.Student.Exam.Result.Result',compact('students','sections','subjects'));
+    }
+    public function result_print($exam_id,$student_id){
+        $student = Student::find($student_id);
+        $exam=Student_exam::find($exam_id);
+        return view('Backend.Pages.Student.Exam.Result.Print', compact('student', 'exam_id','exam'));
+
     }
 
 
