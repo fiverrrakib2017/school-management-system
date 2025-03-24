@@ -678,5 +678,8 @@ Route::group(['middleware'=>'admin'],function(){
         Artisan::call('migrate');
         return 'Database Migration Completed';
     });
+    Route::get('/result/marksheet',function(){
+        return view('Backend.Pages.Student.Exam.marksheet');
+    });
 
 });

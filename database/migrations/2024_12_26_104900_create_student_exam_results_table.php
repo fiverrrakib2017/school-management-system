@@ -18,8 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('subject_id');
-            $table->integer('marks_obtained');
-            $table->integer('total_marks');
+            $table->decimal('practical_marks');
+            $table->decimal('objective_marks');
+            $table->decimal('written_marks');
+            $table->decimal('total_marks');
             $table->string('grade')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
