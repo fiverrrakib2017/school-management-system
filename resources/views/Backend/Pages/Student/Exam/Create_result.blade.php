@@ -47,7 +47,7 @@ $website_info=App\Models\Website_information::first();
 @endsection
 @section('content')
 
-<div class="row">
+<div class="row" id="main_div">
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
@@ -270,13 +270,13 @@ $website_info=App\Models\Website_information::first();
             return false;
         }
 
-        var submitBtn =  $('#search_box').find('button[name="submit_result_btn"]');
+        var submitBtn =  $('button[name="submit_result_btn"]');
         submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
         submitBtn.prop('disabled', true);
 
         $.ajax({
             type: 'POST',
-            url: "{{ route('admin.student.submit_results') }}",
+            url: "{{ route('admin.student.exam.result.store') }}",
             cache: true,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

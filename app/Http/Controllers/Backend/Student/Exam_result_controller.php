@@ -37,20 +37,31 @@ class Exam_result_controller extends Controller
     public function result_store(Request $request)
     {
         /*Validate the form data*/
-        $this->validateForm($request);
-        $object = new Student_exam_result();
-        $object->exam_id  = $request->exam_id;
-        $object->class_id  = $request->class_id;
-        $object->section_id  = $request->section_id ;
-        $object->student_id = $request->student_id;
-        $object->subject_id = $request->subject_id;
-        $object->marks_obtained = $request->marks_obtained;
-        $object->total_marks = $request->total_marks;
-        $object->grade = $request->grade;
-        $object->remarks = $request->remarks;
+        // $this->validateForm($request);
+         $examData = $request->all();
+        foreach ($examData['results'] as $result) {
 
-        /* Save to the database table*/
-        $object->save();
+            if(!empty($result['written_marks']) || !empty($result['objective_marks']) || !empty($result['prectial_marks'])) {
+                $examResult = new Student_exam_result();
+                $examResult->exam_id = $request->exam_id;
+                $examResult->class_id = $request->class_id;
+                $examResult->section_id = $request->section_id;
+                $examResult->student_id = $result['student_id'];
+                $examResult->subject_id = $request->subject_id;
+                $examResult->practical_marks = $result['prectial_marks'] ?? 0;
+                $examResult->objective_marks = $result['objective_marks'] ?? 0;
+                $examResult->written_marks = $result['written_marks'] ?? 0;
+                $examResult->total_marks = $result['total_marks'] ?? 0;
+                $examResult->grade = $result['grade'] ?? null;
+                $examResult->remarks = $result['remarks'] ?? null;
+
+                /* Absent Student Check */
+                $examResult->is_absent = $result['is_absent'] ?? 0;
+                /* Save to the database table*/
+                $examResult->save();
+            }
+
+        }
         return response()->json([
             'success' => true,
             'message' => 'Added successfully!'
@@ -140,13 +151,12 @@ class Exam_result_controller extends Controller
         /*Validate the form data*/
         $rules=[
             'exam_id' => 'required|exists:student_exams,id',
+            'class_id' => 'required|exists:student_classes,id',
+            'section_id' => 'required|exists:sections,id',
             'student_id' => 'required|exists:students,id',
             'subject_id' => 'required|exists:student_subjects,id',
-            'marks_obtained' => 'required|integer',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-            'total_marks' => 'required|integer',
-            'grade' => 'required|string|max:255'
+
+
         ];
         $validator = Validator::make($request->all(), $rules);
 
