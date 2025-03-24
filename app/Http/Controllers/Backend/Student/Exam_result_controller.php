@@ -41,22 +41,41 @@ class Exam_result_controller extends Controller
          $examData = $request->all();
         foreach ($examData['results'] as $result) {
 
-            if(!empty($result['written_marks']) || !empty($result['objective_marks']) || !empty($result['prectial_marks'])) {
-                $examResult = new Student_exam_result();
+            if(!empty($result['written_marks']) || !empty($result['objective_marks']) || !empty($result['prectial_marks']) || $result['is_absent'] == "1") {
+                $examResult = Student_exam_result::where([
+                    ['exam_id', '=', $request->exam_id],
+                    ['class_id', '=', $request->class_id],
+                    ['section_id', '=', $request->section_id],
+                    ['student_id', '=', $result['student_id']],
+                    ['subject_id', '=', $request->subject_id],
+                ])->first();
+
+                /*If not found, create a new instance*/
+                if (!$examResult) {
+                    $examResult = new Student_exam_result();
+                }
                 $examResult->exam_id = $request->exam_id;
                 $examResult->class_id = $request->class_id;
                 $examResult->section_id = $request->section_id;
                 $examResult->student_id = $result['student_id'];
                 $examResult->subject_id = $request->subject_id;
+
                 $examResult->practical_marks = $result['prectial_marks'] ?? 0;
                 $examResult->objective_marks = $result['objective_marks'] ?? 0;
                 $examResult->written_marks = $result['written_marks'] ?? 0;
                 $examResult->total_marks = $result['total_marks'] ?? 0;
-                $examResult->grade = $result['grade'] ?? null;
-                $examResult->remarks = $result['remarks'] ?? null;
 
+                if($result['grade'] !== null){
+                    $examResult->grade = $result['grade'];
+                    $examResult->remarks = $result['remarks'] ?? null;
+                }else if($result['is_absent']==1){
+                    $examResult->grade = 'Absent';
+                }else{
+                    $examResult->grade = null;
+                    $examResult->remarks = null;
+                }
                 /* Absent Student Check */
-                $examResult->is_absent = $result['is_absent'] ?? 0;
+                $examResult->is_absent = isset($result['is_absent']) && $result['is_absent'] == "1" ? 1 : 0;
                 /* Save to the database table*/
                 $examResult->save();
             }
