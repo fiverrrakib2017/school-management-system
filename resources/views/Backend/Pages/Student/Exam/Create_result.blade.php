@@ -231,7 +231,74 @@ $website_info=App\Models\Website_information::first();
 
     });
 
-  
+    /***********************  Student  Submit Result*******************************/
+    $(document).on('click', 'button[name="submit_result_btn"]', function(e) {
+        e.preventDefault();
+
+        var formData = {
+            exam_id: $("select[name='exam_id']").val(),
+            class_id: $("select[name='class_id']").val(),
+            section_id: $("select[name='section_id']").val(),
+            subject_id: $("select[name='subject_id']").val(),
+            results: []
+        };
+
+        $('tr[data-id]').each(function() {
+            var studentId = $(this).data('id');
+            var writtenMarks = $('input[name="written_marks[' + studentId + ']"]').val();
+            var prectialMarks = $('input[name="prectial_marks[' + studentId + ']"]').val();
+            var objectiveMarks = $('input[name="objective_marks[' + studentId + ']"]').val();
+            var totalMarks = $('input[name="total_marks[' + studentId + ']"]').val();
+            var grade = $('input[name="grade[' + studentId + ']"]').val();
+            var remarks = $('input[name="remarks[' + studentId + ']"]').val();
+            var isAbsent = $('input[name="is_absent[' + studentId + ']"]').is(':checked') ? 1 : 0;
+
+            formData.results.push({
+                student_id: studentId,
+                written_marks: writtenMarks,
+                prectial_marks: prectialMarks,
+                objective_marks: objectiveMarks,
+                total_marks: totalMarks,
+                grade: grade,
+                remarks: remarks,
+                is_absent: isAbsent
+            });
+        });
+
+        if (!formData.exam_id || !formData.class_id || !formData.subject_id) {
+            toastr.error('Please fill in all the fields.');
+            return false;
+        }
+
+        var submitBtn =  $('#search_box').find('button[name="submit_result_btn"]');
+        submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
+        submitBtn.prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('admin.student.submit_results') }}",
+            cache: true,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            success: function(response) {
+                if(response.success) {
+                    toastr.success('Results submitted successfully.');
+                } else {
+                    toastr.error('An error occurred while submitting the results.');
+                }
+            },
+            error: function() {
+                toastr.error('An error occurred. Please try again.');
+            },
+            complete: function() {
+                submitBtn.html('<i class="fas fa-save"></i> Submit Results');
+                submitBtn.prop('disabled', false);
+            }
+        });
+    });
+
 
 
     /*********************** Show Student Data For Submit Result*******************************/
