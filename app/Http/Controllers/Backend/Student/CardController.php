@@ -73,9 +73,9 @@ class CardController extends Controller
             $query->where('section_id', '=', $section_id);
         }
 
-        $students = $query->get();
+        $classes = $query->get();
 
-        return view('Backend.Pages.Student.Card.Seat.print', compact('exam', 'students'));
+        return view('Backend.Pages.Student.Card.Seat.print', compact('exam', 'classes'));
     }
 
 
