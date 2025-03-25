@@ -7,9 +7,11 @@ use App\Models\Customer;
 use App\Models\Customer_Invoice;
 use App\Models\Product;
 use App\Models\Product_Order;
+use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use App\Models\Supplier;
 use App\Models\Supplier_Invoice;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -65,7 +67,7 @@ class AdminController extends Controller
             'total_supplier' => intval($total_supplier),
             'total_products' => intval($total_products),
             'net_profit' => intval($net_profit),
-            'total_customer_order' => intval($total_customer_invoice), 
+            'total_customer_order' => intval($total_customer_invoice),
             'total_quantity' => intval(Product::sum('qty')),
         ];
 
@@ -86,8 +88,8 @@ class AdminController extends Controller
         return [
             'product_id' => $item->product_id,
             'total_qty' => $item->total_qty,
-            'product_title' => $product ? $product->title : 'Unknown', 
-            'product_image' => $product_image ? $product_image->image : 'default_image.jpg', 
+            'product_title' => $product ? $product->title : 'Unknown',
+            'product_image' => $product_image ? $product_image->image : 'default_image.jpg',
         ];
     });
 
@@ -109,7 +111,9 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
-        return view('Backend.Pages.Dashboard.index');
+        $total_student=Student::count();
+        $total_teacher=Teacher::count();
+        return view('Backend.Pages.Dashboard.index',compact('total_student','total_teacher'));
     }
 
     public function logout(){

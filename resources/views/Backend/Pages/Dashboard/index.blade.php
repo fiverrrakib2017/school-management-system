@@ -57,8 +57,8 @@
 <div class="row" id="dashboardCards">
     @php
        $dashboardCards = [
-           ['id' => 1,'title' => 'Total Student', 'value' => 0, 'bg' => 'success', 'icon' => 'fas fa-user-graduate'],
-           ['id' => 2,'title' => 'Total Teacher', 'value' => 0, 'bg' => 'info', 'icon' => 'fas fa-chalkboard-teacher'],
+           ['id' => 1,'title' => 'Total Student', 'value' => $total_student, 'bg' => 'success', 'icon' => 'fas fa-user-graduate'],
+           ['id' => 2,'title' => 'Total Teacher', 'value' => $total_teacher, 'bg' => 'info', 'icon' => 'fas fa-chalkboard-teacher'],
            ['id' => 3,'title' => 'Total Staff', 'value' => 0, 'bg' => 'warning', 'icon' => 'fas fa-users'],
            ['id' => 4,'title' => 'Total Class', 'value' => 0, 'bg' => 'danger', 'icon' => 'fas fa-school'],
 
