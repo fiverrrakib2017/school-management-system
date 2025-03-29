@@ -16,45 +16,36 @@ use Carbon\Carbon;
 
 class Exam_result_controller extends Controller
 {
-
     public function create_result()
     {
-        $sections= Section::latest()->get();
-        $subjects=Student_subject::latest()->get();
-        $students=Student::latest()->get();
+        $sections = Section::latest()->get();
+        $subjects = Student_subject::latest()->get();
+        $students = Student::latest()->get();
 
-        return view('Backend.Pages.Student.Exam.Create_result',compact('sections','subjects','students'));
+        return view('Backend.Pages.Student.Exam.Create_result', compact('sections', 'subjects', 'students'));
     }
     public function result_report()
     {
-        $sections= Section::latest()->get();
-        $subjects=Student_subject::latest()->get();
-        $students=Student::latest()->get();
-        return view('Backend.Pages.Student.Exam.Result.Result',compact('students','sections','subjects'));
+        $sections = Section::latest()->get();
+        $subjects = Student_subject::latest()->get();
+        $students = Student::latest()->get();
+        return view('Backend.Pages.Student.Exam.Result.Result', compact('students', 'sections', 'subjects'));
     }
-    public function result_print($exam_id,$student_id){
+    public function result_print($exam_id, $student_id)
+    {
         $student = Student::find($student_id);
-        $exam=Student_exam::find($exam_id);
-        return view('Backend.Pages.Student.Exam.Result.Print', compact('student', 'exam_id','exam'));
-
+        $exam = Student_exam::find($exam_id);
+        return view('Backend.Pages.Student.Exam.Result.Print', compact('student', 'exam_id', 'exam'));
     }
-
 
     public function result_store(Request $request)
     {
         /*Validate the form data*/
         // $this->validateForm($request);
-         $examData = $request->all();
+        $examData = $request->all();
         foreach ($examData['results'] as $result) {
-
-            if(!empty($result['written_marks']) || !empty($result['objective_marks']) || !empty($result['prectial_marks']) || $result['is_absent'] == "1") {
-                $examResult = Student_exam_result::where([
-                    ['exam_id', '=', $request->exam_id],
-                    ['class_id', '=', $request->class_id],
-                    ['section_id', '=', $request->section_id],
-                    ['student_id', '=', $result['student_id']],
-                    ['subject_id', '=', $request->subject_id],
-                ])->first();
+            if (!empty($result['written_marks']) || !empty($result['objective_marks']) || !empty($result['prectial_marks']) || $result['is_absent'] == '1') {
+                $examResult = Student_exam_result::where([['exam_id', '=', $request->exam_id], ['class_id', '=', $request->class_id], ['section_id', '=', $request->section_id], ['student_id', '=', $result['student_id']], ['subject_id', '=', $request->subject_id]])->first();
 
                 /*If not found, create a new instance*/
                 if (!$examResult) {
@@ -71,28 +62,26 @@ class Exam_result_controller extends Controller
                 $examResult->written_marks = $result['written_marks'] ?? 0;
                 $examResult->total_marks = $result['total_marks'] ?? 0;
 
-                if($result['grade'] !== null){
+                if ($result['grade'] !== null) {
                     $examResult->grade = $result['grade'];
                     $examResult->remarks = $result['remarks'] ?? null;
-                }else if($result['is_absent']==1){
+                } elseif ($result['is_absent'] == 1) {
                     $examResult->grade = 'Absent';
-                }else{
+                } else {
                     $examResult->grade = null;
                     $examResult->remarks = null;
                 }
                 /* Absent Student Check */
-                $examResult->is_absent = isset($result['is_absent']) && $result['is_absent'] == "1" ? 1 : 0;
+                $examResult->is_absent = isset($result['is_absent']) && $result['is_absent'] == '1' ? 1 : 0;
                 /* Save to the database table*/
                 $examResult->save();
             }
-
         }
         return response()->json([
             'success' => true,
-            'message' => 'Added successfully!'
+            'message' => 'Added successfully!',
         ]);
     }
-
 
     public function delete(Request $request)
     {
@@ -102,30 +91,28 @@ class Exam_result_controller extends Controller
             return response()->json(['error' => 'Not found.'], 404);
         }
 
-
         /* Delete it From Database Table */
         $object->delete();
 
-        return response()->json(['success' =>true, 'data'=>$object, 'message'=> 'Deleted successfully.']);
+        return response()->json(['success' => true, 'data' => $object, 'message' => 'Deleted successfully.']);
     }
     public function edit($id)
     {
         $data = Student_exam_result::find($id);
-        $sections= Section::latest()->get();
-        $subjects=Student_subject::latest()->get();
-        $students=Student::latest()->get();
-        return view('Backend.Pages.Student.Exam.Result_update',compact('data','sections','subjects','students'));
+        $sections = Section::latest()->get();
+        $subjects = Student_subject::latest()->get();
+        $students = Student::latest()->get();
+        return view('Backend.Pages.Student.Exam.Result_update', compact('data', 'sections', 'subjects', 'students'));
     }
-
 
     public function update(Request $request)
     {
         $this->validateForm($request);
 
         $object = Student_exam_result::findOrFail($request->id);
-        $object->exam_id  = $request->exam_id;
-        $object->class_id  = $request->class_id;
-        $object->section_id  = $request->section_id ;
+        $object->exam_id = $request->exam_id;
+        $object->class_id = $request->class_id;
+        $object->section_id = $request->section_id;
         $object->student_id = $request->student_id;
         $object->subject_id = $request->subject_id;
         $object->marks_obtained = $request->marks_obtained;
@@ -136,60 +123,66 @@ class Exam_result_controller extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Update successfully!'
+            'message' => 'Update successfully!',
         ]);
     }
     public function get_exam_result(Request $request)
-{
-    $query = Student_exam_result::query();
-    if ($request->class_id) {
-        $query->where('class_id', $request->class_id);
-    }
+    {
+        $query = Student_exam_result::query();
+        if ($request->class_id) {
+            $query->where('class_id', $request->class_id);
+        }
 
-    if ($request->exam_id) {
-        $query->where('exam_id', $request->exam_id);
-    }
+        if ($request->exam_id) {
+            $query->where('exam_id', $request->exam_id);
+        }
 
-    if ($request->student_id) {
-        $query->where('student_id', $request->student_id);
-    }
+        if ($request->student_id) {
+            $query->where('student_id', $request->student_id);
+        }
+        if ($request->roll_no) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('roll_no', $request->roll_no);
+            });
+        }
 
-    /* Load related models*/
-    $data = $query->with(['exam', 'student', 'subject', 'class', 'section'])->get();
+        /* Load related models*/
+        $data = $query->with(['exam', 'student', 'subject', 'class', 'section'])->get();
 
-    /*Check if data exists*/
-    if ($data->isNotEmpty()) {
+        /*Check if data exists*/
+        if ($data->isNotEmpty()) {
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ]);
+        }
+
         return response()->json([
-            'success' => true,
-            'data' => $data,
+            'success' => false,
+            'message' => 'No results found.',
         ]);
     }
-
-    return response()->json([
-        'success' => false,
-        'message' => 'No results found.',
-    ]);
-}
 
     private function validateForm($request)
     {
         /*Validate the form data*/
-        $rules=[
+        $rules = [
             'exam_id' => 'required|exists:student_exams,id',
             'class_id' => 'required|exists:student_classes,id',
             'section_id' => 'required|exists:sections,id',
             'student_id' => 'required|exists:students,id',
             'subject_id' => 'required|exists:student_subjects,id',
-
-
         ];
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+            return response()->json(
+                [
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                ],
+                422,
+            );
         }
     }
 }

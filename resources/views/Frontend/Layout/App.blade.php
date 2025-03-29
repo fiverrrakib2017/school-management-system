@@ -13,16 +13,14 @@
     <title> সবাইকে স্বাগতম</title>
     <!-- Meta -->
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="খুব শিঘ্রই এই অংশটি আপডেট করা হবে। ">
+    <meta name="description" content="{{ $website_info->name ?? 'সবাইকে স্বাগতম' }} ">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     @include('Frontend.Include.Style')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
         new WOW().init();
     </script>
