@@ -174,5 +174,4 @@ Route::get('/result/print/{exam_id}/{student_id}', function ($exam_id, $student_
     $student = \App\Models\Student::find($student_id);
     $exam = \App\Models\Student_exam::find($exam_id);
     return view('Backend.Pages.Student.Exam.Result.Print', compact('student', 'exam_id', 'exam'));
-    // return view('Frontend.Pages.Result.Print');
 })->name('student.result.print');

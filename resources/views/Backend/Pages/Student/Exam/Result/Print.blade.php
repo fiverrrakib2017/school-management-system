@@ -89,7 +89,7 @@ $website_info = App\Models\Website_information::first();
                         <img src="{{ asset(!empty($student->photo) ? 'uploads/photos/'.$student->photo : 'uploads/photos/avatar.png') }}" class="img-fluid" alt="image" width="80">
                     </div>
                     <table class="table table-borderless m-0">
-                        <tr><td><b>Student Name:</b> {{ $student->name }}</td><td><b>Roll:</b> {{ $student->roll }}</td></tr>
+                        <tr><td><b>Student Name:</b> {{ $student->name }}</td><td><b>Roll:</b> {{ $student->roll_no }}</td></tr>
                         <tr><td><b>Class:</b> {{ $student->currentClass->name }}</td><td><b>Section:</b> {{ $student->section->name }}</td></tr>
                         <tr><td><b>Father's Name:</b> {{ $student->father_name }}</td><td><b>DOB:</b> {{ \Carbon\Carbon::parse($student->birth_date)->format('d M Y') }}</td></tr>
                     </table>

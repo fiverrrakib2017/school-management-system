@@ -1,6 +1,53 @@
+
+@php
+$website_info=App\Models\Website_information::first();
+@endphp
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
 @section('style')
+<style>
+    /* Print CSS */
+    @media print {
+        #printButton {
+            display: none;
+        }
+        .card {
+            border: none;
+            box-shadow: none;
+        }
+    }
+    .school-header {
+        text-align: center;
+        padding: 15px;
+    }
+    .school-header img {
+        height: 80px;
+        width: 80px;
+        margin-bottom: 10px;
+    }
+    .school-header h2 {
+        font-weight: 100;
+        margin-bottom: 5px;
+    }
+    .school-header p {
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #555;
+    }
+    .info-box {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    @media print {
+        th.hide-on-print, td.hide-on-print {
+            display: none !important;
+        }
+    }
+</style>
 @endsection
 @section('content')
 <div class="row">
@@ -40,21 +87,44 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group mt-4">
                     <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Examination Routine</button>
 
                 </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2 text-end">
                     <div class="form-group mt-4">
                     <button  type="button" data-toggle="modal" data-target="#routineModal" type="button" class="btn btn-primary ">Create Examination Routine</button>
                     </div>
                 </div>
             </div>
         </div>
-            <div class="card-body">
-                <div class="table-responsive responsive-table">
+
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row d-none" id="table_area">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <button id="printButton" class="btn btn-primary"><i class="fas fa-print"></i> </button>
+            </div>
+            <div class="card-body" id="tableArea">
+
+                 <!-- School Header -->
+                 <div id="printHeader" class="school-header">
+                    <img src="{{ asset('Backend/uploads/photos/' . ($website_info->logo ?? 'default-logo.jpg')) }}" alt="School Logo">
+                    <h2>{{ $website_info->name ?? 'Future ICT School' }}</h2>
+                    <p>{{ $website_info->address ?? 'Daudkandi , Chittagong , Bangladesh' }}</p>
+
+                    <span><strong><span id="examName"></span></strong><br>
+                    <strong>Examination Routine</strong></span>
+                </div>
+                <div class="table-responsive responsive-table" >
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap"
                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead >
@@ -68,7 +138,7 @@
                                 <th>End Time</th>
                                 <th>Room Number</th>
                                 <th>Invigilator</th>
-                                <th></th>
+                                <th class="hide-on-print"></th>
                             </tr>
                         </thead>
                         <tbody id="routine_data">
@@ -80,7 +150,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 @include('Backend.Modal.Student.routine_modal')
@@ -93,9 +162,14 @@
 <script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
+        $('select').select2({
+            dropdownParent: $('#routineModal'),
+            placeholder: "---Select---",
+            allowClear: false
+        });
         $("select[name='find_class_id']").select2();
         $("select[name='find_exam_id']").select2();
-        custom_select2('#routineModal');
+        // custom_select2('#routineModal');
         _handleSubmit('#routineForm','#routineModal');
         $("#datatable1").DataTable();
 
@@ -198,6 +272,7 @@
         e.preventDefault();
         var class_id = $("select[name='find_class_id']").val();
         var exam_id = $("select[name='find_exam_id']").val();
+        $("#examName").text($('select[name="find_exam_id"] option:selected').text());
         fetch_exam_routine_data(class_id,exam_id)
     });
     function _time_formate(time) {
@@ -326,6 +401,14 @@
                 exam_id: exam_id,
             },
             success: function(response) {
+            /* Check if the response is successful */
+            if (response.success) {
+                $('#table_area').removeClass('d-none');
+                $('#no-data').remove();
+            } else {
+                $('#table_area').addClass('d-none');
+                $('#routine_data').html('<tr id="no-data"><td colspan="10" class="text-center">No data available</td></tr>');
+            }
             var _number = 1;
             var html = '';
 
@@ -341,7 +424,7 @@
                     html += '<td>' +_time_formate( data.end_time) + '</td>';
                     html += '<td>' + data.room_number + '</td>';
                     html += '<td>' + data.invigilator + '</td>';
-                    html += '<td>';
+                    html += '<td class="hide-on-print">';
                     html += '<button class="btn btn-primary btn-sm me-2 edit-btn" data-id="' + data.id + '" style="margin-right:5px"><i class="fa fa-edit"></i></button>';
                     html += '<button class="btn btn-danger btn-sm delete-btn" data-id="' + data.id + '"><i class="fa fa-trash"></i></button>';
                     html += '</td>';
@@ -368,6 +451,15 @@
 
     $('#routineModal').on('shown.bs.modal', function () {
         $('#routineForm select').trigger('change.select2');
+    });
+    /*********************** Print Student Reuslt Data *******************************/
+    document.getElementById("printButton").addEventListener("click", function() {
+        var printContents = document.getElementById("tableArea").outerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = "<html><head><title>Print</title></head><body>" + printContents + "</body></html>";
+        window.print();
+        document.body.innerHTML = originalContents;
     });
   </script>
 @endsection
