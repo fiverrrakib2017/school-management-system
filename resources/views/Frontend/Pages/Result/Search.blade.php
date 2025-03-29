@@ -156,17 +156,13 @@
 
                         window.open(url, '_blank');
                     }
-                    if (response.error) {
-                       alert(response.error);
+                    if (response.success == false) {
+                       alert(response.message);
                     }
                 },
                 error: function() {
                     console.log('An error occurred. Please try again.');
                 },
-                // complete: function() {
-                //     submitBtn.html('<i class="fas fa-search"></i> Search Now');
-                //     submitBtn.prop('disabled', false);
-                // }
 
             });
     });
