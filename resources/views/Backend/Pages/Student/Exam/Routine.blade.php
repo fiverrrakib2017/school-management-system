@@ -452,7 +452,7 @@ $website_info=App\Models\Website_information::first();
     $('#routineModal').on('shown.bs.modal', function () {
         $('#routineForm select').trigger('change.select2');
     });
-    /*********************** Print Student Reuslt Data *******************************/
+    /*********************** Print Student Exam Routine Data *******************************/
     document.getElementById("printButton").addEventListener("click", function() {
         var printContents = document.getElementById("tableArea").outerHTML;
         var originalContents = document.body.innerHTML;

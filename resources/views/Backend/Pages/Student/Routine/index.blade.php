@@ -1,6 +1,53 @@
+@php
+$website_info=App\Models\Website_information::first();
+@endphp
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-
+@section('style')
+<style>
+    /* Print CSS */
+    @media print {
+        #printButton {
+            display: none;
+        }
+        .card {
+            border: none;
+            box-shadow: none;
+        }
+    }
+    .school-header {
+        text-align: center;
+        padding: 15px;
+    }
+    .school-header img {
+        height: 80px;
+        width: 80px;
+        margin-bottom: 10px;
+    }
+    .school-header h2 {
+        font-weight: 100;
+        margin-bottom: 5px;
+    }
+    .school-header p {
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #555;
+    }
+    .info-box {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    @media print {
+        th.hide-on-print, td.hide-on-print {
+            display: none !important;
+        }
+    }
+</style>
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
@@ -32,21 +79,40 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group ">
                         <button type="submit" name="submit_btn" class="btn btn-success" style="margin-top: 30px;"><i class="mdi mdi-magnify"></i> Find Class Routine</button>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group " style="float: left;">
                         <button data-toggle="modal" data-target="#addModal" type="button" class="btn btn-primary " style="margin-top: 30px;">Create Class Routine</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                {{-- <button type="button" name="print_btn" class="btn btn-primary mb-2"><i class="mdi mdi-printer"></i> Print</button> --}}
+        </div>
+    </div>
+</div>
 
+<div class="row d-none" id="table_area">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <button id="printButton" class="btn btn-primary"><i class="fas fa-print"></i></button>
+            </div>
+            <div class="card-body" id="printArea">
+
+                 <!-- School Header -->
+                 <div id="printHeader" class="school-header">
+                    <img src="{{ asset('Backend/uploads/photos/' . ($website_info->logo ?? 'default-logo.jpg')) }}" alt="School Logo">
+                    <h2>{{ $website_info->name ?? 'Future ICT School' }}</h2>
+                    <p>{{ $website_info->address ?? 'Daudkandi , Chittagong , Bangladesh' }}</p>
+
+                    <span><strong><span id="">Class Routine</span></strong><br>
+                    <span><strong>Class:</strong> <span id="className"></span> | </span>
+                    <span><strong>Section:</strong> <span id="sectionName"></span>  </span>
+                </div>
                 <div class="table-responsive" id="tableStyle">
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
@@ -57,7 +123,7 @@
                                 <th class="">Day </th>
                                 <th class="">Start Time</th>
                                 <th class="">End Time</th>
-                                <th class=""></th>
+                                <th class="hide-on-print"></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -66,7 +132,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -297,13 +362,13 @@
     });
 
     $(document).on('click',"button[name='submit_btn']",function(){
-      var class_id= $("select[name='class_id']").val();
-      var section_id= $("select[name='section_id']").val();
-      fetch_data(class_id,section_id);
-    });
+        var class_id= $("select[name='class_id']").val();
+        var section_id= $("select[name='section_id']").val();
 
+        $("#className").text($('#search_box select[name="class_id"] option:selected').text());
+        $("#sectionName").text($('#search_box select[name="section_id"] option:selected').text());
+        $("#examName").text($('#search_box select[name="exam_id"] option:selected').text());
 
-    function fetch_data(class_id,section_id){
         var submitBtn =  $('#search_box').find('button[type="submit"]');
         var originalBtnText = submitBtn.html();
         submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
@@ -316,6 +381,14 @@
                 request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
             },
             success: function(response) {
+                /* Check if the response is successful */
+                if (response.success) {
+                    $('#table_area').removeClass('d-none');
+                    $('#no-data').remove();
+                } else {
+                    $('#table_area').addClass('d-none');
+                    $('#routine_data').html('<tr id="no-data"><td colspan="10" class="text-center">No data available</td></tr>');
+                }
                 if(response.code == 200 && response.data.length > 0 && response.data != null && response.data != undefined && response.data != '' && response.data != 'null' && response.data != 'undefined'){
                     var html='';
                     var i = 1;
@@ -327,7 +400,7 @@
                         html += '<td>' + routine.day + '</td>';
                         html += '<td>' +_time_formate(routine.start_time) +  '</td>';
                         html += '<td>' +_time_formate(routine.end_time) +  '</td>';
-                        html += '<td>';
+                        html += '<td class="hide-on-print">';
                         html += '<button class="btn btn-primary btn-sm mr-2 edit-btn" data-id="' + routine.id + '" style="margin-right: 5px"><i class="fa fa-edit"></i></button>';
                         html += '<button class="btn btn-danger btn-sm mr-2 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + routine.id + '"><i class="fa fa-trash"></i></button>';
                         html += '</td>';
@@ -350,44 +423,14 @@
                 submitBtn.html(originalBtnText);
                 submitBtn.prop('disabled', false);
             }
-        })
-    }
-
-
-    $(document).on('click','button[name=print_btn]', function(){
-        var classId = $('#class_id').val();
-        if (!classId) {
-            toastr.error("Please select class");
-            return ;
-        }
-        $.ajax({
-            url: "{{ route('admin.student.class.routine.print') }}",
-            type: "GET",
-            data: { class_id: classId },
-            beforeSend: function(request) {
-                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-            },
-            success: function(response) {
-                print_content(response);
-            },
-            error: function(xhr) {
-                console.log(xhr.responseText);
-                alert('Failed to load print data. Please try again.');
-            },
-
         });
 
     });
 
-     function print_content(content) {
-        var printWindow = window.open('', '', 'height=600,width=800');
-        printWindow.document.write('<html><head><title>Class Routine</title>');
-        printWindow.document.write('</head><body >');
-        printWindow.document.write(content);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-    }
+
+
+
+
 
 
     /** Handle edit button click**/
@@ -402,11 +445,11 @@
               if (response.success) {
                  $('#editModal').modal('show');
                  $('#editModal input[name="id"]').val(response.data.id);
-                $('#editModal select[name="class_id"]').val(response.data.class_id);
-                $('#editModal select[name="section_id"]').val(response.data.section_id);
-                $('#editModal select[name="subject_id"]').val(response.data.subject_id);
-                $('#editModal select[name="teacher_id"]').val(response.data.teacher_id);
-                $('#editModal select[name="day"]').val(response.data.day);
+                $('#editModal select[name="class_id"]').val(response.data.class_id).trigger('change');
+                $('#editModal select[name="section_id"]').val(response.data.section_id).trigger('change');
+                $('#editModal select[name="subject_id"]').val(response.data.subject_id).trigger('change');
+                $('#editModal select[name="teacher_id"]').val(response.data.teacher_id).trigger('change');
+                $('#editModal select[name="day"]').val(response.data.day).trigger('change');
                 $('#editModal input[name="start_time"]').val(response.data.start_time);
                 $('#editModal input[name="end_time"]').val(response.data.end_time);
               } else {
@@ -584,6 +627,15 @@
         hour = hour % 12 || 12; // 12-hour format
         return `${hour}:${minute} ${ampm}`;
     }
+    /*********************** Print Student class Routine Data *******************************/
+    document.getElementById("printButton").addEventListener("click", function() {
+        var printContents = document.getElementById("printArea").outerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = "<html><head><title>Print</title></head><body>" + printContents + "</body></html>";
+        window.print();
+        document.body.innerHTML = originalContents;
+    });
   </script>
 
 @endsection
