@@ -103,6 +103,7 @@
                     <h3 class="text-center text-mute">{{ $website_info->name ?? 'Future ICT School' }}</h3>
                     <h3 class="text-center  text-mute">{{ $website_info->address ?? 'Gouripur,Daudknadi,cumilla' }}</h3>
                     <h3 class=" text-mute">{{ $exam->name }} - {{ $exam->year }}</h3>
+                    <h3 style="border: 1px solid; width:100px;display: block; margin: 0 auto; border-bottom:5px;">Seat Plan</h3>
                     <div class="student-info">
                         <div class="student-photo">
                             <img src="{{ asset(!empty($item->photo) ? 'uploads/photos/'.$item->photo : 'uploads/photos/avatar.png') }}" alt="image">
