@@ -1,5 +1,7 @@
 
-
+@php
+    $website_info=App\Models\Website_information::first();
+@endphp
 <!doctype html>
 <html lang="en">
 <head>
@@ -89,7 +91,6 @@
             color: rgb(0, 0, 0);
             font-family: serif;
         }
-
     </style>
 </head>
 <body>
@@ -98,7 +99,10 @@
             <div class="row-container">
                 @foreach ($classes as $item)
                 <div class="seat-card">
-                    <h3>{{ $exam->name }} - {{ $exam->year }}</h3>
+                    <img height="70px" width="80px" src="{{ asset('Backend/uploads/photos/' . ($website_info->logo ?? 'default-logo.jpg')) }}" alt="School Logo" style="display: block; margin: 0 auto;">
+                    <h3 class="text-center text-mute">{{ $website_info->name ?? 'Future ICT School' }}</h3>
+                    <h3 class="text-center  text-mute">{{ $website_info->address ?? 'Gouripur,Daudknadi,cumilla' }}</h3>
+                    <h3 class=" text-mute">{{ $exam->name }} - {{ $exam->year }}</h3>
                     <div class="student-info">
                         <div class="student-photo">
                             <img src="{{ asset(!empty($item->photo) ? 'uploads/photos/'.$item->photo : 'uploads/photos/avatar.png') }}" alt="image">
