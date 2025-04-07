@@ -121,8 +121,9 @@ $website_info=App\Models\Website_information::first();
                     <h2>{{ $website_info->name ?? 'Future ICT School' }}</h2>
                     <p>{{ $website_info->address ?? 'Daudkandi , Chittagong , Bangladesh' }}</p>
 
-                    <span><strong><span id="examName"></span></strong><br>
-                    <strong>Examination Routine</strong></span>
+                    <span><span><span id="examName"></span></span><br>
+                    <span><span>Class: <span id="className"></span></span><br>
+                    <span>Examination Routine</span></span>
                 </div>
                 <div class="table-responsive responsive-table" >
                     <table id="datatable1" class="table table-bordered dt-responsive nowrap"
@@ -162,14 +163,15 @@ $website_info=App\Models\Website_information::first();
 <script  src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-        $('select').select2({
-            dropdownParent: $('#routineModal'),
-            placeholder: "---Select---",
-            allowClear: false
-        });
+        // $('select').select2({
+        //     dropdownParent: $('#editRoutineModal'),
+        //     placeholder: "---Select---",
+        //     allowClear: false
+        // });
         $("select[name='find_class_id']").select2();
         $("select[name='find_exam_id']").select2();
         // custom_select2('#routineModal');
+        _handleSubmit('#editRoutineForm','#editRoutineModal');
         _handleSubmit('#routineForm','#routineModal');
         $("#datatable1").DataTable();
 
@@ -184,45 +186,36 @@ $website_info=App\Models\Website_information::first();
             success: function(response) {
                 if (response.success) {
 
-                    $('#routineForm').attr('action', "{{ route('admin.student.exam.routine.update', ':id') }}".replace(':id', id));
-                    $('#routineModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Examination Routine');
-                    if (!$('#routineForm select[name="class_id"]').hasClass("select2-hidden-accessible")) {
-                        $('#routineForm select[name="class_id"]').select2({
-                            dropdownParent: $('#routineModal'),
-                            placeholder: "---Select---",
-                            allowClear: false
-                        });
-                    }
-                    $('#routineForm select[name="class_id"]').val(response.data.class_id);
+                    $('#editRoutineForm').attr('action', "{{ route('admin.student.exam.routine.update', ':id') }}".replace(':id', id));
+                    $('#editRoutineModalLabel').html('<span class="mdi mdi-account-edit mdi-18px"></span> &nbsp;Edit Examination Routine');
+                    // if (!$('#editRoutineForm select[name="class_id"]').hasClass("select2-hidden-accessible")) {
+                    //     $('#editRoutineForm select[name="class_id"]').select2({
+                    //         dropdownParent: $('#editRoutineModal'),
+                    //         placeholder: "---Select---",
+                    //         allowClear: false
+                    //     });
+                    // }
+                    $('#editRoutineForm select[name="class_id"]').val(response.data.class_id);
 
-                    if (!$('#routineForm select[name="exam_id"]').hasClass("select2-hidden-accessible")) {
-                        $('#routineForm select[name="exam_id"]').select2({
-                            dropdownParent: $('#routineModal'),
-                            placeholder: "---Select---",
-                            allowClear: false
-                        });
-                    }
-                    $('#routineForm select[name="exam_id"]').val(response.data.exam_id);
-
-
-                    if (!$('#routineForm select[name="subject_id"]').hasClass("select2-hidden-accessible")) {
-                        $('#routineForm select[name="subject_id"]').select2({
-                            dropdownParent: $('#routineModal'),
-                            placeholder: "---Select---",
-                            allowClear: false
-                        });
-                    }
-                    $('#routineForm select[name="subject_id"]').val(response.data.subject_id);
+                    // if (!$('#editRoutineForm select[name="exam_id"]').hasClass("select2-hidden-accessible")) {
+                    //     $('#editRoutineForm select[name="exam_id"]').select2({
+                    //         dropdownParent: $('#editRoutineModal'),
+                    //         placeholder: "---Select---",
+                    //         allowClear: false
+                    //     });
+                    // }
+                    $('#editRoutineForm select[name="exam_id"]').val(response.data.exam_id);
+                    $('#editRoutineForm select[name="subject_id"]').val(response.data.subject_id);
 
 
-                    $('#routineForm input[name="exam_date"]').val(response.data.exam_date);
-                    $('#routineForm input[name="start_time"]').val(response.data.start_time);
-                    $('#routineForm input[name="end_time"]').val(response.data.end_time);
-                    $('#routineForm input[name="room_number"]').val(response.data.room_number);
-                    $('#routineForm input[name="invigilator_name"]').val(response.data.invigilator);
+                    $('#editRoutineForm input[name="exam_date"]').val(response.data.exam_date);
+                    $('#editRoutineForm input[name="start_time"]').val(response.data.start_time);
+                    $('#editRoutineForm input[name="end_time"]').val(response.data.end_time);
+                    $('#editRoutineForm input[name="room_number"]').val(response.data.room_number);
+                    $('#editRoutineForm input[name="invigilator_name"]').val(response.data.invigilator);
 
                     /* Show the modal*/
-                    $('#routineModal').modal('show');
+                    $('#editRoutineModal').modal('show');
 
                 } else {
                     toastr.error('Failed to fetch  data.');
@@ -273,6 +266,7 @@ $website_info=App\Models\Website_information::first();
         var class_id = $("select[name='find_class_id']").val();
         var exam_id = $("select[name='find_exam_id']").val();
         $("#examName").text($('select[name="find_exam_id"] option:selected').text());
+        $("#className").text($('select[name="find_class_id"] option:selected').text());
         fetch_exam_routine_data(class_id,exam_id)
     });
     function _time_formate(time) {
@@ -461,5 +455,6 @@ $website_info=App\Models\Website_information::first();
         window.print();
         document.body.innerHTML = originalContents;
     });
+
   </script>
 @endsection
