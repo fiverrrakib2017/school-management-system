@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                {{-- <div class="card-body">
                     <button type="button" id="printBtn" class="btn btn-primary"><i class="fas fa-print"></i></button><br>
                     <div class="table-responsive responsive-table">
 
@@ -84,7 +84,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
         </div>
@@ -152,7 +152,6 @@
             var exam_id = $("select[name='exam_id']").val();
             var class_id = $("select[name='class_id']").val();
             var section_id = $("select[name='section_id']").val();
-            var student_id = $("select[name='student_id']").val();
 
             if (!exam_id) {
                 toastr.error("Exam Name is require!!");
@@ -162,7 +161,15 @@
                 toastr.error("Student Class Name is require!!");
                 return;
             }
-            get_student(exam_id, class_id, section_id, student_id);
+
+            var url = "{{ route('admin.student.admid.card.print', ['exam_id' => ':exam_id', 'class_id' => ':class_id']) }}";
+            url = url.replace(':exam_id', exam_id);
+            url = url.replace(':class_id', class_id);
+            // url = url.replace(':section_id', section_id);
+            if (section_id) {
+                url += '/' + section_id;
+            }
+            window.open(url, '_blank');
         });
 
         function get_student(exam_id, class_id, section_id) {
@@ -233,24 +240,7 @@
 
 
     /* Submit */
-    $(document).on('click', '#printBtn', function() {
-        var exam_id = $("select[name='exam_id']").val();
-        var student_id = $('.student-checkbox:checked').val();
-
-        if(student_id) {
-            // $('#printBtn').prop('disabled', true).html(
-            //     '<i class="fa fa-spinner fa-spin"></i> Submitting...'
-            // );
-            var url = "{{ route('admin.student.admid.card.print', ['exam_id' => ':exam_id', 'student_id' => ':student_id']) }}";
-
-            url = url.replace(':exam_id', exam_id)
-                    .replace(':student_id', student_id);
-
-            window.open(url, '_blank');
-        } else {
-            toastr.error('Please select a student');
-        }
-    });
+  
 
     $(document).on('change', '.student-checkbox', function() {
         if ($(this).prop('checked')) {

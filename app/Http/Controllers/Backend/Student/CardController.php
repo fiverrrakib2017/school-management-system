@@ -32,10 +32,18 @@ class CardController extends Controller
         $students=Student::latest()->get();
         return view('Backend.Pages.Student.Card.Admit.Card_generate',compact('students','sections','subjects'));
     }
-    public function admid_card_print($exam_id,$student_id){
-        $student = Student::find($student_id);
-        $exam=Student_exam::find($exam_id);
-        return view('Backend.Pages.Student.Card.Admit.Print', compact('student', 'exam_id','exam'));
+    public function admid_card_print($exam_id,$class_id, $section_id = null) {
+        $exam = Student_exam::find($exam_id);
+        $query = Student::with(['currentClass', 'section'])
+                        ->where('current_class', '=', $class_id);
+        if (!is_null($section_id)) {
+            $query->where('section_id', '=', $section_id);
+        }
+        $students = $query->get();
+        if($students->isEmpty()){
+            return redirect()->back()->with('error', 'No students found for the selected class and section.');
+        }
+        return view('Backend.Pages.Student.Card.Admit.Print', compact('students', 'exam_id','exam'));
     }
 
     /**************************ID CARD MANAGEMENT**************************************************/
