@@ -57,8 +57,15 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="card-body">
-                    <button type="button" id="printBtn" class="btn btn-primary"><i class="fas fa-print"></i></button><br>
+                <div class="card-body d-none" id="print_area">
+
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" id="printBtn" class="btn btn-primary mb-2"><i class="fas fa-print"></i>
+                                Generate Admit Card</button>
+                        </div>
+                    </div>
+                    {{-- <button type="button" id="printBtn" class="btn btn-primary"><i class="fas fa-print"></i></button><br> --}}
                     <div class="table-responsive responsive-table">
 
                         <table id="datatable1" class="table table-bordered dt-responsive nowrap"
@@ -66,7 +73,8 @@
                             <thead>
                                 <tr>
 
-                                    <th class=""></th>
+                                    <th class=""><input type="checkbox" id="selectAll"
+                                            class=" student-checkbox"></th>
                                     <th class="">No.</th>
                                     <th class="">Images</th>
                                     <th class="">Student Name </th>
@@ -84,7 +92,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div> --}}
+                </div>
             </div>
 
         </div>
@@ -161,15 +169,8 @@
                 toastr.error("Student Class Name is require!!");
                 return;
             }
+            get_student(exam_id, class_id, section_id);
 
-            var url = "{{ route('admin.student.admid.card.print', ['exam_id' => ':exam_id', 'class_id' => ':class_id']) }}";
-            url = url.replace(':exam_id', exam_id);
-            url = url.replace(':class_id', class_id);
-            // url = url.replace(':section_id', section_id);
-            if (section_id) {
-                url += '/' + section_id;
-            }
-            window.open(url, '_blank');
         });
 
         function get_student(exam_id, class_id, section_id) {
@@ -192,7 +193,7 @@
                 success: function(response) {
                     var _number = 1;
                     var html = '';
-
+                    $("#print_area").removeClass('d-none');
                     /*Check if the response data is an array*/
                     if (Array.isArray(response.data) && response.data.length > 0) {
                         response.data.forEach(function(data) {
@@ -226,6 +227,7 @@
                     }
 
                     $("#_data").html(html);
+                    $("#datatable1").DataTable();
                 },
                 error: function() {
                     toastr.error('An error occurred. Please try again.');
@@ -240,14 +242,58 @@
 
 
     /* Submit */
-  
 
-    $(document).on('change', '.student-checkbox', function() {
-        if ($(this).prop('checked')) {
-            $('.student-checkbox').not(this).prop('disabled', true);
-        } else {
-            $('.student-checkbox').prop('disabled', false);
-        }
-    });
+
+    $("#selectAll").on('click', function() {
+            if ($(this).is(':checked')) {
+                $(".student-checkbox").prop('checked', true);
+            } else {
+                $(".student-checkbox").prop('checked', false);
+            }
+        });
+        $(document).on('click', '.student-checkbox', function() {
+            if ($(".student-checkbox:checked").length == $(".student-checkbox").length) {
+                $("#selectAll").prop('checked', true);
+            } else {
+                $("#selectAll").prop('checked', false);
+            }
+        });
+        $(document).on('click', '#printBtn', function() {
+            /*keep reference*/
+            let print_button = $(this);
+
+            /* Show spinner & disable button*/
+            print_button.html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...`
+            );
+            print_button.prop('disabled', true);
+
+            /* Delay spinner for 1s*/
+            setTimeout(() => {
+                var selectedIds = [];
+                $(".student-checkbox:checked").each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length > 0) {
+                    var url =
+                        "{{ route('admin.student.admid.card.print', ['exam_id' => ':exam_id', 'student_ids' => ':student_ids']) }}";
+                    url = url.replace(':exam_id', $("select[name='exam_id']").val());
+
+                    var student_ids = selectedIds.join(',');
+                    url = url.replace(':student_ids', student_ids);
+
+                    window.open(url, '_blank');
+                } else {
+                    toastr.error("Please select at least one student.");
+                }
+
+                /* Restore button after task done*/
+                print_button.html(`<i class="fas fa-print"></i> Generate Admit Card`);
+                /* Enable button*/
+                print_button.prop('disabled', false);
+
+            }, 1000);
+        });
     </script>
 @endsection

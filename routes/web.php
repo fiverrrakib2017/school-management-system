@@ -219,7 +219,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::controller(CardController::class)->group(function(){
                 Route::get('template/index','admid_card_template')->name('admin.student.admid.card.template');
                 Route::get('generate','admid_card_generate')->name('admin.student.admid.card.generate');
-                Route::get('print/{exam_id}/{class_id}/{section_id?}','admid_card_print')->name('admin.student.admid.card.print');
+                Route::get('print/{exam_id}/{student_ids?}','admid_card_print')->name('admin.student.admid.card.print');
             });
         });
         /*Student Seat Plan */
