@@ -222,11 +222,11 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('print/{exam_id}/{class_id}/{section_id?}','admid_card_print')->name('admin.student.admid.card.print');
             });
         });
-        /*Student ID Card */
+        /*Student Seat Plan */
         Route::prefix('seat-plan')->group(function(){
             Route::controller(CardController::class)->group(function(){
                 Route::get('generate','seat_plan_generate')->name('admin.student.seat_plan_generate');
-                Route::get('print/{exam_id}/{class_id}/{section_id?}','seat_plan_print')->name('admin.student.seat_plan_print');
+                Route::get('print/{exam_id}/{student_ids}','seat_plan_print')->name('admin.student.seat_plan_print');
             });
         });
     });

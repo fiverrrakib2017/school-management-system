@@ -69,21 +69,17 @@ class CardController extends Controller
         $students=Student::latest()->get();
         return view('Backend.Pages.Student.Card.Seat.index',compact('students','sections'));
     }
-    public function seat_plan_print($exam_id, $class_id, $section_id = null) {
+    public function seat_plan_print($exam_id, $student_ids) {
 
         $exam = Student_exam::find($exam_id);
 
+        $student_ids = explode(',', $student_ids);
+        $students = Student::with(['currentClass', 'section'])
+                        ->whereIn('id', $student_ids)
+                        ->get();
 
-        $query = Student::with(['currentClass', 'section'])
-                        ->where('current_class', '=', $class_id);
 
-        if (!is_null($section_id)) {
-            $query->where('section_id', '=', $section_id);
-        }
-
-        $classes = $query->get();
-
-        return view('Backend.Pages.Student.Card.Seat.print', compact('exam', 'classes'));
+        return view('Backend.Pages.Student.Card.Seat.print', compact('exam', 'students'));
     }
 
 
