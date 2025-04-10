@@ -65,7 +65,7 @@
           </li>
           <!-----------Examination Menu------------------->
             @php
-                $active_prefix=['admin.student.exam.index','admin.student.exam.routine.index','admin.student.exam.result.index','admin.student.exam.result.create','admin.student.exam.result.report'];
+                $active_prefix=['admin.student.exam.index','admin.student.exam.routine.index','admin.student.exam.result.index','admin.student.exam.result.create','admin.student.exam.result.report','admin.student.exam.result.trabulation.sheet','admin.student.exam.result.merit_list'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -85,6 +85,15 @@
                  <li class="nav-item">
                     <a href="{{ route('admin.student.exam.result.report') }}" class="nav-link {{($route=='admin.student.exam.result.report') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Result Report</p></a>
                  </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.exam.result.trabulation.sheet') }}" class="nav-link {{($route=='admin.student.exam.result.trabulation.sheet') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Tabulation Sheet</p></a>
+                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.exam.result.merit_list') }}" class="nav-link {{($route=='admin.student.exam.result.merit_list') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Merit List</p></a>
+                 </li>
+                  {{-- <li class="nav-item">
+                    <a href="" class="nav-link {{($route=='') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Progress Reports</p></a>
+                 </li> --}}
 
             </ul>
           </li>

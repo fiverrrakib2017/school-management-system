@@ -152,6 +152,8 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store','result_store')->name('admin.student.exam.result.store');
                 Route::post('/get_exam_result','get_exam_result')->name('admin.student.exam.result.get_result');
                 Route::post('/delete','delete')->name('admin.student.exam.result.delete');
+                /* Student Result Trabulation Sheet Route **/
+                Route::get('/trabulation-sheet','trabulation_sheet')->name('admin.student.exam.result.trabulation.sheet');
             });
         });
         /** Student  Route **/

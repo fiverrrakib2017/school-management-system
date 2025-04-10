@@ -83,6 +83,14 @@ class Exam_result_controller extends Controller
         ]);
     }
 
+    public function trabulation_sheet(){
+        $sections = Section::latest()->get();
+        $subjects = Student_subject::latest()->get();
+        $students = Student::latest()->get();
+        $exam = Student_exam::latest()->get();
+        return view('Backend.Pages.Student.Exam.Result.trabulation_sheet', compact('students', 'sections', 'subjects', 'exam'));
+    }
+
     public function delete(Request $request)
     {
         $object = Student_exam_result::find($request->id);
