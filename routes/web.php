@@ -154,6 +154,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/delete','delete')->name('admin.student.exam.result.delete');
                 /* Student Result Trabulation Sheet Route **/
                 Route::get('/trabulation-sheet','trabulation_sheet')->name('admin.student.exam.result.trabulation.sheet');
+                Route::get('/merit-list-sheet','merit_list_sheet')->name('admin.student.exam.result.merit_list');
             });
         });
         /** Student  Route **/

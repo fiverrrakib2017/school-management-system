@@ -90,6 +90,13 @@ class Exam_result_controller extends Controller
         $exam = Student_exam::latest()->get();
         return view('Backend.Pages.Student.Exam.Result.trabulation_sheet', compact('students', 'sections', 'subjects', 'exam'));
     }
+    public function merit_list_sheet(){
+        $sections = Section::latest()->get();
+        $subjects = Student_subject::latest()->get();
+        $students = Student::latest()->get();
+        $exam = Student_exam::latest()->get();
+        return view('Backend.Pages.Student.Exam.Result.merit_list', compact('students', 'sections', 'subjects', 'exam'));
+    }
 
     public function delete(Request $request)
     {
