@@ -65,19 +65,22 @@
           </li>
           <!-----------Examination Menu------------------->
             @php
-                $active_prefix=['admin.student.exam.index','admin.student.exam.routine.index','admin.student.exam.result.index','admin.student.exam.result.create','admin.student.exam.result.report','admin.student.exam.result.trabulation.sheet','admin.student.exam.result.merit_list'];
+                $active_prefix=['admin.student.exam.index','admin.student.exam.routine.index','admin.student.exam.routine.create','admin.student.exam.result.index','admin.student.exam.result.create','admin.student.exam.result.report','admin.student.exam.result.trabulation.sheet','admin.student.exam.result.merit_list'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
                 <i class='nav-icon fas fa-book-open'></i>
-                <p>&nbsp; Examination <i class="right fas fa-angle-left"></i> </p>
+                <p>&nbsp; Exam Management <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
                 <li class="nav-item">
                     <a href="{{ route('admin.student.exam.index') }}" class="nav-link {{($route=='admin.student.exam.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Examination</p></a>
                  </li>
                  <li class="nav-item">
-                    <a href="{{ route('admin.student.exam.routine.index') }}" class="nav-link {{($route=='admin.student.exam.routine.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Routine</p></a>
+                    <a href="{{ route('admin.student.exam.routine.index') }}" class="nav-link {{($route=='admin.student.exam.routine.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Schedule</p></a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="{{ route('admin.student.exam.routine.create') }}" class="nav-link {{($route=='admin.student.exam.routine.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Add Schedule</p></a>
                  </li>
                  <li class="nav-item">
                     <a href="{{ route('admin.student.exam.result.create') }}" class="nav-link  {{($route=='admin.student.exam.result.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Create Exam Result</p></a>

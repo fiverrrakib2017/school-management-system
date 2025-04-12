@@ -143,8 +143,9 @@ $website_info=App\Models\Website_information::first();
                             <th class="">Roll</th>
                             <th class="">Absent</th>
                             <th class="">Written Marks</th>
-                            <th class="">Prectial Marks</th>
                             <th class="">Objective Marks</th>
+                            <th class="">Prectial Marks</th>
+
                             <th class="">Total Marks</th>
                             <th class="">Grade</th>
                             <th class="">Remarks</th>
@@ -359,9 +360,11 @@ $website_info=App\Models\Website_information::first();
 
                     html += '<td><input class="form-control written_marks"  type="text" name="written_marks[' + data.id + ']" data-id="' + data.id + '"></td>';
 
+                    html += '<td><input class="form-control objective_marks"  type="text" name="objective_marks[' + data.id + ']" data-id="' + data.id + '"></td>';
+
                     html += '<td><input class="form-control prectial_marks"  type="text" name="prectial_marks[' + data.id + ']" data-id="' + data.id + '"></td>';
 
-                    html += '<td><input class="form-control objective_marks"  type="text" name="objective_marks[' + data.id + ']" data-id="' + data.id + '"></td>';
+
 
                     html += '<td><input class="form-control total_marks" type="text" name="total_marks[' + data.id + ']" data-id="' + data.id + '" value="100"></td>';
 

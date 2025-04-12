@@ -13,17 +13,24 @@ return new class extends Migration
     {
         Schema::create('student_exam_results', function (Blueprint $table) {
             $table->id();
+
             $table->integer('is_absent')->default(0);
+
             $table->unsignedBigInteger('exam_id');
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('subject_id');
-            $table->decimal('practical_marks');
-            $table->decimal('objective_marks');
-            $table->decimal('written_marks');
-            $table->decimal('total_marks');
+
+            $table->decimal('practical_marks', 8, 2)->nullable();
+            $table->decimal('objective_marks', 8, 2)->nullable();
+            $table->decimal('written_marks', 8, 2)->nullable();
+            $table->decimal('total_marks', 8, 2)->default(0);
+            $table->decimal('highest_marks', 8, 2)->nullable();
+
             $table->string('grade')->nullable();
+            $table->decimal('point', 4, 2)->nullable();
+
             $table->text('remarks')->nullable();
             $table->timestamps();
 
@@ -33,6 +40,7 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->foreign('subject_id')->references('id')->on('student_subjects')->onDelete('cascade');
         });
+
     }
 
     /**

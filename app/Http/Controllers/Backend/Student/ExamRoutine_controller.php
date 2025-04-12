@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Backend\Student;
 use App\Http\Controllers\Controller;
-use App\Models\Customer_ticket;
+use App\Models\Section;
+use App\Models\Student_class;
 use App\Models\Student_exam_routine;
+use App\Models\Student_subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -12,76 +14,114 @@ class ExamRoutine_controller extends Controller
 {
     public function index()
     {
-        return view('Backend.Pages.Student.Exam.Routine');
+        $sections = Section::latest()->get();
+        return view('Backend.Pages.Student.Exam.Routine.index', compact('sections'));
     }
-
-    public function get_all_data(Request $request)
+    public function create()
     {
-        $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'status', 'created_at', 'priority_id', 'customer_id', 'customer_id', 'customer_id', 'customer_id', 'customer_id', 'customer_id', 'customer_id', 'customer_id', 'created_at'];
-        $orderByColumn = $request->order[0]['column'];
-        $orderDirection = $request->order[0]['dir'];
-
-        $query = Customer_ticket::with(['customer', 'assign', 'complain_type'])
-            ->when($search, function ($query) use ($search) {
-                $query
-                    ->where('status', 'like', "%$search%")
-                    //    ->orWhere('priority', 'like', "%$search%")
-                    ->orWhereHas('customer', function ($query) use ($search) {
-                        $query->where('fullname', 'like', "%$search%")->orWhere('phone_number', 'like', "%$search%");
-                    })
-                    ->orWhereHas('complain_type', function ($query) use ($search) {
-                        $query->where('name', 'like', "%$search%");
-                    })
-                    ->orWhereHas('assign', function ($query) use ($search) {
-                        $query->where('name', 'like', "%$search%");
-                    });
-            })
-            ->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection)
-            ->paginate($request->length);
-
-        return response()->json([
-            'draw' => $request->draw,
-            'recordsTotal' => $query->total(),
-            'recordsFiltered' => $query->total(),
-            'data' => $query->items(),
-        ]);
+        $sections = Section::latest()->get();
+        // $subjects = Student_subject::latest()->get();
+        return view('Backend.Pages.Student.Exam.Routine.create', compact('sections'));
     }
+
+    
     public function store(Request $request)
-    {
-        $request->validate([
-            'exam_id' => 'required|exists:student_exams,id',
-            'class_id' => 'required|exists:student_classes,id',
-            'routines' => 'required|array',
-            'routines.*.subject_id' => 'required|exists:student_subjects,id',
-            'routines.*.exam_date' => 'required|date',
-            'routines.*.start_time' => 'required',
-            'routines.*.end_time' => 'required',
-            'routines.*.room_number' => 'required|numeric',
-            'routines.*.invigilator_name' => 'required|string',
-        ]);
+{
+    // Validate incoming request
+    $request->validate([
+        'exam_id' => 'required|integer',
+        'class_id' => 'required|integer',
+        'routines' => 'required|array',
+        'routines.*.subject_id' => 'required|integer',
+        'routines.*.exam_date' => 'required|date',
+        'routines.*.start_time' => 'required',
+        'routines.*.end_time' => 'required',
+    ]);
 
-        foreach ($request->routines as $routineData) {
-            $start_time = Carbon::createFromFormat('H:i', $routineData['start_time'])->format('H:i:s');
-            $end_time = Carbon::createFromFormat('H:i', $routineData['end_time'])->format('H:i:s');
+    // Fetch existing exam routines
+    $existingRoutines = Student_exam_routine::where([
+        ['exam_id', '=', $request->exam_id],
+        ['class_id', '=', $request->class_id],
+        ['section_id', '=', $request->section_id],
+    ])->get();
 
-            $routine = new Student_exam_routine();
-            $routine->exam_id = $request->exam_id;
-            $routine->class_id = $request->class_id;
-            $routine->subject_id = $routineData['subject_id'];
-            $routine->exam_date = $routineData['exam_date'];
-            $routine->start_time = $start_time;
-            $routine->end_time = $end_time;
-            $routine->room_number = $routineData['room_number'];
-            $routine->invigilator = $routineData['invigilator_name'];
-            $routine->save();
+    // Process each routine submitted in the request
+    foreach ($request->routines as $routineData) {
+        try {
+            $start_time = Carbon::parse($routineData['start_time'])->format('H:i:s');
+            $end_time = Carbon::parse($routineData['end_time'])->format('H:i:s');
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Invalid time format: ' . $e->getMessage()], 422);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Routines added successfully!',
-        ]);
+        // $has_written = !empty($routineData['written_full']) && !empty($routineData['written_pass']);
+        // $has_objective = !empty($routineData['objective_full']) && !empty($routineData['objective_pass']);
+        // $has_practical = !empty($routineData['practical_full']) && !empty($routineData['practical_pass']);
+
+        // Check if the routine already exists, if not create a new one
+        $examRoutine = Student_exam_routine::where([
+            ['exam_id', '=', $request->exam_id],
+            ['class_id', '=', $request->class_id],
+            ['section_id', '=', $request->section_id],
+            ['subject_id', '=', $routineData['subject_id']],
+            ['exam_date', '=', $routineData['exam_date']],
+        ])->first();
+
+        // If not found, create a new instance
+        if (!$examRoutine) {
+            $examRoutine = new Student_exam_routine();
+        }
+
+        // Set data to the examRoutine
+        $examRoutine->exam_id = $request->exam_id;
+        $examRoutine->class_id = $request->class_id;
+        $examRoutine->section_id = $request->section_id;
+        $examRoutine->subject_id = $routineData['subject_id'];
+        $examRoutine->exam_date = $routineData['exam_date'];
+        $examRoutine->start_time = $start_time;
+        $examRoutine->end_time = $end_time;
+        $examRoutine->room_number = $routineData['room_number'];
+
+        $examRoutine->has_written = (empty($routineData['written_full']) && empty($routineData['written_pass'])) ? 0 : 1;
+
+
+
+
+        $examRoutine->written_full = $routineData['written_full'] ?? null;
+        $examRoutine->written_pass = $routineData['written_pass'] ?? null;
+
+        $examRoutine->has_objective = (empty($routineData['objective_full']) && empty($routineData['objective_pass'])) ? 0 : 1;
+        $examRoutine->objective_full = $routineData['objective_full'] ?? null;
+        $examRoutine->objective_pass = $routineData['objective_pass'] ?? null;
+
+        $examRoutine->has_practical = (empty($routineData['practical_full']) && empty($routineData['practical_pass'])) ? 0 : 1;
+        $examRoutine->practical_full = $routineData['practical_full'] ?? null;
+        $examRoutine->practical_pass = $routineData['practical_pass'] ?? null;
+
+        $examRoutine->save();
     }
+    $routinesToDelete = $existingRoutines->filter(function ($existingRoutine) use ($request) {
+
+        foreach ($request->routines as $routineData) {
+            if ($existingRoutine->subject_id == $routineData['subject_id'] &&
+                $existingRoutine->exam_date == $routineData['exam_date']) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+    foreach ($routinesToDelete as $routineToDelete) {
+        $routineToDelete->delete();
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Successfully!',
+    ]);
+}
+
+
 
     public function delete(Request $request)
     {
@@ -134,8 +174,9 @@ class ExamRoutine_controller extends Controller
         $data = Student_exam_routine::with(['exam', 'class', 'subject'])
             ->where(['exam_id' => $exam_id, 'class_id' => $class_id])
             ->get();
+        $subjects = Student_subject::where('class_id', $class_id)->get(['id', 'name']);
         if ($data) {
-            return response()->json(['success' => true, 'data' => $data]);
+            return response()->json(['success' => true, 'data' => $data, 'subjects' => $subjects]);
             exit();
         } else {
             return response()->json(['success' => false, 'message' => 'Not found.']);

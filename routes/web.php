@@ -132,12 +132,13 @@ Route::group(['middleware'=>'admin'],function(){
         Route::prefix('examination/routine')->group(function(){
             Route::controller(ExamRoutine_controller::class)->group(function(){
                 Route::get('/list','index')->name('admin.student.exam.routine.index');
-                Route::get('/all_data','get_all_data')->name('admin.student.exam.routine.get_all_data');
-                Route::get('/edit/{id}','edit')->name('admin.student.exam.routine.edit');
-                Route::post('/update/{id}','update')->name('admin.student.exam.routine.update');
-                Route::post('/store','store')->name('admin.student.exam.routine.store');
-                Route::post('/delete','delete')->name('admin.student.exam.routine.delete');
-                Route::post('/get_exam_routine','get_exam_routine')->name('admin.student.exam.routine.get_exam_routine');
+                Route::get('/create','create')->name('admin.student.exam.routine.create');
+                 Route::get('/all_data','get_all_data')->name('admin.student.exam.routine.get_all_data');
+                 Route::get('/edit/{id}','edit')->name('admin.student.exam.routine.edit');
+                 Route::post('/update/{id}','update')->name('admin.student.exam.routine.update');
+                 Route::post('/store','store')->name('admin.student.exam.routine.store');
+                 Route::post('/delete','delete')->name('admin.student.exam.routine.delete');
+                 Route::post('/get_exam_routine','get_exam_routine')->name('admin.student.exam.routine.get_exam_routine');
             });
         });
         /** Examination Result  Route **/
