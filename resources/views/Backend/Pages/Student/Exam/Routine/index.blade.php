@@ -53,49 +53,51 @@ $website_info=App\Models\Website_information::first();
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
-        <div class="card-header">
-          <div class="row" id="search_box">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="">Class</label>
-                        <select name="find_class_id"  class="form-control" style="width: 100%">
-                            <option value="">---Select---</option>
-                            @php
-                                $classes = \App\Models\Student_class::latest()->get();
-                            @endphp
-                            @if($classes->isNotEmpty())
+            <div class="card-header">
+                <form id="search_box">
+                    <div class="row align-items-end">
+                        <!-- Class Dropdown -->
+                        <div class="col-md-3 mb-3">
+                            <label for="find_class_id">Class</label>
+                            <select name="find_class_id" id="find_class_id" class="form-control" required>
+                                <option value="">---Select---</option>
+                                @php
+                                    $classes = \App\Models\Student_class::latest()->get();
+                                @endphp
                                 @foreach($classes as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
-                            @endif
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="">Examination Name</label>
-                        <select name="find_exam_id"  class="form-control" style="width: 100%">
-                            <option value="">---Select---</option>
-                            @php
-                                $exams = \App\Models\Student_exam::latest()->get();
-                            @endphp
-                            @if($exams->isNotEmpty())
+                            </select>
+                        </div>
+
+                        <!-- Examination Dropdown -->
+                        <div class="col-md-3 mb-3">
+                            <label for="find_exam_id">Examination Name</label>
+                            <select name="find_exam_id" id="find_exam_id" class="form-control"required>
+                                <option value="">---Select---</option>
+                                @php
+                                    $exams = \App\Models\Student_exam::latest()->get();
+                                @endphp
                                 @foreach($exams as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
-                            @endif
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group mt-4">
-                    <button type="button" name="submit_btn" class="btn btn-success mt-1"><i class="mdi mdi-magnify"></i> Find Examination Routine</button>
+                            </select>
+                        </div>
 
-                </div>
-                </div>
-               
+                        <!-- Action Buttons -->
+                        <div class="col-md-6 mb-3 text-md-left text-center">
+                            <label class="d-block invisible">.</label> <!-- spacer -->
+                            <button type="button" name="submit_btn" class="btn btn-success mr-2">
+                                <i class="mdi mdi-magnify"></i> Find Examination Routine
+                            </button>
+                            <button type="button" name="exam_attendance_sheet_submit_btn" class="btn btn-primary">
+                                <i class="mdi mdi-magnify"></i> Exam Attendance Sheet
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
+
 
 
         </div>
@@ -134,8 +136,6 @@ $website_info=App\Models\Website_information::first();
                                 <th>Start Time</th>
                                 <th>End Time</th>
                                 <th>Room Number</th>
-                                <th>Invigilator</th>
-                                <th class="hide-on-print"></th>
                             </tr>
                         </thead>
                         <tbody id="routine_data">
@@ -147,6 +147,36 @@ $website_info=App\Models\Website_information::first();
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="row d-none" id="exam_attendance_sheet">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center text-right">
+                <button id="exam_attendance_sheet_print" class="btn btn-primary">
+                    <i class="fas fa-print"></i>
+                </button>
+                {{-- <h3 class="card-title mb-0">Student Exam Attendance</h3> --}}
+            </div>
+
+            <div class="card-body table-responsive p-0" id="attendance_print_area">
+                <!-- School Header -->
+                <div id="printHeader" class="school-header">
+                    <img src="{{ asset('Backend/uploads/photos/' . ($website_info->logo ?? 'default-logo.jpg')) }}" alt="School Logo">
+                    <h2>{{ $website_info->name ?? 'Future ICT School' }}</h2>
+                    <p>{{ $website_info->address ?? 'Daudkandi , Chittagong , Bangladesh' }}</p>
+
+                    <span><span><span id="attendance_examName"></span></span><br>
+                    <span><span>Class: <span id="attendance_className"></span></span><br>
+                    <span>Examination Attendance Sheet</span></span>
+                </div>
+                <div style="overflow-x:auto;" id="exam_attendance_response">
+
+                </div>
+
+            </div>
+          </div>
+
     </div>
 </div>
 @include('Backend.Modal.delete_modal')
@@ -194,6 +224,9 @@ $website_info=App\Models\Website_information::first();
 
     $("button[name='submit_btn']").on('click',function(e){
         e.preventDefault();
+        /*Hide Attendance Button */
+        $("button[name='exam_attendance_sheet_submit_btn']").hide();
+
         var class_id = $("select[name='find_class_id']").val();
         var exam_id = $("select[name='find_exam_id']").val();
         $("#examName").text($('select[name="find_exam_id"] option:selected').text());
@@ -310,11 +343,7 @@ $website_info=App\Models\Website_information::first();
                     html += '<td>' + _time_formate(data.start_time) + '</td>';
                     html += '<td>' +_time_formate( data.end_time) + '</td>';
                     html += '<td>' + data.room_number + '</td>';
-                    html += '<td>' + data.invigilator + '</td>';
-                    html += '<td class="hide-on-print">';
-                    html += '<button class="btn btn-primary btn-sm me-2 edit-btn" data-id="' + data.id + '" style="margin-right:5px"><i class="fa fa-edit"></i></button>';
-                    html += '<button class="btn btn-danger btn-sm delete-btn" data-id="' + data.id + '"><i class="fa fa-trash"></i></button>';
-                    html += '</td>';
+
                     html += '</tr>';
                 });
             } else {
@@ -345,6 +374,55 @@ $website_info=App\Models\Website_information::first();
         document.body.innerHTML = "<html><head><title>Print</title></head><body>" + printContents + "</body></html>";
         window.print();
         document.body.innerHTML = originalContents;
+    });
+    /*********************** Student Exam Attendance Print Data *******************************/
+    document.getElementById("exam_attendance_sheet_print").addEventListener("click", function() {
+        var printContents = document.getElementById("attendance_print_area").outerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = "<html><head><title>Print</title></head><body>" + printContents + "</body></html>";
+        window.print();
+        document.body.innerHTML = originalContents;
+    });
+    /********* **************  Student Exam Attendance Data *******************************/
+    $("button[name='exam_attendance_sheet_submit_btn']").on('click',function(e){
+        e.preventDefault();
+        /*Hide Exam Routine Button */
+        $("button[name='submit_btn']").hide();
+
+        var class_id = $("select[name='find_class_id']").val();
+        var exam_id = $("select[name='find_exam_id']").val();
+        $("#attendance_examName").text($('select[name="find_exam_id"] option:selected').text());
+        $("#attendance_className").text($('select[name="find_class_id"] option:selected').text());
+
+        var submitBtn =  $(this);
+        submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
+        submitBtn.prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('admin.student.exam.routine.get_exam_attendance') }}",
+            cache: true,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                class_id: class_id,
+                exam_id: exam_id,
+            },
+            success: function(response) {
+                $("#exam_attendance_sheet").removeClass('d-none');
+                $("#exam_attendance_response").html(response);
+            },
+        error: function() {
+            toastr.error('An error occurred. Please try again.');
+        },
+        complete:function(){
+            submitBtn.html('<i class="mdi mdi-magnify"></i> Exam Attendance Sheet');
+            submitBtn.prop('disabled', false);
+        }
+
+        });
     });
 
   </script>

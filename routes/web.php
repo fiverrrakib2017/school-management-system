@@ -139,6 +139,8 @@ Route::group(['middleware'=>'admin'],function(){
                  Route::post('/store','store')->name('admin.student.exam.routine.store');
                  Route::post('/delete','delete')->name('admin.student.exam.routine.delete');
                  Route::post('/get_exam_routine','get_exam_routine')->name('admin.student.exam.routine.get_exam_routine');
+                 /*get exam attendance sheet*/
+                 Route::post('/get_exam_attendance','get_exam_attendance')->name('admin.student.exam.routine.get_exam_attendance');
             });
         });
         /** Examination Result  Route **/
