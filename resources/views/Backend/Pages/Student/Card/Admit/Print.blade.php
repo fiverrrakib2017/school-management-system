@@ -47,7 +47,7 @@ $website_info = App\Models\Website_information::first();
         justify-content: space-between;
         align-items: center;
         /* border-bottom: 2px dotted #333; */
-        padding-bottom: 15px;
+        /*padding-bottom: 15px;*/
         /* margin-bottom: 25px; */
     }
 
@@ -69,14 +69,14 @@ $website_info = App\Models\Website_information::first();
         margin: 0;
         font-size: 28px;
         font-weight: bold;
-        color: #2c3e50;
+        color: #0070e1;
     }
 
 
     .school-info p {
         margin: 4px 0;
         font-size: 21px;
-        color: #555;
+        color: #000000;
     }
 
     .photo img {
@@ -87,7 +87,7 @@ $website_info = App\Models\Website_information::first();
 
     .admit-title {
         text-align: center;
-        background-color: #a72020;
+        background-color: #e39912;
         color: #fffafa;
         padding: 4px;
         font-size: 23px;
@@ -172,7 +172,7 @@ $website_info = App\Models\Website_information::first();
                         <tr>
                              <td><strong>Class:</strong> {{ $student->currentClass->name ?? 'N/A' }}</td>
                             <td><strong>Roll:</strong>{{ $student->roll_no ?? 'N/A' }}</td>
-                           
+
                         </tr>
                         <tr>
                             <td><strong>Group:</strong>{{ $student->section->name ?? 'N/A' }} </td>
@@ -205,33 +205,33 @@ $website_info = App\Models\Website_information::first();
         window.print();
     });
     // Disable right-click
-document.addEventListener('contextmenu', function(e) {
-   e.preventDefault();
-});
+// document.addEventListener('contextmenu', function(e) {
+//     e.preventDefault();
+// });
 
-// Disable specific keyboard shortcuts
-document.addEventListener('keydown', function(e) {
-   // F12
-   if (e.key === "F12") {
-       e.preventDefault();
-   }
-   // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-   if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) {
-       e.preventDefault();
-   }
-   // Ctrl+U
-   if (e.ctrlKey && e.key === "u") {
-       e.preventDefault();
-   }
-   // Ctrl+S (to prevent saving)
-   if (e.ctrlKey && e.key === "s") {
-       e.preventDefault();
-   }
-   // Ctrl+Shift+K (Firefox devtools)
-   if (e.ctrlKey && e.shiftKey && e.key === "K") {
-       e.preventDefault();
-   }
-});
+// // Disable specific keyboard shortcuts
+// document.addEventListener('keydown', function(e) {
+//     // F12
+//     if (e.key === "F12") {
+//         e.preventDefault();
+//     }
+//     // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+//     if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) {
+//         e.preventDefault();
+//     }
+//     // Ctrl+U
+//     if (e.ctrlKey && e.key === "u") {
+//         e.preventDefault();
+//     }
+//     // Ctrl+S (to prevent saving)
+//     if (e.ctrlKey && e.key === "s") {
+//         e.preventDefault();
+//     }
+//     // Ctrl+Shift+K (Firefox devtools)
+//     if (e.ctrlKey && e.shiftKey && e.key === "K") {
+//         e.preventDefault();
+//     }
+// });
 </script>
 </body>
 
