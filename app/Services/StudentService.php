@@ -116,7 +116,7 @@ class StudentService{
     // }
     public function get_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name', 'current_class'];
+        $columnsForOrderBy = ['id','photo', 'name', 'current_class','section_id','roll_no','birth_date','current_address','father_name','mother_name','religion','phone'];
         $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
 
