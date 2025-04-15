@@ -120,15 +120,16 @@ class StudentService{
         $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
         $orderDirection = $request->order[0]['dir'];
 
-        $query = Student::with(['currentClass'])->when($search, function ($query) use ($search) {
+        $query = Student::with(['currentClass','section'])->when($search, function ($query) use ($search) {
 
             $query->where('name', 'like', "%$search%")
                   ->orWhere('phone', 'like', "%$search%")
 
-                //   ->orWhereHas('currentClass', function ($query) use ($search) {
-                //       $query->where('name', 'like', "%$search%")
-                //             ->orWhere('district_name_en', 'like', "%$search%");
-                //   })
+                  ->orWhereHas('section', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%");
+                            //if i want to search anoter column this table
+                            // ->orWhere('district_name_en', 'like', "%$search%");
+                  })
                   ->orWhereHas('currentClass', function ($query) use ($search) {
                       $query->where('name', 'like', "%$search%");
                   });

@@ -20,6 +20,10 @@
                                 <th class="">Images</th>
                                 <th class="">Student Name </th>
                                 <th class="">Class </th>
+                                <th class="">Section</th>
+                                <th class="">Roll</th>
+                                <th class="">DOB</th>
+                                <th class="">Address</th>
                                 <th class="">Father Name</th>
                                 <th class="">Mother Name</th>
                                 <th class="">Religion</th>
@@ -103,6 +107,21 @@
         },
         {
           "data":"current_class.name"
+        },
+        {
+          "data":"section.name"
+        },
+        {
+          "data":"roll_no"
+        },
+        {
+          "data":null,
+          render: function(data, type, row){
+              return moment(data).format('DD-MM-YYYY');
+          }
+        },
+        {
+          "data":"current_address"
         },
         {
           "data":"father_name"
