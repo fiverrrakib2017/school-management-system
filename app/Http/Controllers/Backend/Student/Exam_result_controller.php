@@ -13,6 +13,7 @@ use App\Models\Student_subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Exam_result_controller extends Controller
 {
@@ -31,12 +32,24 @@ class Exam_result_controller extends Controller
         $students = Student::latest()->get();
         return view('Backend.Pages.Student.Exam.Result.Result', compact('students', 'sections', 'subjects'));
     }
-    public function result_print($exam_id, $student_id)
+    public function result_card_print($exam_id, $student_ids)
     {
-        $student = Student::find($student_id);
-        $exam = Student_exam::find($exam_id);
-        return view('Backend.Pages.Student.Exam.Result.Print', compact('student', 'exam_id', 'exam'));
+        $student_ids = explode(',', $student_ids);
+
+        $results = Student_exam_result::with('student','subject','class','section','exam')->whereIn('student_id', $student_ids)
+                    ->where('exam_id', $exam_id)
+                    ->get()
+                    ->groupBy('student_id');
+        /*Highest Marks*/
+        $highest_marks=Student_exam_result::where('exam_id', $exam_id)
+        ->select('subject_id', DB::raw('MAX(written_marks + objective_marks + practical_marks) as highest'))
+        ->groupBy('subject_id')
+        ->pluck('highest', 'subject_id');
+        //return $results;
+
+        return view('Backend.Pages.Student.Exam.Result.Print', compact('results','highest_marks'));
     }
+
 
     public function result_store(Request $request)
     {

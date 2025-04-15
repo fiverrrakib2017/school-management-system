@@ -148,7 +148,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::controller(Exam_result_controller::class)->group(function(){
                 Route::get('/create','create_result')->name('admin.student.exam.result.create');
                 Route::get('/report','result_report')->name('admin.student.exam.result.report');
-                Route::get('print/{exam_id}/{student_id}','result_print')->name('admin.student.result.print');
+                // Route::get('print/{exam_id}/{student_id}','result_print')->name('admin.student.result.print');
                 Route::get('/edit/{id}','edit')->name('admin.student.exam.result.edit');
                 Route::post('/update','update')->name('admin.student.exam.result.update');
                 /* Student Result Store Route **/
@@ -156,6 +156,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store','result_store')->name('admin.student.exam.result.store');
                 Route::post('/get_exam_result','get_exam_result')->name('admin.student.exam.result.get_result');
                 Route::post('/delete','delete')->name('admin.student.exam.result.delete');
+                Route::get('print/{exam_id}/{student_ids?}','result_card_print')->name('admin.student.result.card.print');
                 /* Student Result Trabulation Sheet Route **/
                 Route::get('/trabulation-sheet','trabulation_sheet')->name('admin.student.exam.result.trabulation.sheet');
                 Route::get('/merit-list-sheet','merit_list_sheet')->name('admin.student.exam.result.merit_list');

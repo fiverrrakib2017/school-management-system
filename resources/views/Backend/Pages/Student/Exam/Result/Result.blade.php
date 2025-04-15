@@ -57,8 +57,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body d-none" id="student_table">
-                    <button type="button" id="printBtn" class="btn btn-primary"><i class="fas fa-print"></i></button><br>
+                <div class="card-body d-none" id="print_area">
+
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" id="printBtn" class="btn btn-primary mb-2"><i class="fas fa-print"></i>
+                                Generate Result Card</button>
+                        </div>
+                    </div>
+                    {{-- <button type="button" id="printBtn" class="btn btn-primary"><i class="fas fa-print"></i></button><br> --}}
                     <div class="table-responsive responsive-table">
 
                         <table id="datatable1" class="table table-bordered dt-responsive nowrap"
@@ -66,7 +73,8 @@
                             <thead>
                                 <tr>
 
-                                    <th class=""></th>
+                                    <th class=""><input type="checkbox" id="selectAll"
+                                            class=" student-checkbox"></th>
                                     <th class="">No.</th>
                                     <th class="">Images</th>
                                     <th class="">Student Name </th>
@@ -152,7 +160,6 @@
             var exam_id = $("select[name='exam_id']").val();
             var class_id = $("select[name='class_id']").val();
             var section_id = $("select[name='section_id']").val();
-            var student_id = $("select[name='student_id']").val();
 
             if (!exam_id) {
                 toastr.error("Exam Name is require!!");
@@ -162,7 +169,8 @@
                 toastr.error("Student Class Name is require!!");
                 return;
             }
-            get_student(exam_id, class_id, section_id, student_id);
+            get_student(exam_id, class_id, section_id);
+
         });
 
         function get_student(exam_id, class_id, section_id) {
@@ -183,10 +191,9 @@
                     section_id: section_id,
                 },
                 success: function(response) {
-                    $("#student_table").removeClass('d-none');
                     var _number = 1;
                     var html = '';
-
+                    $("#print_area").removeClass('d-none');
                     /*Check if the response data is an array*/
                     if (Array.isArray(response.data) && response.data.length > 0) {
                         response.data.forEach(function(data) {
@@ -220,6 +227,7 @@
                     }
 
                     $("#_data").html(html);
+                    $("#datatable1").DataTable();
                 },
                 error: function() {
                     toastr.error('An error occurred. Please try again.');
@@ -234,31 +242,58 @@
 
 
     /* Submit */
-    $(document).on('click', '#printBtn', function() {
-        var exam_id = $("select[name='exam_id']").val();
-        var student_id = $('.student-checkbox:checked').val();
 
-        if(student_id) {
-            // $('#printBtn').prop('disabled', true).html(
-            //     '<i class="fa fa-spinner fa-spin"></i> Submitting...'
-            // );
-            var url = "{{ route('admin.student.result.print', ['exam_id' => ':exam_id', 'student_id' => ':student_id']) }}";
 
-            url = url.replace(':exam_id', exam_id)
-                    .replace(':student_id', student_id);
+    $("#selectAll").on('click', function() {
+            if ($(this).is(':checked')) {
+                $(".student-checkbox").prop('checked', true);
+            } else {
+                $(".student-checkbox").prop('checked', false);
+            }
+        });
+        $(document).on('click', '.student-checkbox', function() {
+            if ($(".student-checkbox:checked").length == $(".student-checkbox").length) {
+                $("#selectAll").prop('checked', true);
+            } else {
+                $("#selectAll").prop('checked', false);
+            }
+        });
+        $(document).on('click', '#printBtn', function() {
+            /*keep reference*/
+            let print_button = $(this);
 
-            window.open(url, '_blank');
-        } else {
-            toastr.error('Please select a student');
-        }
-    });
+            /* Show spinner & disable button*/
+            print_button.html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...`
+            );
+            print_button.prop('disabled', true);
 
-    $(document).on('change', '.student-checkbox', function() {
-        if ($(this).prop('checked')) {
-            $('.student-checkbox').not(this).prop('disabled', true);
-        } else {
-            $('.student-checkbox').prop('disabled', false);
-        }
-    });
+            /* Delay spinner for 1s*/
+            setTimeout(() => {
+                var selectedIds = [];
+                $(".student-checkbox:checked").each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length > 0) {
+                    var url =
+                        "{{ route('admin.student.result.card.print', ['exam_id' => ':exam_id', 'student_ids' => ':student_ids']) }}";
+                    url = url.replace(':exam_id', $("select[name='exam_id']").val());
+
+                    var student_ids = selectedIds.join(',');
+                    url = url.replace(':student_ids', student_ids);
+
+                    window.open(url, '_blank');
+                } else {
+                    toastr.error("Please select at least one student.");
+                }
+
+                /* Restore button after task done*/
+                print_button.html(`<i class="fas fa-print"></i> Generate Result Card`);
+                /* Enable button*/
+                print_button.prop('disabled', false);
+
+            }, 1000);
+        });
     </script>
 @endsection
