@@ -220,26 +220,25 @@
                         <div class="student-info">
                             <table class="student-info-table">
                                 <tr>
-                                    <td> <strong>Name</strong>:{{ $result->first()->student->name }}</td>
-                                    <td><strong>Father's Name</strong>: {{ $result->first()->student->father_name }}
+                                    <td> <strong>Name:</strong>{{ $result->first()->student->name }}</td>
+                                    <td><strong>Father's Name:</strong> {{ $result->first()->student->father_name }}
                                     </td>
                                     <td rowspan="4" class="student-photo">
-                                        <img src="https://scontent.fdac24-2.fna.fbcdn.net/v/t39.30808-6/482008355_10163244560728103_4494804137816326065_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=aaxuddm0g04Q7kNvwGuWyY_&_nc_oc=Adkj2aghK9gopdtPtxWU-NVOs_Hnq5ge1UnF2eLNMHQhgbpYDls95g3HuZDc6QwjGIM&_nc_zt=23&_nc_ht=scontent.fdac24-2.fna&_nc_gid=6dphBAP6gCPXJn7jRb0_Pg&oh=00_AfF7Tzr0LThvAD7A13wvhofNrVBRTw3rz58571ZjLrYX9A&oe=67FD1E5B"
-                                            alt="Student Photo">
+                                        <img src="{{ asset(!empty($result->first()->student->photo) ? 'uploads/photos/'.$result->first()->student->photo : 'uploads/photos/avatar.png') }}" alt="image">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Register No </strong>: 123456</td>
-                                    <td><strong>Roll No </strong>:{{ $result->first()->student->roll_no }}</td>
+                                    <td><strong>Register No: </strong> 123456</td>
+                                    <td><strong>Roll No :</strong>{{ $result->first()->student->roll_no }}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Date of Birth</strong>:{{ $result->first()->student->birth_date }}</td>
-                                    <td><strong>Session</strong>: 2024</td>
+                                    <td><strong>Date of Birth :</strong>{{ $result->first()->student->birth_date }}</td>
+                                    <td><strong>Session :</strong> 2024</td>
                                 </tr>
                                 <tr>
-                                    <td> <strong>Class </strong>:{{ $result->first()->student->currentClass->name }}
+                                    <td> <strong>Class: </strong>{{ $result->first()->student->currentClass->name }}
                                     </td>
-                                    <td><strong>Gender</strong>: {{ $result->first()->student->gender }}</td>
+                                    <td><strong>Gender:</strong> {{ $result->first()->student->gender }}</td>
                                 </tr>
                             </table>
                         </div>
