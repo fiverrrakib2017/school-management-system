@@ -60,17 +60,7 @@ class Exam_result_controller extends Controller
                 $examResult->practical_marks = $result['prectial_marks'] ?? 0;
                 $examResult->objective_marks = $result['objective_marks'] ?? 0;
                 $examResult->written_marks = $result['written_marks'] ?? 0;
-                $examResult->total_marks = $result['total_marks'] ?? 0;
 
-                if ($result['grade'] !== null) {
-                    $examResult->grade = $result['grade'];
-                    $examResult->remarks = $result['remarks'] ?? null;
-                } elseif ($result['is_absent'] == 1) {
-                    $examResult->grade = 'Absent';
-                } else {
-                    $examResult->grade = null;
-                    $examResult->remarks = null;
-                }
                 /* Absent Student Check */
                 $examResult->is_absent = isset($result['is_absent']) && $result['is_absent'] == '1' ? 1 : 0;
                 /* Save to the database table*/
@@ -83,14 +73,43 @@ class Exam_result_controller extends Controller
         ]);
     }
 
-    public function trabulation_sheet(){
+    public function result_search_before_upload(Request $request)
+    {
+        /* Get all students of the class, section*/
+        $students = Student::where('current_class', $request->class_id)->where('section_id', $request->section_id)->get();
+        $results = Student_exam_result::where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->where('subject_id', $request->subject_id)->get()->keyBy('student_id');
+
+        // Attach result data to each student
+        $data = $students->map(function ($student) use ($results) {
+            $result = $results->get($student->id);
+
+            return [
+                'id' => $student->id,
+                'name' => $student->name,
+                'roll_no' => $student->roll_no,
+                'is_absent' => $result->is_absent ?? 0,
+                'written_marks' => $result ? (float) $result->written_marks : null,
+                'objective_marks' => $result ? (float) $result->objective_marks : null,
+                'practical_marks' => $result ? (float) $result->practical_marks : null,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ]);
+    }
+
+    public function trabulation_sheet()
+    {
         $sections = Section::latest()->get();
         $subjects = Student_subject::latest()->get();
         $students = Student::latest()->get();
         $exam = Student_exam::latest()->get();
         return view('Backend.Pages.Student.Exam.Result.trabulation_sheet', compact('students', 'sections', 'subjects', 'exam'));
     }
-    public function merit_list_sheet(){
+    public function merit_list_sheet()
+    {
         $sections = Section::latest()->get();
         $subjects = Student_subject::latest()->get();
         $students = Student::latest()->get();

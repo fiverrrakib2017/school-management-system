@@ -152,6 +152,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/edit/{id}','edit')->name('admin.student.exam.result.edit');
                 Route::post('/update','update')->name('admin.student.exam.result.update');
                 /* Student Result Store Route **/
+                Route::post('/result_search','result_search_before_upload')->name('admin.student.search_result_before_upload');
                 Route::post('/store','result_store')->name('admin.student.exam.result.store');
                 Route::post('/get_exam_result','get_exam_result')->name('admin.student.exam.result.get_result');
                 Route::post('/delete','delete')->name('admin.student.exam.result.delete');
