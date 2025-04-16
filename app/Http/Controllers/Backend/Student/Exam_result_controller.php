@@ -36,20 +36,13 @@ class Exam_result_controller extends Controller
     {
         $student_ids = explode(',', $student_ids);
 
-        $results = Student_exam_result::with('student','subject','class','section','exam')->whereIn('student_id', $student_ids)
-                    ->where('exam_id', $exam_id)
-                    ->get()
-                    ->groupBy('student_id');
+        $results = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->whereIn('student_id', $student_ids)->where('exam_id', $exam_id)->get()->groupBy('student_id');
         /*Highest Marks*/
-        $highest_marks=Student_exam_result::where('exam_id', $exam_id)
-        ->select('subject_id', DB::raw('MAX(written_marks + objective_marks + practical_marks) as highest'))
-        ->groupBy('subject_id')
-        ->pluck('highest', 'subject_id');
+        $highest_marks = Student_exam_result::where('exam_id', $exam_id)->select('subject_id', DB::raw('MAX(written_marks + objective_marks + practical_marks) as highest'))->groupBy('subject_id')->pluck('highest', 'subject_id');
         //return $results;
 
-        return view('Backend.Pages.Student.Exam.Result.Print', compact('results','highest_marks'));
+        return view('Backend.Pages.Student.Exam.Result.Print', compact('results', 'highest_marks'));
     }
-
 
     public function result_store(Request $request)
     {
@@ -121,6 +114,116 @@ class Exam_result_controller extends Controller
         $exam = Student_exam::latest()->get();
         return view('Backend.Pages.Student.Exam.Result.trabulation_sheet', compact('students', 'sections', 'subjects', 'exam'));
     }
+    public function trabulation(Request $request)
+    {
+        $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
+
+        $subjects = Student_subject::where('class_id', $request->class_id)->get();
+
+        $html = '<table class="table table-bordered table-hover table-condensed mb-none">
+    <thead style="background: #f4f4f4; font-family: sans-serif;">
+        <tr style="text-align: center; font-weight: bold; font-size: 14px;">
+            <th rowspan="2" style="vertical-align: middle;">Sl</th>
+            <th rowspan="2" style="vertical-align: middle;">Student Name</th>
+            <th rowspan="2" style="vertical-align: middle;">Roll</th>';
+
+        foreach ($subjects as $subject) {
+            $html .= "<th colspan='5' style='text-align: center; background: #e0e0e0;'>{$subject->name}</th>";
+        }
+
+        $html .= '
+            <th rowspan="2" style="vertical-align: middle;">Total Marks</th>
+            <th rowspan="2" style="vertical-align: middle;">GPA</th>
+            <th rowspan="2" style="vertical-align: middle;">P/F</th>
+            <th rowspan="2" style="vertical-align: middle;">Result</th>
+            <th rowspan="2" style="vertical-align: middle;">Position</th>
+        </tr>
+        <tr style="text-align: center; font-size: 12px;">';
+
+        foreach ($subjects as $subject) {
+            $html .= '<th>Wr</th><th>Ob</th><th>Pr</th><th>To</th><th>Gp</th>';
+        }
+
+        $html .= '</tr>
+    </thead>
+    <tbody>';
+
+        $sl = 1;
+        foreach ($examResults as $studentId => $results) {
+            $student = $results->first()->student;
+
+            $html .= '<tr>';
+            $html .= '<td>' . $sl++ . '</td>';
+            $html .= '<td>' . $student->name . '</td>';
+            $html .= '<td>' . $student->roll_no . '</td>';
+
+            $totalMarks = 0;
+            $totalPoints = 0;
+            $fullMarks = 0;
+            $subjectCount = 0;
+            $isFail = false;
+
+            foreach ($results as $item) {
+                $written_marks = intval($item->written_marks ?? 0);
+                $objective_marks = intval($item->objective_marks ?? 0);
+                $practical_marks = intval($item->practical_marks ?? 0);
+
+                $total_marks = $written_marks + $objective_marks + $practical_marks;
+                $gpa = $this->get_gpa_from_marks($total_marks);
+                if ($gpa < 1) {
+                    $isFail = true;
+                }
+                $totalMarks += $total_marks;
+                $totalPoints += $gpa;
+                $subjectCount++;
+                $html .= "<td>{$written_marks}</td><td>{$objective_marks}</td><td>{$practical_marks}</td><td>{$total_marks}</td><td>" . number_format($gpa, 2) . '</td>';
+            }
+
+            if ($isFail) {
+                $finalGpa = 0;
+            }
+
+            /** Pass Count */
+            $passCount = $results
+                ->filter(function ($item) {
+                    $total = intval($item->written_marks ?? 0) + intval($item->objective_marks ?? 0) + intval($item->practical_marks ?? 0);
+                    return $total >= 33; //33 is a pass mark
+                })
+                ->count();
+
+            $resultStatus = $isFail ? '<span class="label label-danger">FAIL</span>' : '<span class="label label-primary">PASS</span>';
+
+            $html .= '<td>' . $totalMarks . '</td>';
+            $html .= '<td>' . number_format($finalGpa, 2) . '</td>';
+            $html .= '<td>' . $passCount . '/' . $subjectCount . '</td>';
+            $html .= '<td>' . $resultStatus . '</td>';
+            $html .= '<td> - </td>';
+            $html .= '</tr>';
+        }
+
+        $html .= '</tbody></table>';
+
+        return $html;
+    }
+    function get_gpa_from_marks($marks)
+    {
+        if ($marks >= 80) {
+            return 5.0;
+        } elseif ($marks >= 70) {
+            return 4.0;
+        } elseif ($marks >= 60) {
+            return 3.5;
+        } elseif ($marks >= 50) {
+            return 3.0;
+        } elseif ($marks >= 40) {
+            return 2.0;
+        } elseif ($marks >= 33) {
+            return 1.0;
+        } else {
+            return 0.0;
+        }
+    }
+
     public function merit_list_sheet()
     {
         $sections = Section::latest()->get();

@@ -159,6 +159,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('print/{exam_id}/{student_ids?}','result_card_print')->name('admin.student.result.card.print');
                 /* Student Result Trabulation Sheet Route **/
                 Route::get('/trabulation-sheet','trabulation_sheet')->name('admin.student.exam.result.trabulation.sheet');
+                Route::post('/trabulation','trabulation')->name('admin.student.exam.result.tabulation');
                 Route::get('/merit-list-sheet','merit_list_sheet')->name('admin.student.exam.result.merit_list');
             });
         });
