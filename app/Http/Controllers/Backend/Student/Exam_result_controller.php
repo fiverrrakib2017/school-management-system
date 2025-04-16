@@ -116,16 +116,65 @@ class Exam_result_controller extends Controller
     }
     public function trabulation(Request $request)
     {
-        $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
+        $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')
+            ->where('exam_id', $request->exam_id)
+            ->where('class_id', $request->class_id)
+            ->get()
+            ->groupBy('student_id');
 
         $subjects = Student_subject::where('class_id', $request->class_id)->get();
 
+        // Step 1: পজিশনের জন্য GPA, totalMarks তৈরি
+        $positionData = [];
+        foreach ($examResults as $studentId => $results) {
+            $totalMarks = 0;
+            $isFail = false;
+            $subjectCount = 0;
+            $totalPoints = 0;
+
+            foreach ($results as $item) {
+                $written = intval($item->written_marks ?? 0);
+                $objective = intval($item->objective_marks ?? 0);
+                $practical = intval($item->practical_marks ?? 0);
+                $total = $written + $objective + $practical;
+
+                $totalMarks += $total;
+                $gpa = $this->get_gpa_from_marks($total);
+                $totalPoints += $gpa;
+                $subjectCount++;
+
+                if ($gpa < 1) {
+                    $isFail = true;
+                }
+            }
+
+            $finalGpa = $isFail ? 0 : $totalPoints / $subjectCount;
+
+            $positionData[] = [
+                'student_id' => $studentId,
+                'totalMarks' => $totalMarks,
+                'gpa' => round($finalGpa, 2),
+            ];
+        }
+
+        // Step 2: Sort by totalMarks for position
+        usort($positionData, function ($a, $b) {
+            return $b['totalMarks'] <=> $a['totalMarks'];
+        });
+
+        // Step 3: Assign position
+        $positions = [];
+        foreach ($positionData as $index => $data) {
+            $positions[$data['student_id']] = $index + 1;
+        }
+
+        // Step 4: Create the HTML (আগের মতো সব student এর তথ্য অনুযায়ী)
         $html = '<table class="table table-bordered table-hover table-condensed mb-none">
-    <thead style="background: #f4f4f4; font-family: sans-serif;">
-        <tr style="text-align: center; font-weight: bold; font-size: 14px;">
-            <th rowspan="2" style="vertical-align: middle;">Sl</th>
-            <th rowspan="2" style="vertical-align: middle;">Student Name</th>
-            <th rowspan="2" style="vertical-align: middle;">Roll</th>';
+        <thead style="background: #f4f4f4; font-family: sans-serif;">
+            <tr style="text-align: center; font-weight: bold; font-size: 14px;">
+                <th rowspan="2" style="vertical-align: middle;">Sl</th>
+                <th rowspan="2" style="vertical-align: middle;">Student Name</th>
+                <th rowspan="2" style="vertical-align: middle;">Roll</th>';
 
         foreach ($subjects as $subject) {
             $html .= "<th colspan='5' style='text-align: center; background: #e0e0e0;'>{$subject->name}</th>";
@@ -151,53 +200,58 @@ class Exam_result_controller extends Controller
         $sl = 1;
         foreach ($examResults as $studentId => $results) {
             $student = $results->first()->student;
+            $totalMarks = 0;
+            $isFail = false;
+            $totalPoints = 0;
+            $subjectCount = 0;
+            $passCount = 0;
 
             $html .= '<tr>';
             $html .= '<td>' . $sl++ . '</td>';
             $html .= '<td>' . $student->name . '</td>';
             $html .= '<td>' . $student->roll_no . '</td>';
 
-            $totalMarks = 0;
-            $totalPoints = 0;
-            $fullMarks = 0;
-            $subjectCount = 0;
-            $isFail = false;
+            foreach ($subjects as $subject) {
+                $item = $results->firstWhere('subject_id', $subject->id);
 
-            foreach ($results as $item) {
-                $written_marks = intval($item->written_marks ?? 0);
-                $objective_marks = intval($item->objective_marks ?? 0);
-                $practical_marks = intval($item->practical_marks ?? 0);
+                if ($item) {
+                    if ($item->is_absent == 1) {
+                        $html .= '<td colspan="5" style="text-align: center; color: red;">Absent</td>';
+                        $isFail = true;
+                        $subjectCount++;
+                    } else {
+                        $written = intval($item->written_marks ?? 0);
+                        $objective = intval($item->objective_marks ?? 0);
+                        $practical = intval($item->practical_marks ?? 0);
+                        $total = $written + $objective + $practical;
 
-                $total_marks = $written_marks + $objective_marks + $practical_marks;
-                $gpa = $this->get_gpa_from_marks($total_marks);
-                if ($gpa < 1) {
-                    $isFail = true;
+                        $gpa = $this->get_gpa_from_marks($total);
+                        $totalMarks += $total;
+                        $totalPoints += $gpa;
+                        $subjectCount++;
+
+                        if ($gpa < 1) {
+                            $isFail = true;
+                        } else {
+                            $passCount++;
+                        }
+
+                        $html .= "<td>{$written}</td><td>{$objective}</td><td>{$practical}</td><td>{$total}</td><td>" . number_format($gpa, 2) . '</td>';
+                    }
+                } else {
+                    $html .= '<td colspan="5" style="text-align: center; color: gray;">N/A</td>';
                 }
-                $totalMarks += $total_marks;
-                $totalPoints += $gpa;
-                $subjectCount++;
-                $html .= "<td>{$written_marks}</td><td>{$objective_marks}</td><td>{$practical_marks}</td><td>{$total_marks}</td><td>" . number_format($gpa, 2) . '</td>';
             }
 
-            if ($isFail) {
-                $finalGpa = 0;
-            }
-
-            /** Pass Count */
-            $passCount = $results
-                ->filter(function ($item) {
-                    $total = intval($item->written_marks ?? 0) + intval($item->objective_marks ?? 0) + intval($item->practical_marks ?? 0);
-                    return $total >= 33; //33 is a pass mark
-                })
-                ->count();
-
+            $finalGpa = $subjectCount > 0 ? ($isFail ? 0 : $totalPoints / $subjectCount) : 0;
             $resultStatus = $isFail ? '<span class="label label-danger">FAIL</span>' : '<span class="label label-primary">PASS</span>';
+            $position = $positions[$studentId] ?? '-';
 
             $html .= '<td>' . $totalMarks . '</td>';
             $html .= '<td>' . number_format($finalGpa, 2) . '</td>';
             $html .= '<td>' . $passCount . '/' . $subjectCount . '</td>';
             $html .= '<td>' . $resultStatus . '</td>';
-            $html .= '<td> - </td>';
+            $html .= '<td>' . $position . '</td>';
             $html .= '</tr>';
         }
 
@@ -205,6 +259,9 @@ class Exam_result_controller extends Controller
 
         return $html;
     }
+
+
+
     function get_gpa_from_marks($marks)
     {
         if ($marks >= 80) {
