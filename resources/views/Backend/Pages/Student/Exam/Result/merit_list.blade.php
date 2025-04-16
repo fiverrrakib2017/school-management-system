@@ -160,8 +160,8 @@
                         </div>
                     </div>
                 </div>
-             
-                <div class="card-body tabulation-container " id="tabulation-container">
+
+                <div class="card-body d-none tabulation-container " id="tabulation-container">
 
                     <div id="printHeader" class="school-header">
                         <img src="{{ asset('Backend/uploads/photos/' . ($website_info->logo ?? 'default-logo.jpg')) }}"
@@ -169,46 +169,20 @@
                         <h2>{{ $website_info->name ?? 'Future ICT School' }}</h2>
                         <p>{{ $website_info->address ?? 'Daudkandi , Chittagong , Bangladesh' }}</p>
 
-                        <span><span><span id="examName"></span>1st Semister-2025</span><br>
-                            <span><span>Class:</span> <span id="className"></span> | </span>
-                            <span><span>Section:</span> <span id="sectionName"></span> | </span>
-                            <span><span>Subject:</span> <span id="subjectName"></span></span>
+                        <span id="examName"></span><br>
+                        <span>Class:</span> <span id="className"></span><br>
+                        <span>Section:</span> <span id="sectionName"></span>
+
                     </div>
                     <div class="card-title mb-2">
-                        <i class="fas fa-users"></i> Merit List 
+                        <i class="fas fa-users"></i> Merit List
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped text-center align-middle">
-                            <thead >
-                                <tr>
-                                    <th rowspan="2">Sl</th>
-                                    <th rowspan="2">Student Name</th>
-                                    <th rowspan="2">Roll</th>
-                                    <th rowspan="2">Total Marks</th>
-                                    <th rowspan="2">Merit Position</th>
-                                    <th rowspan="2">GPA</th>
-                                    <th rowspan="2">Result</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>20</td>
-                                    <td>Habiba Akter</td>
-                                    <td>20</td>
-                                    <td>0/0</td>
-                                    <td>20</td>
-                                    <td>0.00</td>
-                                    <td>
-                                        <span class="badge bg-danger">FAIL</span>
-                                    </td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
+                    <div class="table-responsive responsive-table display_table">
+
                     </div>
-                    
+
                 </div>
-                <div class="card-footer">
+                <div class="card-footer d-none" id="trabulation_footer">
                     <div class="row">
                         <div class="col-md-12 text-right">
                             <button type="button" id="printBtn" class="btn btn-danger"><i class="fas fa-print"></i>
@@ -232,49 +206,26 @@
         var students = @json($students);
         $(document).on('change', 'select[name="class_id"]', function() {
             var sections = @json($sections);
-            var subjects = @json($subjects);
-            var students = @json($students);
             /*Get Class ID*/
             var selectedClassId = $(this).val();
 
-            var filteredStudents = students.filter(function(student) {
-                /*Filter class by class_id*/
-                return student.current_class == selectedClassId;
-            });
+
             var filteredSections = sections.filter(function(section) {
                 /*Filter sections by class_id*/
                 return section.class_id == selectedClassId;
             });
-            /* Update Subject dropdown*/
-            var filteredSubjects = subjects.filter(function(subject) {
-                /*Filter subject by class_id*/
-                return subject.class_id == selectedClassId;
-            });
 
-            /* Update Student dropdown*/
-            var studentOptions = '<option value="">--Select--</option>';
-            filteredStudents.forEach(function(student) {
-                studentOptions += '<option value="' + student.id + '">' + student.name + '</option>';
-            });
+
             /* Update Section dropdown*/
             var sectionOptions = '<option value="">--Select--</option>';
             filteredSections.forEach(function(section) {
                 sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
             });
-            /* Update Subject dropdown*/
-            var subjectOptions = '<option value="">--Select--</option>';
-            filteredSubjects.forEach(function(subject) {
-                subjectOptions += '<option value="' + subject.id + '">' + subject.name + '</option>';
-            });
 
-            $('select[name="student_id"]').html(studentOptions);
-            $('select[name="student_id"]').select2();
 
             $('select[name="section_id"]').html(sectionOptions);
             $('select[name="section_id"]').select2();
 
-            $('select[name="subject_id"]').html(subjectOptions);
-            $('select[name="subject_id"]').select2();
 
         });
 
@@ -283,7 +234,10 @@
             var exam_id = $("select[name='exam_id']").val();
             var class_id = $("select[name='class_id']").val();
             var section_id = $("select[name='section_id']").val();
-            var student_id = $("select[name='student_id']").val();
+
+            $("#examName").text($('select[name="exam_id"] option:selected').text());
+            $("#className").text($('select[name="class_id"] option:selected').text());
+            $("#sectionName").text($('select[name="section_id"] option:selected').text());
 
             if (!exam_id) {
                 toastr.error("Exam Name is require!!");
@@ -293,6 +247,28 @@
                 toastr.error("Student Class Name is require!!");
                 return;
             }
+            let button= $(this);
+            button.prop('disabled', true);
+            button.html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Please Wait...`
+            );
+            $.ajax({
+                url: "{{ route('admin.student.exam.result.show_merit_list') }}",
+                type: 'POST',
+                data: {
+                    'exam_id': exam_id,
+                    'class_id': class_id,
+                    'section_id': section_id,
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    button.prop('disabled', false);
+                    button.html('<i class="fa fa-search"></i> Search');
+                    $("#tabulation-container").removeClass("d-none");
+                    $("#trabulation_footer").removeClass("d-none");
+                    $(".display_table").html(response);
+                }
+            });
 
         });
 

@@ -116,15 +116,11 @@ class Exam_result_controller extends Controller
     }
     public function trabulation(Request $request)
     {
-        $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')
-            ->where('exam_id', $request->exam_id)
-            ->where('class_id', $request->class_id)
-            ->get()
-            ->groupBy('student_id');
+        $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
 
         $subjects = Student_subject::where('class_id', $request->class_id)->get();
 
-        // Step 1: পজিশনের জন্য GPA, totalMarks তৈরি
+        /*GPA, totalMarks For Position*/
         $positionData = [];
         foreach ($examResults as $studentId => $results) {
             $totalMarks = 0;
@@ -260,8 +256,6 @@ class Exam_result_controller extends Controller
         return $html;
     }
 
-
-
     function get_gpa_from_marks($marks)
     {
         if ($marks >= 80) {
@@ -279,6 +273,104 @@ class Exam_result_controller extends Controller
         } else {
             return 0.0;
         }
+    }
+
+    public function show_merit_list(Request $request)
+    {
+        $examResults = Student_exam_result::with('student')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
+
+        $positionData = [];
+
+        foreach ($examResults as $studentId => $results) {
+            $totalMarks = 0;
+            $isFail = false;
+            $subjectCount = 0;
+            $totalPoints = 0;
+
+            foreach ($results as $item) {
+                if ($item->absent == 1) {
+                    $isFail = true;
+                    $subjectCount++;
+                    continue;
+                }
+
+                $written = intval($item->written_marks ?? 0);
+                $objective = intval($item->objective_marks ?? 0);
+                $practical = intval($item->practical_marks ?? 0);
+                $total = $written + $objective + $practical;
+
+                $gpa = $this->get_gpa_from_marks($total);
+
+                $totalMarks += $total;
+                $totalPoints += $gpa;
+                $subjectCount++;
+
+                if ($gpa < 1) {
+                    $isFail = true;
+                }
+            }
+
+            $gpaFinal = $subjectCount > 0 ? ($isFail ? 0 : $totalPoints / $subjectCount) : 0;
+
+            $positionData[] = [
+                'student_id' => $studentId,
+                'name' => $results->first()->student->name,
+                'roll' => $results->first()->student->roll_no,
+                'totalMarks' => $totalMarks,
+                'gpa' => round($gpaFinal, 2),
+                'is_fail' => $isFail,
+            ];
+        }
+
+        /*Sort by total marks descending*/
+        usort($positionData, function ($a, $b) {
+            return $b['totalMarks'] <=> $a['totalMarks'];
+        });
+
+        /*Assign merit position*/
+        foreach ($positionData as $index => &$data) {
+            $data['position'] = $index + 1;
+        }
+
+        /* Generate HTML table*/
+        $html = '<table class="table table-bordered table-hover table-striped text-center align-middle">
+        <thead>
+            <tr>
+                <th rowspan="2">Sl</th>
+                <th rowspan="2">Student Name</th>
+                <th rowspan="2">Roll</th>
+                <th rowspan="2">Total Marks</th>
+                <th rowspan="2">Merit Position</th>
+                <th rowspan="2">GPA</th>
+                <th rowspan="2">Result</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+        $sl = 1;
+        foreach ($positionData as $student) {
+            $html .= '<tr>';
+            $html .= '<td>' . $sl++ . '</td>';
+            $html .= '<td>' . $student['name'] . '</td>';
+            $html .= '<td>' . $student['roll'] . '</td>';
+            $html .= '<td>' . $student['totalMarks'] . '</td>';
+            $html .= '<td>' . $student['position'] . '</td>';
+            $html .= '<td>' . number_format($student['gpa'], 2) . '</td>';
+
+            $html .= '<td>';
+            if ($student['is_fail']) {
+                $html .= '<span class="badge bg-danger">FAIL</span>';
+            } else {
+                $html .= '<span class="badge bg-success">PASS</span>';
+            }
+            $html .= '</td>';
+
+            $html .= '</tr>';
+        }
+
+        $html .= '</tbody></table>';
+
+        return $html;
     }
 
     public function merit_list_sheet()

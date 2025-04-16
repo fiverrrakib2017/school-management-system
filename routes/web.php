@@ -161,6 +161,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::get('/trabulation-sheet','trabulation_sheet')->name('admin.student.exam.result.trabulation.sheet');
                 Route::post('/trabulation','trabulation')->name('admin.student.exam.result.tabulation');
                 Route::get('/merit-list-sheet','merit_list_sheet')->name('admin.student.exam.result.merit_list');
+                Route::post('/show_merit_list','show_merit_list')->name('admin.student.exam.result.show_merit_list');
             });
         });
         /** Student  Route **/
