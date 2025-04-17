@@ -122,6 +122,12 @@ class Exam_result_controller extends Controller
 
         /*GPA, totalMarks For Position*/
         $positionData = [];
+        $routines = DB::table('student_exam_routines')
+                    ->where('exam_id', $request->exam_id)
+                    ->where('class_id', $request->class_id)
+                    ->where('section_id', $request->section_id)
+                    ->get()
+                    ->keyBy('subject_id');
         foreach ($examResults as $studentId => $results) {
             $totalMarks = 0;
             $isFail = false;
@@ -133,6 +139,19 @@ class Exam_result_controller extends Controller
                 $objective = intval($item->objective_marks ?? 0);
                 $practical = intval($item->practical_marks ?? 0);
                 $total = $written + $objective + $practical;
+
+                $routine = $routines[$item->subject_id] ?? null;
+                // if ($routine) {
+                //     if ($routine->has_written && $written < $routine->written_pass) {
+                //         $isFail = true;
+                //     }
+                //     if ($routine->has_objective && $objective < $routine->objective_pass) {
+                //         $isFail = true;
+                //     }
+                //     if ($routine->has_practical && $practical < $routine->practical_pass) {
+                //         $isFail = true;
+                //     }
+                // }
 
                 $totalMarks += $total;
                 $gpa = $this->get_gpa_from_marks($total);
@@ -153,18 +172,18 @@ class Exam_result_controller extends Controller
             ];
         }
 
-        // Step 2: Sort by totalMarks for position
+        /* Sort by totalMarks for position*/
         usort($positionData, function ($a, $b) {
             return $b['totalMarks'] <=> $a['totalMarks'];
         });
 
-        // Step 3: Assign position
+        /* Assign position*/
         $positions = [];
         foreach ($positionData as $index => $data) {
             $positions[$data['student_id']] = $index + 1;
         }
 
-        // Step 4: Create the HTML (আগের মতো সব student এর তথ্য অনুযায়ী)
+        /*Create HTML*/
         $html = '<table class="table table-bordered table-hover table-condensed mb-none">
         <thead style="background: #f4f4f4; font-family: sans-serif;">
             <tr style="text-align: center; font-weight: bold; font-size: 14px;">

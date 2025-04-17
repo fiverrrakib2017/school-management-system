@@ -221,7 +221,7 @@ Route::group(['middleware'=>'admin'],function(){
         Route::prefix('id-card')->group(function(){
             Route::controller(CardController::class)->group(function(){
                 Route::get('generate','id_card_generate')->name('admin.student.id_card.generate');
-                Route::get('print/{class_id}/{section_id?}','id_card_print')->name('admin.student.id.card.print');
+                Route::get('print/{student_ids?}','id_card_print')->name('admin.student.id.card.print');
             });
         });
         /*Student Admit ID Card */
@@ -690,8 +690,8 @@ Route::group(['middleware'=>'admin'],function(){
         Artisan::call('migrate');
         return 'Database Migration Completed';
     });
-    Route::get('/result/marksheet',function(){
-        return view('Backend.Pages.Student.Exam.marksheet');
+    Route::get('/student',function(){
+        return view('Backend.Pages.Student.test');
     });
 
 });
