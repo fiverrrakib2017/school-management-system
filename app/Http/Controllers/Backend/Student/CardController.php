@@ -53,8 +53,16 @@ class CardController extends Controller
         $students = Student::with(['currentClass', 'section'])
                         ->whereIn('id', $student_ids)
                         ->get();
+        /*Get the Domain Name*/
+        $domain = request()->getHost();
+        if($domain == 'https://rzascbd.com/'){
+            return view('Backend.Pages.Student.Card.id_card_print', compact('students'));
+        }else if($domain == 'https://admin.futureictbd.com'){
+            return view('Backend.Pages.Student.Card.futureict_card', compact('students'));
+        }else if($domain=='localhost'){
+            return view('Backend.Pages.Student.Card.futureict_card', compact('students'));
+        }
 
-        return view('Backend.Pages.Student.Card.id_card_print', compact('students'));
     }
     /************************** Seat Plan MANAGEMENT**************************************************/
     public function seat_plan_generate(){
