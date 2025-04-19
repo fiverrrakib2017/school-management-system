@@ -94,9 +94,9 @@ class Exam_result_controller extends Controller
                 'name' => $student->name,
                 'roll_no' => $student->roll_no,
                 'is_absent' => $result->is_absent ?? 0,
-                'written_marks' => $result ? (float) $result->written_marks : null,
-                'objective_marks' => $result ? (float) $result->objective_marks : null,
-                'practical_marks' => $result ? (float) $result->practical_marks : null,
+                'written_marks' => $result ? (float) $result->written_marks : 0,
+                'objective_marks' => $result ? (float) $result->objective_marks : 0,
+                'practical_marks' => $result ? (float) $result->practical_marks : 0,
             ];
         });
 
@@ -116,18 +116,22 @@ class Exam_result_controller extends Controller
     }
     public function trabulation(Request $request)
     {
+        // Get exam results grouped by student_id
         $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
 
+        // Get subjects for the class
         $subjects = Student_subject::where('class_id', $request->class_id)->get();
-
-        /*GPA, totalMarks For Position*/
+        /* Fetch routines for exam*/
+        $routines = DB::table('student_exam_routines')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->keyBy('subject_id');
+        if ($routines->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Routine not found',
+            ]);
+            exit();
+        }
+        /* Prepare position data array*/
         $positionData = [];
-        $routines = DB::table('student_exam_routines')
-                    ->where('exam_id', $request->exam_id)
-                    ->where('class_id', $request->class_id)
-                    ->where('section_id', $request->section_id)
-                    ->get()
-                    ->keyBy('subject_id');
         foreach ($examResults as $studentId => $results) {
             $totalMarks = 0;
             $isFail = false;
@@ -135,36 +139,35 @@ class Exam_result_controller extends Controller
             $totalPoints = 0;
 
             foreach ($results as $item) {
+                // Get marks from the results
                 $written = intval($item->written_marks ?? 0);
                 $objective = intval($item->objective_marks ?? 0);
                 $practical = intval($item->practical_marks ?? 0);
                 $total = $written + $objective + $practical;
 
+                /*Get routine for the subject*/
                 $routine = $routines[$item->subject_id] ?? null;
-                // if ($routine) {
-                //     if ($routine->has_written && $written < $routine->written_pass) {
-                //         $isFail = true;
-                //     }
-                //     if ($routine->has_objective && $objective < $routine->objective_pass) {
-                //         $isFail = true;
-                //     }
-                //     if ($routine->has_practical && $practical < $routine->practical_pass) {
-                //         $isFail = true;
-                //     }
-                // }
+                if ($routine === null) {
+                    $gpa = 0;
+                } else {
+                    /* Calculate GPA based on available data*/
+                    $gpa = $this->get_gpa_from_marks($written, $objective, $practical, $routine->written_pass, $routine->objective_pass, $routine->practical_pass, $routine->written_full, $routine->objective_full, $routine->practical_full);
+                }
 
                 $totalMarks += $total;
-                $gpa = $this->get_gpa_from_marks($total);
                 $totalPoints += $gpa;
                 $subjectCount++;
 
+                /*Check if the student has failed in any subject*/
                 if ($gpa < 1) {
                     $isFail = true;
                 }
             }
 
+            /*Calculate final GPA*/
             $finalGpa = $isFail ? 0 : $totalPoints / $subjectCount;
 
+            /* Store position data*/
             $positionData[] = [
                 'student_id' => $studentId,
                 'totalMarks' => $totalMarks,
@@ -172,18 +175,18 @@ class Exam_result_controller extends Controller
             ];
         }
 
-        /* Sort by totalMarks for position*/
+        /*Sort position data by total marks in descending order*/
         usort($positionData, function ($a, $b) {
             return $b['totalMarks'] <=> $a['totalMarks'];
         });
 
-        /* Assign position*/
+        /* Assign positions*/
         $positions = [];
         foreach ($positionData as $index => $data) {
             $positions[$data['student_id']] = $index + 1;
         }
 
-        /*Create HTML*/
+        /* Generate HTML table*/
         $html = '<table class="table table-bordered table-hover table-condensed mb-none">
         <thead style="background: #f4f4f4; font-family: sans-serif;">
             <tr style="text-align: center; font-weight: bold; font-size: 14px;">
@@ -191,6 +194,7 @@ class Exam_result_controller extends Controller
                 <th rowspan="2" style="vertical-align: middle;">Student Name</th>
                 <th rowspan="2" style="vertical-align: middle;">Roll</th>';
 
+        /* Add subject columns dynamically*/
         foreach ($subjects as $subject) {
             $html .= "<th colspan='5' style='text-align: center; background: #e0e0e0;'>{$subject->name}</th>";
         }
@@ -204,14 +208,14 @@ class Exam_result_controller extends Controller
         </tr>
         <tr style="text-align: center; font-size: 12px;">';
 
+        /*Add subcolumns for each subject (marks breakdown)*/
         foreach ($subjects as $subject) {
             $html .= '<th>Wr</th><th>Ob</th><th>Pr</th><th>To</th><th>Gp</th>';
         }
 
-        $html .= '</tr>
-    </thead>
-    <tbody>';
+        $html .= '</tr></thead><tbody>';
 
+        /*Add student data in table rows*/
         $sl = 1;
         foreach ($examResults as $studentId => $results) {
             $student = $results->first()->student;
@@ -240,7 +244,14 @@ class Exam_result_controller extends Controller
                         $practical = intval($item->practical_marks ?? 0);
                         $total = $written + $objective + $practical;
 
-                        $gpa = $this->get_gpa_from_marks($total);
+                        /*Get routine for the subject*/
+                        $routine = $routines[$subject->id] ?? null;
+                        if ($routine === null) {
+                            $gpa = 0;
+                        } else {
+                            $gpa = $this->get_gpa_from_marks($written, $objective, $practical, $routine->written_pass, $routine->objective_pass, $routine->practical_pass, $routine->written_full, $routine->objective_full, $routine->practical_full);
+                        }
+
                         $totalMarks += $total;
                         $totalPoints += $gpa;
                         $subjectCount++;
@@ -275,20 +286,53 @@ class Exam_result_controller extends Controller
         return $html;
     }
 
-    function get_gpa_from_marks($marks)
+    function get_gpa_from_marks($written = null, $objective = null, $practical = null, $written_pass, $objective_pass = null, $practical_pass = null, $written_full_marks = null, $objective_full_marks = null, $practical_full_marks = null)
     {
-        if ($marks >= 80) {
-            return 5.0;
-        } elseif ($marks >= 70) {
-            return 4.0;
-        } elseif ($marks >= 60) {
-            return 3.5;
-        } elseif ($marks >= 50) {
-            return 3.0;
-        } elseif ($marks >= 40) {
-            return 2.0;
-        } elseif ($marks >= 33) {
-            return 1.0;
+        $is_fail = false;
+
+        if (($written !== null && $written < $written_pass) || ($objective !== null && $objective < $objective_pass) || ($practical !== null && $practical < $practical_pass)) {
+            $is_fail = true;
+        }
+        if (!$is_fail) {
+            $total_marks = 0;
+            $total_full_marks = 0;
+
+            if ($written !== null) {
+                $total_marks += $written;
+                $total_full_marks += $written_full_marks;
+            }
+            if ($objective !== null) {
+                $total_marks += $objective;
+                $total_full_marks += $objective_full_marks;
+            }
+            if ($practical !== null) {
+                $total_marks += $practical;
+                $total_full_marks += $practical_full_marks;
+            }
+
+            /* Calculate percentage*/
+            if ($total_full_marks > 0) {
+                $percentage = ($total_marks / $total_full_marks) * 100;
+            } else {
+                $percentage = 0;
+            }
+
+            // Return GPA based on percentage
+            if ($percentage >= 80) {
+                return 5.0;
+            } elseif ($percentage >= 70) {
+                return 4.0;
+            } elseif ($percentage >= 60) {
+                return 3.5;
+            } elseif ($percentage >= 50) {
+                return 3.0;
+            } elseif ($percentage >= 40) {
+                return 2.0;
+            } elseif ($percentage >= 33) {
+                return 1.0;
+            } else {
+                return 0.0;
+            }
         } else {
             return 0.0;
         }
@@ -297,6 +341,9 @@ class Exam_result_controller extends Controller
     public function show_merit_list(Request $request)
     {
         $examResults = Student_exam_result::with('student')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
+
+        /* Fetch routines for exam*/
+        $routines = DB::table('student_exam_routines')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->keyBy('subject_id');
 
         $positionData = [];
 
@@ -318,7 +365,14 @@ class Exam_result_controller extends Controller
                 $practical = intval($item->practical_marks ?? 0);
                 $total = $written + $objective + $practical;
 
-                $gpa = $this->get_gpa_from_marks($total);
+                /*Get routine for the subject*/
+                $routine = $routines[$item->subject_id] ?? null;
+                if ($routine === null) {
+                    $gpa = 0;
+                } else {
+                    /* Calculate GPA based on available data*/
+                    $gpa = $this->get_gpa_from_marks($written, $objective, $practical, $routine->written_pass, $routine->objective_pass, $routine->practical_pass, $routine->written_full, $routine->objective_full, $routine->practical_full);
+                }
 
                 $totalMarks += $total;
                 $totalPoints += $gpa;
