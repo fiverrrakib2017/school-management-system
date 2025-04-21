@@ -127,7 +127,7 @@ Route::group(['middleware'=>'admin'],function(){
                 // Route::get('/all_data','all_data')->name('admin.student.subject.all_data');
                 // Route::get('/edit/{id}','edit')->name('admin.student.subject.edit');
                 // Route::post('/update','update')->name('admin.student.subject.update');
-                // Route::post('/store','store')->name('admin.student.subject.store');
+                 Route::post('/store','store')->name('admin.student.lesson.plan.store');
                 // Route::post('/delete','delete')->name('admin.student.subject.delete');
                 // Route::post('/get_subject_by_class','get_subject_by_class')->name('admin.student.subject.get_subject_by_class');
             });

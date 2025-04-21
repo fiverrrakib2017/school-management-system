@@ -16,8 +16,8 @@
                 </div>
             </div>
 
-            <form action="" method="POST">
-                @csrf
+            <form action="{{ route('admin.student.lesson.plan.store') }}" method="POST" id="handle_submit_form" enctype="multipart/form-data">@csrf
+       
                 <div class="card-body">
                     <div class="row">
 
@@ -116,7 +116,14 @@
                                 <label for="teacher">Teacher</label>
                                 <select type="text" name="teacher_id" class="form-control" required>
                                     <option value="">---Select---</option>
-                                   
+                                    @php
+                                    $data = \App\Models\Teacher::latest()->get();
+                                @endphp
+                                @if ($data->isNotEmpty())
+                                    @foreach ($data as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                @endif
                                 </select>
                             </div>
                         </div>
@@ -154,8 +161,9 @@
 
 
 @section('script')
-    <script src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
+    <script src="{{ asset('Backend/assets/js/__handle_submit.js') }}"></script>
     <script type="text/javascript">
+        handle_submit_form("#handle_submit_form"); 
         $('select').select2({
             placeholder: "---Select---",
             allowClear: false
