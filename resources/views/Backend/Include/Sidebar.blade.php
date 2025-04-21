@@ -50,6 +50,7 @@
               <li class="nav-item">
                  <a href="{{ route('admin.student.subject.index') }}" class="nav-link {{ $route == 'admin.student.subject.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Subject</p></a>
               </li>
+              
               <li class="nav-item">
                  <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link {{ $route == 'admin.student.class.routine.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
               </li>
@@ -57,9 +58,22 @@
                  <a href="{{ route('admin.student.section.index') }}" class="nav-link {{($route=='admin.student.section.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Section</p></a>
               </li>
 
+            </ul>
+          </li>
+          <!-----------Lesson Plan Menu------------------->
+            @php
+                $active_prefix=['admin.student.lesson.plan.create'];
+            @endphp
+          <li class="nav-item">
+            <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
+                <i class='nav-icon fas fa-book-open'></i>
+                <p>&nbsp; Lesson Management <i class="right fas fa-angle-left"></i> </p>
+            </a>
+            <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
-
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.lesson.plan.create') }}" class="nav-link {{ $route == 'admin.student.lesson.plan.create' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Lesson Plan</p></a>
+                 </li>
 
             </ul>
           </li>

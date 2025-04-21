@@ -42,6 +42,7 @@ use App\Http\Controllers\Backend\Student\Exam_controller;
 use App\Http\Controllers\Backend\Student\Exam_result_controller;
 use App\Http\Controllers\Backend\Student\Fees_type_controller;
 use App\Http\Controllers\Backend\Student\Leave_controller;
+use App\Http\Controllers\Backend\Student\lessonController;
 use App\Http\Controllers\Backend\Teacher\Leave\Leave_controller as teacher_leave_controller;
 use App\Http\Controllers\Backend\Student\SectionController;
 use App\Http\Controllers\Backend\Student\Shift_controller;
@@ -56,6 +57,8 @@ use App\Http\Controllers\Backend\Tickets\Complain_typeController;
 use App\Http\Controllers\Backend\Tickets\Ticket_controller;
 use App\Models\Exam_cornar;
 use App\Models\Product_Category;
+use App\Models\Section;
+use App\Models\Student_subject;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 require __DIR__.'/Frontend.php';
@@ -115,6 +118,18 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/store','store')->name('admin.student.subject.store');
                 Route::post('/delete','delete')->name('admin.student.subject.delete');
                 Route::post('/get_subject_by_class','get_subject_by_class')->name('admin.student.subject.get_subject_by_class');
+            });
+        });
+        /** Subject  Route **/
+        Route::prefix('lession/plan')->group(function(){
+            Route::controller(lessonController::class)->group(function(){
+                Route::get('/create','create')->name('admin.student.lesson.plan.create');
+                // Route::get('/all_data','all_data')->name('admin.student.subject.all_data');
+                // Route::get('/edit/{id}','edit')->name('admin.student.subject.edit');
+                // Route::post('/update','update')->name('admin.student.subject.update');
+                // Route::post('/store','store')->name('admin.student.subject.store');
+                // Route::post('/delete','delete')->name('admin.student.subject.delete');
+                // Route::post('/get_subject_by_class','get_subject_by_class')->name('admin.student.subject.get_subject_by_class');
             });
         });
         /** Examination  Route **/
