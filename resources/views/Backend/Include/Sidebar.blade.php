@@ -62,7 +62,7 @@
           </li>
           <!-----------Lesson Plan Menu------------------->
             @php
-                $active_prefix=['admin.student.lesson.plan.create'];
+                $active_prefix=['admin.student.lesson.plan.create','admin.student.lesson.plan.show_data'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -73,6 +73,9 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.student.lesson.plan.create') }}" class="nav-link {{ $route == 'admin.student.lesson.plan.create' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Lesson Plan</p></a>
+                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.lesson.plan.show_data') }}" class="nav-link {{ $route == 'admin.student.lesson.plan.show_data' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Show Lesson Plan</p></a>
                  </li>
 
             </ul>

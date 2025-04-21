@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Backend\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Models\Student;
+use App\Models\Student_class;
 use App\Models\Student_lesson;
 use App\Models\Student_subject;
 use Illuminate\Http\Request;
@@ -17,29 +19,49 @@ class lessonController extends Controller
         $sections = Section::latest()->get();
         return view('Backend.Pages.Student.Lesson.create', compact('subjects', 'sections'));
     }
+    public function show()
+    {
+        $classes = Student_class::latest()->get();
+        return view('Backend.Pages.Student.Lesson.index', compact('classes'));
+    }
 
     public function get_all_data(Request $request)
     {
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name', 'year', 'start_date', 'end_date'];
-        $orderByColumn = $request->order[0]['column'];
-        $orderDirectection = $request->order[0]['dir'];
+        $columnsForOrderBy = ['id','photo', 'name', 'current_class','section_id','roll_no','birth_date','current_address','father_name','mother_name','religion','phone'];
+        $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
+        $orderDirection = $request->order[0]['dir'];
 
-        $object = Student_lesson::when($search, function ($query) use ($search) {
-            $query->where('name', 'like', "%$search%");
-            $query->where('year', 'like', "%$search%");
-            $query->where('start_date', 'like', "%$search%");
-            $query->where('end_date', 'like', "%$search%");
-        })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
+        $query = Student_lesson::with(['currentClass','section','subject','teacher'])->when($search, function ($query) use ($search) {
 
-        $total = $object->count();
-        $item = $object->skip($request->start)->take($request->length)->get();
+            $query->where('lesson_name', 'like', "%$search%")
+                  ->orWhere('lesson_range', 'like', "%$search%")
+                  ->orWhere('approx_duration', 'like', "%$search%")
+                  ->orWhere('question_and_answer', 'like', "%$search%")
+
+                  ->orWhereHas('section', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%");
+                  })
+                  ->orWhereHas('currentClass', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%");
+                  });
+        });
+
+        if ($request->has('class_id') && !empty($request->class_id)) {
+            $query->where('current_class', $request->class_id);
+        }
+
+        $total = $query->count();
+        $items = $query->orderBy($orderByColumn, $orderDirection)
+                       ->skip($request->start)
+                       ->take($request->length)
+                       ->get();
 
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
             'recordsFiltered' => $total,
-            'data' => $item,
+            'data' => $items,
         ]);
     }
     public function store(Request $request)

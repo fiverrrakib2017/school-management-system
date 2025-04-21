@@ -124,7 +124,8 @@ Route::group(['middleware'=>'admin'],function(){
         Route::prefix('lession/plan')->group(function(){
             Route::controller(lessonController::class)->group(function(){
                 Route::get('/create','create')->name('admin.student.lesson.plan.create');
-                // Route::get('/all_data','all_data')->name('admin.student.subject.all_data');
+                Route::get('/show','show')->name('admin.student.lesson.plan.show_data');
+                Route::get('/all_data','get_all_data')->name('admin.student.lesson.plan.all_data');
                 // Route::get('/edit/{id}','edit')->name('admin.student.subject.edit');
                 // Route::post('/update','update')->name('admin.student.subject.update');
                  Route::post('/store','store')->name('admin.student.lesson.plan.store');
