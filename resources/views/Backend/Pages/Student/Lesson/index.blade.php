@@ -1,6 +1,8 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
-
+@section('style')
+<link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12 ">
@@ -23,6 +25,8 @@
                                 <th class="">Lesson Name</th>
                                 <th class="">Lesson Range</th>
                                 <th class="">Approx Duration</th>
+                                <th class="">Repeatd</th>
+                                <th class="">Status</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -40,7 +44,7 @@
 @endsection
 
 @section('script')
-
+<script src="https://adminlte.io/themes/v3/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
     var classes = @json($classes);
@@ -100,6 +104,32 @@
         },
         {
           "data":"approx_duration"
+        },
+        {
+          "data":"is_repeated",
+          render: function(data) {
+            if (data === 'yes') {
+                return ` <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">`;
+            } else if(data === 'no') {
+                return ' <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">';
+            }else {
+                return '<span class="badge badge-secondary">Unknown</span>';
+            }
+          }
+        },
+        {
+          "data":"status",
+          render: function(data) {
+            if (data == 'pending') {
+                return '<span class="badge badge-danger">Pending</span>';
+            } else if(data == 'started') {
+                return '<span class="badge badge-success">Started</span>';
+            }else if(data == 'completed') {
+                return '<span class="badge badge-info">Completed</span>';
+            }else {
+                return '<span class="badge badge-secondary">Unknown</span>';
+            }
+          }
         },
         {
         "data": null,
