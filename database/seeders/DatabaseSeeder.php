@@ -17,9 +17,15 @@ class DatabaseSeeder extends Seeder
         //     StudentSeeder::class
         // ]);
         \App\Models\Admin::create([
-            'name' => 'Rakib Mahmud',
+            'name' => 'Masud Rana',
+            'email' => 'admin@gmail.com',
+            'username' => 'admin',
+            'password' => Hash::make('adm12345'),
+        ]);
+        \App\Models\Admin::create([
+            'name' => 'Shafiul Bashar Sumon',
             'email' => 'admin@futureictbd.com',
-            'username' => 'rakibas375',
+            'username' => 'futureictbd',
             'password' => Hash::make('futureictbd'),
         ]);
         $master_ledger_name = ['Income', 'Expense', 'Asset', 'Liabilities'];

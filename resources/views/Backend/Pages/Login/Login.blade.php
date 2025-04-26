@@ -70,7 +70,7 @@
                     @csrf
 
                     <div class="input-group mb-3">
-                        <input  type="email" name="email" class="form-control" placeholder="Enter Your Email" value="{{old('email')}}">
+                        <input  type="text" name="username" class="form-control" placeholder="Enter Your Username" value="{{old('username')}}">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
