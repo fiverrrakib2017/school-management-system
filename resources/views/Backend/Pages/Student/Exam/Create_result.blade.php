@@ -196,48 +196,40 @@
         /*********************** Student Filter and Condition*******************************/
         $(document).on('change', 'select[name="class_id"]', function() {
             var sections = @json($sections);
-            var subjects = @json($subjects);
-            var students = @json($students);
+
             /*Get Class ID*/
             var selectedClassId = $(this).val();
-
-            var filteredStudents = students.filter(function(student) {
-                /*Filter class by class_id*/
-                return student.current_class == selectedClassId;
-            });
             var filteredSections = sections.filter(function(section) {
                 /*Filter sections by class_id*/
                 return section.class_id == selectedClassId;
-            });
-            /* Update Subject dropdown*/
-            var filteredSubjects = subjects.filter(function(subject) {
-                /*Filter subject by class_id*/
-                return subject.class_id == selectedClassId;
-            });
-
-            /* Update Student dropdown*/
-            var studentOptions = '<option value="">--Select--</option>';
-            filteredStudents.forEach(function(student) {
-                studentOptions += '<option value="' + student.id + '">' + student.name + '</option>';
             });
             /* Update Section dropdown*/
             var sectionOptions = '<option value="">--Select--</option>';
             filteredSections.forEach(function(section) {
                 sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
             });
-            /* Update Subject dropdown*/
-            var subjectOptions = '<option value="">--Select--</option>';
-            filteredSubjects.forEach(function(subject) {
-                subjectOptions += '<option value="' + subject.id + '">' + subject.name + '</option>';
-            });
-
-            $('select[name="student_id"]').html(studentOptions);
-            $('select[name="student_id"]').select2();
 
             $('select[name="section_id"]').html(sectionOptions);
             $('select[name="section_id"]').select2();
 
-            $('select[name="subject_id"]').html(subjectOptions);
+        });
+        /*********************** On Change Class Filter and Condition*******************************/
+        $(document).on('change', 'select[name="section_id"]', function() {
+            var subjects = @json($subjects);
+            /*Get Class ID*/
+            var __select_seciton_id = $(this).val();
+
+            var filter_subjects = subjects.filter(function(section) {
+                /*Filter sections by class_id*/
+                return section.section_id == __select_seciton_id;
+            });
+            /* Update Section dropdown*/
+            var options = '<option value="">--Select--</option>';
+            filter_subjects.forEach(function(section) {
+                options += '<option value="' + section.id + '">' + section.name + '</option>';
+            });
+
+            $('select[name="subject_id"]').html(options);
             $('select[name="subject_id"]').select2();
 
         });
