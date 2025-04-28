@@ -307,7 +307,10 @@
             $('#addModal ').modal('hide');
             $('#addModal form')[0].reset();
             toastr.success(response.message);
-            $('#datatable1').DataTable().ajax.reload( null , false);
+            // $('#datatable1').DataTable().ajax.reload( null , false);
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         }
       },
 

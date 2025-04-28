@@ -13,12 +13,15 @@ class Subject_controller extends Controller
 {
     public function index(){
 
-       $classes = Student_class::get();
-       $subjects = Student_subject::join('student_classes', 'student_subjects.class_id', '=', 'student_classes.id')
-       ->select('student_subjects.*', 'student_classes.name as class_name')
-       ->orderBy('student_subjects.class_id')
-       ->get();
-        return view('Backend.Pages.Student.Subject.index',compact('classes', 'subjects'));
+    //    $classes = Student_class::get();
+    //    $subjects = Student_subject::join('student_classes', 'student_subjects.class_id', '=', 'student_classes.id')
+    //    ->select('student_subjects.*', 'student_classes.name as class_name')
+    //    ->orderBy('student_subjects.class_id')
+    //    ->get();
+        $data = Student_class::with('subjects')->latest()->get();
+        $sections=Section::latest()->get();
+        //return $data;
+        return view('Backend.Pages.Student.Subject.index',compact('data','sections'));
     }
     public function all_data(Request $request)
     {
@@ -73,6 +76,7 @@ class Subject_controller extends Controller
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
             'class_id' => 'required|integer',
+            'section_id' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 
@@ -86,6 +90,7 @@ class Subject_controller extends Controller
         /*Create a new  record*/
         $object = new Student_subject();
         $object->class_id = $request->class_id;
+        $object->section_id = $request->section_id;
         $object->name = $request->name;
 
         /* Save the class record to the database*/

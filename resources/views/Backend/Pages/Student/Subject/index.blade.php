@@ -5,14 +5,14 @@
     <div class="col-md-12 ">
         <div class="card">
             <div class="card-header">
-                  <button data-toggle="modal" data-target="#addModal" type="button" class="btn-sm btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
+                  <button data-toggle="modal" data-target="#addModal" type="button" class=" btn btn-success mb-2"><i class="mdi mdi-account-plus"></i>
                     Add New Subject</button>
             </div>
             <div class="card-body">
 
 
                 <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <table id="datatable12" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th class="">No.</th>
@@ -21,7 +21,22 @@
                                 <th class=""></th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            @foreach ($data as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td>
+                                    @foreach ($item->subjects as $subject)
+                                        <span >{{ $subject->name }}</span><br>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    {{-- <a href="#" class="btn btn-sm btn-warning">Edit</a> --}}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -48,12 +63,19 @@
                 <div class="modal-body">
                     <!----- Start Add Form input ------->
                         <div class="form-group mb-2">
-                            <label for="sectionName">Class</label>
+                            <label for="">Class</label>
                             <select type="text" name="class_id"  class="form-control">
                                 <option value="">---Select---</option>
-                                @foreach ($classes as $item)
+                                @foreach ($data as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">Section</label>
+                            <select type="text" name="section_id"  class="form-control">
+                                <option value="">---Select---</option>
+
                             </select>
                         </div>
                         <div class="form-group mb-2">
@@ -92,7 +114,7 @@
                             <input type="text" name="id"  class="d-none">
                             <select type="text" name="class_id"  class="form-control">
                                 <option value="">---Select---</option>
-                                @foreach ($classes as $item)
+                                @foreach ($data as $item)
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
@@ -142,6 +164,33 @@
   <script type="text/javascript">
     $(document).ready(function(){
 
+        $(document).on('change', 'select[name="class_id"]', function() {
+            var sections = @json($sections);
+            /*Get Class ID*/
+            var selectedClassId = $(this).val();
+
+
+            var filteredSections = sections.filter(function(section) {
+                /*Filter sections by class_id*/
+                return section.class_id == selectedClassId;
+            });
+
+
+
+            /* Update Section dropdown*/
+            var sectionOptions = '<option value="">--Select--</option>';
+            filteredSections.forEach(function(section) {
+                sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+            });
+
+
+
+
+            $('select[name="section_id"]').html(sectionOptions);
+            $('select[name="section_id"]').select2();
+
+
+        });
         var table=$("#datatable1").DataTable({
         "processing":true,
         "responsive": true,
@@ -289,7 +338,10 @@
             $('#addModal ').modal('hide');
             $('#addModal form')[0].reset();
             toastr.success(response.message);
-            $('#datatable1').DataTable().ajax.reload( null , false);
+            //$('#datatable1').DataTable().ajax.reload( null , false);
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         }
       },
 
