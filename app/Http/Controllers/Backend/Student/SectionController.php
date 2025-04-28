@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Validator;
 class SectionController extends Controller
 {
     public function index(){
-        $classes = Student_class::all();
+        $classes = Student_class::with('sections')->latest()->get();
+       
         return view('Backend.Pages.Student.Section.index',compact('classes'));
     }
     public function all_data(Request $request){

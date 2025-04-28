@@ -1,7 +1,8 @@
 @extends('Backend.Layout.App')
 @section('title','Dashboard | Admin Panel')
 @section('style')
-
+<!-- Choices.js CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 @endsection
 @section('content')
 <div class="row">
@@ -18,7 +19,7 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Class Name</th>
-                                <th class="">Create Date</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -61,6 +62,7 @@
         </div>
     </div>
 </div>
+
 <!-- Edit Class Modal -->
 <div class="modal fade bs-example-modal-lg" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog " role="document">
@@ -144,19 +146,13 @@
           {
             "data":"name"
           },
-            {
-                "data":"created_at",
-                render:function(data,type,row){
-                return moment(data).format('DD/MM/YYYY');
-                }
-            },
-        //   {
-        //     "data":null,
-        //     render:function(data,type,row){
-        //       return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-        //         <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
-        //     }
-        //   },
+          {
+            "data":null,
+            render:function(data,type,row){
+              return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
+            }
+          },
         ],
         order:[
           [0, "desc"]

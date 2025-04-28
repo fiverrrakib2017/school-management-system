@@ -48,15 +48,16 @@
                  <a href="{{ route('admin.student.class.index') }}" class="nav-link {{ $route == 'admin.student.class.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Class</p></a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('admin.student.section.index') }}" class="nav-link {{($route=='admin.student.section.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Section</p></a>
+             </li>
+              <li class="nav-item">
                  <a href="{{ route('admin.student.subject.index') }}" class="nav-link {{ $route == 'admin.student.subject.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Subject</p></a>
               </li>
-              
+
               <li class="nav-item">
                  <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link {{ $route == 'admin.student.class.routine.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
               </li>
-              <li class="nav-item">
-                 <a href="{{ route('admin.student.section.index') }}" class="nav-link {{($route=='admin.student.section.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Section</p></a>
-              </li>
+
 
             </ul>
           </li>
