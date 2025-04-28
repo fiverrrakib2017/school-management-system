@@ -17,52 +17,35 @@ class classController extends Controller
     }
     public function all_data(Request $request)
     {
-        $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name', 'created_at'];
-        $orderByColumnIndex = $request->order[0]['column'];
-        $orderDirection = $request->order[0]['dir'];
-        $orderByColumn = $columnsForOrderBy[$orderByColumnIndex];
+        $search = $request->search['value'] ?? null;
 
-        $query = Student_class::with('sections');
+    $columnsForOrderBy = ['id', 'name'];
 
-        /*Apply the search filter*/ 
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                ->orWhereHas('sections', function($q) use ($search) {
-                    $q->where('name', 'like', "%$search%");
-                });
+    $orderByColumnIndex = $request->order[0]['column'] ?? 0;
+    $orderByColumn = $columnsForOrderBy[$orderByColumnIndex] ?? 'id';
+    $orderDirection = $request->order[0]['dir'] ?? 'asc';
+
+    $query = Student_class::with(['section'])
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', "%{$search}%");
             });
-        }
-
-        /* Get the total count of records*/
-        $totalRecords = Student_class::count();
-
-        // Get the count of filtered records
-        $filteredRecords = $query->count();
-
-        /* Apply ordering, pagination and get the data*/
-        $items = $query->orderBy($orderByColumn, $orderDirection)
-                    ->skip($request->start)
-                    ->take($request->length)
-                    ->get();
-
-        /* Format the data for DataTables*/
-        $formattedData = $items->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'sections' => $item->sections->pluck('name')->implode(', '),
-            ];
         });
 
-        /* Return the response in JSON format*/
-        return response()->json([
-            'draw' => $request->draw,
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
-            'data' => $formattedData,
-        ]);
+    $totalRecords = Student_class::count();
+    $filteredRecords = $query->count();
+
+    $items = $query->orderBy($orderByColumn, $orderDirection)
+                   ->skip($request->start ?? 0)
+                   ->take($request->length ?? 10)
+                   ->get();
+
+    return response()->json([
+        'draw' => intval($request->draw),
+        'recordsTotal' => $totalRecords,
+        'recordsFiltered' => $filteredRecords,
+        'data' => $items,
+    ]);
     }
 
     public function store(Request $request){

@@ -18,8 +18,7 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Class Name</th>
-                                <th class="">Section</th>
-                                <th class=""></th>
+                                <th class="">Create Date</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -145,16 +144,19 @@
           {
             "data":"name"
           },
-          {
-            "data":"sections"
-          },
-          {
-            "data":null,
-            render:function(data,type,row){
-              return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-                <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
-            }
-          },
+            {
+                "data":"created_at",
+                render:function(data,type,row){
+                return moment(data).format('DD/MM/YYYY');
+                }
+            },
+        //   {
+        //     "data":null,
+        //     render:function(data,type,row){
+        //       return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
+        //         <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
+        //     }
+        //   },
         ],
         order:[
           [0, "desc"]

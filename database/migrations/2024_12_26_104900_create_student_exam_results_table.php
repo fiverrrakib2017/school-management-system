@@ -27,12 +27,6 @@ return new class extends Migration
             $table->decimal('written_marks', 8, 2)->nullable();
 
 
-            // $table->decimal('total_marks', 8, 2)->default(0);
-            // $table->decimal('highest_marks', 8, 2)->nullable();
-            // $table->string('grade')->nullable();
-            // $table->decimal('point', 4, 2)->nullable();
-            // $table->text('remarks')->nullable();
-
             $table->timestamps();
 
             $table->foreign('exam_id')->references('id')->on('student_exams')->onDelete('cascade');
