@@ -36,12 +36,19 @@ class Exam_result_controller extends Controller
     {
         $student_ids = explode(',', $student_ids);
 
-        $results = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->whereIn('student_id', $student_ids)->where('exam_id', $exam_id)->get()->groupBy('student_id');
-        /*Highest Marks*/
-        $highest_marks = Student_exam_result::where('exam_id', $exam_id)->select('subject_id', DB::raw('MAX(written_marks + objective_marks + practical_marks) as highest'))->groupBy('subject_id')->pluck('highest', 'subject_id');
-        //return $results;
+        $results = Student_exam_result::with(['student.currentClass', 'student.section', 'subject', 'class', 'section', 'exam'])
+            ->whereIn('student_id', $student_ids)
+            ->where('exam_id', $exam_id)
+            ->get()
+            ->groupBy('student_id');
 
-        return view('Backend.Pages.Student.Exam.Result.Print', compact('results', 'highest_marks'));
+        $highest_marks = Student_exam_result::where('exam_id', $exam_id)->select('subject_id', DB::raw('MAX(written_marks + objective_marks + practical_marks) as highest'))->groupBy('subject_id')->pluck('highest', 'subject_id');
+
+        $first_student = $results->first()->first()->student;
+
+        $routines = DB::table('student_exam_routines')->where('exam_id', $exam_id)->where('class_id', $first_student->currentClass->id)->where('section_id', $first_student->section_id)->get()->keyBy('subject_id');
+
+        return view('Backend.Pages.Student.Exam.Result.Print', compact('results', 'highest_marks', 'routines'));
     }
 
     public function result_store(Request $request)
@@ -117,12 +124,12 @@ class Exam_result_controller extends Controller
     public function trabulation(Request $request)
     {
         // Get exam results grouped by student_id
-        $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
+        $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get()->groupBy('student_id');
 
         // Get subjects for the class
-        $subjects = Student_subject::where('class_id', $request->class_id)->get();
+        $subjects = Student_subject::where('class_id', $request->class_id)->where('section_id', $request->section_id)->get();
         /* Fetch routines for exam*/
-        $routines = DB::table('student_exam_routines')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->keyBy('subject_id');
+        $routines = DB::table('student_exam_routines')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get()->keyBy('subject_id');
         if ($routines->isEmpty()) {
             return response()->json([
                 'success' => false,
@@ -272,10 +279,10 @@ class Exam_result_controller extends Controller
             $finalGpa = $subjectCount > 0 ? ($isFail ? 0 : $totalPoints / $subjectCount) : 0;
             $resultStatus = $isFail ? '<span class="label label-danger">FAIL</span>' : '<span class="label label-primary">PASS</span>';
             $position = $positions[$studentId] ?? '-';
-
+            $failCount = $subjectCount - $passCount;
             $html .= '<td>' . $totalMarks . '</td>';
             $html .= '<td>' . number_format($finalGpa, 2) . '</td>';
-            $html .= '<td>' . $passCount . '/' . $subjectCount . '</td>';
+            $html .= '<td>' . $passCount . '/' . $failCount . '</td>';
             $html .= '<td>' . $resultStatus . '</td>';
             $html .= '<td>' . $position . '</td>';
             $html .= '</tr>';
@@ -340,10 +347,10 @@ class Exam_result_controller extends Controller
 
     public function show_merit_list(Request $request)
     {
-        $examResults = Student_exam_result::with('student')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->groupBy('student_id');
+        $examResults = Student_exam_result::with('student')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get()->groupBy('student_id');
 
         /* Fetch routines for exam*/
-        $routines = DB::table('student_exam_routines')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->get()->keyBy('subject_id');
+        $routines = DB::table('student_exam_routines')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get()->keyBy('subject_id');
 
         $positionData = [];
 

@@ -1,5 +1,6 @@
 @php
     $website_info = App\Models\Website_information::first();
+
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -228,7 +229,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Register No: </strong> 123456</td>
+                                    <td><strong>Register No: </strong> N/A</td>
                                     <td><strong>Roll No :</strong>{{ $result->first()->student->roll_no }}</td>
                                 </tr>
                                 <tr>
@@ -244,6 +245,7 @@
                         </div>
 
                         <!-- Result Table -->
+                       <!-- Result Table -->
                         <table class="result-table">
                             <thead>
                                 <tr>
@@ -265,121 +267,174 @@
                                         <td>{{ intval($item->written_marks) }}</td>
                                         <td>{{ intval($item->objective_marks) }}</td>
                                         <td>{{ intval($item->practical_marks) }}</td>
-                                        <td>{{ intval($item->written_marks) + intval($item->objective_marks) + intval($item->practical_marks) }}
-                                        </td>
 
-                                        <td>{{ intval($highest_marks[$item->subject_id] ?? '') }}</td>
                                         @php
-                                            $total =
-                                                intval($item->written_marks) +
-                                                intval($item->objective_marks) +
-                                                intval($item->practical_marks);
+                                            $written = intval($item->written_marks ?? 0);
+                                            $objective = intval($item->objective_marks ?? 0);
+                                            $practical = intval($item->practical_marks ?? 0);
+                                            $total = $written + $objective + $practical;
 
-                                            if ($total >= 80) {
-                                                $grade = 'A+';
-                                                $point = 5.0;
-                                            } elseif ($total >= 70) {
-                                                $grade = 'A';
-                                                $point = 4.0;
-                                            } elseif ($total >= 60) {
-                                                $grade = 'A-';
-                                                $point = 3.5;
-                                            } elseif ($total >= 50) {
-                                                $grade = 'B';
-                                                $point = 3.0;
-                                            } elseif ($total >= 40) {
-                                                $grade = 'C';
-                                                $point = 2.0;
-                                            } elseif ($total >= 33) {
-                                                $grade = 'D';
-                                                $point = 1.0;
+                                            $routine = $routines[$item->subject_id] ?? null;
+
+                                            $written_pass = $routine->written_pass ?? 0;
+                                            $objective_pass = $routine->objective_pass ?? 0;
+                                            $practical_pass = $routine->practical_pass ?? 0;
+
+                                            $written_full = $routine->written_full ?? 0;
+                                            $objective_full = $routine->objective_full ?? 0;
+                                            $practical_full = $routine->practical_full ?? 0;
+
+                                            $total_full = $written_full + $objective_full + $practical_full;
+
+                                            $is_fail = false;
+
+                                            if ($written < $written_pass || $objective < $objective_pass || $practical < $practical_pass) {
+                                                $is_fail = true;
+                                            }
+
+                                            if ($total_full > 0) {
+                                                $percentage = ($total / $total_full) * 100;
                                             } else {
+                                                $percentage = 0;
+                                            }
+
+                                            if ($is_fail) {
                                                 $grade = 'F';
                                                 $point = 0.0;
+                                                $remarks = '';
+                                            } else {
+                                                if ($percentage >= 80) {
+                                                    $grade = 'A+';
+                                                    $point = 5.0;
+                                                    $remarks = 'Excellent';
+                                                } elseif ($percentage >= 70) {
+                                                    $grade = 'A';
+                                                    $point = 4.0;
+                                                    $remarks = 'Very Good';
+                                                } elseif ($percentage >= 60) {
+                                                    $grade = 'A-';
+                                                    $point = 3.5;
+                                                    $remarks = 'Good';
+                                                } elseif ($percentage >= 50) {
+                                                    $grade = 'B';
+                                                    $point = 3.0;
+                                                    $remarks = 'Satisfactory';
+                                                } elseif ($percentage >= 40) {
+                                                    $grade = 'C';
+                                                    $point = 2.0;
+                                                    $remarks = 'Needs Improvement';
+                                                } elseif ($percentage >= 33) {
+                                                    $grade = 'D';
+                                                    $point = 1.0;
+                                                    $remarks = 'Poor';
+                                                } else {
+                                                    $grade = 'F';
+                                                    $point = 0.0;
+                                                    $remarks = 'Fail';
+                                                }
+
                                             }
                                         @endphp
 
+                                        <td>{{ $total }}</td>
+                                        <td>{{ intval($highest_marks[$item->subject_id] ?? 0) }}</td>
                                         <td>{{ $grade }}</td>
                                         <td>{{ number_format($point, 2) }}</td>
-                                        <td>
-                                            @if ($point == 5.0)
-                                                Excellent
-                                            @elseif($point >= 4.0)
-                                                Very Good
-                                            @elseif($point >= 3.0)
-                                                Good
-                                            @elseif($point >= 2.0)
-                                                Satisfactory
-                                            @elseif($point >= 1.0)
-                                                Pass
-                                            @else
-                                                Fail
-                                            @endif
-                                        </td>
+                                        <td>{{ $remarks }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
 
+
                         <!-- Summary Section -->
+
+
+
+
+
+
                         @php
-                            $grandTotal = 0;
-                            $fullMarks = 0;
-                            $totalPoints = 0;
-                            $subjectCount = count($result);
-                            $hasFail = false;
-                        @endphp
+                        $grand_total_obtained = 0;
+                        $grand_total_full = 0;
+                        $total_gpa = 0;
+                        $subject_count = 0;
+                        $has_failed = false;
+                    @endphp
 
-                        @foreach ($result as $item)
-                            @php
-                                $written = intval($item->written_marks);
-                                $objective = intval($item->objective_marks);
-                                $practical = intval($item->practical_marks);
-                                $total = $written + $objective + $practical;
+                    @foreach ($result as $item)
+                        @php
+                            $routine = $routines[$item->subject_id] ?? null;
 
-                                $grandTotal += $total;
-                                $fullMarks += 100; // প্রতি বিষয়ের পূর্ণমান ধরেছি 100
+                            $written = intval($item->written_marks);
+                            $objective = intval($item->objective_marks);
+                            $practical = intval($item->practical_marks);
 
-                                if ($total >= 80) {
-                                    $point = 5.0;
-                                } elseif ($total >= 70) {
-                                    $point = 4.0;
-                                } elseif ($total >= 60) {
-                                    $point = 3.5;
-                                } elseif ($total >= 50) {
-                                    $point = 3.0;
-                                } elseif ($total >= 40) {
-                                    $point = 2.0;
-                                } elseif ($total >= 33) {
-                                    $point = 1.0;
+                            $written_full = $routine->written_full ?? 0;
+                            $objective_full = $routine->objective_full ?? 0;
+                            $practical_full = $routine->practical_full ?? 0;
+
+                            $written_pass = $routine->written_pass ?? 0;
+                            $objective_pass = $routine->objective_pass ?? 0;
+                            $practical_pass = $routine->practical_pass ?? 0;
+
+                            $total_obtained = $written + $objective + $practical;
+                            $total_full = $written_full + $objective_full + $practical_full;
+
+                            $grand_total_obtained += $total_obtained;
+                            $grand_total_full += $total_full;
+
+                            // Fail check
+                            if (($written < $written_pass) || ($objective < $objective_pass) || ($practical < $practical_pass)) {
+                                $has_failed = true;
+                                $gpa = 0.00;
+                            } else {
+                                $percentage = $total_full > 0 ? ($total_obtained / $total_full) * 100 : 0;
+                                if ($percentage >= 80) {
+                                    $gpa = 5.0;
+                                } elseif ($percentage >= 70) {
+                                    $gpa = 4.0;
+                                } elseif ($percentage >= 60) {
+                                    $gpa = 3.5;
+                                } elseif ($percentage >= 50) {
+                                    $gpa = 3.0;
+                                } elseif ($percentage >= 40) {
+                                    $gpa = 2.0;
+                                } elseif ($percentage >= 33) {
+                                    $gpa = 1.0;
                                 } else {
-                                    $point = 0.0;
-                                    $hasFail = true;
+                                    $gpa = 0.0;
                                 }
+                            }
 
-                                $totalPoints += $point;
-                            @endphp
-                        @endforeach
-
-                        @php
-                            $average = $fullMarks > 0 ? ($grandTotal / $fullMarks) * 100 : 0;
-                            $gpa = $subjectCount > 0 ? $totalPoints / $subjectCount : 0;
+                            $total_gpa += $gpa;
+                            $subject_count++;
                         @endphp
+                    @endforeach
 
-                        <div class="summary mt-4 p-3 bg-light border rounded">
-                            <div>
-                                <strong>Grand Total:</strong> <span>{{ $grandTotal }}/{{ $fullMarks }}</span>
-                            </div>
-                            <div>
-                                <strong>Average:</strong> <span>{{ number_format($average, 2) }}%</span>
-                            </div>
-                            <div>
-                                <strong>GPA:</strong> <span>{{ number_format($hasFail ? 0.0 : $gpa, 2) }}</span>
-                            </div>
-                            <div>
-                                <strong>Result:</strong> <span>{{ $hasFail ? 'Failed' : 'Passed' }}</span>
-                            </div>
+                    @php
+                        $average_percentage = $grand_total_full > 0 ? number_format(($grand_total_obtained / $grand_total_full) * 100, 2) : 0;
+                        $final_result = $has_failed ? 'Fail' : 'Pass';
+                        $final_gpa = $has_failed ? 'N/A' : number_format($total_gpa / $subject_count, 2);
+                    @endphp
+
+                    <!-- Summary Box -->
+                    <div class="summary mt-4 p-3 bg-light border rounded">
+                        <div>
+                            <strong>Grand Total:</strong> <span>{{ $grand_total_obtained }}/{{ $grand_total_full }}</span>
                         </div>
+                        <div>
+                            <strong>Average:</strong> <span>{{ $average_percentage }}%</span>
+                        </div>
+                        <div>
+                            <strong>GPA:</strong> <span>{{ $final_gpa }}</span>
+                        </div>
+                        <div>
+                            <strong>Result:</strong> <span>{{ $final_result }}</span>
+                        </div>
+                    </div>
+
+
 
 
                         <!-- Grade Scale -->

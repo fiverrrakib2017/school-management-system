@@ -170,7 +170,8 @@
                         <p>{{ $website_info->address ?? 'Daudkandi , Chittagong , Bangladesh' }}</p>
 
                        <span id="examName"></span><br>
-                        <span>Class:</span> <span id="className"></span>
+                        <span>Class:</span> <span id="className"></span><br>
+                        <span>Section:</span> <span id="sectionName"></span>
                     </div>
                     <div class="card-title mb-2">
                         <i class="fas fa-users"></i> Tabulation Sheet
@@ -287,6 +288,12 @@
                     $("#tabulation-container").removeClass("d-none");
                     $("#trabulation_footer").removeClass("d-none");
                     $(".display_table").html(response);
+
+                    if(response.success==false){
+                        toastr.error(response.message);
+                        $("#tabulation-container").addClass("d-none");
+                        $("#trabulation_footer").addClass("d-none");
+                    }
                 }
             });
 
