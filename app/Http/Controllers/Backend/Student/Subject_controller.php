@@ -136,7 +136,12 @@ class Subject_controller extends Controller
         ], 404);
     }
     public function get_subject_by_class(Request $request){
-        $object = Student_subject::where('class_id', $request->class_id)->get();
+        if(!empty($request->class_id) && !empty($request->section_id)){
+            $object = Student_subject::where('class_id', $request->class_id)->where('section_id', $request->section_id)->get();
+        }
+
+       
+
 
         if ($object) {
             return response()->json([

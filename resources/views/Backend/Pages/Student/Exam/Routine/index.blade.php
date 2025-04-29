@@ -56,22 +56,10 @@ $website_info=App\Models\Website_information::first();
             <div class="card-header">
                 <form id="search_box">
                     <div class="row align-items-end">
-                        <!-- Class Dropdown -->
-                        <div class="col-md-3 mb-3">
-                            <label for="find_class_id">Class</label>
-                            <select name="find_class_id" id="find_class_id" class="form-control" required>
-                                <option value="">---Select---</option>
-                                @php
-                                    $classes = \App\Models\Student_class::latest()->get();
-                                @endphp
-                                @foreach($classes as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+
 
                         <!-- Examination Dropdown -->
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-3 ">
                             <label for="find_exam_id">Examination Name</label>
                             <select name="find_exam_id" id="find_exam_id" class="form-control"required>
                                 <option value="">---Select---</option>
@@ -84,15 +72,37 @@ $website_info=App\Models\Website_information::first();
                             </select>
                         </div>
 
+                        <!-- Class Dropdown -->
+                        <div class="col-md-3 ">
+                            <label for="find_class_id">Class</label>
+                            <select name="find_class_id" id="find_class_id" class="form-control" required>
+                                <option value="">---Select---</option>
+                                @php
+                                    $classes = \App\Models\Student_class::latest()->get();
+                                @endphp
+                                @foreach($classes as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- Section  Dropdown -->
+                        <div class="col-md-3 ">
+                            <label for="find_section_id">Section</label>
+                            <select name="find_section_id" id="find_section_id" class="form-control" required>
+                                <option value="">---Select---</option>
+
+                            </select>
+                        </div>
+
                         <!-- Action Buttons -->
-                        <div class="col-md-6 mb-3 text-md-left text-center">
-                            <label class="d-block invisible">.</label> <!-- spacer -->
+                        <div class="col-md-3 ">
+
                             <button type="button" name="submit_btn" class="btn btn-success mr-2">
                                 <i class="mdi mdi-magnify"></i> Find Examination Routine
                             </button>
-                            <button type="button" name="exam_attendance_sheet_submit_btn" class="btn btn-primary">
+                            {{-- <button type="button" name="exam_attendance_sheet_submit_btn" class="btn btn-primary">
                                 <i class="mdi mdi-magnify"></i> Exam Attendance Sheet
-                            </button>
+                            </button> --}}
                         </div>
                     </div>
                 </form>
@@ -198,29 +208,33 @@ $website_info=App\Models\Website_information::first();
 
 
 
-    $(document).on('change','select[name="class_id"]',function(){
-        var class_id = $(this).val();
-        $.ajax({
-            url: "{{ route('admin.student.subject.get_subject_by_class') }}",
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: {
-                class_id: class_id
-            },
-            success: function(response) {
-                var subjectOptions = '<option value="">--Select Subject--</option>';
-                response.data.forEach(function(subject) {
-                    subjectOptions += '<option value="' + subject.id + '">' + subject.name + '</option>';
-                });
-                $('select[name="subject_id"]').html(subjectOptions);
-            },
-            error: function() {
-                toastr.error('An error occurred. Please try again.');
-            }
+   /*********************** Student Filter and Condition*******************************/
+   $(document).on('change', 'select[name="find_class_id"]', function() {
+            var sections = @json($sections);
+            /*Get Class ID*/
+            var selectedClassId = $(this).val();
+
+
+            var filteredSections = sections.filter(function(section) {
+                /*Filter sections by class_id*/
+                return section.class_id == selectedClassId;
+            });
+
+
+            /* Update Section dropdown*/
+            var sectionOptions = '<option value="">--Select--</option>';
+            filteredSections.forEach(function(section) {
+                sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+            });
+
+
+
+
+            $('select[name="find_section_id"]').html(sectionOptions);
+             $('select[name="find_section_id"]').select2();
+
+
         });
-    });
 
     $("button[name='submit_btn']").on('click',function(e){
         e.preventDefault();
@@ -229,9 +243,10 @@ $website_info=App\Models\Website_information::first();
 
         var class_id = $("select[name='find_class_id']").val();
         var exam_id = $("select[name='find_exam_id']").val();
+        var section_id = $("select[name='find_section_id']").val();
         $("#examName").text($('select[name="find_exam_id"] option:selected').text());
         $("#className").text($('select[name="find_class_id"] option:selected').text());
-        fetch_exam_routine_data(class_id,exam_id)
+        fetch_exam_routine_data(class_id,exam_id, section_id);
     });
     function _time_formate(time) {
         let [hour, minute, second] = time.split(':');
@@ -269,9 +284,10 @@ $website_info=App\Models\Website_information::first();
                         /* Reload the Page */
                         let class_id = $("select[name='find_class_id']").val();
                         let exam_id = $("select[name='find_exam_id']").val();
+                        let section_id = $("select[name='find_section_id']").val();
 
-                        if (class_id && exam_id && class_id.trim() !== '' && exam_id.trim() !== '') {
-                            fetch_exam_routine_data(class_id, exam_id);
+                        if (class_id && exam_id && class_id.trim() !== '' && exam_id.trim() !== '' && section_id.trim() !== '') {
+                            fetch_exam_routine_data(class_id, exam_id, section_id);
                         } else {
                             setTimeout(() => {
                                 location.reload();
@@ -305,7 +321,7 @@ $website_info=App\Models\Website_information::first();
         });
     }
 
-  function fetch_exam_routine_data(class_id,exam_id){
+  function fetch_exam_routine_data(class_id,exam_id, section_id){
     var submitBtn =  $('#search_box').find('button[name="submit_btn"]');
         submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
         submitBtn.prop('disabled', true);
@@ -319,6 +335,7 @@ $website_info=App\Models\Website_information::first();
             data: {
                 class_id: class_id,
                 exam_id: exam_id,
+                section_id: section_id,
             },
             success: function(response) {
             /* Check if the response is successful */

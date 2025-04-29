@@ -84,45 +84,6 @@
                                         </tr>
                                     </thead>
                                     <tbody id="_data">
-                                        {{-- <tr class="routine-row">
-                                            <td>0</td>
-                                            <td>
-                                                <select class="form-control  subject-select" name="routines[0][subject_id]"
-                                                    required>
-                                                    <option value="">--- Select ---</option>
-                                                    @foreach (\App\Models\Student_subject::latest()->get() as $subject)
-                                                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td><input type="date" class="form-control" name="routines[0][exam_date]" required>
-                                            </td>
-                                            <td><input type="time" class="form-control" name="routines[0][start_time]" required>
-                                            </td>
-                                            <td><input type="time" class="form-control" name="routines[0][end_time]" required>
-                                            </td>
-                                            <td><input type="text" class="form-control" name="routines[0][room_number]"
-                                                    placeholder="Room No." required></td>
-                                            <td>
-                                                <input type="number" class="form-control mb-1" name="routines[0][written_full]"
-                                                    placeholder="Full">
-                                                <input type="number" class="form-control" name="routines[0][written_pass]"
-                                                    placeholder="Pass">
-                                            </td>
-                                            <td>
-                                                <input type="number" class="form-control mb-1" name="routines[0][objective_full]"
-                                                    placeholder="Full">
-                                                <input type="number" class="form-control" name="routines[0][objective_pass]"
-                                                    placeholder="Pass">
-                                            </td>
-                                            <td>
-                                                <input type="number" class="form-control mb-1" name="routines[0][practical_full]"
-                                                    placeholder="Full">
-                                                <input type="number" class="form-control" name="routines[0][practical_pass]"
-                                                    placeholder="Pass">
-                                            </td>
-                                            <td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
 
@@ -168,10 +129,13 @@
         //         allowClear: false
         //     });
 
-        // Subject load by class ID
-        $('#class_id').on('change', function() {
-            const classId = $(this).val();
-            if (!classId) return;
+        // Subject load by class id and section id
+        $('#section_id').on('change', function() {
+            const section_id    = $(this).val();
+            const class_id      = $("select[name='class_id']").val();
+ 
+
+            if (!section_id) return;
 
             $.ajax({
                 url: "{{ route('admin.student.subject.get_subject_by_class') }}",
@@ -180,7 +144,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: {
-                    class_id: classId
+                    section_id: section_id,
+                    class_id:class_id
                 },
                 success: function(res) {
                     // Update only the last added subject-select
@@ -259,6 +224,7 @@
             $('#_data').append(newRow);
             // Load subjects for this new row
             const classId = $('#class_id').val();
+            const section_id = $('#section_id').val();
             if (classId) {
                 $.ajax({
                     url: "{{ route('admin.student.subject.get_subject_by_class') }}",
@@ -267,7 +233,8 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
-                        class_id: classId
+                        class_id: classId,
+                        section_id: section_id
                     },
                     success: function(res) {
                         const newSelect = $(' .routine-row:last .subject-select');
@@ -386,6 +353,7 @@
             `;
             $('#_data').html(html);
             const classId = $('#class_id').val();
+            const section_id = $('#section_id').val();
                     if (classId) {
                         $.ajax({
                             url: "{{ route('admin.student.subject.get_subject_by_class') }}",
@@ -394,7 +362,8 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             data: {
-                                class_id: classId
+                                class_id: classId,
+                                section_id: section_id
                             },
                             success: function(res) {
                                 const newSelect = $(' .routine-row:last .subject-select');

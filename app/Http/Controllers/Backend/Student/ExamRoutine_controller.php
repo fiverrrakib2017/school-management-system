@@ -107,13 +107,16 @@ class ExamRoutine_controller extends Controller
     }
     public function get_exam_attendance(Request $request){
         $class_id = $request->class_id;
+        $section_id = $request->section_id;
         $exam_id = $request->exam_id;
 
-        $exam_routine = Student_exam_routine::with('subject')->where('class_id', $class_id)
+        $exam_routine = Student_exam_routine::with('subject')
+                                            ->where('class_id', $class_id)
                                             ->where('exam_id', $exam_id)
+                                            ->where('section_id', $section_id)
                                             ->get();
 
-        $students = Student::where('current_class', $class_id)->get();
+        $students = Student::where('current_class', $class_id)->where('section_id', $section_id)->get();
 
         $html = '<table class="table table-bordered table-hover table-sm text-center">';
         $html .= '<thead><tr><th>Roll</th><th>Name</th>';
@@ -201,12 +204,14 @@ class ExamRoutine_controller extends Controller
     }
     public function get_exam_routine(Request $request)
     {
-        $class_id = $request->class_id;
+
         $exam_id = $request->exam_id;
+        $class_id = $request->class_id;
+        $section_id = $request->section_id;
         $data = Student_exam_routine::with(['exam', 'class', 'subject'])
-            ->where(['exam_id' => $exam_id, 'class_id' => $class_id])
+            ->where(['exam_id' => $exam_id, 'class_id' => $class_id, 'section_id' => $section_id])
             ->get();
-        $subjects = Student_subject::where('class_id', $class_id)->get(['id', 'name']);
+        $subjects = Student_subject::where('class_id', $class_id)->where('section_id', $section_id)->get(['id', 'name']);
         if ($data) {
             return response()->json(['success' => true, 'data' => $data, 'subjects' => $subjects]);
             exit();
