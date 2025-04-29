@@ -17,25 +17,22 @@
                             <tr>
                                 <th class="">No.</th>
                                 <th class="">Class Name</th>
+                                <th class="">Section Name</th>
                                 <th class="">Subject Name</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            @foreach ($data as $item)
+                            @foreach ($results as $index => $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->name }}</td>
-                                <td>
-                                    @foreach ($item->subjects as $subject)
-                                        <span >{{ $subject->name }}</span><br>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    {{-- <a href="#" class="btn btn-sm btn-warning">Edit</a> --}}
-                                </td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item['class_name'] }}</td>
+                                <td>{{ $item['section_name'] }}</td>
+                                <td>{!! $item['subjects'] !!}</td>
                             </tr>
-                            @endforeach
+                        @endforeach
+
                         </tbody>
                     </table>
                 </div>

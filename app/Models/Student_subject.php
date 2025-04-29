@@ -11,5 +11,5 @@ class Student_subject extends Model
     public function class(){
         return $this->belongsTo(Student_class::class, 'class_id', 'id');
     }
-   
+
 }

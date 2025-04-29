@@ -7,6 +7,7 @@ use App\Models\Section;
 use App\Models\Student_class;
 use App\Models\Student_subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class Subject_controller extends Controller
@@ -20,8 +21,24 @@ class Subject_controller extends Controller
     //    ->get();
         $data = Student_class::with('subjects')->latest()->get();
         $sections=Section::latest()->get();
-        //return $data;
-        return view('Backend.Pages.Student.Subject.index',compact('data','sections'));
+        foreach ( DB::table('student_classes')->get() as $class) {
+            $sections = DB::table('sections')->where('class_id', $class->id)->get();
+
+            foreach ($sections as $section) {
+                $subjects = DB::table('student_subjects')
+                    ->where('class_id', $class->id)
+                    ->where('section_id', $section->id)
+                    ->pluck('name')
+                    ->toArray();
+                $results[] = [
+                    'class_name' => $class->name,
+                    'section_name' => $section->name,
+                   'subjects' => implode('<br>', $subjects),
+                ];
+            }
+
+        }
+        return view('Backend.Pages.Student.Subject.index',compact('data','sections','results'));
     }
     public function all_data(Request $request)
     {
