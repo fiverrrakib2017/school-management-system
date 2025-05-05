@@ -215,23 +215,37 @@
         });
         /*********************** On Change Class Filter and Condition*******************************/
         $(document).on('change', 'select[name="section_id"]', function() {
-            var subjects = @json($subjects);
-            /*Get Class ID*/
-            var __select_seciton_id = $(this).val();
-
-            var filter_subjects = subjects.filter(function(section) {
-                /*Filter sections by class_id*/
-                return section.section_id == __select_seciton_id;
+            var exam_id=$("select[name='exam_id']").val();
+            var class_id=$("select[name='class_id']").val();
+            var section_id=$(this).val();
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('admin.student.exam.routine.get_subject_by_exam_routine') }}",
+                cache: true,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    class_id: class_id,
+                    section_id: section_id,
+                    exam_id: exam_id
+                },
+                success: function(response) {
+                    if (response.success) {
+                        var options = '<option value="">--Select--</option>';
+                        response.data.forEach(function(item) {
+                            if (item.subject) {
+                                options += '<option value="' + item.subject.id + '">' + item.subject.name + '</option>';
+                            }
+                        });
+                        $('select[name="subject_id"]').html(options);
+                        $('select[name="subject_id"]').select2(); 
+                    }
+                },
+                error: function() {
+                    toastr.error('An error occurred. Please try again.');
+                },
             });
-            /* Update Section dropdown*/
-            var options = '<option value="">--Select--</option>';
-            filter_subjects.forEach(function(section) {
-                options += '<option value="' + section.id + '">' + section.name + '</option>';
-            });
-
-            $('select[name="subject_id"]').html(options);
-            $('select[name="subject_id"]').select2();
-
         });
 
         /***********************  Student  Submit Result*******************************/

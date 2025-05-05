@@ -219,6 +219,22 @@ class ExamRoutine_controller extends Controller
             return response()->json(['success' => false, 'message' => 'Not found.']);
         }
     }
+    public function get_subject_by_exam_routine(Request $request)
+    {
+
+        $exam_id = $request->exam_id;
+        $class_id = $request->class_id;
+        $section_id=$request->section_id;
+        $data = Student_exam_routine::with(['exam', 'class', 'subject'])
+            ->where(['exam_id' => $exam_id, 'class_id' => $class_id, 'section_id' => $section_id])
+            ->get();
+        if ($data) {
+            return response()->json(['success' => true, 'data' => $data]);
+            exit();
+        } else {
+            return response()->json(['success' => false, 'message' => 'Not found.']);
+        }
+    }
     private function validateForm($request)
     {
         /*Validate the form data*/
