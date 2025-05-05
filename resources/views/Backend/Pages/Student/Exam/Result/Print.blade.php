@@ -221,8 +221,8 @@
                         <div class="student-info">
                             <table class="student-info-table">
                                 <tr>
-                                    <td> <strong>Name:</strong>{{ $result->first()->student->name }}</td>
-                                    <td><strong>Father's Name:</strong> {{ $result->first()->student->father_name }}
+                                    <td> <strong>Name:</strong>{{ $result->first()->student->name ?? 'N/A' }}</td>
+                                    <td><strong>Father's Name:</strong> {{ $result->first()->student->father_name ?? 'N/A' }}
                                     </td>
                                     <td rowspan="4" class="student-photo">
                                         <img src="{{ asset(!empty($result->first()->student->photo) ? 'uploads/photos/'.$result->first()->student->photo : 'uploads/photos/avatar.png') }}" alt="image">
@@ -230,11 +230,11 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Register No: </strong> N/A</td>
-                                    <td><strong>Roll No :</strong>{{ $result->first()->student->roll_no }}</td>
+                                    <td><strong>Roll No :</strong>{{ $result->first()->student->roll_no?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Date of Birth :</strong>{{ $result->first()->student->birth_date }}</td>
-                                    <td><strong>Session :</strong> 2024</td>
+                                    <td><strong>Date of Birth :</strong>{{ $result->first()->student->birth_date ?? 'N/A' }}</td>
+                                    <td><strong>Session :</strong> 2025</td>
                                 </tr>
                                 <tr>
                                     <td> <strong>Class: </strong>{{ $result->first()->student->currentClass->name }}
@@ -264,9 +264,9 @@
                                 @foreach ($result as $item)
                                     <tr>
                                         <td>{{ $item->subject->name }}</td>
-                                        <td>{{ intval($item->written_marks) }}</td>
-                                        <td>{{ intval($item->objective_marks) }}</td>
-                                        <td>{{ intval($item->practical_marks) }}</td>
+                                        <td>{{ intval($item->written_marks) }}/{{ intval($routines[$item->subject_id]->written_full ?? 0) }}</td>
+                                        <td>{{ intval($item->objective_marks) }}/{{ intval($routines[$item->subject_id]->objective_full ?? 0) }}</td>
+                                        <td>{{ intval($item->practical_marks) }}/{{ intval($routines[$item->subject_id]->practical_full ?? 0) }}</td>
 
                                         @php
                                             $written = intval($item->written_marks ?? 0);
@@ -301,7 +301,7 @@
                                             if ($is_fail) {
                                                 $grade = 'F';
                                                 $point = 0.0;
-                                                $remarks = '';
+                                                $remarks = 'Try Again';
                                             } else {
                                                 if ($percentage >= 80) {
                                                     $grade = 'A+';
@@ -330,7 +330,7 @@
                                                 } else {
                                                     $grade = 'F';
                                                     $point = 0.0;
-                                                    $remarks = 'Fail';
+                                                    $remarks = 'Try Again';
                                                 }
 
                                             }
