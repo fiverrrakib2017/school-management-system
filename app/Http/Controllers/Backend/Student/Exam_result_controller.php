@@ -202,8 +202,10 @@ class Exam_result_controller extends Controller
                 <th rowspan="2" style="vertical-align: middle;">Roll</th>';
 
         /* Add subject columns dynamically*/
-        foreach ($subjects as $subject) {
-            $html .= "<th colspan='5' style='text-align: center; background: #e0e0e0;'>{$subject->name}</th>";
+        $get_subject_from_routine=Student_exam_routine::with('subject')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get();
+
+        foreach ($get_subject_from_routine as $item) {
+            $html .= "<th colspan='5' style='text-align: center; background: #e0e0e0;'>{$item->subject->name}</th>";
         }
 
         $html .= '
@@ -216,7 +218,7 @@ class Exam_result_controller extends Controller
         <tr style="text-align: center; font-size: 12px;">';
 
         /*Add subcolumns for each subject (marks breakdown)*/
-        foreach ($subjects as $subject) {
+        foreach ($get_subject_from_routine as $item) {
             $html .= '<th>Wr</th><th>Ob</th><th>Pr</th><th>To</th><th>Gp</th>';
         }
 
