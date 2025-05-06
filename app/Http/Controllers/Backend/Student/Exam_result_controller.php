@@ -89,7 +89,10 @@ class Exam_result_controller extends Controller
     public function result_search_before_upload(Request $request)
     {
         /* Get all students of the class, section*/
-        $students = Student::where('current_class', $request->class_id)->where('section_id', $request->section_id)->get();
+        $students = Student::where('current_class', $request->class_id)
+        ->where('section_id', $request->section_id)
+        ->orderBy('roll_no', 'asc') 
+        ->get();
         $results = Student_exam_result::where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->where('subject_id', $request->subject_id)->get()->keyBy('student_id');
 
         // Attach result data to each student
