@@ -239,7 +239,7 @@
                             }
                         });
                         $('select[name="subject_id"]').html(options);
-                        $('select[name="subject_id"]').select2(); 
+                        $('select[name="subject_id"]').select2();
                     }
                 },
                 error: function() {
@@ -321,97 +321,6 @@
 
 
         /*********************** Show Student Data For Submit Result*******************************/
-
-        // $("button[name='submit_btn']").on('click',function(e){
-        //     e.preventDefault();
-        //     var exam_id = $("select[name='exam_id']").val();
-        //     var class_id = $("select[name='class_id']").val();
-        //     var section_id = $("select[name='section_id']").val();
-        //     var subject_id = $("select[name='subject_id']").val();
-        //     if(exam_id == ''){
-        //         toastr.error('Please Select Examination Name');
-        //         return false;
-        //     }
-        //     if(class_id == ''){
-        //         toastr.error('Please Select Class Name');
-        //         return false;
-        //     }
-        //     if(subject_id == ''){
-        //         toastr.error('Please Select Subject Name');
-        //         return false;
-        //     }
-
-        //     $("#className").text($('select[name="class_id"] option:selected').text());
-        //     $("#sectionName").text($('select[name="section_id"] option:selected').text());
-        //     $("#subjectName").text($('select[name="subject_id"] option:selected').text());
-        //     $("#examName").text($('select[name="exam_id"] option:selected').text());
-
-        //     var submitBtn =  $('#search_box').find('button[name="submit_btn"]');
-        //     submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
-        //     submitBtn.prop('disabled', true);
-        //     $.ajax({
-        //         type: 'POST',
-        //         url: "{{ route('admin.student.student_filter') }}",
-        //         cache: true,
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         data: {
-        //             class_id: class_id,
-        //             section_id: section_id,
-        //         },
-        //         success: function(response) {
-        //             $("#table_area").removeClass('d-none');
-
-        //         var _number = 1;
-        //         var html = '';
-
-        //         /*Check if the response data is an array*/
-        //         if (Array.isArray(response.data) && response.data.length > 0) {
-        //             response.data.forEach(function(data) {
-
-        //                 html += '<tr data-id="' + data.id + '">';
-        //                 html += '<td>' + (_number++) + '</td>';
-        //                 html += '<td>' + (data.name ? data.name : 'N/A') + '</td>';
-        //                 html += '<td>' + (data.roll_no ? data.roll_no : 'N/A') + '</td>';
-        //                 html += '<td><input type="checkbox" name="is_absent[' + data.id + ']"></td>';
-
-        //                 html += '<td><input class="form-control written_marks"  type="text" name="written_marks[' + data.id + ']" data-id="' + data.id + '"></td>';
-
-        //                 html += '<td><input class="form-control objective_marks"  type="text" name="objective_marks[' + data.id + ']" data-id="' + data.id + '"></td>';
-
-        //                 html += '<td><input class="form-control prectial_marks"  type="text" name="prectial_marks[' + data.id + ']" data-id="' + data.id + '"></td>';
-
-
-
-        //                 html += '<td><input class="form-control total_marks" type="text" name="total_marks[' + data.id + ']" data-id="' + data.id + '" value="100"></td>';
-
-        //                 html += '<td><input class="form-control grade" Placeholder="Grade" type="text" name="grade[' + data.id + ']" data-id="' + data.id + '" readonly></td>';
-
-
-
-        //                 html += '<td><input class="form-control" Placeholder="Enter Remarks" type="text" name="remarks[' + data.id + ']"></td>';
-
-        //                 html += '</tr>';
-        //             });
-        //         } else {
-        //             html += '<tr>';
-        //             html += '<td colspan="10" style="text-align: center;">No Data Available</td>';
-        //             html += '</tr>';
-        //         }
-
-        //         $("#_data").html(html);
-        //     },
-        //     error: function() {
-        //         toastr.error('An error occurred. Please try again.');
-        //     },
-        //     complete:function(){
-        //         submitBtn.html('<i class="fas fa-search"></i> Search Now');
-        //         submitBtn.prop('disabled', false);
-        //     }
-
-        //     });
-        // });
         $("button[name='submit_btn']").on('click', function(e) {
             e.preventDefault();
             var exam_id = $("select[name='exam_id']").val();
@@ -482,7 +391,7 @@
                                 data.id + ']" value="' + (data.objective_marks ?? '') +
                                 '"></td>';
                             html +=
-                                '<td><input class="form-control practical_marks" type="text" name="practical_marks[' +
+                                '<td><input class="form-control practical_marks" type="text" name="prectial_marks[' +
                                 data.id + ']" value="' + (data.practical_marks ?? '') +
                                 '"></td>';
 

@@ -101,10 +101,10 @@
                     <a href="{{ route('admin.student.exam.routine.create') }}" class="nav-link {{($route=='admin.student.exam.routine.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Add Schedule</p></a>
                  </li>
                  <li class="nav-item">
-                    <a href="{{ route('admin.student.exam.result.create') }}" class="nav-link  {{($route=='admin.student.exam.result.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Create Exam Result</p></a>
+                    <a href="{{ route('admin.student.exam.result.create') }}" class="nav-link  {{($route=='admin.student.exam.result.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Marks Entry</p></a>
                  </li>
                  <li class="nav-item">
-                    <a href="{{ route('admin.student.exam.result.report') }}" class="nav-link {{($route=='admin.student.exam.result.report') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Exam Result Report</p></a>
+                    <a href="{{ route('admin.student.exam.result.report') }}" class="nav-link {{($route=='admin.student.exam.result.report') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Report Card</p></a>
                  </li>
                  <li class="nav-item">
                     <a href="{{ route('admin.student.exam.result.trabulation.sheet') }}" class="nav-link {{($route=='admin.student.exam.result.trabulation.sheet') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Tabulation Sheet</p></a>
