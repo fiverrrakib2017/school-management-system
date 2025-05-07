@@ -117,6 +117,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update','update')->name('admin.student.subject.update');
                 Route::post('/store','store')->name('admin.student.subject.store');
                 Route::post('/delete','delete')->name('admin.student.subject.delete');
+                Route::post('/subject_filter','subject_filter')->name('admin.student.subject_filter');
                 Route::post('/get_subject_by_class','get_subject_by_class')->name('admin.student.subject.get_subject_by_class');
             });
         });
@@ -699,16 +700,18 @@ Route::group(['middleware'=>'admin'],function(){
             });
         });
     });
-    Route::get('/optimize',function(){
-        Artisan::call('optimize:clear');
-        return 'Optimize Clear Completed';
-    });
-    Route::get('/migrate', function () {
-        Artisan::call('migrate');
-        return 'Database Migration Completed';
-    });
-    Route::get('/student',function(){
-        return view('Backend.Pages.Student.test');
-    });
 
+});
+
+
+Route::get('/optimize',function(){
+    Artisan::call('optimize:clear');
+    return 'Optimize Clear Completed';
+});
+Route::get('/migrate', function () {
+    Artisan::call('migrate');
+    return 'Database Migration Completed';
+});
+Route::get('/student',function(){
+    return view('Backend.Pages.Student.test');
 });

@@ -13,32 +13,10 @@ use Illuminate\Support\Facades\Validator;
 class Subject_controller extends Controller
 {
     public function index(){
-
-    //    $classes = Student_class::get();
-    //    $subjects = Student_subject::join('student_classes', 'student_subjects.class_id', '=', 'student_classes.id')
-    //    ->select('student_subjects.*', 'student_classes.name as class_name')
-    //    ->orderBy('student_subjects.class_id')
-    //    ->get();
         $data = Student_class::with('subjects')->latest()->get();
         $sections=Section::latest()->get();
-        foreach ( DB::table('student_classes')->get() as $class) {
-            $sections = DB::table('sections')->where('class_id', $class->id)->get();
 
-            foreach ($sections as $section) {
-                $subjects = DB::table('student_subjects')
-                    ->where('class_id', $class->id)
-                    ->where('section_id', $section->id)
-                    ->pluck('name')
-                    ->toArray();
-                $results[] = [
-                    'class_name' => $class->name,
-                    'section_name' => $section->name,
-                   'subjects' => implode('<br>', $subjects),
-                ];
-            }
-
-        }
-        return view('Backend.Pages.Student.Subject.index',compact('data','sections','results'));
+        return view('Backend.Pages.Student.Subject.index',compact('data','sections'));
     }
     public function all_data(Request $request)
     {
@@ -140,7 +118,7 @@ class Subject_controller extends Controller
             $object = Student_subject::where('class_id', $request->class_id)->where('section_id', $request->section_id)->get();
         }
 
-       
+
 
 
         if ($object) {
@@ -155,11 +133,16 @@ class Subject_controller extends Controller
             'message' => 'Subject not found'
         ], 404);
     }
-
+    public function subject_filter(Request $request){
+        $object = Student_subject::with('class', 'section')->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get();
+        return response()->json([
+            'success' => true,
+            'data' => $object
+        ]);
+    }
     public function update(Request $request){
         /*Validate the incoming request data*/
         $validator = Validator::make($request->all(), [
-            'class_id' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 
@@ -180,7 +163,6 @@ class Subject_controller extends Controller
         }
 
         /* Update the  record */
-        $object->class_id = $request->class_id;
         $object->name = $request->name;
         $object->save();
 

@@ -11,5 +11,8 @@ class Student_subject extends Model
     public function class(){
         return $this->belongsTo(Student_class::class, 'class_id', 'id');
     }
+    public function section(){
+        return $this->belongsTo(Section::class, 'section_id', 'id');
+    }
 
 }
