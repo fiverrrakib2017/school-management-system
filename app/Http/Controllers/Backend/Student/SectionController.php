@@ -17,22 +17,29 @@ class SectionController extends Controller
     }
     public function all_data(Request $request){
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'name', 'created_at'];
-        $orderByColumn = $request->order[0]['column'];
-        $orderDirectection = $request->order[0]['dir'];
+        $columnsForOrderBy = ['id','class_id', 'name', 'created_at'];
+        $orderByColumn = $columnsForOrderBy[$request->order[0]['column']];
+        $orderDirection = $request->order[0]['dir'];
 
-        $object = Section::when($search, function ($query) use ($search) {
-            $query->where('name', 'like', "%$search%");
-        })->orderBy($columnsForOrderBy[$orderByColumn], $orderDirectection);
+        $query = Section::with(['studentClass'])->when($search, function ($query) use ($search) {
 
-        $total = $object->count();
-        $item = $object->skip($request->start)->take($request->length)->get();
+            $query->where('name', 'like', "%$search%")
+                  ->orWhereHas('studentClass', function ($query) use ($search) {
+                      $query->where('name', 'like', "%$search%");
+                  });
+        });
+
+        $total = $query->count();
+        $items = $query->orderBy($orderByColumn, $orderDirection)
+                       ->skip($request->start)
+                       ->take($request->length)
+                       ->get();
 
         return response()->json([
             'draw' => $request->draw,
             'recordsTotal' => $total,
             'recordsFiltered' => $total,
-            'data' => $item,
+            'data' => $items,
         ]);
     }
     public function store(Request $request){

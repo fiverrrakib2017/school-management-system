@@ -12,7 +12,7 @@
 
 
                 <div class="table-responsive" id="tableStyle">
-                    <table id="datatable122" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th class="">No.</th>
@@ -22,20 +22,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($classes as $key => $class)
-                            <tr>
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ $class->name }}</td>
-                                <td>
-                                    @foreach ($class->sections as $section)
-                                        <span >{{ $section->name }}</span><br>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    {{-- <a href="#" class="btn btn-sm btn-warning">Edit</a> --}}
-                                </td>
-                            </tr>
-                        @endforeach
+                        
                         </tbody>
                     </table>
                 </div>
@@ -159,40 +146,40 @@
   <script type="text/javascript">
     $(document).ready(function(){
 
-        // var table=$("#datatable1").DataTable({
-        // "processing":true,
-        // "responsive": true,
-        // "serverSide":true,
+        var table=$("#datatable1").DataTable({
+        "processing":true,
+        "responsive": true,
+        "serverSide":true,
 
-        // ajax: "{{ route('admin.student.class.all_data') }}",
-        // language: {
-        //     searchPlaceholder: 'Search...',
-        //     sSearch: '',
-        //     lengthMenu: '_MENU_ items/page',
-        // },
-        // "columns":[
-        //     {
-        //     "data":"id"
-        //     },
-        //     {
-        //     "data":"name"
-        //     },
-        //     {
-        //     "data":"sections"
-        //     },
-        //     {
-        //     "data":null,
-        //     render:function(data,type,row){
-        //         return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-        //         <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
-        //     }
-        //     },
-        // ],
-        // order:[
-        //     [0, "desc"]
-        // ],
+        ajax: "{{ route('admin.student.section.all_data') }}",
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
+        },
+        "columns":[
+            {
+            "data":"id"
+            },
+            {
+            "data":"student_class.name"
+            },
+            {
+            "data":"name"
+            },
+            {
+            "data":null,
+            render:function(data,type,row){
+                return `<button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-danger btn-sm mr-3 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="${row.id}"><i class="fa fa-trash"></i></button>`
+            }
+            },
+        ],
+        order:[
+            [0, "desc"]
+        ],
 
-        // });
+        });
     });
 
 
