@@ -242,10 +242,6 @@
                     const subjects = response.subjects;
                     const teachers = response.teachers;
 
-                    // if (response.success && response.data.length === 0) {
-                    //     toastr.info('No routine found for this class and section.');
-                    //     return false;
-                    // }
                     if (subjects.length === 0) {
                         toastr.error('No subjects found for this class and section.');
                         return false;
@@ -263,20 +259,20 @@
                                         <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
                                             <option value="">--- Select ---</option>
                                             ${subjects.map(subject => `
-                                                            <option value="${subject.id}" ${subject.id == item.subject_id ? 'selected' : ''}>
-                                                                ${subject.name}
-                                                            </option>
-                                                        `).join('')}
+                                                                <option value="${subject.id}" ${subject.id == item.subject_id ? 'selected' : ''}>
+                                                                    ${subject.name}
+                                                                </option>
+                                                            `).join('')}
                                         </select>
                                     </td>
                                     <td>
                                         <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
                                             <option value="">--- Select ---</option>
                                             ${teachers.map(teacher => `
-                                                            <option value="${teacher.id}" ${teacher.id == item.teacher_id ? 'selected' : ''}>
-                                                                ${teacher.name}
-                                                            </option>
-                                                        `).join('')}
+                                                    <option value="${teacher.id}" ${teacher.id == item.teacher_id ? 'selected' : ''}>
+                                                        ${teacher.name}
+                                                    </option>
+                                                `).join('')}
                                         </select>
                                     </td>
                                     <td>
@@ -308,20 +304,20 @@
                                         <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
                                             <option value="">--- Select ---</option>
                                                 ${subjects.map(subject => `
-                                                        <option value="${subject.id}">
-                                                            ${subject.name}
-                                                        </option>
-                                                    `).join('')}
+                                                            <option value="${subject.id}">
+                                                                ${subject.name}
+                                                            </option>
+                                                        `).join('')}
                                         </select>
                                     </td>
                                     <td>
                                         <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
                                             <option value="">--- Select ---</option>
                                             ${teachers.map(teacher => `
-                                                    <option value="${teacher.id}">
-                                                        ${teacher.name}
-                                                    </option>
-                                                `).join('')}
+                                                        <option value="${teacher.id}">
+                                                            ${teacher.name}
+                                                        </option>
+                                                    `).join('')}
                                         </select>
                                     </td>
                                     <td>
@@ -361,64 +357,60 @@
             });
         });
 
+        /* Submit routine form using AJAX*/
+        $("#routineForm").submit(function(e) {
+            e.preventDefault();
 
-        handle_submit_form("#routineForm");
+            /* Get the submit button */
+            var submitBtn = $(this).find('button[type="submit"]');
+            var originalBtnText = submitBtn.html();
 
-        function handle_submit_form(formSelector) {
-            $(formSelector).submit(function(e) {
-                e.preventDefault();
+            submitBtn.html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden"></span>'
+            );
+            submitBtn.prop('disabled', true);
 
-                /* Get the submit button */
-                var submitBtn = $(this).find('button[type="submit"]');
-                var originalBtnText = submitBtn.html();
-
-                submitBtn.html(
-                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden"></span>'
-                    );
-                submitBtn.prop('disabled', true);
-
-                var form = $(this);
-                var formData = new FormData(this);
-                /* Send the form data using AJAX*/
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: formData,
-                    beforeSend: function() {
-                        form.find(':input').prop('disabled', true);
-                    },
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            toastr.success(response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 422) {
-                            /* Validation error*/
-                            var errors = xhr.responseJSON.errors;
-
-                            /* Loop through the errors and show them using toastr*/
-                            $.each(errors, function(field, messages) {
-                                $.each(messages, function(index, message) {
-                                    /* Display each error message*/
-                                    toastr.error(message);
-                                });
-                            });
-                        } else {
-                            /*General error message*/
-                            toastr.error('An error occurred. Please try again.');
-                        }
-                    },
-                    complete: function() {
-                        submitBtn.html(originalBtnText);
-                        submitBtn.prop('disabled', false);
-                        form.find(':input').prop('disabled', false);
+            var form = $(this);
+            var formData = new FormData(this);
+            /* Send the form data using AJAX*/
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: formData,
+                beforeSend: function() {
+                    form.find(':input').prop('disabled', true);
+                },
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
                     }
-                });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        /* Validation error*/
+                        var errors = xhr.responseJSON.errors;
+
+                        /* Loop through the errors and show them using toastr*/
+                        $.each(errors, function(field, messages) {
+                            $.each(messages, function(index, message) {
+                                /* Display each error message*/
+                                toastr.error(message);
+                            });
+                        });
+                    } else {
+                        /*General error message*/
+                        toastr.error('An error occurred. Please try again.');
+                    }
+                },
+                complete: function() {
+                    submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                    form.find(':input').prop('disabled', false);
+                }
             });
-        }
+        });
     </script>
 
 @endsection
