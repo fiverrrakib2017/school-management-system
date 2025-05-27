@@ -7,7 +7,7 @@
     <div class="row" id="main_div">
         <div class="col-md-12 ">
             <div class="card">
-                <form action="{{ route('admin.student.exam.routine.store') }}" method="POST" id="routineForm">
+                <form action="{{ route('admin.student.class.routine.store') }}" method="POST" id="routineForm">
                     @csrf
                     <div class="card-header">
                         <div class="row" id="search_box">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="schedule_area ">
+                    <div class="schedule_area d-none">
                         <div class="card-header">
                             <h4 class="mb-0">
                                 <i class="far fa-clock mr-2"></i>
@@ -143,6 +143,13 @@
                     <td>
                         <select class="form-control day-select" name="routines[${rowCount}][day]" required>
                             <option value="">--- Select ---</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
 
                         </select>
                     </td>
@@ -235,10 +242,10 @@
                     const subjects = response.subjects;
                     const teachers = response.teachers;
 
-                    if (response.success && response.data.length === 0) {
-                        toastr.info('No routine found for this class and section.');
-                        return false;
-                    }
+                    // if (response.success && response.data.length === 0) {
+                    //     toastr.info('No routine found for this class and section.');
+                    //     return false;
+                    // }
                     if (subjects.length === 0) {
                         toastr.error('No subjects found for this class and section.');
                         return false;
@@ -256,24 +263,24 @@
                                         <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
                                             <option value="">--- Select ---</option>
                                             ${subjects.map(subject => `
-                                                        <option value="${subject.id}" ${subject.id == item.subject_id ? 'selected' : ''}>
-                                                            ${subject.name}
-                                                        </option>
-                                                    `).join('')}
+                                                            <option value="${subject.id}" ${subject.id == item.subject_id ? 'selected' : ''}>
+                                                                ${subject.name}
+                                                            </option>
+                                                        `).join('')}
                                         </select>
                                     </td>
                                     <td>
                                         <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
                                             <option value="">--- Select ---</option>
                                             ${teachers.map(teacher => `
-                                                        <option value="${teacher.id}" ${teacher.id == item.teacher_id ? 'selected' : ''}>
-                                                            ${teacher.name}
-                                                        </option>
-                                                    `).join('')}
+                                                            <option value="${teacher.id}" ${teacher.id == item.teacher_id ? 'selected' : ''}>
+                                                                ${teacher.name}
+                                                            </option>
+                                                        `).join('')}
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
+                                        <select class="form-control teacher-select" name="routines[${rowCount}][day]" required>
                                             <option value="">--- Select ---</option>
                                             <option value="Saturday" ${item.day == 'Saturday' ? 'selected' : ''}>Saturday</option>
                                             <option value="Sunday" ${item.day == 'Sunday' ? 'selected' : ''}>Sunday</option>
@@ -293,38 +300,50 @@
                             $('#_data').html(html);
                         });
 
+                    } else {
+                        html += `
+                                <tr class="routine-row">
+                                    <td>${++rowCount}</td>
+                                    <td>
+                                        <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
+                                            <option value="">--- Select ---</option>
+                                                ${subjects.map(subject => `
+                                                        <option value="${subject.id}">
+                                                            ${subject.name}
+                                                        </option>
+                                                    `).join('')}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
+                                            <option value="">--- Select ---</option>
+                                            ${teachers.map(teacher => `
+                                                    <option value="${teacher.id}">
+                                                        ${teacher.name}
+                                                    </option>
+                                                `).join('')}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control day-select" name="routines[${rowCount}][day]" required>
+                                            <option value="">--- Select ---</option>
+                                            <option value="Saturday">Saturday</option>
+                                            <option value="Sunday">Sunday</option>
+                                            <option value="Monday">Monday</option>
+                                            <option value="Tuesday">Tuesday</option>
+                                            <option value="Wednesday">Wednesday</option>
+                                            <option value="Thursday">Thursday</option>
+                                            <option value="Friday">Friday</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="time" class="form-control" name="routines[${rowCount}][start_time]"  required></td>
+                                    <td><input type="time" class="form-control" name="routines[${rowCount}][end_time]"required></td>
+
+                                    <td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
+                                </tr>
+                            `;
+                        $('#_data').html(html);
                     }
-
-                    // else {
-                    //     html += `
-                    //             <tr class="routine-row">
-                    //                 <td>${++rowCount}</td>
-                    //                 <td>
-                    //                     <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
-                    //                         <option value="">--- Select ---</option>
-
-                    //                     </select>
-                    //                 </td>
-                    //                 <td>
-                    //                     <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
-                    //                         <option value="">--- Select ---</option>
-
-                    //                     </select>
-                    //                 </td>
-                    //                 <td>
-                    //                     <select class="form-control day-select" name="routines[${rowCount}][day]" required>
-                    //                         <option value="">--- Select ---</option>
-
-                    //                     </select>
-                    //                 </td>
-                    //                 <td><input type="time" class="form-control" name="routines[${rowCount}][start_time]"  required></td>
-                    //                 <td><input type="time" class="form-control" name="routines[${rowCount}][end_time]"required></td>
-
-                    //                 <td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
-                    //             </tr>
-                    //         `;
-                    //     $('#_data').html(html);
-                    // }
 
 
 
@@ -341,6 +360,65 @@
 
             });
         });
+
+
+        handle_submit_form("#routineForm");
+
+        function handle_submit_form(formSelector) {
+            $(formSelector).submit(function(e) {
+                e.preventDefault();
+
+                /* Get the submit button */
+                var submitBtn = $(this).find('button[type="submit"]');
+                var originalBtnText = submitBtn.html();
+
+                submitBtn.html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden"></span>'
+                    );
+                submitBtn.prop('disabled', true);
+
+                var form = $(this);
+                var formData = new FormData(this);
+                /* Send the form data using AJAX*/
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    beforeSend: function() {
+                        form.find(':input').prop('disabled', true);
+                    },
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            /* Validation error*/
+                            var errors = xhr.responseJSON.errors;
+
+                            /* Loop through the errors and show them using toastr*/
+                            $.each(errors, function(field, messages) {
+                                $.each(messages, function(index, message) {
+                                    /* Display each error message*/
+                                    toastr.error(message);
+                                });
+                            });
+                        } else {
+                            /*General error message*/
+                            toastr.error('An error occurred. Please try again.');
+                        }
+                    },
+                    complete: function() {
+                        submitBtn.html(originalBtnText);
+                        submitBtn.prop('disabled', false);
+                        form.find(':input').prop('disabled', false);
+                    }
+                });
+            });
+        }
     </script>
 
 @endsection

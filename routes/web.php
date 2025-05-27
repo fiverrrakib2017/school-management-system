@@ -97,13 +97,8 @@ Route::group(['middleware'=>'admin'],function(){
             Route::prefix('routine')->group(function(){
                 Route::controller(ClassRoutine_controller::class)->group(function(){
                     Route::get('/list','index')->name('admin.student.class.routine.index');
-                    Route::get('/all_data','all_data')->name('admin.student.class.routine.all_data');
-                    Route::get('/edit/{id}','edit')->name('admin.student.class.routine.edit');
-                    Route::post('/update','update')->name('admin.student.class.routine.update');
                     Route::post('/store','store')->name('admin.student.class.routine.store');
-                    Route::post('/delete','delete')->name('admin.student.class.routine.delete');
                     Route::get('/print','print')->name('admin.student.class.routine.print');
-                    Route::get('/get_routine_data','get_routine_data')->name('admin.student.class.routine.data');
                     Route::post('/get_class_routine','get_class_routine')->name('admin.student.class.routine.get_class_routine');
 
                 });
