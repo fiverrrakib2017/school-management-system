@@ -92,6 +92,22 @@ class TeacherController extends Controller
             'message' => 'Teacher added successfully!'
         ]);
     }
+    public function get_teacher(){
+        
+        $teachers = Teacher::latest()->get();
+
+        if ($teachers->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No teachers found!'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $teachers
+        ]);
+    }
     public function edit($id){
         $data = Teacher::find($id);
 

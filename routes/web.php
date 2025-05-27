@@ -104,6 +104,7 @@ Route::group(['middleware'=>'admin'],function(){
                     Route::post('/delete','delete')->name('admin.student.class.routine.delete');
                     Route::get('/print','print')->name('admin.student.class.routine.print');
                     Route::get('/get_routine_data','get_routine_data')->name('admin.student.class.routine.data');
+                    Route::post('/get_class_routine','get_class_routine')->name('admin.student.class.routine.get_class_routine');
 
                 });
             });
@@ -294,6 +295,7 @@ Route::group(['middleware'=>'admin'],function(){
             Route::get('/create','create')->name('admin.teacher.create');
             Route::post('/store','store')->name('admin.teacher.store');
             Route::get('/list','index')->name('admin.teacher.index');
+            Route::get('/get_teacher','get_teacher')->name('admin.teacher.get_teacher');
             Route::get('/all_data','all_data')->name('admin.teacher.all_data');
             Route::get('/edit/{id}','edit')->name('admin.teacher.edit');
             Route::post('/update/{id}','update')->name('admin.teacher.update');

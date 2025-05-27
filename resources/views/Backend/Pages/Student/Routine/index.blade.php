@@ -1,641 +1,346 @@
 @php
-$website_info=App\Models\Website_information::first();
+    $website_info = App\Models\Website_information::first();
 @endphp
 @extends('Backend.Layout.App')
-@section('title','Dashboard | Admin Panel')
-@section('style')
-<style>
-    /* Print CSS */
-    @media print {
-        #printButton {
-            display: none;
-        }
-        .card {
-            border: none;
-            box-shadow: none;
-        }
-    }
-    .school-header {
-        text-align: center;
-        padding: 15px;
-    }
-    .school-header img {
-        height: 80px;
-        width: 80px;
-        margin-bottom: 10px;
-    }
-    .school-header h2 {
-        font-weight: 100;
-        margin-bottom: 5px;
-    }
-    .school-header p {
-        margin-bottom: 5px;
-        font-size: 14px;
-        color: #555;
-    }
-    .info-box {
-        background: #f8f9fa;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 15px;
-        font-size: 16px;
-        font-weight: bold;
-    }
-    @media print {
-        th.hide-on-print, td.hide-on-print {
-            display: none !important;
-        }
-    }
-</style>
-@endsection
+@section('title', 'Dashboard | Admin Panel')
 @section('content')
-<div class="row">
-    <div class="col-md-12 ">
-        <div class="card">
-            <div class="card-header">
-                <div class="row" id="search_box">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">Class</label>
-                            <select name="class_id"  class="form-control">
-                                <option value="">---Select---</option>
-                                @php
-                                    $classes = \App\Models\Student_class::latest()->get();
-                                @endphp
-                                @if($classes->isNotEmpty())
-                                    @foreach($classes as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
+    <div class="row" id="main_div">
+        <div class="col-md-12 ">
+            <div class="card">
+                <form action="{{ route('admin.student.exam.routine.store') }}" method="POST" id="routineForm">
+                    @csrf
+                    <div class="card-header">
+                        <div class="row" id="search_box">
+
+                            <div class="col-md-3">
+                                <div class="form-group mb-2">
+                                    <label for="class_id" class="form-label">Class <span
+                                            class="text-danger">*</span></label>
+                                    <select name="class_id" id="class_id" class="form-control" style="width: 100%"
+                                        required>
+                                        <option value="">---Select---</option>
+                                        @php
+                                            $classes = \App\Models\Student_class::latest()->get();
+                                        @endphp
+                                        @if ($classes->isNotEmpty())
+                                            @foreach ($classes as $item)
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-2">
+                                    <label for="section_id" class="form-label">Section <span
+                                            class="text-danger">*</span></label>
+                                    <select name="section_id" id="section_id" class="form-control" style="width: 100%">
+                                        <option value="">---Select---</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mt-3">
+                                    <button type="button" name="submit_btn" class="btn btn-success"
+                                        style="margin-top: 16px">
+                                        <i class="fas fa-filter"></i> Filter Now</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">Section</label>
-                            <select name="section_id"  class="form-control">
-                                <option value="">---Select---</option>
-                            </select>
+                    <div class="schedule_area ">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                <i class="far fa-clock mr-2"></i>
+                                Class Routine Schedule
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive responsive-table">
+                                <table class="table table-bordered text-nowrap" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th style="min-width: 60px;">No.</th>
+                                            <th style="min-width: 150px;">Subject</th>
+                                            <th style="min-width: 120px;">Teacher</th>
+                                            <th style="min-width: 120px;">Day</th>
+                                            <th style="min-width: 100px;">Start Time</th>
+                                            <th style="min-width: 100px;">End Time</th>
+                                            <th style="min-width: 80px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="_data">
+                                    </tbody>
+                                </table>
+
+                                <button type="button" class="btn btn-success mt-2" id="addMoreBtn">+ Add More</button>
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- Footer -->
+                        <div class="card-footer text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                <i class="fas fa-back"></i> Back
+                            </button>
+                            <button type="submit" name="submit_routine_btn" class="btn btn-primary ">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
                         </div>
                     </div>
-
-                    <div class="col-md-2">
-                        <div class="form-group ">
-                        <button type="submit" name="submit_btn" class="btn btn-success" style="margin-top: 30px;"><i class="mdi mdi-magnify"></i> Find Class Routine</button>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group " style="float: left;">
-                        <button data-toggle="modal" data-target="#addModal" type="button" class="btn btn-primary " style="margin-top: 30px;">Create Class Routine</button>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
+
         </div>
     </div>
-</div>
 
-<div class="row d-none" id="table_area">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <button id="printButton" class="btn btn-primary"><i class="fas fa-print"></i></button>
-            </div>
-            <div class="card-body" id="printArea">
 
-                 <!-- School Header -->
-                 <div id="printHeader" class="school-header">
-                    <img src="{{ asset('Backend/uploads/photos/' . ($website_info->logo ?? 'default-logo.jpg')) }}" alt="School Logo">
-                    <h2>{{ $website_info->name ?? 'Future ICT School' }}</h2>
-                    <p>{{ $website_info->address ?? 'Daudkandi , Chittagong , Bangladesh' }}</p>
 
-                    <span><strong><span id="">Class Routine</span></strong><br>
-                    <span><strong>Class:</strong> <span id="className"></span> | </span>
-                    <span><strong>Section:</strong> <span id="sectionName"></span>  </span>
-                </div>
-                <div class="table-responsive" id="tableStyle">
-                    <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
-                            <tr>
-                                <th class="">No.</th>
-                                <th class="">Subject Name</th>
-                                <th class="">Subject Teacher</th>
-                                <th class="">Day </th>
-                                <th class="">Start Time</th>
-                                <th class="">End Time</th>
-                                <th class="hide-on-print"></th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Add  Modal -->
-<div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Add Class Routine
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-            </div>
-            <!----- Start Add Form ------->
-            <form id="addSectionForm" action="{{ route('admin.student.class.routine.store') }}" method="post">
-                @csrf
-                <div class="modal-body">
-                    <!----- Start Add Form input ------->
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Class Name</label>
-                            <select type="text" name="class_id"  class="form-select" style="width: 100%;">
-                                <option value="">---Select---</option>
-                                @foreach ($classes as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Section Name</label>
-                            <select type="text" name="section_id"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Subject Name</label>
-                            <select type="text" name="subject_id"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Day Of Week</label>
-                            <select type="text" name="day"  class="form-control " style="width: 100%;">
-                                <option value="">---Select---</option>
-                                <option value="Saturday">Saturday</option>
-                                <option value="Sunday">Sunday</option>
-                                <option value="Monday">Monday</option>
-                                <option value="Tuesday">Tuesday</option>
-                                <option value="Wednesday">Wednesday</option>
-                                <option value="Thursday">Thursday</option>
-                                <option value="Friday">Friday</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Teacher Name</label>
-                            <select type="text" name="teacher_id"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-                                @foreach ($teachers as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="">Start Time</label>
-                            <input type="time" name="start_time"  class="form-control">
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="">End Time</label>
-                            <input type="time" name="end_time"  class="form-control">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
-                </div>
-            </form>
-            <!----- End Add Form ------->
-        </div>
-    </div>
-</div>
-<!-- Edit  Modal -->
-<div class="modal fade bs-example-modal-lg" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    <span class="mdi mdi-account-check mdi-18px"></span> &nbsp;Update Class Routine
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-            </div>
-            <!----- Start Update Form ------->
-            <form id="addSectionForm" action="{{ route('admin.student.class.routine.update') }}" method="post">
-                @csrf
-                <div class="modal-body">
-                    <!----- Start Update Form input ------->
-                        <div class="form-group mb-2">
-                            <label for="">Class Name</label>
-                            <input type="text" name="id" class="d-none">
-                            <select type="text" name="class_id"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-                                @foreach ($classes as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="">Section Name</label>
-                            <select type="text" name="section_id"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Subject Name</label>
-                            <select type="text" name="subject_id"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-                                @foreach ($subjects as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Day Of Week</label>
-                            <select type="text" name="day"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-                                <option value="Saturday">Saturday</option>
-                                <option value="Sunday">Sunday</option>
-                                <option value="Monday">Monday</option>
-                                <option value="Tuesday">Tuesday</option>
-                                <option value="Wednesday">Wednesday</option>
-                                <option value="Thursday">Thursday</option>
-                                <option value="Friday">Friday</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="sectionName">Teacher Name</label>
-                            <select type="text" name="teacher_id"  class="form-control" style="width: 100%;">
-                                <option value="">---Select---</option>
-                                @foreach ($teachers as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="">Start Time</label>
-                            <input type="time" name="start_time"  class="form-control">
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="">End Time</label>
-                            <input type="time" name="end_time"  class="form-control">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success tx-size-xs">Save changes</button>
-                    <button type="button" class="btn btn-danger tx-size-xs" data-dismiss="modal">Close</button>
-                </div>
-            </form>
-            <!----- End Update Form ------->
-        </div>
-    </div>
-</div>
-<div id="deleteModal" class="modal fade">
-    <div class="modal-dialog modal-confirm">
-        <form action="{{route('admin.student.class.routine.delete')}}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div class="modal-content">
-            <div class="modal-header flex-column">
-                <div class="icon-box">
-                    <i class="fas fa-trash"></i>
-                </div>
-                <h4 class="modal-title w-100">Are you sure?</h4>
-                <input type="hidden" name="id" value="">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-            </div>
-            <div class="modal-body">
-                <p>Do you really want to delete these records? This process cannot be undone.</p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </div>
-            </div>
-        </form>
-    </div>
-</div>
 @endsection
 
 @section('script')
 
-  <script type="text/javascript">
-   $("select").select2();
-    $(document).on('change','select[name="class_id"]',function(){
-        var sections = @json($sections);
-        var subjects = @json($subjects);
-        /*Get Class ID*/
-        var selectedClassId = $(this).val();
+    <script type="text/javascript">
+        let rowCount = 0;
+        $("select").select2();
+        $(document).on('change', 'select[name="class_id"]', function() {
+            var sections = @json($sections);
+            /*Get Class ID*/
+            var select_calss_id = $(this).val();
 
-        var filteredSections = sections.filter(function(section) {
-            /*Filter sections by class_id*/
-            return section.class_id == selectedClassId;
+            var filteredSections = sections.filter(function(section) {
+                /*Filter sections by class_id*/
+                return section.class_id == select_calss_id;
+            });
+            /* Update Section dropdown*/
+            var sectionOptions = '<option value="">--Select--</option>';
+            filteredSections.forEach(function(section) {
+                sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+            });
+            $('select[name="section_id"]').html(sectionOptions);
         });
-         /* Update Subject dropdown*/
-         var filteredSubjects = subjects.filter(function(subject) {
-            /*Filter subject by class_id*/
-            return subject.class_id == selectedClassId;
-        });
+        /* Add new routine row*/
+        $('#addMoreBtn').on('click', function(e) {
+            e.preventDefault();
 
-        /* Update Section dropdown*/
-        var sectionOptions = '<option value="">--Select--</option>';
-        filteredSections.forEach(function(section) {
-            sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
-        });
-        /* Update Subject dropdown*/
-        var subjectOptions = '<option value="">--Select--</option>';
-        filteredSubjects.forEach(function(subject) {
-            subjectOptions += '<option value="' + subject.id + '">' + subject.name + '</option>';
-        });
+            let newRow = `
+                <tr class="routine-row">
+                    <td>${++rowCount}</td>
+                    <td>
+                        <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
+                            <option value="">--- Select ---</option>
+
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
+                            <option value="">--- Select ---</option>
+
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control day-select" name="routines[${rowCount}][day]" required>
+                            <option value="">--- Select ---</option>
+
+                        </select>
+                    </td>
+                    <td><input type="time" class="form-control" name="routines[${rowCount}][start_time]" required></td>
+                    <td><input type="time" class="form-control" name="routines[${rowCount}][end_time]" required></td>
+
+                    <td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
+                </tr>`;
+
+            $('#_data').append(newRow);
+            /*Get Subject class and section wise*/
+            const classId = $('#class_id').val();
+            const section_id = $('#section_id').val();
+            if (classId) {
+                $.ajax({
+                    url: "{{ route('admin.student.subject_filter') }}",
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        class_id: classId,
+                        section_id: section_id
+                    },
+                    success: function(res) {
+                        const newSelect = $(' .routine-row:last .subject-select');
+                        newSelect.empty().append('<option>---Select---</option>');
+                        res.data.forEach(item => {
+                            newSelect.append(
+                                `<option value="${item.id}">${item.name}</option>`);
+                        });
 
 
-
-        $('select[name="section_id"]').html(sectionOptions);
-        $('select[name="subject_id"]').html(subjectOptions);
-    });
-
-    $(document).on('click',"button[name='submit_btn']",function(){
-        var class_id= $("select[name='class_id']").val();
-        var section_id= $("select[name='section_id']").val();
-
-        $("#className").text($('#search_box select[name="class_id"] option:selected').text());
-        $("#sectionName").text($('#search_box select[name="section_id"] option:selected').text());
-        $("#examName").text($('#search_box select[name="exam_id"] option:selected').text());
-
-        var submitBtn =  $('#search_box').find('button[type="submit"]');
-        var originalBtnText = submitBtn.html();
-        submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
-        submitBtn.prop('disabled', true);
-        $.ajax({
-            url: "{{ route('admin.student.class.routine.data') }}",
-            type: "GET",
-            data: { class_id: class_id, section_id: section_id },
-            beforeSend: function(request) {
-                request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-            },
-            success: function(response) {
-                /* Check if the response is successful */
-                if (response.success) {
-                    $('#table_area').removeClass('d-none');
-                    $('#no-data').remove();
-                } else {
-                    $('#table_area').addClass('d-none');
-                    $('#routine_data').html('<tr id="no-data"><td colspan="10" class="text-center">No data available</td></tr>');
-                }
-                if(response.code == 200 && response.data.length > 0 && response.data != null && response.data != undefined && response.data != '' && response.data != 'null' && response.data != 'undefined'){
-                    var html='';
-                    var i = 1;
-                    $.each(response.data, function(key, routine) {
-                        html += '<tr>';
-                        html += '<td>' + i++ + '</td>';
-                        html += '<td>' + routine.subject.name + '</td>';
-                        html += '<td>' + routine.teacher.name + '</td>';
-                        html += '<td>' + routine.day + '</td>';
-                        html += '<td>' +_time_formate(routine.start_time) +  '</td>';
-                        html += '<td>' +_time_formate(routine.end_time) +  '</td>';
-                        html += '<td class="hide-on-print">';
-                        html += '<button class="btn btn-primary btn-sm mr-2 edit-btn" data-id="' + routine.id + '" style="margin-right: 5px"><i class="fa fa-edit"></i></button>';
-                        html += '<button class="btn btn-danger btn-sm mr-2 delete-btn" data-toggle="modal" data-target="#deleteModal" data-id="' + routine.id + '"><i class="fa fa-trash"></i></button>';
-                        html += '</td>';
-                        html += '</tr>';
+                    }
+                });
+            }
+            /*Get Teacher */
+            $.ajax({
+                url: "{{ route('admin.teacher.get_teacher') }}",
+                method: 'GET',
+                // headers: {
+                //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                // },
+                success: function(res) {
+                    const newSelect = $(' .routine-row:last .teacher-select');
+                    newSelect.empty().append('<option>---Select---</option>');
+                    res.data.forEach(item => {
+                        newSelect.append(
+                            `<option value="${item.id}">${item.name}</option>`);
                     });
 
-                    $('#datatable1 tbody').html(html);
-                    submitBtn.html(originalBtnText);
-                    submitBtn.prop('disabled', false);
-                }else{
-                    $('#datatable1 tbody').html('<tr id="no-data"><td colspan="7" class="text-center">No data available</td></tr>');
-                }
 
-            },
-            error: function(xhr) {
-                console.log(xhr.responseText);
-                alert('Failed to load data. Please try again.');
-            },
-            complete:function (){
-                submitBtn.html(originalBtnText);
-                submitBtn.prop('disabled', false);
-            }
+                }
+            });
         });
 
-    });
+        /* Remove row*/
+        $(document).on('click', '.removeRow', function() {
+            $(this).closest('.routine-row').remove();
+        });
+
+
+        $("button[name='submit_btn']").on('click', function(e) {
+            e.preventDefault();
+            var class_id = $("select[name='class_id']").val();
+            var section_id = $("select[name='section_id']").val();
+
+            var submitBtn = $(this);
+
+            submitBtn.html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`
+            );
+
+            submitBtn.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('admin.student.class.routine.get_class_routine') }}",
+                cache: true,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    class_id: class_id,
+                    section_id: section_id,
+                },
+                success: function(response) {
+                    $(".schedule_area").removeClass('d-none');
+                    var html = '';
+
+                    const subjects = response.subjects;
+                    const teachers = response.teachers;
+
+                    if (response.success && response.data.length === 0) {
+                        toastr.info('No routine found for this class and section.');
+                        return false;
+                    }
+                    if (subjects.length === 0) {
+                        toastr.error('No subjects found for this class and section.');
+                        return false;
+                    }
+                    if (teachers.length === 0) {
+                        toastr.error('No teachers found for this class and section.');
+                        return false;
+                    }
+                    if (response.success && response.data.length > 0) {
+                        response.data.forEach(function(item) {
+                            html += `
+                                <tr class="routine-row">
+                                    <td>${++rowCount}</td>
+                                    <td>
+                                        <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
+                                            <option value="">--- Select ---</option>
+                                            ${subjects.map(subject => `
+                                                        <option value="${subject.id}" ${subject.id == item.subject_id ? 'selected' : ''}>
+                                                            ${subject.name}
+                                                        </option>
+                                                    `).join('')}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
+                                            <option value="">--- Select ---</option>
+                                            ${teachers.map(teacher => `
+                                                        <option value="${teacher.id}" ${teacher.id == item.teacher_id ? 'selected' : ''}>
+                                                            ${teacher.name}
+                                                        </option>
+                                                    `).join('')}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
+                                            <option value="">--- Select ---</option>
+                                            <option value="Saturday" ${item.day == 'Saturday' ? 'selected' : ''}>Saturday</option>
+                                            <option value="Sunday" ${item.day == 'Sunday' ? 'selected' : ''}>Sunday</option>
+                                            <option value="Monday" ${item.day == 'Monday' ? 'selected' : ''}>Monday</option>
+                                            <option value="Tuesday" ${item.day == 'Tuesday' ? 'selected' : ''}>Tuesday</option>
+                                            <option value="Wednesday" ${item.day == 'Wednesday' ? 'selected' : ''}>Wednesday</option>
+                                            <option value="Thursday" ${item.day == 'Thursday' ? 'selected' : ''}>Thursday</option>
+                                            <option value="Friday" ${item.day == 'Friday' ? 'selected' : ''}>Friday</option>
+
+                                        </select>
+                                    </td>
+                                    <td><input type="time" class="form-control" name="routines[${rowCount}][start_time]" value="${item.start_time}" required></td>
+                                    <td><input type="time" class="form-control" name="routines[${rowCount}][end_time]" value="${item.end_time}" required></td>
+
+                                    <td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
+                                </tr>`;
+                            $('#_data').html(html);
+                        });
+
+                    }
+
+                    // else {
+                    //     html += `
+                    //             <tr class="routine-row">
+                    //                 <td>${++rowCount}</td>
+                    //                 <td>
+                    //                     <select class="form-control subject-select" name="routines[${rowCount}][subject_id]" required>
+                    //                         <option value="">--- Select ---</option>
+
+                    //                     </select>
+                    //                 </td>
+                    //                 <td>
+                    //                     <select class="form-control teacher-select" name="routines[${rowCount}][teacher_id]" required>
+                    //                         <option value="">--- Select ---</option>
+
+                    //                     </select>
+                    //                 </td>
+                    //                 <td>
+                    //                     <select class="form-control day-select" name="routines[${rowCount}][day]" required>
+                    //                         <option value="">--- Select ---</option>
+
+                    //                     </select>
+                    //                 </td>
+                    //                 <td><input type="time" class="form-control" name="routines[${rowCount}][start_time]"  required></td>
+                    //                 <td><input type="time" class="form-control" name="routines[${rowCount}][end_time]"required></td>
+
+                    //                 <td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
+                    //             </tr>
+                    //         `;
+                    //     $('#_data').html(html);
+                    // }
 
 
 
+                },
 
 
+                error: function() {
+                    toastr.error('An error occurred. Please try again.');
+                },
+                complete: function() {
+                    submitBtn.html(' <i class="fas fa-filter"></i> Filter');
+                    submitBtn.prop('disabled', false);
+                }
 
-
-    /** Handle edit button click**/
-    $('#datatable1 tbody').on('click', '.edit-btn', function () {
-      var id = $(this).data('id');
-      var editUrl = '{{ route("admin.student.class.routine.edit", ":id") }}';
-      var url = editUrl.replace(':id', id);
-      $.ajax({
-          type: 'GET',
-          url: url,
-          success: function (response) {
-              if (response.success) {
-                 $('#editModal').modal('show');
-                 $('#editModal input[name="id"]').val(response.data.id);
-                $('#editModal select[name="class_id"]').val(response.data.class_id).trigger('change');
-                $('#editModal select[name="section_id"]').val(response.data.section_id).trigger('change');
-                $('#editModal select[name="subject_id"]').val(response.data.subject_id).trigger('change');
-                $('#editModal select[name="teacher_id"]').val(response.data.teacher_id).trigger('change');
-                $('#editModal select[name="day"]').val(response.data.day).trigger('change');
-                $('#editModal input[name="start_time"]').val(response.data.start_time);
-                $('#editModal input[name="end_time"]').val(response.data.end_time);
-              } else {
-                toastr.error("Error fetching data for edit!");
-              }
-          },
-          error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            toastr.error("Error fetching data for edit!");
-          }
-      });
-    });
-
-
-
-
-  /** Handle Delete button click**/
-  $('#datatable1 tbody').on('click', '.delete-btn', function () {
-    var id = $(this).data('id');
-    $('#deleteModal').modal('show');
-    var value_input = $("input[name*='id']").val(id);
-  });
-
-
-
-  /** Handle form submission for delete **/
-  $('#deleteModal form').submit(function(e){
-    e.preventDefault();
-    /*Get the submit button*/
-    var submitBtn =  $('#deleteModal form').find('button[type="submit"]');
-
-    /* Save the original button text*/
-    var originalBtnText = submitBtn.html();
-
-    /*Change button text to loading state*/
-    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
-
-    var form = $(this);
-    var url = form.attr('action');
-    var formData = form.serialize();
-    /** Use Ajax to send the delete request **/
-    $.ajax({
-      type:'POST',
-      'url':url,
-      data: formData,
-      success: function (response) {
-        $('#deleteModal').modal('hide');
-        if (response.success) {
-          toastr.success(response.message);
-          $('#datatable1').DataTable().ajax.reload( null , false);
-        }
-      },
-
-      error: function (xhr, status, error) {
-         /** Handle  errors **/
-         toastr.error(xhr.responseText);
-      },
-      complete: function () {
-        submitBtn.html(originalBtnText);
-        }
-    });
-  });
-
-
-
-
-  /** Store The data from the database table **/
-  $('#addModal form').submit(function(e){
-    e.preventDefault();
-    /*Get the submit button*/
-    var submitBtn =  $('#addModal form').find('button[type="submit"]');
-
-    /* Save the original button text*/
-    var originalBtnText = submitBtn.html();
-
-    /*Change button text to loading state*/
-    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
-    var form = $(this);
-    var url = form.attr('action');
-    var formData = form.serialize();
-    /** Use Ajax to send the delete request **/
-    $.ajax({
-      type:'POST',
-      'url':url,
-      data: formData,
-      success: function (response) {
-
-        if (response.success) {
-            $('#addModal ').modal('hide');
-            $('#addModal form')[0].reset();
-            toastr.success(response.message);
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-            submitBtn.html(originalBtnText);
-            //$('#datatable1').DataTable().ajax.reload( null , false);
-        }
-      },
-
-      error: function (xhr, status, error) {
-         /** Handle  errors **/
-        console.error(xhr.responseText);
-      },
-      complete:function (){
-            submitBtn.html(originalBtnText);
-            submitBtn.prop('disabled', false);
-        }
-    });
-  });
-
-
-
-
-  /** Update The data from the database table **/
-  $('#editModal form').submit(function(e){
-    e.preventDefault();
-
-    var form = $(this);
-    var url = form.attr('action');
-    var formData = form.serialize();
-
-    /*Get the submit button*/
-    var submitBtn = form.find('button[type="submit"]');
-
-    /*Save the original button text*/
-    var originalBtnText = submitBtn.html();
-
-    /*Change button text to loading state*/
-    submitBtn.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>`);
-
-    var form = $(this);
-    var url = form.attr('action');
-    var formData = form.serialize();
-    console.log(formData);
-    return false;
-    /** Use Ajax to send the delete request **/
-    $.ajax({
-      type:'POST',
-      'url':url,
-      data: formData,
-      beforeSend: function () {
-        form.find(':input').prop('disabled', true);
-      },
-      success: function (response) {
-
-        $('#editModal').modal('hide');
-        $('#editModal form')[0].reset();
-        if (response.success) {
-            submitBtn.html(originalBtnText);
-            toastr.success(response.message);
-            $('#datatable1').DataTable().ajax.reload( null , false);
-        }
-      },
-
-      error: function (xhr, status, error) {
-        if (xhr.status === 422) {
-            var errors = xhr.responseJSON.errors;
-            $.each(errors, function(key, value) {
-                toastr.error(value[0]);
             });
-        } else {
-            toastr.error("An error occurred. Please try again.");
-        }
-      },
-      complete: function () {
-        submitBtn.html(originalBtnText);
-          form.find(':input').prop('disabled', false);
-        }
-    });
-  });
-  function _time_formate(time) {
-        let [hour, minute, second] = time.split(':');
-        hour = parseInt(hour);
-        let ampm = hour >= 12 ? 'PM' : 'AM';
-        hour = hour % 12 || 12; // 12-hour format
-        return `${hour}:${minute} ${ampm}`;
-    }
-    /*********************** Print Student class Routine Data *******************************/
-    document.getElementById("printButton").addEventListener("click", function() {
-        var printContents = document.getElementById("printArea").outerHTML;
-        var originalContents = document.body.innerHTML;
-
-        document.body.innerHTML = "<html><head><title>Print</title></head><body>" + printContents + "</body></html>";
-        window.print();
-        document.body.innerHTML = originalContents;
-    });
-  </script>
+        });
+    </script>
 
 @endsection

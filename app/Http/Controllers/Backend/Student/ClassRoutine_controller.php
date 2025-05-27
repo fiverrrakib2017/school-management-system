@@ -154,6 +154,43 @@ class ClassRoutine_controller extends Controller
             ]);
         }
     }
+    public function get_class_routine(Request $request){
+        /*Validate the incoming request data*/
+        $validator = Validator::make($request->all(), [
+            'class_id' => 'required|integer',
+            'section_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        $query = Student_class_routine::query();
+        /* Apply filter class_id */
+        if ($request->class_id) {
+            $query->where('class_id', $request->class_id);
+        }
+        /* Apply filter section_id */
+        if ($request->section_id) {
+            $query->where('section_id', $request->section_id);
+        }
+
+        /* Load related models*/
+        $data = $query->with(['class', 'subject', 'teacher'])->get();
+
+        /*Check if data exists*/
+        if ($data->isNotEmpty()) {
+            return response()->json([
+                'success' => true,
+                'code'=>200,
+                'data' => $data,
+                'subjects' => Student_subject::where('class_id', $request->class_id)->where('section_id',$request->section_id)->get(),
+                'teachers' => Teacher::latest()->get(),
+            ]);
+        }
+    }
 
     public function update(Request $request){
         /*Validate the incoming request data*/

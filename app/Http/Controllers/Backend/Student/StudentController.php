@@ -19,7 +19,8 @@ class StudentController extends Controller
         $this->student=$student;
     }
     public function index(){
-        $classes=Student_class::with('section')->latest()->get();
+        $classes=Student_class::with('section')->orderBy('id', 'asc')->get();
+
         $section= Section::latest()->get();
         return view('Backend.Pages.Student.index',compact('classes','section'));
     }
@@ -170,7 +171,7 @@ class StudentController extends Controller
         ->where($filters)
         ->orderBy('roll_no', 'asc')
         ->get();
-        
+
         if ($students->isEmpty()) {
             return response()->json([
                 'success' => false,
