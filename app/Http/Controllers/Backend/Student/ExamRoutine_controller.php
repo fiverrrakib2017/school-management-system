@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\Student_class;
+use App\Models\Student_class_routine;
 use App\Models\Student_exam_routine;
 use App\Models\Student_subject;
 use Illuminate\Http\Request;
@@ -225,15 +226,35 @@ class ExamRoutine_controller extends Controller
         $exam_id = $request->exam_id;
         $class_id = $request->class_id;
         $section_id=$request->section_id;
-        $data = Student_exam_routine::with(['exam', 'class', 'subject'])
+        /*** Check Login User is admin or teacher ****/
+        $type = auth()->guard('admin')->user()->user_type == '2' ? 'teacher' : 'admin';
+        $teacher_subject_id=[];
+        if($type=='teacher'){
+            $teacher_id=auth()->guard('admin')->user()->teacher_id;
+           $get_student_class_routine=  Student_class_routine::where(['class_id' => $class_id, 'section_id' => $section_id, 'teacher_id'=>$teacher_id])->get();
+           /*get teacher subject id list */
+            foreach($get_student_class_routine as $item){
+                $teacher_subject_id[]=$item->subject_id;
+            }
+            $data = Student_exam_routine::with(['exam', 'class', 'subject'])
+                ->where(['exam_id' => $exam_id, 'class_id' => $class_id, 'section_id' => $section_id])
+                ->whereIn('subject_id', $teacher_subject_id)
+                ->get();
+        }
+        /*if user type is =1 it meens admin just need class_id and section id . then he will get subject , frontend drop down menu*/
+        if($type=='admin'){
+            $data = Student_exam_routine::with(['exam', 'class', 'subject'])
             ->where(['exam_id' => $exam_id, 'class_id' => $class_id, 'section_id' => $section_id])
             ->get();
-        if ($data) {
+        }
+
+        if (!empty($data)) {
             return response()->json(['success' => true, 'data' => $data]);
             exit();
         } else {
             return response()->json(['success' => false, 'message' => 'Not found.']);
         }
+
     }
     private function validateForm($request)
     {
