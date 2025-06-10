@@ -132,12 +132,6 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="">Blood Group</label><small class="req"> *</small>
-                                            <input type="text" class="form-control" name="blood_group" placeholder="Enter Blood Group" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
                                             <label> Highest Education</label><small class="req"> *</small>
                                             <input type="text" class="form-control" name="highest_education" placeholder="Enter Highest Education">
                                         </div>
@@ -188,6 +182,30 @@
                                         <div class="form-group">
                                             <label for="guardian_name">Remarks</label>
                                             <textarea type="text" class="form-control" name="remarks"  placeholder="Enter any remarks" ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<div class="tshadow mb25 bozero">
+                                <h4 class="pagetitleh2" style="text-decoration:underline dotted;">Login Information</h4>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Username</label><small class="req"> *</small>
+                                            <input type="text" class="form-control"  name="username" placeholder="Enter Username" required>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Passowrd</label><small class="req"> *</small>
+                                            <input type="password" class="form-control" name="password" placeholder="Enter Passowrd" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Confirm Passowrd</label>
+                                            <input type="password" class="form-control" name="confirm_password" placeholder="Enter Confirm Passowrd" required>
                                         </div>
                                     </div>
                                 </div>
@@ -298,7 +316,10 @@
                         form[0].reset();
                         $('#preview').hide();
                     }
-                },
+					if(response.success==false){
+						 toastr.error(response.message);
+					}                
+				},
                 error: function(xhr, status, error) {
                     /* Handle errors */
                     console.error(xhr.responseText);

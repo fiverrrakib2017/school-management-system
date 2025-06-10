@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Backend\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use App\Models\Teacher_docs;
+use App\Models\Admin; 
 use App\Services\TeacherService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class TeacherController extends Controller
 {
@@ -70,6 +72,31 @@ class TeacherController extends Controller
         $teacher = new Teacher();
         TeacherService::setTeacherData($teacher, $request, $filename);
         $teacher->save();
+		
+		/* Check Password both are same */
+		if(!empty($request->password) && !empty($request->confirm_password)){
+			if(trim($request->password) !== trim($request->confirm_password)){
+				return response()->json([
+					'success' => false,
+					'message' => 'Password and Confirmation Password Does not match!'
+				]);
+				exit; 
+			}
+			$admin=new Admin();
+			$admin->name=trim($request->name);
+			$admin->username=trim($request->username);
+			$admin->email=trim($request->email);
+			$admin->phone=trim($request->phone);
+			$admin->password = Hash::make($request->password);
+			$admin->user_type='2';
+			$admin->teacher_id = $teacher->id ?? null; 
+			$admin->save();
+		}else{
+			return response()->json([
+				'success' => false,
+				'message' => 'Password and Confirmation Password Requred!'
+			]);
+		}
         /* Check if documents are uploaded */
         if ($request->hasFile('documents')) {
             foreach ($request->file('documents') as $index => $file) {
