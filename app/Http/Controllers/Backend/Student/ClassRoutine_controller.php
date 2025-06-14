@@ -10,6 +10,7 @@ use App\Models\Student_subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class ClassRoutine_controller extends Controller
 {
@@ -19,6 +20,13 @@ class ClassRoutine_controller extends Controller
        $teachers=Teacher::latest()->get();
        $sections= Section::latest()->get();
         return view('Backend.Pages.Student.Routine.index',compact('classes','subjects', 'teachers', 'sections'));
+    }
+    public function create(){
+       $classes = Student_class::latest()->get();
+       $subjects= Student_subject::latest()->get();
+       $teachers=Teacher::latest()->get();
+       $sections= Section::latest()->get();
+        return view('Backend.Pages.Student.Routine.create',compact('classes','subjects', 'teachers', 'sections'));
     }
 
     public function store(Request $request){
@@ -93,6 +101,68 @@ class ClassRoutine_controller extends Controller
             'teachers' => Teacher::latest()->get(),
         ]);
     }
+
+    public function show_class_routine(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'class_id' => 'required|integer',
+            'section_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $routines = Student_class_routine::with(['subject', 'teacher'])
+            ->where('class_id', $request->class_id)
+            ->where('section_id', $request->section_id)
+            ->get();
+
+        if ($routines->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                 'message' => 'No data available!',
+            ]);
+        }
+
+        /* Unique time slots dynamically extract*/
+        $timeSlots = $routines->map(function ($item) {
+            return [
+                'start' => $item->start_time,
+                'end' => $item->end_time
+            ];
+        })
+        ->unique()
+        ->sortBy('start')
+        ->values()
+        ->map(function ($slot) {
+            return [
+                'start' => Carbon::createFromFormat('H:i:s', $slot['start'])->format('g:i A'),
+                'end' => Carbon::createFromFormat('H:i:s', $slot['end'])->format('g:i A'),
+            ];
+        })
+        ->all();
+
+        return response()->json([
+            'success' => true,
+            'data' => $routines->map(function ($routine) {
+                return [
+                    'id' => $routine->id,
+                    'day' => $routine->day,
+                    'start_time' => Carbon::createFromFormat('H:i:s', $routine->start_time)->format('g:i A'),
+                    'end_time' => Carbon::createFromFormat('H:i:s', $routine->end_time)->format('g:i A'),
+                    'subject_name' => $routine->subject->name ?? '',
+                    'teacher_name' => $routine->teacher->name ?? '',
+                ];
+            }),
+            'timeSlots' => $timeSlots,
+            'days' => ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        ]);
+    }
+
 
     public function print(Request $request){
         $class_id = $request->input('class_id');

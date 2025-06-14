@@ -97,10 +97,11 @@ Route::group(['middleware'=>'admin'],function(){
             Route::prefix('routine')->group(function(){
                 Route::controller(ClassRoutine_controller::class)->group(function(){
                     Route::get('/list','index')->name('admin.student.class.routine.index');
+                    Route::get('/create','create')->name('admin.student.class.routine.create');
                     Route::post('/store','store')->name('admin.student.class.routine.store');
                     Route::get('/print','print')->name('admin.student.class.routine.print');
                     Route::post('/get_class_routine','get_class_routine')->name('admin.student.class.routine.get_class_routine');
-
+                    Route::post('/show_class_routine','show_class_routine')->name('admin.student.class.routine.show_class_routine');
                 });
             });
         });

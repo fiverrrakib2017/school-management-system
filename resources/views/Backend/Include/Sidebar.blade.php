@@ -27,9 +27,9 @@
                 <p>Dashboard</p>
             </a>
         </li>
-            <!-----------Examination Menu------------------->
+            <!-----------Student Menu------------------->
             @php
-                $active_prefix=['admin.student.index','admin.student.class.index','admin.student.subject.index','admin.student.class.routine.index','admin.student.section.index'];
+                $active_prefix=['admin.student.index','admin.student.class.index','admin.student.subject.index','admin.student.class.routine.index','admin.student.section.index', 'admin.student.class.routine.create'];
             @endphp
           <li class="nav-item ">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -55,7 +55,10 @@
               </li>
 
               <li class="nav-item">
-                 <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link {{ $route == 'admin.student.class.routine.index' ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
+                 <a href="{{ route('admin.student.class.routine.index') }}" class="nav-link {{ $route == 'admin.student.class.routine.index'  ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Class Routine</p></a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ route('admin.student.class.routine.create') }}" class="nav-link {{ $route == 'admin.student.class.routine.create'  ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Create Class Routine</p></a>
               </li>
 
 
