@@ -228,16 +228,19 @@ class ExamRoutine_controller extends Controller
         $section_id=$request->section_id;
         /*** Check Login User is admin or teacher ****/
         $type = auth()->guard('admin')->user()->user_type == '2' ? 'teacher' : 'admin';
-        $teacher_subject_id=[];
+
         if($type=='teacher'){
+            
             $teacher_id=auth()->guard('admin')->user()->teacher_id;
-           $get_student_class_routine=  Student_class_routine::where(['class_id' => $class_id, 'section_id' => $section_id, 'teacher_id'=>$teacher_id])->get();
-           /*get teacher subject id list */
-            foreach($get_student_class_routine as $item){
-                $teacher_subject_id[]=$item->subject_id;
-            }
+
+           $teacher_subject_id=  Student_class_routine::where(['class_id' => $class_id, 'section_id' => $section_id, 'teacher_id'=>$teacher_id])->pluck('subject_id')->unique()->toArray();
+
             $data = Student_exam_routine::with(['exam', 'class', 'subject'])
-                ->where(['exam_id' => $exam_id, 'class_id' => $class_id, 'section_id' => $section_id])
+                ->where([
+                    'exam_id' => $exam_id,
+                    'class_id' => $class_id,
+                    'section_id' => $section_id
+                ])
                 ->whereIn('subject_id', $teacher_subject_id)
                 ->get();
         }
