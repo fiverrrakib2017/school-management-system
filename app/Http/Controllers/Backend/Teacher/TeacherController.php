@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Backend\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use App\Models\Teacher_docs;
-use App\Models\Admin; 
+use App\Models\Admin;
 use App\Services\TeacherService;
+use App\Services\ZktecoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -71,8 +72,10 @@ class TeacherController extends Controller
         $filename = TeacherService::handleFileUpload($request);
         $teacher = new Teacher();
         TeacherService::setTeacherData($teacher, $request, $filename);
+        /************* Zkteco Device Add Teacher Data ******************/
+        ZktecoService::add_employee($request);
         $teacher->save();
-		
+
 		/* Check Password both are same */
 		if(!empty($request->password) && !empty($request->confirm_password)){
 			if(trim($request->password) !== trim($request->confirm_password)){
@@ -80,7 +83,7 @@ class TeacherController extends Controller
 					'success' => false,
 					'message' => 'Password and Confirmation Password Does not match!'
 				]);
-				exit; 
+				exit;
 			}
 			$admin=new Admin();
 			$admin->name=trim($request->name);
@@ -89,7 +92,7 @@ class TeacherController extends Controller
 			$admin->phone=trim($request->phone);
 			$admin->password = Hash::make($request->password);
 			$admin->user_type='2';
-			$admin->teacher_id = $teacher->id ?? null; 
+			$admin->teacher_id = $teacher->id ?? null;
 			$admin->save();
 		}else{
 			return response()->json([
@@ -120,7 +123,7 @@ class TeacherController extends Controller
         ]);
     }
     public function get_teacher(){
-        
+
         $teachers = Teacher::latest()->get();
 
         if ($teachers->isEmpty()) {

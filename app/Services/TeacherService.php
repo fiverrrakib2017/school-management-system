@@ -51,6 +51,8 @@ class TeacherService{
     }
 
     public static function setTeacherData(Teacher $teacher, Request $request, $filename) {
+
+        $teacher->code = $request->code;
         $teacher->name = $request->name;
         $teacher->email = $request->email;
         $teacher->phone = $request->phone;

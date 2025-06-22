@@ -23,6 +23,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Full Name</label><small class="req"> *</small>
+                                             <input type="text" class="d-none" name="code" value="STU{{ time() }}">
                                             <input type="text" class="form-control" name="name" placeholder="Enter Fullname"  required>
 
                                         </div>
@@ -394,6 +395,9 @@
                 complete: function() {
                     /* Reset button text and enable the button */
                     submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                    /* Enable the Form input */
+                    form.find(':input').prop('disabled', false);
                     submitBtn.prop('disabled', false);
                 }
             });

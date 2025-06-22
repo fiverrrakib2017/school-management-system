@@ -55,6 +55,7 @@ class StudentService{
     }
 
     public static function setData(Student $student, Request $request, $filename) {
+        $student->code = $request->code;
         $student->name = $request->name;
         $student->birth_date = $request->birth_date;
         $student->roll_no = $request->roll_no;
@@ -79,7 +80,7 @@ class StudentService{
         $student->nationality = $request->nationality;
         $student->remarks = $request->remarks;
     }
-    
+
     public function get_data(Request $request){
         $search = $request->search['value'];
         $columnsForOrderBy = ['id','photo', 'name', 'current_class','section_id','roll_no','birth_date','current_address','father_name','mother_name','religion','phone'];

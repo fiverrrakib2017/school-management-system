@@ -30,6 +30,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Full Name</label><small class="req"> *</small>
+                                            <input type="text" class="d-none" name="code"  value="TEA{{ time() }}">
                                             <input type="text" class="form-control" name="name" placeholder="Enter Fullname"  required>
 
                                         </div>
@@ -259,6 +260,25 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">ZKTeco Device </label>
+                                        <select class="form-control" name="include_zkteco_device" required>
+                                            <option value="">---Select---</option>
+                                            <option value="enabled">Enable</option>
+                                            <option value="disable">Disable</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                         <label for="zktecoDeviceCardNo">Device Card No.</label>
+                                        <input type="text" class="form-control" name="zkteco_device_card_no" placeholder="Enter Device Card No.">
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -310,6 +330,11 @@
                 data: formData,
                 contentType: false,
                 processData: false,
+                beforeSend: function() {
+                    /* Disable the Form input */
+                    form.find(':input').prop('disabled', true);
+                    submitBtn.prop('disabled', true);
+                },
                 success: function(response) {
                     if (response.success) {
                         toastr.success(response.message);
@@ -317,24 +342,27 @@
                         $('#preview').hide();
                     }
 					if(response.success==false){
-						 toastr.error(response.message);
-					}                
+						toastr.error(response.message);
+                         /* Enable the Form input */
+                        form.find(':input').prop('disabled', false);
+                        submitBtn.prop('disabled', false);
+					}
 				},
                 error: function(xhr, status, error) {
                     /* Handle errors */
-                    console.error(xhr.responseText);
                     if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         for (var error in errors) {
                             toastr.error(errors[error][0]);
                         }
-                    } else {
-                        toastr.error('Error Request');
                     }
                 },
                 complete: function() {
                     /* Reset button text and enable the button */
                     submitBtn.html(originalBtnText);
+                    submitBtn.prop('disabled', false);
+                    /* Enable the Form input */
+                    form.find(':input').prop('disabled', false);
                     submitBtn.prop('disabled', false);
                 }
             });

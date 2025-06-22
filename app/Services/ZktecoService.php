@@ -63,7 +63,7 @@ class ZktecoService
 
             ])->post(config('zkteco.api_url').'/personnel/api/employees/', [
 
-                'emp_code'      => 'STU' . time(),
+                'emp_code'      => $request->code ?? time(),
                 'first_name'    => $request->name,
                 'department'    => config('zkteco.default_department'),
                 'area'          => config('zkteco.default_area'),
