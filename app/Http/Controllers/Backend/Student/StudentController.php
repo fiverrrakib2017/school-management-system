@@ -10,7 +10,8 @@ use App\Models\Student_docs;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use App\Services\ZktecoService;
+use Illuminate\Support\Facades\Http;
 class StudentController extends Controller
 {
     protected $student=Null;
@@ -59,8 +60,9 @@ class StudentController extends Controller
         $filename = StudentService::handleFileUpload($request);
         $student = new Student();
         StudentService::setData($student, $request, $filename);
+        /************* Zkteco Device Add Student Data ******************/
+        ZktecoService::add_employee($request);
         $student->save();
-
         /* Check if documents are uploaded */
         if ($request->hasFile('documents')) {
             foreach($request->file('documents') as $index => $file){

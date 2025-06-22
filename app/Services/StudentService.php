@@ -79,41 +79,7 @@ class StudentService{
         $student->nationality = $request->nationality;
         $student->remarks = $request->remarks;
     }
-    // public function get_data(Request $request)
-    // {
-    //     $search = $request->search['value'];
-
-    //     $columnsForOrderBy = ['id', 'name', 'current_class'];
-
-    //     $orderByColumn = $request->order[0]['column'];
-    //     $orderDirection = $request->order[0]['dir'];
-
-    //     $query = Student::with(['currentClass', 'currentClass.section']);
-
-    //     if ($search) {
-    //         $query->where(function ($q) use ($search) {
-    //             $q->where('name', 'like', "%$search%")
-    //             ->orWhere('gender', 'like', "%$search%")
-    //             ->orWhere('phone', 'like', "%$search%")
-    //             ->orWhere('phone_2', 'like', "%$search%");
-    //         });
-    //     }
-
-    //     if (isset($columnsForOrderBy[$orderByColumn])) {
-    //         $query->orderBy($columnsForOrderBy[$orderByColumn], $orderDirection);
-    //     }
-
-    //     $total = $query->count();
-
-    //     $data = $query->skip($request->start)->take($request->length)->get();
-
-    //     return response()->json([
-    //         'draw' => $request->draw,
-    //         'recordsTotal' => $total,
-    //         'recordsFiltered' => $total,
-    //         'data' => $data,
-    //     ]);
-    // }
+    
     public function get_data(Request $request){
         $search = $request->search['value'];
         $columnsForOrderBy = ['id','photo', 'name', 'current_class','section_id','roll_no','birth_date','current_address','father_name','mother_name','religion','phone'];

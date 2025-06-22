@@ -194,6 +194,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label for="remarks">Class Roll No.</label>
@@ -262,12 +263,32 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </div>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">ZKTeco Device </label>
+                                        <select class="form-control" name="include_zkteco_device" required>
+                                            <option value="">---Select---</option>
+                                            <option value="enabled">Enable</option>
+                                            <option value="disable">Disable</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                         <label for="zktecoDeviceCardNo">Device Card No.</label>
+                                        <input type="text" class="form-control" name="zkteco_device_card_no" placeholder="Enter Device Card No.">
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="card-footer">
@@ -354,17 +375,20 @@
                         form[0].reset();
                         $('#preview').hide();
                     }
+                    if(response.success==false) {
+                        toastr.error(response.message);
+                        /* Enable the Form input */
+                        form.find(':input').prop('disabled', false);
+                        submitBtn.prop('disabled', false);
+                    }
                 },
                 error: function(xhr, status, error) {
                     /* Handle errors */
-                    console.error(xhr.responseText);
                     if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         for (var error in errors) {
                             toastr.error(errors[error][0]);
                         }
-                    } else {
-                        toastr.error('An error occurred while processing the request.');
                     }
                 },
                 complete: function() {
