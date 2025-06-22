@@ -266,7 +266,7 @@
                                         <label for="">ZKTeco Device </label>
                                         <select class="form-control" name="include_zkteco_device" required>
                                             <option value="">---Select---</option>
-                                            <option value="enabled">Enable</option>
+                                            <option value="enable">Enable</option>
                                             <option value="disable">Disable</option>
                                         </select>
                                     </div>

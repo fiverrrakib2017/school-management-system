@@ -34,13 +34,13 @@ class ZktecoService
     public static function add_employee($request)
     {
         /*Check Zkteco Device enable And Card No*/
-        if($request->include_zkteco_device =='enabled' && $request->zkteco_device_card_no == null){
+        if($request->include_zkteco_device =='enable' && $request->zkteco_device_card_no == null){
             return response()->json([
                 'success' => false,
                 'message' => 'Card No is required when ZKTeco device is enabled.'
             ]);
         }
-        if ($request->include_zkteco_device =='enabled') {
+        if ($request->include_zkteco_device =='enable') {
             /* Check if the ZKTeco token is available */
             if (!config('zkteco.api_url') || !config('zkteco.username') || !config('zkteco.password')) {
                 return response()->json([

@@ -42,6 +42,15 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
+                                            @php
+                                            $teacher_code = $data->code ?? null;
+                                            // If code is null, generate a new one
+                                                if($teacher_code==null){
+                                                    $teacher_code = 'TEA' . time();
+                                                }
+                                            @endphp
+                                            <input type="text" class="d-none" name="code" value="{{ $teacher_code }}" >
+
                                             <label>Full Name</label><small class="req"> *</small>
                                             <input type="text" class="form-control" name="name" placeholder="Enter Fullname" value="{{ $data->name ?? '' }}"  required>
 
@@ -244,6 +253,25 @@
                                             </div>
 
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">ZKTeco Device </label>
+                                       <select class="form-control" name="include_zkteco_device" required>
+                                            <option value="">---Select---</option>
+                                            <option value="enable" @selected(isset($data) && $data->include_zkteco_device == 'enable')>Enable</option>
+                                            <option value="disable" @selected(isset($data) && $data->include_zkteco_device == 'disable')>Disable</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                         <label for="zktecoDeviceCardNo">Device Card No.</label>
+                                        <input type="text" class="form-control" name="zkteco_device_card_no" placeholder="Enter Device Card No." value="{{ $data->zkteco_device_card_no ?? '' }}">
+
                                     </div>
                                 </div>
                             </div>

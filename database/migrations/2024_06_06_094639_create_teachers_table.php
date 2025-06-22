@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->string('code')->unique()->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
@@ -36,6 +36,9 @@ return new class extends Migration
             $table->string('emergency_contact_name');
             $table->string('emergency_contact_phone');
             $table->text('remarks')->nullable();
+             /*For Zkteco Device*/
+            $table->enum('include_zkteco_device', ['enabled', 'disable'])->nullable();
+            $table->text('zkteco_device_card_no')->nullable();
             $table->integer('status');
             $table->timestamps();
         });

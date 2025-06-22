@@ -79,6 +79,8 @@ class StudentService{
         $student->religion = $request->religion;
         $student->nationality = $request->nationality;
         $student->remarks = $request->remarks;
+        $student->include_zkteco_device = $request->include_zkteco_device ?? 'disable';
+        $student->zkteco_device_card_no = $request->zkteco_device_card_no ?? null;
     }
 
     public function get_data(Request $request){

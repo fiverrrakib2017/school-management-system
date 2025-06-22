@@ -76,5 +76,7 @@ class TeacherService{
         $teacher->emergency_contact_phone = $request->emergency_contact_phone;
         $teacher->remarks = $request->remarks;
         $teacher->status = $request->status ?? 1;
+        $teacher->include_zkteco_device = $request->include_zkteco_device ?? 'disable';
+        $teacher->zkteco_device_card_no = $request->zkteco_device_card_no ?? null;
     }
 }

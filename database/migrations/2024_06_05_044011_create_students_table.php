@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->string('code')->unique()->nullable();
             $table->string('name');
             $table->date('birth_date');
             $table->integer('roll_no')->nullable();
@@ -37,6 +37,10 @@ return new class extends Migration
             $table->string('religion')->nullable();
             $table->string('nationality')->nullable();
             $table->text('remarks')->nullable();
+
+            /*For Zkteco Device*/
+            $table->enum('include_zkteco_device', ['enabled', 'disable'])->nullable();
+            $table->text('zkteco_device_card_no')->nullable();
             $table->timestamps();
 
 
