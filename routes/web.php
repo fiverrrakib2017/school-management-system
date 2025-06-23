@@ -59,6 +59,7 @@ use App\Models\Exam_cornar;
 use App\Models\Product_Category;
 use App\Models\Section;
 use App\Models\Student_subject;
+use App\Services\ZktecoService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 require __DIR__.'/Frontend.php';
@@ -712,4 +713,8 @@ Route::get('/migrate', function () {
 });
 Route::get('/student',function(){
     return view('Backend.Pages.Student.test');
+});
+Route::get('/test',function(){
+    $result=ZktecoService::get_today_transactions();
+    return $result;
 });

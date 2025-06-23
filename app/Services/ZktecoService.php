@@ -104,9 +104,86 @@ class ZktecoService
                         ]);
                     }
                 }
-                
+
             }
         }
 
+    }
+
+    public static function delete_employee($id)
+    {
+        $token = self::get_token();
+        if (!$token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get ZKTeco token.',
+            ]);
+        }
+
+        $response = Http::withHeaders([
+            'Authorization' => $token,
+            'Content-Type' => 'application/json',
+        ])->delete(config('zkteco.api_url') . '/personnel/api/employees/' . $id);
+
+        if ($response->successful()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Employee deleted successfully.',
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete employee.',
+            'error' => $response->body(),
+        ]);
+    }
+    public static function get_today_transactions()
+    {
+        $token = self::get_token();
+        if (!$token) {
+            return null; // অথবা false
+        }
+
+        $start = now()->startOfDay()->format('Y-m-d H:i:s');
+        $end = now()->endOfDay()->format('Y-m-d H:i:s');
+
+        $response = Http::withHeaders([
+            'Authorization' => $token,
+            'Content-Type' => 'application/json',
+        ])->get(config('zkteco.api_url') . '/iclock/api/transactions/', [
+            'start_time' => $start,
+            'end_time' => $end,
+            'page_size' => 1000,
+        ]);
+
+        if ($response->successful()) {
+            return $response->json()['data'];
+        }
+
+        return null;
+    }
+
+    public static function get_employee($id)
+    {
+        $token = self::get_token();
+        if (!$token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get ZKTeco token.',
+            ]);
+        }
+        $response = Http::withHeaders([
+            'Authorization' => $token,
+            'Content-Type' => 'application/json',
+        ])->get(config('zkteco.api_url') . '/personnel/api/employees/' . $id);
+        if ($response->successful()) {
+            return $response->json();
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to fetch employee data.',
+            'error' => $response->body(),
+        ]);
     }
 }
