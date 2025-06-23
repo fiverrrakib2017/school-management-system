@@ -72,9 +72,9 @@ class TeacherController extends Controller
         $filename = TeacherService::handleFileUpload($request);
         $teacher = new Teacher();
         TeacherService::setTeacherData($teacher, $request, $filename);
-        /************* Zkteco Device Add Teacher Data ******************/
-        ZktecoService::add_employee($request);
         $teacher->save();
+        /************* Zkteco Device Add Teacher Data ******************/
+        ZktecoService::add_employee($teacher);
 
 		/* Check Password both are same */
 		if(!empty($request->password) && !empty($request->confirm_password)){
@@ -165,6 +165,8 @@ class TeacherController extends Controller
         $filename = TeacherService::handleFileUpload($request, $teacher);
         TeacherService::setTeacherData($teacher, $request, $filename);
         $teacher->update();
+        /************* Zkteco Device Update Teacher Data ******************/
+        ZktecoService::add_employee($teacher);
         if ($request->hasFile('documents')) {
             foreach ($request->file('documents') as $index => $file) {
                 $filename = time() . '_' . $index . '.' . $file->getClientOriginalExtension();

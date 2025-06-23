@@ -60,9 +60,9 @@ class StudentController extends Controller
         $filename = StudentService::handleFileUpload($request);
         $student = new Student();
         StudentService::setData($student, $request, $filename);
-        /************* Zkteco Device Add Student Data ******************/
-        ZktecoService::add_employee($request);
         $student->save();
+        /************* Zkteco Device Add Student Data ******************/
+        ZktecoService::add_employee($student);
         /* Check if documents are uploaded */
         if ($request->hasFile('documents')) {
             foreach($request->file('documents') as $index => $file){
@@ -96,7 +96,10 @@ class StudentController extends Controller
 
         $filename = StudentService::handleFileUpload($request, $student);
         StudentService::setData($student, $request, $filename);
+        ZktecoService::add_employee($request);
         $student->update();
+        /************* Zkteco Device Update Student Data ******************/
+        ZktecoService::add_employee($student);
 
 
         /* Check if documents are uploaded */
