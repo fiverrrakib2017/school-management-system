@@ -40,8 +40,10 @@ class ZktecoService
                 'message' => 'Card No is required when ZKTeco device is enabled.',
             ]);
         }
+
         /* Check if the ZKTeco API is enabled */
         if ($request->include_zkteco_device == 'enable' && $request->code !== null && $request->code !== '') {
+
             /* Get the ZKTeco token */
             $token = self::get_token();
             if (!$token) {
@@ -56,6 +58,7 @@ class ZktecoService
             ])->get(config('zkteco.api_url').'/personnel/api/employees/?emp_code='.$request->code);
 
             if(empty($extis_employee_res->data)){
+
                 /* Check if the ZKTeco token is available */
                 if (!config('zkteco.api_url') || !config('zkteco.username') || !config('zkteco.password')) {
                     return response()->json([
@@ -78,12 +81,14 @@ class ZktecoService
                     'card_no' => $request->zkteco_device_card_no,
                 ]);
 
+
                 if ($zktecoResponse->successful()) {
                     $biotimeUser = $zktecoResponse->json();
+
                 } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Student created, but failed to sync with ZKTeco.',
+                        'message' => 'Failed to sync with ZKTeco.',
                         'error' => $zktecoResponse->body(),
                     ]);
                 }

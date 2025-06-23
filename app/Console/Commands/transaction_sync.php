@@ -54,14 +54,19 @@ class transaction_sync extends Command
                 'attendance_date' => $today,
             ]);
 
-            if (!$attendance->exists) {
+             if (!$attendance->exists) {
                 $attendance->shift_id = 1;
                 $attendance->status = 'Present';
                 $attendance->time_in = $punchTime;
-                $attendance->time_out = $punchTime;
             } else {
-                if ($punchTime > $attendance->time_out) {
-                    $attendance->time_out = $punchTime;
+                if (is_null($attendance->time_out)) {
+                    if ($punchTime > $attendance->time_in) {
+                        $attendance->time_out = $punchTime;
+                    }
+                } else {
+                    if ($punchTime > $attendance->time_out) {
+                        $attendance->time_out = $punchTime;
+                    }
                 }
             }
 

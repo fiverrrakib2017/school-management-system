@@ -63,12 +63,13 @@
                                 <th class="">Section</th>
                                 <th class="">Status</th>
                                 <th class="">Date</th>
-                                <th class="">Time In</th>
+                                <th class="">Check In</th>
+                                <th class="">Check Out</th>
                             </tr>
                         </thead>
                         <tbody>
                         <tr id="no-data">
-                            <td colspan="7" class="text-center">No data available</td>
+                            <td colspan="8" class="text-center">No data available</td>
                         </tr>
                         </tbody>
                     </table>
@@ -149,6 +150,7 @@ $(document).ready(function(){
                                 }
                                 /*Attendance Time Formate*/
                                 var timeIn = 'N/A';
+                                var timeOut = 'N/A';
                                 if (attendance.time_in) {
                                     let date = new Date(`1970-01-01T${attendance.time_in}Z`);
                                     let hours = date.getUTCHours();
@@ -160,6 +162,17 @@ $(document).ready(function(){
                                     minutes = minutes < 10 ? '0' + minutes : minutes;
                                     timeIn = hours + ':' + minutes + ' ' + ampm;
                                 }
+                                // if (attendance.time_out) {
+                                //     let date = new Date(`1970-01-01T${attendance.time_out}Z`);
+                                //     let hours = date.getUTCHours();
+                                //     let minutes = date.getUTCMinutes();
+
+                                //     let ampm = hours >= 12 ? 'PM' : 'AM';
+                                //     hours = hours % 12;
+                                //     hours = hours ? hours : 12;
+                                //     minutes = minutes < 10 ? '0' + minutes : minutes;
+                                //     timeOut = hours + ':' + minutes + ' ' + ampm;
+                                // }
                                 html += '<tr>';
                                 html += '<td>' + attendance.id + '</td>';
                                 html += '<td>' + student.name + '</td>';
@@ -168,6 +181,7 @@ $(document).ready(function(){
                                 html += '<td>' + status + '</td>';
                                 html += '<td>' + attendance.attendance_date + '</td>';
                                 html += '<td>' + timeIn + '</td>';
+                                html += '<td>' + time_formated(attendance.time_out) + '</td>';
                                 html += '</tr>';
                             });
                         });
@@ -204,6 +218,23 @@ $(document).ready(function(){
     }).on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
     });
+
+    /*time formate function */
+    function time_formated($time) {
+        if ($time == null || $time == '' || $time == 'null' || $time == 'undefined') {
+            return 'N/A';
+        }
+        let date = new Date(`1970-01-01T${$time}Z`);
+        let hours = date.getUTCHours();
+        let minutes = date.getUTCMinutes();
+
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        return hours + ':' + minutes + ' ' + ampm;
+
+    }
 });
 </script>
 @endsection

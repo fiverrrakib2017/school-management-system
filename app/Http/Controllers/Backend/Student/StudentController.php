@@ -63,6 +63,7 @@ class StudentController extends Controller
         $student->save();
         /************* Zkteco Device Add Student Data ******************/
         ZktecoService::add_employee($student);
+
         /* Check if documents are uploaded */
         if ($request->hasFile('documents')) {
             foreach($request->file('documents') as $index => $file){
