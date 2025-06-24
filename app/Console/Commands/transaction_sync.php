@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Models\Student;
 use App\Models\Student_attendance;
 use App\Models\Student_leave;
+use App\Models\Teacher;
+use App\Models\Teacher_attendance;
 use App\Services\ZktecoService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -30,31 +32,27 @@ class transaction_sync extends Command
     public function handle()
     {
         $this->info('Transaction sync Started.');
-        $this->_transaction();
+        $this->process_transaction(Student::class, Student_attendance::class, 'student_id');
+        $this->process_transaction(Teacher::class, Teacher_attendance::class, 'teacher_id');
         $this->info('Transaction sync End.');
-
-
     }
-    protected function _transaction(){
-
-        /***GET Zkteco Transaction Data****/
+    protected function process_transaction($model, $attendanceModel, $relationKey){
         $transactions = ZktecoService::get_today_transactions();
-
         $today = now()->format('Y-m-d');
 
         foreach ($transactions as $trx) {
             $empCode = $trx['emp_code'];
             $punchTime = Carbon::parse($trx['punch_time'])->format('H:i:s');
 
-            $student = Student::where('code', $empCode)->first();
-            if (!$student) continue;
+            $person = $model::where('code', $empCode)->first();
+            if (!$person) continue;
 
-            $attendance = Student_attendance::firstOrNew([
-                'student_id' => $student->id,
+            $attendance = $attendanceModel::firstOrNew([
+                $relationKey => $person->id,
                 'attendance_date' => $today,
             ]);
 
-             if (!$attendance->exists) {
+            if (!$attendance->exists) {
                 $attendance->shift_id = 1;
                 $attendance->status = 'Present';
                 $attendance->time_in = $punchTime;
@@ -72,26 +70,64 @@ class transaction_sync extends Command
 
             $attendance->save();
         }
-
-        /*Handle Absent Student*/
-        // $markedStudentIds = Student_attendance::where('attendance_date', $today)->pluck('student_id')->toArray();
-        // $allStudentIds = Student::pluck('id')->toArray();
-
-        // $absentees = array_diff($allStudentIds, $markedStudentIds);
-
-        // foreach ($absentees as $studentId) {
-        //     $onLeave = Student_leave::where('student_id', $studentId)
-        //         ->where('leave_status', 'approved')
-        //         ->where('start_date', '<=', $today)
-        //         ->where('end_date', '>=', $today)
-        //         ->exists();
-
-        //     Student_attendance::create([
-        //         'student_id' => $studentId,
-        //         'attendance_date' => $today,
-        //         'shift_id' => 1,
-        //         'status' => $onLeave ? 'Leave' : 'Absent',
-        //     ]);
-        // }
     }
+    // protected function _transaction(){
+
+    //     /***GET Zkteco Transaction Data****/
+    //     $transactions = ZktecoService::get_today_transactions();
+
+    //     $today = now()->format('Y-m-d');
+
+    //     foreach ($transactions as $trx) {
+    //         $empCode = $trx['emp_code'];
+    //         $punchTime = Carbon::parse($trx['punch_time'])->format('H:i:s');
+
+    //         $student = Student::where('code', $empCode)->first();
+    //         if (!$student) continue;
+
+    //         $attendance = Student_attendance::firstOrNew([
+    //             'student_id' => $student->id,
+    //             'attendance_date' => $today,
+    //         ]);
+
+    //          if (!$attendance->exists) {
+    //             $attendance->shift_id = 1;
+    //             $attendance->status = 'Present';
+    //             $attendance->time_in = $punchTime;
+    //         } else {
+    //             if (is_null($attendance->time_out)) {
+    //                 if ($punchTime > $attendance->time_in) {
+    //                     $attendance->time_out = $punchTime;
+    //                 }
+    //             } else {
+    //                 if ($punchTime > $attendance->time_out) {
+    //                     $attendance->time_out = $punchTime;
+    //                 }
+    //             }
+    //         }
+
+    //         $attendance->save();
+    //     }
+
+    //     /*Handle Absent Student*/
+    //     // $markedStudentIds = Student_attendance::where('attendance_date', $today)->pluck('student_id')->toArray();
+    //     // $allStudentIds = Student::pluck('id')->toArray();
+
+    //     // $absentees = array_diff($allStudentIds, $markedStudentIds);
+
+    //     // foreach ($absentees as $studentId) {
+    //     //     $onLeave = Student_leave::where('student_id', $studentId)
+    //     //         ->where('leave_status', 'approved')
+    //     //         ->where('start_date', '<=', $today)
+    //     //         ->where('end_date', '>=', $today)
+    //     //         ->exists();
+
+    //     //     Student_attendance::create([
+    //     //         'student_id' => $studentId,
+    //     //         'attendance_date' => $today,
+    //     //         'shift_id' => 1,
+    //     //         'status' => $onLeave ? 'Leave' : 'Absent',
+    //     //     ]);
+    //     // }
+    // }
 }
