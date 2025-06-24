@@ -4,6 +4,7 @@
     $prefix= Request::route()->getPrefix();
     $route=Route::current()->getname();
     $currentRoute = Route::currentRouteName();
+    $teacher_panel_id = Auth::guard('admin')->user()->teacher_id ?? null;
 @endphp
 
 

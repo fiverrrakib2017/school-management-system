@@ -43,6 +43,8 @@
     <script src="{{ asset('Backend/assets/js/delete_data.js') }}"></script>
     <script src="{{ asset('Backend/assets/js/custom_select.js') }}"></script>
     <script type="text/javascript">
+     var showButtons = {{ (empty($teacher_panel_id) || $teacher_panel_id == null || $teacher_panel_id == 0) ? 'true' : 'false' }};
+     console.log('Show buttons:', showButtons);
         $(document).ready(function() {
             custom_select2('#examModal');
             handleSubmit('#examForm', '#examModal');
@@ -78,10 +80,16 @@
                         data: null,
                         render: function(data, type, row) {
 
-                            //   var viewUrl = "{{ route('admin.customer.view', ':id') }}".replace(':id', row.id);
-                            return `<button  class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}"><i class="fa fa-edit"></i></button>
-
-              <button class="btn btn-danger btn-sm mr-3 delete-btn"  data-id="${row.id}"><i class="fa fa-trash"></i></button> `;
+                           if (showButtons) {
+                                return `
+                                    <button class="btn btn-primary btn-sm mr-3 edit-btn" data-id="${row.id}">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm mr-3 delete-btn" data-id="${row.id}">
+                                        <i class="fa fa-trash"></i>
+                                    </button>`;
+                            }
+                            return '';
                         }
 
                     },
