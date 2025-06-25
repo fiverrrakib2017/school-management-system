@@ -236,8 +236,8 @@
                 </ul>
             </li>
             @endif
-             @php
-                $active_prefix = [];
+            @php
+                $active_prefix = ['admin.sms.config', 'admin.sms.template_list', 'admin.sms.message_send_list','admin.sms.bulk.message_send_list','admin.sms.logs','admin.sms.report'];
             @endphp
             <li class="nav-item has-treeview">
                 <a href="#" class="nav-link{{ in_array($route, $active_prefix) ? ' active' : '' }}">
