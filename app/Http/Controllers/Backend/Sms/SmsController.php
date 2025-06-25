@@ -38,17 +38,14 @@ class SmsController extends Controller
     public function sms_template_get_all_data(Request $request)
     {
         $search = $request->search['value'];
-        $columnsForOrderBy = ['id', 'pop_id', 'name', 'message'];
+        $columnsForOrderBy = ['id',  'name', 'message'];
         $orderByColumn = $request->order[0]['column'];
         $orderDirectection = $request->order[0]['dir'];
 
-        $query = Message_template::with(['pop'])->when($search, function ($query) use ($search) {
+        $query = Message_template::when($search, function ($query) use ($search) {
             $query
                 ->where('name', 'like', "%$search%")
-                ->orWhere('message', 'like', "%$search%")
-                ->orWhereHas('pop', function ($query) use ($search) {
-                    $query->where('name', 'like', "%$search%");
-                });
+                ->orWhere('message', 'like', "%$search%");
         });
 
         $total = $query->count();
@@ -65,10 +62,47 @@ class SmsController extends Controller
         ]);
     }
     public function sms_template_get($id){
-        $data = Message_template::with(['pop'])->find($id);
+        $data = Message_template::find($id);
         return response()->json([
             'success' => true,
             'data' => $data,
+        ]);
+    }
+    public function sms_template_update(Request $request)
+    {
+        /*Validate the form data*/
+        $rules = [
+            'name' => 'required|string',
+            'message' => 'required|string',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                ],
+                422,
+            );
+        }
+
+        /* Get the object */
+        $object = Message_template::find($request->id);
+
+        if (empty($object)) {
+            return response()->json(['error' => 'Not found.'], 404);
+        }
+
+        /* Update the object */
+        $object->name = $request->name;
+        $object->message = $request->message;
+
+        /* Save to the database table*/
+        $object->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Updated successfully!',
         ]);
     }
     public function config_store(Request $request)
@@ -111,7 +145,6 @@ class SmsController extends Controller
 
         /*Validate the form data*/
        $rules = [
-        'pop_id' => 'required|integer',
         'name' => 'required|string',
         'message' => 'required|string',
     ];
@@ -128,7 +161,6 @@ class SmsController extends Controller
     }
      /* Create a new Instance*/
      $object =new Message_template();
-     $object->pop_id = $request->pop_id;
      $object->name = $request->name;
      $object->message = $request->message;
 
