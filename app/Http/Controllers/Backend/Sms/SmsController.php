@@ -5,8 +5,10 @@ use App\Models\Customer;
 use App\Models\Message_template;
 use App\Models\Pop_area;
 use App\Models\Pop_branch;
+use App\Models\Section;
 use App\Models\Send_message;
 use App\Models\Sms_configuration;
+use App\Models\Student;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,7 +35,8 @@ class SmsController extends Controller
         return view('Backend.Pages.Sms.Send_list');
     }
     public function bulk_message_send_list(){
-        return view('Backend.Pages.Sms.Bulk_send_list');
+        $sections= Section::latest()->get();
+        return view('Backend.Pages.Sms.Bulk_send_list',compact('sections'));
     }
     public function sms_template_get_all_data(Request $request)
     {
@@ -189,23 +192,22 @@ class SmsController extends Controller
             );
         }
 
-        if(empty($request->customer_ids) && isset($request->customer_ids)){
-            return response()->json(['success'=>false, 'message'=>'Customer Not Found']);
+        if(empty($request->student_ids) && isset($request->student_ids)){
+            return response()->json(['success'=>false, 'message'=>'Student Not Found']);
         }
-        foreach($request->customer_ids as $customer_id){
-            /*Get POP ID From Customer table*/
-            $customer=Customer::find($customer_id);
+        foreach($request->student_ids as $student_id){
+            $student=Student::find($student_id);
             /* Create a new Instance*/
             $object =new Send_message();
-            $object->pop_id = $customer->pop_id;
-            $object->area_id = $customer->area_id;
-            $object->customer_id = $customer_id;
+            $object->student_id = $student->id;
+            $object->class_id = $student->current_class ;
+            $object->section_id = $student->section_id ;
             $object->message = $request->message;
             $object->sent_at = Carbon::now();
 
 
             /*Call Send Message Function */
-           send_message($customer->phone, $request->message);
+           send_message($student->phone, $request->message);
             /* Save to the database table*/
             $object->save();
         }

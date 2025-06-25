@@ -29,7 +29,7 @@
 
                             <div class="form-group">
                                 <label for="section_id" class="form-label">Section <span class="text-danger">*</span></label>
-                                <select  id="section_id" class="form-control" style="width: 100%">
+                                <select  name="find_section_id" class="form-control" style="width: 100%">
                                     <option value="">---Select---</option>
                                 </select>
                             </div>
@@ -61,15 +61,15 @@
                             <thead>
                                 <tr>
 
-                                    <th class=""><input type="checkbox" id="selectAll" class=" customer-checkbox">
+                                    <th class="">
+                                        <input type="checkbox" id="selectAll" class="student-checkbox">
                                     </th>
-                                    <th class="">ID.</th>
-                                    <th class="">Username</th>
-                                    <th class="">Package </th>
-                                        <th class="">Price </th>
-                                    <th class="">Expire Date </th>
-                                    <th class="">POP/Branch</th>
-                                    <th class="">Area</th>
+                                    <th class="">No.</th>
+                                    <th class="">Images</th>
+                                    <th class="">Student Name </th>
+                                    <th class="">Class </th>
+                                    <th class="">Section </th>
+                                    <th class="">Roll </th>
                                     <th class="">Phone Number</th>
                                     <th class="">Address</th>
                                 </tr>
@@ -103,7 +103,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-success" id="selectedCustomerCount"></div>
+                    <div class="alert alert-success" id="selectedStudentCount"></div>
                     <form id="send_bulk_message_form" action="{{ route('admin.sms.send_message_store') }}" method="POST"> @csrf
 
                         <div class="form-group mb-2">
@@ -136,29 +136,26 @@
 @section('script')
     <script type="text/javascript">
         var selectedStudents = [];
-
-        $(document).on('change','select[name="class_id"]',function(){
-            var class_id = $(this).val();
-            $.ajax({
-                url: "{{ route('admin.student.subject.get_subject_by_class') }}",
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    class_id: class_id
-                },
-                success: function(response) {
-                    var subjectOptions = '<option value="">--Select Subject--</option>';
-                    response.data.forEach(function(subject) {
-                        subjectOptions += '<option value="' + subject.id + '">' + subject.name + '</option>';
-                    });
-                    $('select[name="subject_id"]').html(subjectOptions);
-                },
-                error: function() {
-                    toastr.error('An error occurred. Please try again.');
-                }
+         $('select[name="find_class_id"]').select2();
+         $('select[name="find_section_id"]').select2();
+        /*********************** Student Filter and Condition*******************************/
+        $(document).on('change', 'select[name="find_class_id"]', function() {
+            var sections = @json($sections);
+            /*Get Class ID*/
+            var selectedClassId = $(this).val();
+            var filteredSections = sections.filter(function(section) {
+                /*Filter sections by class_id*/
+                return section.class_id == selectedClassId;
             });
+            /* Update Section dropdown*/
+            var sectionOptions = '<option value="">--Select--</option>';
+            filteredSections.forEach(function(section) {
+                sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+            });
+            $('select[name="find_section_id"]').html(sectionOptions);
+             $('select[name="find_section_id"]').select2();
+
+
         });
           /***Load Customer **/
           $("button[name='search_btn']").click(function() {
@@ -166,22 +163,55 @@
 
                 button.html(`<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Loading...`);
                 button.attr('disabled', true);
-                var pop_id = $("#pop_id").val();
-                var area_id = $("#area_id").val();
-                var customer_status = $("#customer_status").val();
+                var class_id =   $('select[name="find_class_id"]').val();
+                var section_id = $('select[name="find_section_id"]').val();
                 if ( $.fn.DataTable.isDataTable("#datatable1") ) {
                     $("#datatable1").DataTable().destroy();
                 }
                 $.ajax({
-                    url: "",
+                    url: "{{ route('admin.student.student_filter') }}",
                     type: 'POST',
                     dataType: 'json',
-                    data: {  _token: "{{ csrf_token() }}",pop_id: pop_id, area_id: area_id, status: customer_status},
+                    data: {  _token: "{{ csrf_token() }}",class_id: class_id, section_id: section_id},
                     success: function(response) {
                         if(response.success==true){
 
+                             var _number = 1;
+                            var html = '';
                             $("#print_area").removeClass('d-none');
-                            $("#_data").html(response.html);
+                            /*Check if the response data is an array*/
+                            if (Array.isArray(response.data) && response.data.length > 0) {
+                                response.data.forEach(function(data) {
+                                    html += '<tr data-id="' + data.id + '">';
+
+                                    html += '<td><input type="checkbox"  value="' + data.id + '" name="student_ids[]" class="checkSingle Custom Checkbox student-checkbox"></td>';
+
+                                    html += '<td>' + (_number++) + '</td>';
+
+                                    var photo = data.photo ?
+                                    '<img src="' + "{{ asset('uploads/photos/') }}/" + data.photo + '"style="width: 50px; height: 50px; border-radius: 50%;">' :
+                                    '<img src="' + "{{ asset('uploads/photos/avatar.png') }}" + '"  style="width: 50px; height: 50px; border-radius: 50%;">';
+
+
+                                    html += '<td>' + photo + '</td>';
+
+
+                                    html += '<td>' + data.name + '</td>';
+                                    html += '<td>' + (data.current_class ? data.current_class.name : 'N/A') +
+                                        '</td>';
+                                    html += '<td>' + (data.section ? data.section.name : 'N/A') + '</td>';
+                                    html += '<td>' + data.roll_no + '</td>';
+                                    html += '<td>' + data.phone + '</td>';
+                                    html += '<td>' + data.current_address + '</td>';
+                                    html += '</tr>';
+                                });
+                            } else {
+                                html += '<tr>';
+                                html += '<td colspan="8" style="text-align: center;">No Data Available</td>';
+                                html += '</tr>';
+                            }
+
+                            $("#_data").html(html);
                             $("#datatable1").DataTable({
                                 "paging": true,
                                 "searching": true,
@@ -190,11 +220,10 @@
                             });
 
                             $('#selectAll').on('click', function() {
-                                $('.customer-checkbox').prop('checked', this.checked);
+                                $('.student-checkbox').prop('checked', this.checked);
                             });
-
-                            $('.customer-checkbox').on('click', function() {
-                                if ($('.customer-checkbox:checked').length == $('.customer-checkbox').length) {
+                            $('.student-checkbox').on('click', function() {
+                                if ($('.student-checkbox:checked').length == $('.student-checkbox').length) {
                                     $('#selectAll').prop('checked', true);
                                 } else {
                                     $('#selectAll').prop('checked', false);
@@ -217,10 +246,10 @@
                 event.preventDefault();
 
                 $(".checkSingle:checked").each(function() {
-                    selectedCustomers.push($(this).val());
+                    selectedStudents.push($(this).val());
                 });
-                var countText = "You have selected " + selectedCustomers.length + " customers.";
-                $("#selectedCustomerCount").text(countText);
+                var countText = "You have selected " + selectedStudents.length + " customers.";
+                $("#selectedStudentCount").text(countText);
                 $('#sendMessageModal').modal('show');
             });
             /*Load Message Template*/
@@ -253,7 +282,7 @@
                 /*Get Message Data Value*/
                 var message = $("#send_bulk_message_form textarea[name='message']").val();
 
-                if(selectedCustomers.length==0){
+                if(selectedStudents.length==0){
                     toastr.error('Please Selete Customer');
                     button.html('Send Message');
                     button.attr('disabled', false);
@@ -263,7 +292,7 @@
                     url: "{{ route('admin.sms.send_message_store') }}",
                     type: 'POST',
                     dataType: 'json',
-                    data: {  _token: "{{ csrf_token() }}", message: message, customer_ids:selectedCustomers },
+                    data: {  _token: "{{ csrf_token() }}", message: message, student_ids:selectedStudents },
                     success: function(response) {
                         if(response.success==true){
                             toastr.success(response.message);
