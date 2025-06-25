@@ -33,6 +33,7 @@ use App\Http\Controllers\Backend\Settings\Website\SpeechController;
 use App\Http\Controllers\Backend\Settings\Website\Exam_cornerController;
 use App\Http\Controllers\Backend\Settings\Website\FacilitiesController;
 use App\Http\Controllers\Backend\Settings\Website\TeacherCornerController;
+use App\Http\Controllers\Backend\Sms\SmsController;
 use App\Http\Controllers\Backend\Student\Attendance_controller;
 use App\Http\Controllers\Backend\Student\Bill_CollectionController;
 use App\Http\Controllers\Backend\Student\CardController;
@@ -335,41 +336,93 @@ Route::group(['middleware'=>'admin'],function(){
         });
 
     });
-     /** Tickets  Route **/
-     Route::prefix('admin/ticket')->group(function(){
-        /*Complain Type */
-        Route::prefix('complain_type')->group(function(){
-            Route::controller(Complain_typeController::class)->group(function(){
-                Route::get('/list', 'index')->name('admin.tickets.complain_type.index');
-                Route::get('/all-data', 'get_all_data')->name('admin.tickets.complain_type.get_all_data');
-                Route::get('/edit/{id}', 'edit')->name('admin.tickets.complain_type.edit');
-                Route::post('/delete', 'delete')->name('admin.tickets.complain_type.delete');
-                Route::post('/store', 'store')->name('admin.tickets.complain_type.store');
-                Route::post('/update/{id}', 'update')->name('admin.tickets.complain_type.update');
+     /* SMS Management Route */
+    Route::prefix('admin/sms')->group(function () {
+        /* SMS Configration Route */
+        Route::prefix('configration')->group(function () {
+            Route::controller(SmsController::class)->group(function () {
+                Route::get('/config', 'config')->name('admin.sms.config');
+                Route::post('/config_store', 'config_store')->name('admin.sms.config.store');
             });
         });
-        /*Assign To */
-        Route::prefix('assign')->group(function(){
-            Route::controller(AssignController::class)->group(function(){
-                Route::get('/list', 'index')->name('admin.tickets.assign.index');
-                Route::get('/all-data', 'get_all_data')->name('admin.tickets.assign.get_all_data');
-                Route::get('/edit/{id}', 'edit')->name('admin.tickets.assign.edit');
-                Route::post('/delete', 'delete')->name('admin.tickets.assign.delete');
-                Route::post('/store', 'store')->name('admin.tickets.assign.store');
-                Route::post('/update/{id}', 'update')->name('admin.tickets.assign.update');
+        /*SMS Logs*/
+         Route::prefix('logs')->group(function () {
+            Route::controller(SmsController::class)->group(function () {
+                Route::get('/index', 'sms_logs')->name('admin.sms.logs');
+                Route::get('/get_all_sms_logs_data', 'get_all_sms_logs_data')->name('admin.sms.get_all_sms_logs_data');
+            });
+        });
+        /*SMS Report*/
+         Route::prefix('report')->group(function () {
+            Route::controller(SmsController::class)->group(function () {
+                Route::get('/index', 'sms_report')->name('admin.sms.report');
+            });
+        });
+        /* SMS Template Route */
+        Route::prefix('template')->group(function () {
+            Route::controller(SmsController::class)->group(function () {
+                Route::get('/list', 'sms_template_list')->name('admin.sms.template_list');
+                Route::get('/get_all_data', 'sms_template_get_all_data')->name('admin.sms.template_get_all_data');
+                Route::post('/Store', 'sms_template_Store')->name('admin.sms.template_Store');
+                Route::post('/delete', 'sms_template_delete')->name('admin.sms.template_delete');
+                Route::get('/get/{id}', 'sms_template_get')->name('admin.sms.template_get');
+            });
+        });
+        /* Send SMS Template Route */
+        Route::prefix('send_message')->group(function () {
+            Route::controller(SmsController::class)->group(function () {
+                Route::get('/list', 'message_send_list')->name('admin.sms.message_send_list');
+                Route::get('/get_all_data', 'send_message_get_all_data')->name('admin.sms.send_message_get_all_data');
+                Route::post('/store', 'send_message_store')->name('admin.sms.send_message_store');
+                Route::post('/delete', 'send_message_delete')->name('admin.sms.send_message_delete');
+            });
+        });
+        /* Send Bulk SMS Template Route */
+        Route::prefix('bulk-message')->group(function () {
+            Route::controller(SmsController::class)->group(function () {
+                Route::get('/list', 'bulk_message_send_list')->name('admin.sms.bulk.message_send_list');
+                Route::get('/get_all_data', 'bulk_message_get_all_data')->name('admin.sms.bulk.send_message_get_all_data');
+                Route::post('/Store', 'bulk_message_store')->name('admin.sms.bulk.send_message_store');
+                Route::post('/delete', 'bulk_message_delete')->name('admin.sms.bulk.send_message_delete');
+            });
+        });
+    });
 
-            });
+    /** Tickets  Route **/
+    Route::prefix('admin/ticket')->group(function(){
+    /*Complain Type */
+    Route::prefix('complain_type')->group(function(){
+        Route::controller(Complain_typeController::class)->group(function(){
+            Route::get('/list', 'index')->name('admin.tickets.complain_type.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.tickets.complain_type.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.tickets.complain_type.edit');
+            Route::post('/delete', 'delete')->name('admin.tickets.complain_type.delete');
+            Route::post('/store', 'store')->name('admin.tickets.complain_type.store');
+            Route::post('/update/{id}', 'update')->name('admin.tickets.complain_type.update');
         });
-         /*Ticket Route To */
-        Route::controller(Ticket_controller::class)->group(function(){
-            Route::get('/list', 'index')->name('admin.tickets.index');
-            Route::get('/all-data', 'get_all_data')->name('admin.tickets.get_all_data');
-            Route::get('/edit/{id}', 'edit')->name('admin.tickets.edit');
-            Route::post('/delete', 'delete')->name('admin.tickets.delete');
-            Route::post('/store', 'store')->name('admin.tickets.store');
-            Route::post('/update/{id}', 'update')->name('admin.tickets.update');
+    });
+    /*Assign To */
+    Route::prefix('assign')->group(function(){
+        Route::controller(AssignController::class)->group(function(){
+            Route::get('/list', 'index')->name('admin.tickets.assign.index');
+            Route::get('/all-data', 'get_all_data')->name('admin.tickets.assign.get_all_data');
+            Route::get('/edit/{id}', 'edit')->name('admin.tickets.assign.edit');
+            Route::post('/delete', 'delete')->name('admin.tickets.assign.delete');
+            Route::post('/store', 'store')->name('admin.tickets.assign.store');
+            Route::post('/update/{id}', 'update')->name('admin.tickets.assign.update');
+
         });
-     });
+    });
+        /*Ticket Route To */
+    Route::controller(Ticket_controller::class)->group(function(){
+        Route::get('/list', 'index')->name('admin.tickets.index');
+        Route::get('/all-data', 'get_all_data')->name('admin.tickets.get_all_data');
+        Route::get('/edit/{id}', 'edit')->name('admin.tickets.edit');
+        Route::post('/delete', 'delete')->name('admin.tickets.delete');
+        Route::post('/store', 'store')->name('admin.tickets.store');
+        Route::post('/update/{id}', 'update')->name('admin.tickets.update');
+    });
+    });
     /** Accounts Management  Route **/
     Route::prefix('admin/accounts')->group(function(){
 

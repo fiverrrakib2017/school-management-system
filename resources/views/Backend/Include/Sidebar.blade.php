@@ -90,7 +90,7 @@
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
-                <i class='nav-icon fas fa-book-open'></i>
+                 <i class='nav-icon fas fa-clipboard-list'></i>
                 <p>&nbsp; Exam Management <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
@@ -236,6 +236,64 @@
                 </ul>
             </li>
             @endif
+             @php
+                $active_prefix = [];
+            @endphp
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link{{ in_array($route, $active_prefix) ? ' active' : '' }}">
+                    <i class="nav-icon fas fa-envelope"></i>
+                    <p>SMS <i class="right fas fa-angle-left"></i></p>
+                </a>
+
+                <ul class="nav nav-treeview"
+                    style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
+
+                    <li class="nav-item">
+                        <a href="{{ route('admin.sms.message_send_list') }}"
+                            class="nav-link {{ $route == 'admin.sms.message_send_list' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Send SMS</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('admin.sms.bulk.message_send_list') }}"
+                            class="nav-link {{ $route == 'admin.sms.bulk.message_send_list' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Send Bulk SMS</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('admin.sms.template_list') }}"
+                            class="nav-link {{ $route == 'admin.sms.template_list' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>SMS Template</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('admin.sms.logs') }}" class="nav-link {{ $route == 'admin.sms.logs' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>SMS Logs</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('admin.sms.report') }}" class="nav-link {{ $route == 'admin.sms.report' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>SMS Reports</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.sms.config') }}"
+                            class="nav-link {{ $route == 'admin.sms.config' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>SMS Configuration </p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <!-----------Tickets Menu------------------->
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, 'admin.tickets') ? 'active' : '' }}">
