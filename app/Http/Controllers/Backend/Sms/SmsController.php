@@ -10,6 +10,7 @@ use App\Models\Send_message;
 use App\Models\Sms_configuration;
 use App\Models\Student;
 use App\Models\Ticket;
+use App\Models\Zkteco_sms_settings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -37,6 +38,46 @@ class SmsController extends Controller
     public function bulk_message_send_list(){
         $sections= Section::latest()->get();
         return view('Backend.Pages.Sms.Bulk_send_list',compact('sections'));
+    }
+    public function biometric_message_settings()
+    {
+        $data = Zkteco_sms_settings::latest()->first();
+        return view('Backend.Pages.Sms.Biometric.Settings', compact('data'));
+    }
+    public function biometric_message_settings_store(Request $request)
+    {
+        /*Validate the form data*/
+        $rules = [
+            'sms_enable' => 'nullable|in:1',
+            'status_present' => 'nullable|in:Present',
+            'status_absent' => 'nullable|in:Absent',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                ],
+                422,
+            );
+        }
+
+        /* Create a new Instance*/
+        $object = Zkteco_sms_settings::firstOrNew([]);
+        $object->sms_enable = $request->has('sms_enable') ? 1 : 0;
+        $object->on_present = $request->status_present == 'Present' ? 1 : 0;
+        $object->on_absent = $request->status_absent == 'Absent' ? 1 : 0;
+        $object->present_template = $request->present_template ? $request->present_template : '';
+        $object->absent_template = $request->absent_template ? $request->absent_template : '';
+
+        /* Save to the database table*/
+        $object->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Added successfully!',
+        ]);
     }
     public function sms_template_get_all_data(Request $request)
     {
@@ -112,22 +153,22 @@ class SmsController extends Controller
     {
        /*Validate the form data*/
        $rules = [
-        'api_url' => 'required|string',
-        'api_key' => 'required|string',
-        'sender_id' => 'required|string',
-        'default_country_code' => 'required',
-    ];
-    $validator = Validator::make($request->all(), $rules);
+            'api_url' => 'required|string',
+            'api_key' => 'required|string',
+            'sender_id' => 'required|string',
+            'default_country_code' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
 
-    if ($validator->fails()) {
-        return response()->json(
-            [
-                'success' => false,
-                'errors' => $validator->errors(),
-            ],
-            422,
-        );
-    }
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                ],
+                422,
+            );
+        }
 
         /* Create a new Instance*/
         $object = Sms_configuration::firstOrNew([]);

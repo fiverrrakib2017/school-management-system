@@ -237,7 +237,7 @@
             </li>
             @endif
             @php
-                $active_prefix = ['admin.sms.config', 'admin.sms.template_list', 'admin.sms.message_send_list','admin.sms.bulk.message_send_list','admin.sms.logs','admin.sms.report'];
+                $active_prefix = ['admin.sms.config', 'admin.sms.template_list', 'admin.sms.message_send_list','admin.sms.bulk.message_send_list','admin.sms.logs','admin.sms.report','admin.biometric.sms.biometric_message_settings'];
             @endphp
             <li class="nav-item has-treeview">
                 <a href="#" class="nav-link{{ in_array($route, $active_prefix) ? ' active' : '' }}">
@@ -283,6 +283,13 @@
                         <a href="{{ route('admin.sms.report') }}" class="nav-link {{ $route == 'admin.sms.report' ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
                             <p>SMS Reports</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.biometric.sms.biometric_message_settings') }}"
+                            class="nav-link {{ $route == 'admin.biometric.sms.biometric_message_settings' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Biometric SMS Settings </p>
                         </a>
                     </li>
                     <li class="nav-item">

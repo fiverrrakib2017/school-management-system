@@ -369,7 +369,7 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/update', 'sms_template_update')->name('admin.sms.template_update');
             });
         });
-        /* Send SMS Template Route */
+        /* Send SMS send Route */
         Route::prefix('send_message')->group(function () {
             Route::controller(SmsController::class)->group(function () {
                 Route::get('/list', 'message_send_list')->name('admin.sms.message_send_list');
@@ -378,13 +378,20 @@ Route::group(['middleware'=>'admin'],function(){
                 Route::post('/delete', 'send_message_delete')->name('admin.sms.send_message_delete');
             });
         });
-        /* Send Bulk SMS Template Route */
+        /* Send Bulk SMS Route */
         Route::prefix('bulk-message')->group(function () {
             Route::controller(SmsController::class)->group(function () {
                 Route::get('/list', 'bulk_message_send_list')->name('admin.sms.bulk.message_send_list');
                 Route::get('/get_all_data', 'bulk_message_get_all_data')->name('admin.sms.bulk.send_message_get_all_data');
                 Route::post('/Store', 'bulk_message_store')->name('admin.sms.bulk.send_message_store');
                 Route::post('/delete', 'bulk_message_delete')->name('admin.sms.bulk.send_message_delete');
+            });
+        });
+        /* Biometric SMS Route */
+        Route::prefix('biometric/message')->group(function () {
+            Route::controller(SmsController::class)->group(function () {
+                Route::get('/settings', 'biometric_message_settings')->name('admin.biometric.sms.biometric_message_settings');
+                Route::post('/settings/store', 'biometric_message_settings_store')->name('admin.biometric.sms.settings.store');
             });
         });
     });
