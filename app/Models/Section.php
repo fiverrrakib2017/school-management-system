@@ -10,6 +10,6 @@ class Section extends Model
     use HasFactory;
     public function studentClass()
     {
-        return $this->belongsTo(student_class::class, 'class_id');
+        return $this->belongsTo(Student_class::class, 'class_id');
     }
 }

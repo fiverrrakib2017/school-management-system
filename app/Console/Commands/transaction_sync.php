@@ -10,6 +10,9 @@ use App\Models\Teacher_attendance;
 use App\Services\ZktecoService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+
+use function App\Helpers\send_message;
+
 class transaction_sync extends Command
 {
     /**
@@ -51,11 +54,12 @@ class transaction_sync extends Command
                 $relationKey => $person->id,
                 'attendance_date' => $today,
             ]);
-
+            $_is_new_entry =false;
             if (!$attendance->exists) {
                 $attendance->shift_id = 1;
                 $attendance->status = 'Present';
                 $attendance->time_in = $punchTime;
+                $_is_new_entry =true;
             } else {
                 if (is_null($attendance->time_out)) {
                     if ($punchTime > $attendance->time_in) {
@@ -69,7 +73,23 @@ class transaction_sync extends Command
             }
 
             $attendance->save();
+            /*send sms notification*/
+             if ($model === Student::class && $_is_new_entry) {
+                $this->send_student_sms_notification($attendance);
+            }
         }
+    }
+    protected function send_student_sms_notification($student_attendance) {
+        /*Sms Settings Check*/
+        $sms_settings = \App\Models\Zkteco_sms_settings::first();
+        if(!$sms_settings || !$sms_settings->sms_enable || !$sms_settings->on_present) {
+            return;
+        }
+         /*Get Sms Template*/
+        $template = $sms_settings->present_template ?? 'Dear {name}, you have been marked present at {time}.';
+        $message = str_replace(['{name}', '{date}' , '{time}'], [$student_attendance->student->name , $student_attendance->attendance_date, $student_attendance->time_in], $template);
+        $this->info('Send Sms to ' . $student_attendance->student->phone . ' - ' . $message);
+        send_message($student_attendance->student->phone, $message);
     }
     // protected function _transaction(){
 
