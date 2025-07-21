@@ -62,6 +62,12 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-md-2 col-sm-12 mb-3">
+                    <label for="" class="form-label">Section</label>
+                    <select type="text" name="section_id" class="form-control" style="width:100%">
+                        <option value="">---Select---</option>
+                    </select>
+                </div>
                <div class="col-md-3 col-sm-12 mb-3">
                   <label class="form-label">Student Name</label>
                   <select name="student_id" class="form-select" style="width:100%">
@@ -69,11 +75,11 @@
                   </select>
                </div>
 
-                <div class="col-md-3 col-sm-12 mb-3">
+                <div class="col-md-2 col-sm-12 mb-3">
                   <label for="date" class="form-label">Previous Due</label>
                   <input readonly type="text" name="previous_due_amount" class="form-control" value="00"/>
                 </div>
-                <div class="col-md-3 col-sm-12 mb-3">
+                <div class="col-md-2 col-sm-12 mb-3">
                   <label for="date" class="form-label">Collection Date:</label>
                   <input readonly type="date" class="form-control" name="bill_date" value="@php
                       echo date('Y-m-d');
@@ -114,7 +120,7 @@
                </div>
 
                <div class="col-md-2 col-sm-12 d-flex align-items-end mb-3">
-                  <button type="button" id="submitBtn" class="btn btn-primary w-100">Add Now</button>
+                  <button type="button" id="submitBtn" class="btn btn-primary w-100"><i class="fas fa-plus-circle"></i> Add Now</button>
                </div>
             </div>
 
@@ -149,6 +155,18 @@
                                 <input type="number" readonly class="form-control due_amount text-right fw-bold" name="due_amount" placeholder="Due amount will be calculated">
                             </th>
                         </tr>
+                        <tr>
+                            <th class="text-right" colspan="2">Send Message?</th>
+                            <th colspan="2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" name="send_sms" id="send_sms">
+                                    <label class="form-check-label" for="send_sms">
+                                        Send SMS to Student
+                                    </label>
+                                </div>
+                            </th>
+                        </tr>
+
                     </tfoot>
                 </table>
             </div>
@@ -170,36 +188,83 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    $("select[name='student_id']").select2();
-    $("select[name='class_id']").select2();
-    $('.month_name').select2({
-                            placeholder: "Select"
-                        });
-    $("#billing_item").select2();
+    // $("select[name='student_id']").select2();
+    // $("select[name='class_id']").select2();
+    // $('.month_name').select2({
+    //      placeholder: "Select"
+    // });
+    // $("#billing_item").select2();
 
-    $(document).on('change', 'select[name="class_id"]', function () {
-        var class_id = $(this).val();
-        if (class_id !== '---Select---' && class_id !== "") {
-            var url="{{ route('admin.student.student_filter') }}";
+    $('select').select2({
+        placeholder: "---Select---",
+        allowClear: false
+    });
+        var students = @json($students);
+        $(document).on('change', 'select[name="class_id"]', function() {
+            var sections = @json($sections);
+            var students = @json($students);
+            /*Get Class ID*/
+            var selectedClassId = $(this).val();
+
+            var filteredStudents = students.filter(function(student) {
+                /*Filter class by class_id*/
+                return student.current_class == selectedClassId;
+            });
+            var filteredSections = sections.filter(function(section) {
+                /*Filter sections by class_id*/
+                return section.class_id == selectedClassId;
+            });
+
+
+            /* Update Student dropdown*/
+            var studentOptions = '<option value="">--Select--</option>';
+            filteredStudents.forEach(function(student) {
+                studentOptions += '<option value="' + student.id + '">' + student.name + '</option>';
+            });
+            /* Update Section dropdown*/
+            var sectionOptions = '<option value="">--Select--</option>';
+            filteredSections.forEach(function(section) {
+                sectionOptions += '<option value="' + section.id + '">' + section.name + '</option>';
+            });
+
+            $('select[name="student_id"]').html(studentOptions);
+            $('select[name="student_id"]').select2();
+
+            $('select[name="section_id"]').html(sectionOptions);
+            $('select[name="section_id"]').select2();
+
+
+        });
+    $(document).on('change', 'select[name="section_id"]', function () {
+        var class_id = $("select[name='class_id']").val();
+        var section_id = $(this).val();
+
+        if (section_id !== '---Select---' && section_id !== "") {
+            var url = "{{ route('admin.student.student_filter') }}";
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-           $.ajax({
-               url: url,
-               type: 'POST',
-               data: {  _token: csrfToken,  class_id: class_id  },
 
-               success: function (response) {
-                $.each(response.data, function (index, item) {
-                    $('select[name="student_id"]').append('<option value="' + item.id + '">' + item.name + '</option>');
-                });
-               },
-               error: function (xhr, status, error) {
-                   console.error('Error:', error);
-               }
-           });
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { _token: csrfToken, class_id: class_id, section_id: section_id },
+                success: function (response) {
+                    var options = '<option value="">---Select---</option>'; // default option
+
+                    $.each(response.data, function (index, item) {
+                        options += '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+
+                    $('select[name="student_id"]').html(options);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
         } else {
-            $('#student_id').html('<option>---Select---</option>');
+            $('select[name="student_id"]').html('<option value="">---Select---</option>');
         }
     });
+
      $(document).on('change', 'select[name="student_id"]', function () {
         var studentId = $(this).val();
         if (studentId !== '---Select---' && studentId !== "") {
@@ -357,7 +422,9 @@
         submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
         submitBtn.prop('disabled', true);
 
-        var formData = new FormData(this);
+        let formData = new FormData(this);
+        let sendSms = $('#send_sms').is(':checked') ? 1 : 0;
+        formData.append('send_sms', sendSms);
         $.ajax({
             type: $(this).attr('method'),
             url: $(this).attr('action'),
@@ -368,12 +435,12 @@
                 if (response.success) {
                     toastr.success(response.message);
                     setTimeout(() => {
-                        window.location.href = "{{ route('admin.bill_collection.student.index') }}";
+                        window.location.href = "{{ route('admin.student.bill_collection.index') }}";
                     }, 500);
                 }
             },
             error: function(xhr) {
-                if (xhr.status === 422) {
+                 if (xhr.status === 422) {
                     var errors = xhr.responseJSON.errors;
                     $.each(errors, function(field, messages) {
                         $.each(messages, function(index, message) {

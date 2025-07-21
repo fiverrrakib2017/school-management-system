@@ -275,7 +275,7 @@ Route::group(['middleware'=>'admin'],function(){
         /*Student Bill Collection */
         Route::prefix('')->group(function(){
             Route::controller(Bill_CollectionController::class)->group(function(){
-                Route::get('/index','index')->name('admin.bill_collection.student.index');
+                Route::get('/index','index')->name('admin.student.bill_collection.index');
                 Route::get('/all_data','all_data')->name('admin.student.bill_collection.all_data');
                 Route::get('/create','create_bill')->name('admin.student.bill_collection.create');
                 Route::post('/store','store')->name('admin.student.bill_collection.store');

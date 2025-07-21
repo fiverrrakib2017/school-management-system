@@ -188,7 +188,7 @@
           </li>
           <!-----------Bill Collection Menu------------------->
             @php
-                $active_prefix=['admin.fees_type.student.index','admin.bill_collection.student.create','admin.bill_collection.student.index'];
+                $active_prefix=['admin.fees_type.student.index','admin.bill_collection.student.create','admin.student.bill_collection.index'];
             @endphp
           <li class="nav-item">
             <a href="#" class="nav-link {{ Str::startsWith($currentRoute, $active_prefix) ? 'active' : '' }}">
@@ -198,7 +198,7 @@
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
                  <li class="nav-item">
-                    <a href="{{ route('admin.bill_collection.student.index') }}" class="nav-link  {{($route=='admin.bill_collection.student.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
+                    <a href="{{ route('admin.student.bill_collection.index') }}" class="nav-link  {{($route=='admin.student.bill_collection.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
                  </li>
                  <li class="nav-item">
                     <a href="{{ route('admin.fees_type.student.index') }}" class="nav-link  {{($route=='admin.fees_type.student.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Fees Type</p></a>
