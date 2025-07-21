@@ -153,7 +153,7 @@ class Bill_CollectionController extends Controller
 
                 $website_info = Website_information::first();
 
-                $message = "📄 বিল সংগ্রহের তথ্য\n"
+                $message = "📄 ফ্রি সংগ্রহের তথ্য\n" 
                         . "👤 শিক্ষার্থী: {$student->name}\n"
                         . "📅 তারিখ: {$date}\n"
                         . "-------------------\n"

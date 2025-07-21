@@ -99,7 +99,7 @@
 
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row ">
                         <div class="col-md-6 mb-2">
                             <label>Description</label>
                             <textarea name="description" class="form-control" type="text" placeholder="Enter Description" required></textarea>
@@ -116,7 +116,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-2">
+                        <div class="col-md-6 mb-3">
                             <label>Percentage</label>
                             <select name="percentage" class="form-select" type="text" style="width: 100%;" required>
                                 <option value="0%">0%</option>
@@ -133,13 +133,24 @@
                             </select>
 
                         </div>
-                        <div class="col-md-6 mb-2">
+                        <div class="col-md-6 mb-3">
                             <label>Note</label>
                             <input name="note" class="form-control" type="text" placeholder="Enter Note"/>
 
                         </div>
-                        <div class="col-md-6 mb-2">
+                        @php
+                            $checkbox_id = 'sendMessageCheckbox_' . uniqid();
+                        @endphp
 
+                        <div class="col-md-6 mb-2">
+                            <div class="form-group clearfix">
+                                <div class="icheck-primary d-inline">
+                                    <input type="checkbox" id="{{ $checkbox_id }}" name="send_message" value="1">
+                                    <label for="{{ $checkbox_id }}">
+                                        Send message to the Student
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

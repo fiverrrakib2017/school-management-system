@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Customer_Invoice;
 use App\Models\Customer_Transaction_History;
+use App\Models\Student;
 use App\Models\Ticket;
 use App\Models\Ticket_complain_type;
 use App\Models\User;
+use App\Models\Website_information;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use function App\Helpers\send_message;
 class Ticket_controller extends Controller
 {
     public function index()
@@ -67,6 +69,36 @@ class Ticket_controller extends Controller
 
         /* Save to the database table*/
         $object->save();
+        /* Send Message to the Student*/
+        if($request->send_message==1){
+            $student = Student::find($request->student_id);
+            //=== Student Fees Details Message Generate ===/
+            if (empty($student)) {
+                return response()->json(['success'=>false, 'message'=>'Student Not Found!']);
+            }
+            $date = date('d-m-Y');
+
+            $website_info = Website_information::first();
+
+            $message = "📄 টিকেট তথ্য\n"
+                        . "👤 শিক্ষার্থী: {$student->name}\n"
+                        . "📅 তারিখ: {$date}\n"
+                        . "-------------------\n"
+                        . "টিকেট আইডি: {$object->id}\n"
+                        . "বিষয়: {$object->subject}\n"
+                        . "বিবরণ: {$object->description}\n"
+                        . "কমপ্লেইন টাইপ: {$object->complain_type->name}\n"
+                        . "ধন্যবাদ। - {$website_info->name}\n";
+
+            $send_message= new \App\Models\Send_message();
+            $send_message->student_id = $student->id;
+            $send_message->class_id = $student->current_class;
+            $send_message->section_id = $student->section_id;
+            $send_message->message = $message;
+            $send_message->save();
+            /*Call Send Message Function */
+            send_message($student->phone, $message);
+        }
         return response()->json([
             'success' => true,
             'message' => 'Added successfully!'
