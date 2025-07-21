@@ -18,11 +18,11 @@
                             <select name="student_id" class="form-select" type="text" style="width: 100%;" required>
                                 <option value="">---Select---</option>
                                 @php
-                                    $students = \App\Models\Student::latest()->get();
+                                    $students = \App\Models\Student::with('currentClass', 'section')->latest()->get();
                                 @endphp
                                 @if($students->isNotEmpty())
                                     @foreach($students as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        <option value="{{ $item->id }}">{{ $item->name }} || {{ $item->currentClass->name ?? 'No Class' }} - {{ $item->section->name ?? 'No Section' }} </option>
                                     @endforeach
                                 @else
                                     <option value="">No student available</option>
