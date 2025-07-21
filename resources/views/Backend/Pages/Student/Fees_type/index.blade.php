@@ -230,6 +230,9 @@
                         $(modalId).modal('hide');
                         form[0].reset();
                     }
+                    if(response.success==false) {
+                        toastr.error(response.message);
+                    }
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {

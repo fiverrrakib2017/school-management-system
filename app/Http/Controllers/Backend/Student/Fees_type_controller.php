@@ -76,10 +76,20 @@ class Fees_type_controller extends Controller
             ], 422);
         }
 
+        /* Check for duplicate entry*/
+        $exists = Student_fees_type::where('type_name', $request->type_name)
+                    ->where('class_id', $request->class_id)
+                    ->exists();
 
-        /* Create a new Supplier*/
-       
+        if ($exists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This fee type already exists!'
+            ]);
+            exit;
+        }
 
+        /* Create a new Instance*/
 
         $object = new Student_fees_type();
         $object->type_name = $request->type_name;
@@ -107,33 +117,59 @@ class Fees_type_controller extends Controller
             'data' => $data
         ]);
     }
-    public function update(Request $request){
-        /*Validate the incoming request data*/
+    public function update(Request $request)
+    {
+        /* Validation Rules*/
         $validator = Validator::make($request->all(), [
             'type_name' => 'required|string',
             'class_id' => 'required|integer',
             'amount' => 'required|numeric|min:0',
         ]);
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
-        $object =Student_fees_type::find($request->id);
+
+        /* Check if record exists*/
+        $object = Student_fees_type::find($request->id);
+        if (!$object) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Record not found'
+            ], 404);
+        }
+
+        /*Check for duplicates*/
+        $duplicate = Student_fees_type::where('type_name', $request->type_name)
+            ->where('class_id', $request->class_id)
+            ->where('id', '!=', $request->id)
+            ->exists();
+
+        if ($duplicate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This Fee Type already exists for the selected class.'
+            ], 409);
+        }
+
+        /* Update values*/
         $object->type_name = $request->type_name;
         $object->class_id = $request->class_id;
         $object->amount = $request->amount;
-        /*Update to the database table*/
         $object->update();
+
         return response()->json([
             'success' => true,
             'message' => 'Update Successfully'
         ]);
     }
+
     public function delete(Request $request){
-        $object = Student_fees_type::find($request->id); 
-        $object->delete(); 
+        $object = Student_fees_type::find($request->id);
+        $object->delete();
         return response()->json([
             'success' => true,
             'message' => 'Delete Successfully'
