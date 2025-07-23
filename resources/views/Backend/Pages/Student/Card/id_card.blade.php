@@ -11,6 +11,9 @@
 <div class="row">
     <div class="col-md-12 ">
         <div class="card">
+                <div class="card-header">
+                  <i class="fas fa-id-badge me-2 text-primary"></i> Student ID Card
+                </div>
             <div class="card-header">
                 <div class="row" id="search_box">
 

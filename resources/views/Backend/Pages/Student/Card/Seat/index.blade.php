@@ -11,6 +11,9 @@
         <div class="col-md-12 ">
             <div class="card">
                 <div class="card-header">
+                    <i class="fas fa-chair me-2 text-secondary fs-4"></i> Student Seat Plan
+                </div>
+                <div class="card-header">
                     <div class="row" id="search_box">
                         <div class="col-md-3">
                             <div class="form-group mb-2">

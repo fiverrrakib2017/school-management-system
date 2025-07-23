@@ -43,9 +43,13 @@
 @section('content')
 <div class="container">
    <div class="card shadow-sm">
-      <div class="card-header ">
-         <h4>Student Bill Collection</h4>
-      </div>
+    <div class="card-header bg-light">
+        <h5 class="text-dark mb-0">
+            <i class="fas fa-file-invoice-dollar me-2 text-success"></i>
+            Student Bill Collection
+        </h5>
+    </div>
+
       <div class="card-body">
          <form id="form-data" action="{{route('admin.student.bill_collection.store')}}" method="post">@csrf
             <div class="row">

@@ -8,6 +8,10 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="card">
+                <div class="card-header d-flex align-items-center gap-2">
+                    <i class="fas fa-user-graduate"></i>&nbsp;
+                    <h5 class="mb-0 fw-semibold">Student Admit Card Generate</h5>
+                </div>
                 <div class="card-header">
                     <div class="row" id="search_box">
                         <div class="col-md-3">

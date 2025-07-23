@@ -198,7 +198,7 @@
             <ul class="nav nav-treeview"  style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
                  <li class="nav-item">
-                    <a href="{{ route('admin.student.bill_collection.index') }}" class="nav-link  {{($route=='admin.student.bill_collection.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
+                    <a href="{{ route('admin.student.bill_collection.index') }}" class="nav-link  {{($route=='admin.student.bill_collection.index' || $route=='admin.bill_collection.student.create') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Bill Collection</p></a>
                  </li>
                  <li class="nav-item">
                     <a href="{{ route('admin.fees_type.student.index') }}" class="nav-link  {{($route=='admin.fees_type.student.index') ?  'active':''}}"><i class="far fa-circle nav-icon"></i><p>Fees Type</p></a>
