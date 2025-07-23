@@ -9,6 +9,7 @@ use App\Models\Section;
 use App\Models\Send_message;
 use App\Models\Sms_configuration;
 use App\Models\Student;
+use App\Models\Student_class;
 use App\Models\Ticket;
 use App\Models\Zkteco_sms_settings;
 use Carbon\Carbon;
@@ -318,46 +319,40 @@ class SmsController extends Controller
     }
     /*********************** SMS Logs   ******************************/
     public function sms_logs(){
-        return view('Backend.Pages.Sms.Logs');
+        $classes = Student_class::latest()->get();
+        $sections = Section::latest()->get();
+        return view('Backend.Pages.Sms.Logs',compact('classes', 'sections'));
     }
     public function get_all_sms_logs_data(Request $request)
 {
-    $pop_id = $request->pop_id;
-    $area_id = $request->area_id;
+    $class_id = $request->class_id;
+    $section_id = $request->section_id;
     $search = $request->search['value'];
-    $columnsForOrderBy = ['id', 'pop_id', 'name', 'message'];
+    $columnsForOrderBy = ['id', 'class_id', 'section_id', 'name', 'roll_no', 'phone', 'sent_at', 'message'];
     $orderByColumn = $request->order[0]['column'];
     $orderDirectection = $request->order[0]['dir'];
 
-    /*Check if branch user value is empty*/
-    $branch_user_id = Auth::guard('admin')->user()->pop_id ?? null;
 
-    $query = Send_message::with(['pop', 'area', 'customer', 'customer.package']);
+    $query = Send_message::with(['student.currentClass', 'student.section']);
 
     if ($search) {
         $query->where(function ($q) use ($search) {
             $q->where('message', 'like', "%$search%")
-              ->orWhereHas('pop', function ($q) use ($search) {
+              ->orWhereHas('student.currentClass', function ($q) use ($search) {
                   $q->where('name', 'like', "%$search%");
               })
-              ->orWhereHas('customer', function ($q) use ($search) {
-                  $q->where('fullname', 'like', "%$search%")
-                    ->orWhere('username', 'like', "%$search%");
+              ->orWhereHas('student.section', function ($q) use ($search) {
+                  $q->where('name', 'like', "%$search%");
               });
         });
     }
 
-    if ($pop_id) {
-        $query->where('pop_id', $pop_id);
+    if ($class_id) {
+        $query->where('class_id', $class_id);
     }
 
-    if ($branch_user_id) {
-        $query->where('pop_id', $branch_user_id);
-    }
-
-    // Filter by area
-    if ($area_id) {
-        $query->where('area_id', $area_id);
+    if ($section_id) {
+        $query->where('section_id', $section_id);
     }
      if ($request->from_date) {
         $query->whereDate('created_at', '>=', $request->from_date);

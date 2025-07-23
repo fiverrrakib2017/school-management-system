@@ -11,4 +11,7 @@ class Send_message extends Model
     public function student(){
         return $this->belongsTo(Student::class,'student_id', 'id');
     }
+    public function section(){
+        return $this->belongsTo(Section::class,'section_id', 'id');
+    }
 }
