@@ -6,6 +6,9 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="card">
+                 <div class="card-header">
+                    <i class="fas fa-sms text-primary me-2"></i> Send SMS
+                </div>
                 <div class="card-body ">
                     <form class="row g-3 align-items-end" id="search_box">
                         <div class="col-md-3">

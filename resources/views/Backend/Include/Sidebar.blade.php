@@ -249,18 +249,10 @@
                     style="{{ Str::startsWith($currentRoute, $active_prefix) ? 'display: block;' : 'display: none;' }}">
 
                     <li class="nav-item">
-                        <a href="{{ route('admin.sms.message_send_list') }}"
-                            class="nav-link {{ $route == 'admin.sms.message_send_list' ? 'active' : '' }}">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Send SMS</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
                         <a href="{{ route('admin.sms.bulk.message_send_list') }}"
                             class="nav-link {{ $route == 'admin.sms.bulk.message_send_list' ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Send Bulk SMS</p>
+                            <p>Send SMS</p>
                         </a>
                     </li>
 
