@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('section_id');
 
             $table->text('message');
+            $table->enum('status', ['0', '1'])->default('1'); // 0 for unsuccessfull, 1 for successfull
             $table->timestamp('sent_at')->nullable();
             $table->timestamps();
 

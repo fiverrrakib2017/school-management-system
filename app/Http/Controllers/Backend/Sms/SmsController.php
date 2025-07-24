@@ -248,8 +248,16 @@ class SmsController extends Controller
             $object->sent_at = Carbon::now();
 
 
+
             /*Call Send Message Function */
-           send_message($student->phone, $request->message);
+            $response=send_message($student->phone, $request->message);
+                if (isset($response['status']) && $response['status'] == 'success') {
+                    $object->status = 1;
+                } else {
+                    $object->status = 0;
+                }
+                return $response; 
+                exit;
             /* Save to the database table*/
             $object->save();
         }

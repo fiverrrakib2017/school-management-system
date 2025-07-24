@@ -24,6 +24,7 @@
                                     <th>Roll No.</th>
                                     <th>Phone Number</th>
                                     <th>Sent Time</th>
+                                      <th>Status</th>
                                     <th>message</th>
                                 </tr>
                             </thead>
@@ -165,6 +166,20 @@
                         "data": "sent_at",
                         "render": function(data, type, row) {
                             return moment(data).format('lll');
+                        }
+                    },
+                    {
+                        "data": "status",
+                        "render": function(data, type, row) {
+                            var status = '';
+                            if (data === '1') {
+                                status = '<span class="badge badge-success">Success</span>';
+                            } else if (data === '0') {
+                                status = '<span class="badge badge-danger">Failed</span>';
+                            } else {
+                                status = '<span class="badge badge-warning">Pending</span>';
+                            }
+                            return status;
                         }
                     },
                     {
