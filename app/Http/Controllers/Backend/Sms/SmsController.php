@@ -251,13 +251,11 @@ class SmsController extends Controller
 
             /*Call Send Message Function */
             $response=send_message($student->phone, $request->message);
-                if (isset($response['status']) && $response['status'] == 'success') {
+                if (isset($response['response_code']) && $response['response_code'] == '202') {
                     $object->status = 1;
                 } else {
                     $object->status = 0;
                 }
-                return $response; 
-                exit;
             /* Save to the database table*/
             $object->save();
         }
