@@ -132,7 +132,7 @@ class Exam_result_controller extends Controller
         $examResults = Student_exam_result::with('student', 'subject', 'class', 'section', 'exam')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get()->groupBy('student_id');
 
         // Get subjects for the class
-        $subjects = Student_subject::where('class_id', $request->class_id)->where('section_id', $request->section_id)->get();
+        //$subjects = Student_subject::where('class_id', $request->class_id)->where('section_id', $request->section_id)->get();
         /* Fetch routines for exam*/
         $routines = DB::table('student_exam_routines')->where('exam_id', $request->exam_id)->where('class_id', $request->class_id)->where('section_id', $request->section_id)->get()->keyBy('subject_id');
         if ($routines->isEmpty()) {
@@ -244,8 +244,9 @@ class Exam_result_controller extends Controller
             $html .= '<td>' . $student->name . '</td>';
             $html .= '<td>' . $student->roll_no . '</td>';
 
-            foreach ($subjects as $subject) {
-                $item = $results->firstWhere('subject_id', $subject->id);
+            foreach ($get_subject_from_routine as $subjectRoutine) {
+                $subjectId = $subjectRoutine->subject_id;
+                $item = $results->firstWhere('subject_id', $subjectId);
 
                 if ($item) {
                     if ($item->is_absent == 1) {
@@ -259,7 +260,7 @@ class Exam_result_controller extends Controller
                         $total = $written + $objective + $practical;
 
                         /*Get routine for the subject*/
-                        $routine = $routines[$subject->id] ?? null;
+                        $routine = $routines[$subjectId] ?? null;
                         if ($routine === null) {
                             $gpa = 0;
                         } else {
