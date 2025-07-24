@@ -256,6 +256,8 @@ class SmsController extends Controller
                 } else {
                     $object->status = 0;
                 }
+                return $response;
+                exit;
             /* Save to the database table*/
             $object->save();
         }
